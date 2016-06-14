@@ -54,7 +54,7 @@ gulp.task('deploy-surge', [], function () {
 })
 
 gulp.task('build-dapple', ['copy-dapple-maker-otc'])
-gulp.task('deploy', gulpsync.sync(['build-dapple', 'build-meteor', 'deploy-surge']))
+gulp.task('deploy', gulpsync.sync(['build-dapple', 'build-meteor', 'deploy-gh-pages']))
 
 gulp.task('build', ['build-dapple'])
 gulp.task('default', ['build'])
