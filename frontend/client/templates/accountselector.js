@@ -1,6 +1,9 @@
 Template.accountSelector.helpers({
   accounts: function () {
     return Session.get('accounts')
+  },
+  currentAccount: function () {
+    return Session.get('address')
   }
 })
 
