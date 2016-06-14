@@ -1,9 +1,0 @@
-*.sw*
-.DS_Store
-.publish/
-scripts/blockchain/tmp
-frontend/packages/dapple/build/
-dist/
-node_modules/
-npm-debug.log
-nohup.out

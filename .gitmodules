@@ -1,7 +1,0 @@
-[submodule "dapple_packages/maker-otc"]
-	path = dapple_packages/maker-otc
-	url = git@github.com:MakerDAO/maker-otc.git
-	branch = erc20
-[submodule "dapple_packages/erc20"]
-	path = dapple_packages/erc20
-	url = https://github.com/nexusdev/erc20.git
