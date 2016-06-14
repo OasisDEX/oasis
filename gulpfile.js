@@ -6,8 +6,8 @@ var ghPages = require('gulp-gh-pages')
 var surge = require('gulp-surge')
 
 // npm run build
-gulp.task('build-dapple', function (cb) {
-  exec('dapple build --template meteor --no-deploy-data', function (err, res, failed) {
+gulp.task('build-dapple-maker-otc', function (cb) {
+  exec('dapple build --template meteor --no-deploy-data', {cwd: 'dapple_packages/maker-otc'}, function (err, res, failed) {
     if (err) {
       console.log(err)
     } else if (failed) {
@@ -17,6 +17,13 @@ gulp.task('build-dapple', function (cb) {
     }
     cb(err)
   })
+})
+
+gulp.task('copy-dapple-maker-otc', ['build-dapple-maker-otc'], function (){
+  return gulp.src([
+      'dapple_packages/maker-otc/build/meteor.js'
+  ])
+  .pipe(gulp.dest('frontend/packages/dapple/build/'))
 })
 
 // meteor-build-client ../build
@@ -46,4 +53,8 @@ gulp.task('deploy-surge', [], function () {
   })
 })
 
+gulp.task('build-dapple', ['copy-dapple-maker-otc'])
 gulp.task('deploy', gulpsync.sync(['build-dapple', 'build-meteor', 'deploy-surge']))
+
+gulp.task('build', ['build-dapple'])
+gulp.task('default', ['build'])

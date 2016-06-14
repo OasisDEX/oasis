@@ -1,7 +1,7 @@
 {
   "name": "Maker-Market",
   "scripts": {
-    "build": "dapple build --template meteor --no-deploy-data",
+    "build": "gulp build",
     "test": "standard"
   },
   "devDependencies": {
