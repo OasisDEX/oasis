@@ -1,0 +1,44 @@
+{
+  "name": "Maker-Market",
+  "scripts": {
+    "build": "dapple build --template meteor --no-deploy-data",
+    "test": "standard"
+  },
+  "devDependencies": {
+    "babel-eslint": "6.0.0",
+    "gulp": "^3.9.1",
+    "gulp-gh-pages": "^0.5.4",
+    "gulp-surge": "^0.1.0",
+    "gulp-sync": "^0.1.4",
+    "meteor-build-client": "^0.3.0",
+    "standard": "6.0.7"
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "globals": [
+      "Meteor",
+      "Session",
+      "localStorage",
+      "Template",
+      "EthTools",
+      "Dapple",
+      "BigNumber",
+      "web3",
+      "Spacebars",
+      "Offers",
+      "Trades",
+      "Status",
+      "PRICE_CURRENCY",
+      "Tokens",
+      "Transactions",
+      "$",
+      "_"
+    ],
+    "ignore": [
+      "dapple_packages/**",
+      "frontent/.meteor/**",
+      "frontend/packages/**",
+      "scripts/**"
+    ]
+  }
+}

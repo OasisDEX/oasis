@@ -1,0 +1,16 @@
+<template name="orders">
+  <table>
+    <thead>
+      <tr>
+        <th title={{concat quoteCurrency ' / ' baseCurrency}} class={{priceClass}}>{{priceLabel}}</th>
+        <th>{{quoteCurrency}}</th>
+        <th>{{baseCurrency}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each orders}}
+        {{> orderRow order=this canAccept=../canAccept showCancel=../showCancel}}
+      {{/each}}
+    </tbody>
+  </table>
+</template>
