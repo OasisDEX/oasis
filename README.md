@@ -7,7 +7,7 @@
 
 This is a simple on-chain OTC market for MKR. You can either pick an order from the order book (in which case delivery will happen instantly), or submit a new order yourself.
 
-**MakerOTC is undergoing alpha testing: Proceed at your own risk, and use only small amounts of ETH and MKR.**
+**Maker Market is undergoing alpha testing: Proceed at your own risk, and use only small amounts of ETH and MKR.**
 
 ## Overview
 
@@ -29,29 +29,16 @@ Requirements:
 Clone and install:
 
 ```bash
-git clone https://github.com/MakerDAO/maker-otc
-cd maker-otc
+git clone https://github.com/MakerDAO/maker-market
+cd maker-market
 git submodule update --init --recursive
 npm install
+npm run build
 ```
 
 ## Usage (for Developers)
 
-There is a helpful blockchain script for development, which will use a clever mining script similar to Embark. This is entirely optional; you can use any testnet config via RPC on port 8545 and deploy via dapple as normal.
-
-To start the blockchain script:
-
-```bash
-npm run blockchain
-```
-
-In a new terminal window, you can then build and deploy the dapp:
-
-```bash
-npm run deploy
-```
-
-Now that the contracts are deployed to the blockchain, you need to build the JS wrappers:
+You need to build the JS wrappers for the Dapple contracts:
 
 ```bash
 npm run build
@@ -66,19 +53,6 @@ cd frontend && meteor
 If you got the error message `File not found: build/meteor.js`, then you forgot to run the build step from above.
 
 You can access the user interface on [http://localhost:3000/](http://localhost:3000/)
-
-If you find that dapple is deploying to EVM rather than geth, please modify `~/.dapplerc`:
-
-```yaml
-environments:
-  default:
-    # comment out default config
-    # ethereum: internal
-    # replace with real ethereum node
-    ethereum:
-      host: localhost
-      port: '8545'
-```
 
 To deploy the frontend to Github Pages:
 
