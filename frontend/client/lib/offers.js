@@ -99,8 +99,10 @@ Offers.sync = function () {
     if (!error) {
       // Transform arguments
       var args = {
-        buy_which_token: formattedString(trade.args.buy_which_token),
-        sell_which_token: formattedString(trade.args.sell_which_token),
+        buy_which_token_address: trade.args.buy_which_token,
+        buy_which_token: Dapple.getTokenByAddress(trade.args.buy_which_token),
+        sell_which_token_address: trade.args.sell_which_token,
+        sell_which_token: Dapple.getTokenByAddress(trade.args.sell_which_token),
         buy_how_much: trade.args.buy_how_much.toString(10),
         sell_how_much: trade.args.sell_how_much.toString(10)
       }
