@@ -35,7 +35,7 @@ var tokens = {
 }
 
 Dapple.getTokens = function () {
-  return [ 'ETH', 'MKR', 'DAI', 'DGD' ]
+  return [ 'ETH', 'MKR', 'DAI' ]
 }
 
 Dapple.getTokenAddress = function (symbol) {
