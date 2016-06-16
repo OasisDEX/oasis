@@ -19,7 +19,7 @@
         </tr>
         <tr>
           <th>
-            {{fancyType}} Price (in {{quoteCurrency}})
+            {{fancyType}} Price (in {{quoteCurrency}}/{{baseCurrency}})
           </th>
           <td>
             <input type="number" class="input" step="any" min="0" {{b "value: price, input: calcTotal"}}>
@@ -108,7 +108,7 @@
               </tr>
               <tr>
                 <th>Price</th>
-                <td>{{formatBalance (toWei price)}} {{quoteCurrency}}</td>
+                <td>{{formatBalance (toWei price)}} {{quoteCurrency}}/{{baseCurrency}}</td>
               </tr>
               <tr>
                 <th>Volume</th>
