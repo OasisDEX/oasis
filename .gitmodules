@@ -1,4 +1,4 @@
 [submodule "dapple_packages/maker-otc"]
 	path = dapple_packages/maker-otc
-	url = git@github.com:MakerDAO/maker-otc.git
+	url = https://github.com/MakerDAO/maker-otc.git
 	branch = erc20
