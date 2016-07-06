@@ -19,6 +19,17 @@ Dapple['init'] = function (env) {
   }
 }
 
+// XXX generated blocknumbers, should use incremental lookback instead
+Dapple.getFirstContractBlock = function () {
+  if (Dapple.env === 'live') {
+    return 1714571;
+  } else if (Dapple.env === 'morden') {
+    return 1089550;
+  } else {
+    return 0;
+  }
+}
+
 var tokens = {
   'morden': {
     'ETH': '0x52fe88b987c7829e5d5a61c98f67c9c14e6a7a90',

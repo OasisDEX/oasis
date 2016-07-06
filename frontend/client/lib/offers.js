@@ -95,7 +95,7 @@ Offers.sync = function () {
   })
 
   // Watch Trade events
-  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: 0 }, function (error, trade) {
+  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: Dapple.getFirstContractBlock() }, function (error, trade) {
     if (!error) {
       // Transform arguments
       var args = {
