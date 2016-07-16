@@ -10,9 +10,9 @@ body > div.container { padding-bottom: 3rem }
 body > div.container { max-width: 20rem }
 body > div.container { margin: auto }
 
-h1, h2 { color: #546979 }
-h1, h2 { line-height: 2rem }
-h1, h2 { margin-top: 1rem }
+h1, h2, h3 { color: #546979 }
+h1, h2, h3 { line-height: 2rem }
+h1, h2, h3 { margin-top: 1rem }
 
 h1 { text-align: center }
 h1 { font-size: 1.5rem }
@@ -23,7 +23,7 @@ h1 span { top: 2.2rem }
 h1 span { left: -1.25rem }
 
 h2 { border-top: .1rem solid currentcolor }
-h2 { font-weight: bold }
+h2, h3 { font-weight: bold }
 h2 span { font-size: .6rem }
 h2 span { font-weight: normal }
 h2 span { margin-left: .5rem }
