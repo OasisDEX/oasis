@@ -10,7 +10,7 @@ this.Status = {
 }
 
 var OFFER_GAS = 1000000
-var BUY_PARTIAL_GAS = 1000000
+var BUY_GAS = 1000000
 var CANCEL_GAS = 1000000
 
 function formattedString (str) {
@@ -190,7 +190,7 @@ Offers.buyOffer = function (_id, _quantity) {
   var id = parseInt(_id, 10)
   var quantity = _quantity.toNumber()
   Offers.update(_id, { $unset: { helper: '' } })
-  Dapple['maker-otc'].objects.otc.buyPartial(id.toString(10), quantity, { gas: BUY_PARTIAL_GAS }, function (error, tx) {
+  Dapple['maker-otc'].objects.otc.buy(id.toString(10), quantity, { gas: BUY_GAS }, function (error, tx) {
     if (!error) {
       Transactions.add('offer', tx, { id: _id, status: Status.BOUGHT })
       Offers.update(_id, { $set: { tx: tx, status: Status.BOUGHT, helper: 'Your buy / sell order is being processed...' } })
