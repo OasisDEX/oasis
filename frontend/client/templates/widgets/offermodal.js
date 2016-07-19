@@ -147,7 +147,6 @@ Template.offermodal.viewmodel({
   },
   buy: function () {
     var _id = this.templateInstance.data.offer._id
-    console.log('buy', this.templateInstance.data.offer.type(), this.total(), this.volume())
     if (this.templateInstance.data.offer.type() === 'bid') {
       Offers.buyOffer(_id, web3.toWei(new BigNumber(this.total())))
     } else {
