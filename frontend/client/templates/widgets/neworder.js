@@ -110,7 +110,6 @@ Template.neworder.viewmodel({
     }
   },
   canSubmit: function () {
-    return false
     try {
       var type = this.type()
       var price = new BigNumber(this.price())
