@@ -52,12 +52,9 @@ var helpers = {
 
 Offers.helpers(_.extend(helpers, {
   canCancel: function () {
+    var market_open = Session.get('market_open')
     var address = Session.get('address')
-    return this.status === Status.CONFIRMED && address === this.owner
-  },
-  isMine: function () {
-    var address = Session.get('address')
-    return address === this.owner
+    return this.status === Status.CONFIRMED && (!market_open || address === this.owner)
   }
 }))
 

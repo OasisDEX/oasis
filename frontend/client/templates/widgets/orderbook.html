@@ -6,6 +6,6 @@
   </h2>
 
   <div class=o>
-    {{> orders orders=orders priceLabel=priceLabel priceClass=priceClass canAccept=canAccept}}
+    {{> orders orders=orders priceLabel=priceLabel priceClass=priceClass canAccept=canAccept showCancel=(not isMarketOpen)}}
   </div>
 </template>
