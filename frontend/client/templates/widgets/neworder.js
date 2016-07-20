@@ -117,7 +117,8 @@ Template.neworder.viewmodel({
       var maxAmount = new BigNumber(this.maxAmount())
       var total = new BigNumber(this.total())
       var maxTotal = new BigNumber(this.maxTotal())
-      return price.gt(0) && amount.gt(0) && total.gt(0) && (type !== 'buy' || total.lte(maxTotal)) && (type !== 'sell' || amount.lte(maxAmount))
+      var market_open = Session.get('market_open')
+      return market_open && price.gt(0) && amount.gt(0) && total.gt(0) && (type !== 'buy' || total.lte(maxTotal)) && (type !== 'sell' || amount.lte(maxAmount))
     } catch (e) {
       return false
     }

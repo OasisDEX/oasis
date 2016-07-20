@@ -81,6 +81,15 @@ Offers.sync = function () {
     }
   })
 
+  // Fetch the market close time
+  Dapple['maker-otc'].objects.otc.close_time(function (error, t) {
+    if (!error) {
+      var close_time = t.toNumber()
+      Session.set('close_time', close_time)
+      Session.set('market_open', close_time > (new Date() / 1000))
+    }
+  })
+
   // Sync all past offers
   Dapple['maker-otc'].objects.otc.last_offer_id(function (error, n) {
     if (!error) {

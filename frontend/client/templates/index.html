@@ -38,12 +38,7 @@
     </p>
 
     {{#if ready}}
-      {{#unless equals network 'private'}}
-        <p>
-          Contract: <a href={{contractHref}}>{{contractAddress}}</a>
-          {{> whatisthis section="contract"}}
-        </p>
-      {{/unless}}
+      {{> marketDetails }}
       {{> accountSelector }}
       {{> currencySelector }}
       <p>

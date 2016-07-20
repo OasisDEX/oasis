@@ -18,6 +18,14 @@ Template.registerHelper('contractHref', function () {
   return 'https://' + (network === 'test' ? 'testnet.' : '') + 'etherscan.io/address/' + Dapple['maker-otc'].objects.otc.address
 })
 
+Template.registerHelper('marketCloseTime', function () {
+  return Session.get('close_time')
+})
+
+Template.registerHelper('isMarketOpen', function () {
+  return Session.get('market_open');
+})
+
 Template.registerHelper('rpccorsdomain', function () {
   return window.location.origin
 })
