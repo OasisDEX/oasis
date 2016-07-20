@@ -13,56 +13,33 @@
       <strong>Update notice:</strong> If you have any open orders at the previous market <a href="https://makerdao.github.io/maker-market-archive/v0.1.0/">Maker OTC</a>; be sure to cancel them there to unlock the held funds!
     </p>
 
-    <p>
-      Network: {{network}}
-      {{#unless isConnected}}
-        (not connected)
-      {{else}}
-        {{#if syncing}}
-          (syncing {{syncingPercentage}}%)
-        {{else}}
-          {{#if outOfSync}}
-            (out of sync, waiting for synchronization)
-          {{else}}
-            {{#if loading}}
-              (loading offers {{loadingProgress}}%)
-            {{else}}
-              {{#if ready}}
-                (ready)
-              {{/if}}
-            {{/if}}
-          {{/if}}
-        {{/if}}
-      {{/unless}}
-      {{> whatisthis section="network"}}
-    </p>
+    {{> networkStatus }}
 
     {{#if ready}}
       {{> marketDetails }}
-      {{> accountSelector }}
-      {{> currencySelector }}
-      <p>
-        Balance: {{formatBalance ETHBalance}} ETH
-        {{> whatisthis section="balance"}}
-      </p>
-      <p>Tokens:
-        {{#each token in allTokens}}
-          {{formatBalance token.balance}}
-          {{#if equals token._id 'ETH'}}
-            <a href="#ethtokens">{{token._id}}</a> {{> whatisthis section="eth-tokens"}}
-          {{else}}
-            {{token._id}}
-          {{/if}}
-          |
-        {{/each}}
-        {{> whatisthis section="tokens"}}
-      </p>
-      <p>
-        <a href="#allowance">Allowance</a>: {{#each token in allTokens}}{{formatBalance token.allowance}} {{token._id}} | {{/each}}
-        {{> whatisthis section="allowance"}}
-      </p>
-
       {{#if contractExists}}
+        {{> accountSelector }}
+        {{> currencySelector }}
+        <p>
+          Balance: {{formatBalance ETHBalance}} ETH
+          {{> whatisthis section="balance"}}
+        </p>
+        <p>Tokens:
+          {{#each token in allTokens}}
+            {{formatBalance token.balance}}
+            {{#if equals token._id 'ETH'}}
+              <a href="#ethtokens">{{token._id}}</a> {{> whatisthis section="eth-tokens"}}
+            {{else}}
+              {{token._id}}
+            {{/if}}
+            |
+          {{/each}}
+          {{> whatisthis section="tokens"}}
+        </p>
+        <p>
+          <a href="#allowance">Allowance</a>: {{#each token in allTokens}}{{formatBalance token.allowance}} {{token._id}} | {{/each}}
+          {{> whatisthis section="allowance"}}
+        </p>
         <div class=row>
           <section>
             {{> orderbook title='Buy orders' subtitle=(concat '(click to sell ' baseCurrency ')') priceLabel='Bid Price' priceClass='bid' orders=(findOffers 'bid') canAccept=true}}
@@ -102,10 +79,6 @@
         </div>
 
         {{> offermodal offer=(findOffer selectedOffer)}}
-      {{else}}
-        <p>
-          Could not find the contract on your current blockchain environment.
-        </p>
       {{/if}}
     {{/if}}
     {{#unless isConnected}}
