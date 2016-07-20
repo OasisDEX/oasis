@@ -7,12 +7,12 @@
   {{#if isMarketOpen}}
     <p>
       Market open until {{timestampToString marketCloseTime true}}
-      {{> whatisthis section="market-closetime"}}
+      {{> whatisthis section="expiring-market"}}
     </p>
   {{else}}
     <p class="text-danger">
       Market has closed on {{timestampToString marketCloseTime true}}.
-      {{> whatisthis section="market-closetime"}}<br />
+      {{> whatisthis section="expiring-market"}}<br />
       <strong>Please cancel your orders.</strong>
     </p>
   {{/if}}
