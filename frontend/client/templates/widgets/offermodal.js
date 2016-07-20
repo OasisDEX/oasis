@@ -140,7 +140,8 @@ Template.offermodal.viewmodel({
       }
       var volume = new BigNumber(this.volume())
       var total = new BigNumber(this.total())
-      return !total.isNaN() && total.gt(0) && total.lte(new BigNumber(this.maxTotal())) && !volume.isNaN() && volume.gt(0) && volume.lte(new BigNumber(this.maxVolume()))
+      var market_open = Session.get('market_open')
+      return market_open && !total.isNaN() && total.gt(0) && total.lte(new BigNumber(this.maxTotal())) && !volume.isNaN() && volume.gt(0) && volume.lte(new BigNumber(this.maxVolume()))
     } catch (e) {
       return false
     }

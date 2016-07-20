@@ -1,0 +1,25 @@
+<template name="networkStatus">
+  <p>
+      Network: {{network}}
+      {{#unless isConnected}}
+        (not connected)
+      {{else}}
+        {{#if syncing}}
+          (syncing {{syncingPercentage}}%)
+        {{else}}
+          {{#if outOfSync}}
+            (out of sync, waiting for synchronization)
+          {{else}}
+            {{#if loading}}
+              (loading offers {{loadingProgress}}%)
+            {{else}}
+              {{#if ready}}
+                (ready)
+              {{/if}}
+            {{/if}}
+          {{/if}}
+        {{/if}}
+      {{/unless}}
+      {{> whatisthis section="network"}}
+    </p>
+</template>

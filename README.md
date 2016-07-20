@@ -59,15 +59,6 @@ To deploy the frontend to Github Pages:
 gulp deploy
 ```
 
-## Gas Costs
-
-```
-new SimpleMarket:   927556 gas
-SimpleMarket.offer: 140395-186235 gas
-SimpleMarket.cancel: 33882 gas
-SimpleMarket.buy:    49306-51707 gas
-```
-
 ## TODOs
 See https://waffle.io/MakerDAO/maker-market
 

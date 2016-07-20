@@ -52,12 +52,9 @@ var helpers = {
 
 Offers.helpers(_.extend(helpers, {
   canCancel: function () {
+    var market_open = Session.get('market_open')
     var address = Session.get('address')
-    return this.status === Status.CONFIRMED && address === this.owner
-  },
-  isMine: function () {
-    var address = Session.get('address')
-    return address === this.owner
+    return this.status === Status.CONFIRMED && (!market_open || address === this.owner)
   }
 }))
 
@@ -78,6 +75,15 @@ Offers.sync = function () {
       if (Session.equals('selectedOffer', result.transactionHash)) {
         Session.set('selectedOffer', id.toString())
       }
+    }
+  })
+
+  // Fetch the market close time
+  Dapple['maker-otc'].objects.otc.close_time(function (error, t) {
+    if (!error) {
+      var close_time = t.toNumber()
+      Session.set('close_time', close_time)
+      Session.set('market_open', close_time > (new Date() / 1000))
     }
   })
 
