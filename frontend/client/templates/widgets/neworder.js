@@ -1,9 +1,4 @@
 Template.neworder.viewmodel({
-  autorun: function () {
-    Transactions.observeRemoved('newoffer', function (document) {
-      Offers.remove(document.tx)
-    })
-  },
   lastError: '',
   bestOffer: undefined,
   type: 'buy',
