@@ -22,9 +22,9 @@ Dapple['init'] = function (env) {
 // XXX generated blocknumbers, should use incremental lookback instead
 Dapple.getFirstContractBlock = function () {
   if (Dapple.env === 'live') {
-    return 1714571;
+    return 1930912;
   } else if (Dapple.env === 'morden') {
-    return 1089550;
+    return 1381271;
   } else {
     return 0;
   }
