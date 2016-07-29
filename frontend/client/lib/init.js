@@ -26,8 +26,9 @@ function initNetwork (newNetwork) {
   Dapple.init(newNetwork)
   checkAccounts()
   Session.set('network', newNetwork)
-  Tokens.sync()
   Session.set('isConnected', true)
+  Session.set('latestBlock', 0)
+  Tokens.sync()
   Offers.sync()
 }
 
@@ -39,7 +40,14 @@ function checkNetwork () {
     // Check if we are synced
     if (isConnected) {
       web3.eth.getBlock('latest', function (e, res) {
-        Session.set('outOfSync', e != null || new Date().getTime() / 1000 - res.timestamp > 600)
+        if (res.number >= Session.get('latestBlock')) {
+          Session.set('outOfSync', e != null || new Date().getTime() / 1000 - res.timestamp > 600)
+          Session.set('latestBlock', res.number)
+        } else {
+          // XXX MetaMask frequently returns old blocks
+          // https://github.com/MetaMask/metamask-plugin/issues/504
+          console.debug('Skipping old block')
+        }
       })
     }
 
@@ -68,6 +76,7 @@ function checkNetwork () {
       } else {
         Session.set('isConnected', isConnected)
         Session.set('network', false)
+        Session.set('latestBlock', 0)
       }
     }
   })
@@ -78,6 +87,7 @@ Session.set('loading', false)
 Session.set('outOfSync', false)
 Session.set('syncing', false)
 Session.set('isConnected', false)
+Session.set('latestBlock', 0)
 
 /**
  * Startup code
