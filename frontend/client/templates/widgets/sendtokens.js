@@ -3,7 +3,7 @@ var TRANSACTION_TYPE = 'transfer'
 
 Template.sendtokens.viewmodel({
   currency: 'MKR',
-  currencies: Dapple.getTokens(),
+  currencies: _.without(Dapple.getTokens(), 'ETH'),
   recipient: '',
   lastError: '',
   pending: function () {
