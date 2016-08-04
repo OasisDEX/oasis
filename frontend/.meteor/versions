@@ -63,6 +63,11 @@ npm-mongo@1.5.45
 numeral:numeral@1.5.3_1
 observe-sequence@1.0.12
 ordered-dict@1.0.8
+practicalmeteor:chai@2.1.0_1
+practicalmeteor:loglevel@1.2.0_2
+practicalmeteor:mocha@2.4.5_6
+practicalmeteor:mocha-core@1.0.1
+practicalmeteor:sinon@1.14.1_2
 promise@0.8.3
 random@1.0.10
 reactive-dict@1.1.8
@@ -78,6 +83,7 @@ standard-minifier-css@1.1.8
 standard-minifier-js@1.1.8
 templating@1.1.14
 templating-tools@1.0.4
+tmeasday:test-reporter-helpers@0.2.1
 tracker@1.1.0
 twbs:bootstrap@3.3.6
 ui@1.0.11

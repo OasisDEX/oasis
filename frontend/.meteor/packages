@@ -24,3 +24,4 @@ standard-minifier-css@1.1.8
 standard-minifier-js@1.1.8
 manuel:viewmodel
 twbs:bootstrap
+practicalmeteor:mocha
