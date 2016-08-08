@@ -25,3 +25,5 @@ standard-minifier-js@1.1.8
 manuel:viewmodel
 twbs:bootstrap
 practicalmeteor:mocha
+velocity:meteor-stubs
+hwillson:stub-collections

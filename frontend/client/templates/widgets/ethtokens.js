@@ -1,3 +1,7 @@
+import { Template } from 'meteor/templating';
+
+import './ethtokens.html';
+
 var TRANSACTION_TYPE = 'ethtokens'
 var DEPOSIT_GAS = 150000
 var WITHDRAW_GAS = 150000
