@@ -27,3 +27,4 @@ twbs:bootstrap
 practicalmeteor:mocha
 velocity:meteor-stubs
 hwillson:stub-collections
+dispatch:mocha-phantomjs

@@ -1,0 +1,9 @@
+{
+  "name": "maker-market",
+  "private": true,
+  "scripts": {
+    "test": "meteor test --port 3100 --once --driver-package dispatch:mocha-phantomjs",
+    "test:watch": "TEST_WATCH=1 meteor test --port 3100 --driver-package dispatch:mocha-phantomjs",
+    "start": "meteor run"
+  }
+}
