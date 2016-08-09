@@ -1,41 +1,11 @@
-import { chai } from 'meteor/practicalmeteor:chai'
+import { chai } from 'meteor/practicalmeteor:chai';
 import { MeteorStubs } from 'meteor/velocity:meteor-stubs'
 import StubCollections from 'meteor/hwillson:stub-collections'
+import { DappleTokenSpy } from '/imports/test/dapple-token-spy'
 
-import '../../lib/_transactions.js'
-import '../../lib/tokens.js'
+import '/imports/api/transactions.js'
+import '/imports/api/tokens.js'
 import './ethtokens.js'
-
-class DappleTokenSpy {
-  constructor(canLookup, canCall) {
-    this.canLookup = canLookup
-    this.canCall = canCall
-  }
-  getToken(tokenName, tokenCb) {
-    var _this = this
-    if (this.canLookup) {
-      let token = {
-        deposit: function (options, cb) {
-          if (_this.canCall) {
-            cb(false, 'txid')
-          } else {
-            cb('token call error', null)
-          }
-        },
-        withdraw: function (amount, options, cb) {
-          if (_this.canCall) {
-            cb(false, 'txid')
-          } else {
-            cb('token call error', null)
-          }
-        }
-      }
-      tokenCb(false, token)
-    } else {
-      tokenCb('token lookup error', null)
-    }
-  }
-}
 
 const fakeEvent = {
   preventDefault: function() {
@@ -133,7 +103,7 @@ describe("EthTokens View Model", function() {
       vm.type('deposit')
       vm.amount('1.00')
       vm.deposit(fakeEvent)
-      chai.assert.equal(vm.lastError(), 'token call error')
+      chai.assert.equal(vm.lastError(), 'token.deposit call error')
     })
     it("should set lastError when an error happens calling the token upon withdraw", function () {
       let tokenSpy = new DappleTokenSpy(true, false)
@@ -141,7 +111,7 @@ describe("EthTokens View Model", function() {
       vm.type('withdraw')
       vm.amount('1.00')
       vm.deposit(fakeEvent)
-      chai.assert.equal(vm.lastError(), 'token call error')
+      chai.assert.equal(vm.lastError(), 'token.withdraw call error')
     })
   })
 

@@ -1,3 +1,7 @@
+import '/imports/api/transactions';
+import '/imports/api/offers';
+import '/imports/api/tokens';
+
 // Check which accounts are available and if defaultAccount is still available,
 // Otherwise set it to localStorage, Session, or first element in accounts
 function checkAccounts () {
@@ -88,6 +92,8 @@ Session.set('outOfSync', false)
 Session.set('syncing', false)
 Session.set('isConnected', false)
 Session.set('latestBlock', 0)
+Session.set('quoteCurrency', localStorage.getItem('quoteCurrency') || 'ETH')
+Session.set('baseCurrency', localStorage.getItem('baseCurrency') || 'MKR')
 
 /**
  * Startup code
