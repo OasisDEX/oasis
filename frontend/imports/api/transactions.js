@@ -1,42 +1,46 @@
-this.Transactions = new Meteor.Collection(null)
+import { Mongo } from 'meteor/mongo';
+import { web3 } from 'meteor/makerotc:dapple';
 
-Transactions.add = function (type, transaction_hash, object) {
-  console.log('tx', type, transaction_hash, object)
-  Transactions.insert({ type: type, tx: transaction_hash, object: object })
-}
+class TransactionsCollection extends Mongo.Collection {
 
-Transactions.findType = function (type) {
-  return Transactions.find({ type: type }).map(function (value) {
-    return value.object
-  })
-}
-
-Transactions.observeRemoved = function (type, callback) {
-  return Transactions.find({ type: type }).observe({ removed: callback })
-}
-
-Transactions.sync = function () {
-  var open = Transactions.find().fetch()
-
-  // Sync all open transactions non-blocking and asynchronously
-  var syncTransaction = function (index) {
-    if (index >= 0 && index < open.length) {
-      var document = open[index]
-      web3.eth.getTransactionReceipt(document.tx, function (error, result) {
-        if (!error && result != null) {
-          if (result.logs.length > 0) {
-            console.log('tx_success', document.tx, result.gasUsed)
-          } else {
-            console.error('tx_oog', document.tx, result.gasUsed)
-          }
-          Transactions.update({ tx: document.tx }, { $set: { receipt: result } }, function () {
-            Transactions.remove({ tx: document.tx })
-          })
-        }
-        // Sync next transaction
-        syncTransaction(index + 1)
-      })
-    }
+  add(type, transactionHash, object) {
+    console.log('tx', type, transactionHash, object);
+    super.insert({ type, tx: transactionHash, object });
   }
-  syncTransaction(0)
+
+  findType(type) {
+    return super.find({ type }).map(value => value.object);
+  }
+
+  observeRemoved(type, callback) {
+    return super.find({ type }).observe({ removed: callback });
+  }
+
+  sync() {
+    const open = super.find().fetch();
+
+    // Sync all open transactions non-blocking and asynchronously
+    const syncTransaction = (index) => {
+      if (index >= 0 && index < open.length) {
+        const document = open[index];
+        web3.eth.getTransactionReceipt(document.tx, (error, result) => {
+          if (!error && result != null) {
+            if (result.logs.length > 0) {
+              console.log('tx_success', document.tx, result.gasUsed);
+            } else {
+              console.error('tx_oog', document.tx, result.gasUsed);
+            }
+            super.update({ tx: document.tx }, { $set: { receipt: result } }, () => {
+              super.remove({ tx: document.tx });
+            });
+          }
+          // Sync next transaction
+          syncTransaction(index + 1);
+        });
+      }
+    };
+    syncTransaction(0);
+  }
 }
+
+export default new TransactionsCollection(null);

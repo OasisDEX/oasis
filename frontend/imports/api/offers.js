@@ -1,240 +1,227 @@
-this.Offers = new Meteor.Collection(null)
-this.Trades = new Meteor.Collection(null)
+import { Mongo } from 'meteor/mongo';
+import { Session } from 'meteor/session';
+import { BigNumber } from 'meteor/ethereum:web3';
+import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { _ } from 'meteor/underscore';
+import { $ } from 'meteor/jquery';
 
-this.PRICE_CURRENCY = 'USD'
-this.Status = {
+import Transactions from '/imports/api/transactions';
+
+const Offers = new Mongo.Collection(null);
+const Trades = new Mongo.Collection(null);
+
+const Status = {
   PENDING: 'pending',
   CONFIRMED: 'confirmed',
   CANCELLED: 'cancelled',
-  BOUGHT: 'bought'
-}
+  BOUGHT: 'bought',
+};
 
-var OFFER_GAS = 1000000
-var BUY_GAS = 1000000
-var CANCEL_GAS = 1000000
+const OFFER_GAS = 1000000;
+const BUY_GAS = 1000000;
+const CANCEL_GAS = 1000000;
 
-function formattedString (str) {
-  return web3.toAscii(str).replace(/\0[\s\S]*$/g, '').trim()
-}
-
-var helpers = {
-  volume: function (currency) {
-    if (this.buy_which_token === currency) {
-      return this.buy_how_much
-    } else if (this.sell_which_token === currency) {
-      return this.sell_how_much
-    } else {
-      return '0'
+const helpers = {
+  volume(currency) {
+    let volume = '0';
+    if (this.buyWhichToken === currency) {
+      volume = this.buyHowMuch;
+    } else if (this.sellWhichToken === currency) {
+      volume = this.sellHowMuch;
     }
+    return volume;
   },
-  type: function () {
-    var baseCurrency = Session.get('baseCurrency')
-    if (this.buy_which_token === baseCurrency) {
-      return 'bid'
-    } else if (this.sell_which_token === baseCurrency) {
-      return 'ask'
-    } else {
-      return ''
+  type() {
+    const baseCurrency = Session.get('baseCurrency');
+    let type = '';
+    if (this.buyWhichToken === baseCurrency) {
+      type = 'bid';
+    } else if (this.sellWhichToken === baseCurrency) {
+      type = 'ask';
     }
+    return type;
   },
-  price: function () {
-    var quoteCurrency = Session.get('quoteCurrency')
-    var baseCurrency = Session.get('baseCurrency')
-    if (this.buy_which_token === quoteCurrency && this.sell_which_token === baseCurrency) {
-      return new BigNumber(this.buy_how_much).div(new BigNumber(this.sell_how_much)).toString(10)
-    } else if (this.buy_which_token === baseCurrency && this.sell_which_token === quoteCurrency) {
-      return new BigNumber(this.sell_how_much).div(new BigNumber(this.buy_how_much)).toString(10)
-    } else {
-      return '0'
+  price() {
+    const quoteCurrency = Session.get('quoteCurrency');
+    const baseCurrency = Session.get('baseCurrency');
+    let price = '0';
+    if (this.buyWhichToken === quoteCurrency && this.sellWhichToken === baseCurrency) {
+      price = new BigNumber(this.buyHowMuch).div(new BigNumber(this.sellHowMuch)).toString(10);
+    } else if (this.buyWhichToken === baseCurrency && this.sellWhichToken === quoteCurrency) {
+      price = new BigNumber(this.sellHowMuch).div(new BigNumber(this.buyHowMuch)).toString(10);
     }
-  }
-}
+    return price;
+  },
+};
 
 Offers.helpers(_.extend(helpers, {
-  canCancel: function () {
-    var market_open = Session.get('market_open')
-    var address = Session.get('address')
-    return this.status === Status.CONFIRMED && (!market_open || address === this.owner)
-  }
-}))
+  canCancel() {
+    const marketOpen = Session.get('market_open');
+    const address = Session.get('address');
+    return this.status === Status.CONFIRMED && (!marketOpen || address === this.owner);
+  },
+}));
 
-Trades.helpers(helpers)
+Trades.helpers(helpers);
 
 /**
  * Syncs up all offers and trades
  */
-Offers.sync = function () {
-  Offers.remove({})
+Offers.sync = () => {
+  Offers.remove({});
 
   // Watch ItemUpdate Event
-  Dapple['maker-otc'].objects.otc.ItemUpdate(function (error, result) {
+  /* eslint new-cap: ["error", { "capIsNewExceptions": ["ItemUpdate", "Trade"] }] */
+  Dapple['maker-otc'].objects.otc.ItemUpdate((error, result) => {
     if (!error) {
-      var id = result.args.id.toNumber()
-      Offers.syncOffer(id)
-      Offers.remove(result.transactionHash)
+      const id = result.args.id.toNumber();
+      Offers.syncOffer(id);
+      Offers.remove(result.transactionHash);
       if (Session.equals('selectedOffer', result.transactionHash)) {
-        Session.set('selectedOffer', id.toString())
+        Session.set('selectedOffer', id.toString());
       }
     }
-  })
+  });
 
   // Fetch the market close time
-  Dapple['maker-otc'].objects.otc.close_time(function (error, t) {
+  Dapple['maker-otc'].objects.otc.close_time((error, t) => {
     if (!error) {
-      var close_time = t.toNumber()
-      Session.set('close_time', close_time)
-      Session.set('market_open', close_time > (new Date() / 1000))
+      const closeTime = t.toNumber();
+      Session.set('close_time', closeTime);
+      Session.set('market_open', closeTime > (new Date() / 1000));
     }
-  })
+  });
 
   // Sync all past offers
-  Dapple['maker-otc'].objects.otc.last_offer_id(function (error, n) {
+  Dapple['maker-otc'].objects.otc.last_offer_id((error, n) => {
     if (!error) {
-      var last_offer_id = n.toNumber()
-      console.log('last_offer_id', last_offer_id)
-      if (last_offer_id > 0) {
-        Session.set('loading', true)
-        Session.set('loadingProgress', 0)
-        Offers.syncOffer(last_offer_id, last_offer_id)
+      const lastOfferId = n.toNumber();
+      console.log('last_offer_id', lastOfferId);
+      if (lastOfferId > 0) {
+        Session.set('loading', true);
+        Session.set('loadingProgress', 0);
+        Offers.syncOffer(lastOfferId, lastOfferId);
       }
     }
-  })
+  });
 
   // Watch Trade events
-  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: Dapple.getFirstContractBlock() }, function (error, trade) {
+  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: Dapple.getFirstContractBlock() }, (error, trade) => {
     if (!error) {
       // Transform arguments
-      var args = {
-        buy_which_token_address: trade.args.buy_which_token,
-        buy_which_token: Dapple.getTokenByAddress(trade.args.buy_which_token),
-        sell_which_token_address: trade.args.sell_which_token,
-        sell_which_token: Dapple.getTokenByAddress(trade.args.sell_which_token),
-        buy_how_much: trade.args.buy_how_much.toString(10),
-        sell_how_much: trade.args.sell_how_much.toString(10)
-      }
+      const args = {
+        buyWhichToken_address: trade.args.buy_which_token,
+        buyWhichToken: Dapple.getTokenByAddress(trade.args.buy_which_token),
+        sellWhichToken_address: trade.args.sell_which_token,
+        sellWhichToken: Dapple.getTokenByAddress(trade.args.sell_which_token),
+        buyHowMuch: trade.args.buy_how_much.toString(10),
+        sellHowMuch: trade.args.sell_how_much.toString(10),
+      };
       // Get block for timestamp
-      web3.eth.getBlock(trade.blockNumber, function (error, block) {
+      web3.eth.getBlock(trade.blockNumber, (blockError, block) => {
         if (!error) {
-          Trades.upsert(trade.transactionHash, _.extend(block, trade, args))
+          Trades.upsert(trade.transactionHash, _.extend(block, trade, args));
         }
-      })
+      });
     }
-  })
-}
+  });
+};
 
 /**
  * Syncs up a single offer
  */
-Offers.syncOffer = function (id, max) {
-  Dapple['maker-otc'].objects.otc.offers(id, function (error, data) {
+Offers.syncOffer = (id, max) => {
+  Dapple['maker-otc'].objects.otc.offers(id, (error, data) => {
     if (!error) {
-      var idx = id.toString()
-      var sell_how_much = data[0]
-      var sell_which_token_address = data[1]
-      var buy_how_much = data[2]
-      var buy_which_token_address = data[3]
-      var owner = data[4]
-      var active = data[5]
+      const idx = id.toString();
+      const [sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress, owner, active] = data;
 
       if (active) {
-        Offers.updateOffer(idx, sell_how_much, sell_which_token_address, buy_how_much, buy_which_token_address, owner, Status.CONFIRMED)
+        Offers.updateOffer(idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress,
+                           owner, Status.CONFIRMED);
       } else {
-        Offers.remove(idx)
+        Offers.remove(idx);
         if (Session.equals('selectedOffer', idx)) {
-          $('#offerModal').modal('hide')
+          $('#offerModal').modal('hide');
         }
       }
       if (max > 0 && id > 1) {
-        Session.set('loadingProgress', Math.round(100 * (max - id) / max))
-        Offers.syncOffer(id - 1, max)
+        Session.set('loadingProgress', Math.round(100 * ((max - id) / max)));
+        Offers.syncOffer(id - 1, max);
       } else if (max > 0) {
-        Session.set('loading', false)
+        Session.set('loading', false);
       }
     }
-  })
-}
+  });
+};
 
-Offers.updateOffer = function (idx, sell_how_much, sell_which_token_address, buy_how_much, buy_which_token_address, owner, status) {
-  if (!(sell_how_much instanceof BigNumber)) {
-    sell_how_much = new BigNumber(sell_how_much)
+Offers.updateOffer = (idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress, owner, status) => {
+  let sellHowMuchValue = sellHowMuch;
+  let buyHowMuchValue = buyHowMuch;
+  if (!(sellHowMuchValue instanceof BigNumber)) {
+    sellHowMuchValue = new BigNumber(sellHowMuchValue);
   }
-  if (!(buy_how_much instanceof BigNumber)) {
-    buy_how_much = new BigNumber(buy_how_much)
+  if (!(buyHowMuchValue instanceof BigNumber)) {
+    buyHowMuchValue = new BigNumber(buyHowMuchValue);
   }
 
-  var offer = {
-    owner: owner,
-    status: status,
+  const offer = {
+    owner,
+    status,
     helper: status === Status.PENDING ? 'Your new order is being placed...' : '',
-    buy_which_token_address: buy_which_token_address,
-    buy_which_token: Dapple.getTokenByAddress(buy_which_token_address),
-    sell_which_token_address: sell_which_token_address,
-    sell_which_token: Dapple.getTokenByAddress(sell_which_token_address),
-    buy_how_much: buy_how_much.toString(10),
-    sell_how_much: sell_how_much.toString(10),
-    ask_price: buy_how_much.div(sell_how_much).toNumber(),
-    bid_price: sell_how_much.div(buy_how_much).toNumber()
-  }
+    buyWhichTokenAddress,
+    buyWhichToken: Dapple.getTokenByAddress(buyWhichTokenAddress),
+    sellWhichTokenAddress,
+    sellWhichToken: Dapple.getTokenByAddress(sellWhichTokenAddress),
+    buyHowMuch: buyHowMuchValue.toString(10),
+    sellHowMuch: sellHowMuchValue.toString(10),
+    ask_price: buyHowMuchValue.div(sellHowMuchValue).toNumber(),
+    bid_price: sellHowMuchValue.div(buyHowMuchValue).toNumber(),
+  };
 
-  Offers.upsert(idx, { $set: offer })
-}
+  Offers.upsert(idx, { $set: offer });
+};
 
-Offers.newOffer = function (sell_how_much, sell_which_token, buy_how_much, buy_which_token, callback) {
-  var sell_which_token_address = Dapple.getTokenAddress(sell_which_token)
-  var buy_which_token_address = Dapple.getTokenAddress(buy_which_token)
+Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callback) => {
+  const sellWhichTokenAddress = Dapple.getTokenAddress(sellWhichToken);
+  const buyWhichTokenAddress = Dapple.getTokenAddress(buyWhichToken);
 
-  Dapple['maker-otc'].objects.otc.offer(sell_how_much, sell_which_token_address, buy_how_much, buy_which_token_address, { gas: OFFER_GAS }, function (error, tx) {
-    callback(error, tx)
-    if (!error) {
-      Offers.updateOffer(tx, sell_how_much, sell_which_token_address, buy_how_much, buy_which_token_address, web3.eth.defaultAccount, Status.PENDING)
-      Transactions.add('offer', tx, { id: tx, status: Status.PENDING })
-    }
-  })
-}
-
-Offers.buyOffer = function (_id, _quantity) {
-  var id = parseInt(_id, 10)
-  Offers.update(_id, { $unset: { helper: '' } })
-  Dapple['maker-otc'].objects.otc.buy(id.toString(10), _quantity, { gas: BUY_GAS }, function (error, tx) {
-    if (!error) {
-      Transactions.add('offer', tx, { id: _id, status: Status.BOUGHT })
-      Offers.update(_id, { $set: { tx: tx, status: Status.BOUGHT, helper: 'Your buy / sell order is being processed...' } })
-    } else {
-      Offers.update(_id, { $set: { helper: error.toString() } })
-    }
-  })
-}
-
-Offers.cancelOffer = function (idx) {
-  var id = parseInt(idx, 10)
-  Offers.update(idx, { $unset: { helper: '' } })
-  Dapple['maker-otc'].objects.otc.cancel(id, { gas: CANCEL_GAS }, function (error, tx) {
-    if (!error) {
-      Transactions.add('offer', tx, { id: idx, status: Status.CANCELLED })
-      Offers.update(idx, { $set: { tx: tx, status: Status.CANCELLED, helper: 'Your order is being cancelled...' } })
-    } else {
-      Offers.update(idx, { $set: { helper: error.toString() } })
-    }
-  })
-}
-
-Transactions.observeRemoved('offer', function (document) {
-  switch (document.object.status) {
-    case Status.CANCELLED:
-    case Status.BOUGHT:
-      Offers.syncOffer(document.object.id)
-      if (document.receipt.logs.length === 0) {
-        Offers.update(document.object.id, { $set: { helper: document.object.status.toUpperCase() + ': Error during Contract Execution' } })
-      } else {
-        Offers.update(document.object.id, { $set: { helper: '' } })
+  Dapple['maker-otc'].objects.otc.offer(sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress,
+    { gas: OFFER_GAS }, (error, tx) => {
+      callback(error, tx);
+      if (!error) {
+        Offers.updateOffer(tx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress,
+                           web3.eth.defaultAccount, Status.PENDING);
+        Transactions.add('offer', tx, { id: tx, status: Status.PENDING });
       }
-      break
-    case Status.PENDING:
-      // The ItemUpdate event will be triggered on successful generation, which will delete the object; otherwise set helper
-      Offers.update(document.object.id, { $set: { helper: 'Error during Contract Execution' } })
-      Meteor.setTimeout(function () {
-        Offers.remove(document.object.id)
-      }, 5000)
-      break
-  }
-})
+    });
+};
+
+Offers.buyOffer = (_id, _quantity) => {
+  const id = parseInt(_id, 10);
+  Offers.update(_id, { $unset: { helper: '' } });
+  Dapple['maker-otc'].objects.otc.buy(id.toString(10), _quantity, { gas: BUY_GAS }, (error, tx) => {
+    if (!error) {
+      Transactions.add('offer', tx, { id: _id, status: Status.BOUGHT });
+      Offers.update(_id, { $set: {
+        tx, status: Status.BOUGHT, helper: 'Your buy / sell order is being processed...' } });
+    } else {
+      Offers.update(_id, { $set: { helper: error.toString() } });
+    }
+  });
+};
+
+Offers.cancelOffer = (idx) => {
+  const id = parseInt(idx, 10);
+  Offers.update(idx, { $unset: { helper: '' } });
+  Dapple['maker-otc'].objects.otc.cancel(id, { gas: CANCEL_GAS }, (error, tx) => {
+    if (!error) {
+      Transactions.add('offer', tx, { id: idx, status: Status.CANCELLED });
+      Offers.update(idx, { $set: { tx, status: Status.CANCELLED, helper: 'Your order is being cancelled...' } });
+    } else {
+      Offers.update(idx, { $set: { helper: error.toString() } });
+    }
+  });
+};
+
+export { Offers, Trades, Status };
