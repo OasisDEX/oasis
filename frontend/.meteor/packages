@@ -20,11 +20,11 @@ makerotc:dapple
 numeral:numeral
 dburles:collection-helpers
 ethereum:tools
-standard-minifier-css@1.1.8
-standard-minifier-js@1.1.8
 manuel:viewmodel
 twbs:bootstrap
 practicalmeteor:mocha
 velocity:meteor-stubs
 hwillson:stub-collections
 dispatch:mocha-phantomjs
+standard-minifier-css
+standard-minifier-js
