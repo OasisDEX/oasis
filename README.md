@@ -59,6 +59,18 @@ To deploy the frontend to Github Pages:
 gulp deploy
 ```
 
+## Development
+
+This project uses the [AirBnB style guide](https://github.com/airbnb/javascript) for coding standard guidelines.
+We use [ESLint](http://eslint.org/docs/user-guide/getting-started) to automatically check for common code problems or style errors.
+There's an eslintConfig section in frontend/package.json for the configuration of ESLint.
+You can run the linter with:
+
+```bash
+cd frontend
+meteor npm run lint
+```
+
 ## TODOs
 See https://waffle.io/MakerDAO/maker-market
 

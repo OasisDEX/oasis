@@ -1,0 +1,66 @@
+{
+  "name": "maker-market",
+  "private": true,
+  "scripts": {
+    "lint": "eslint .",
+    "test": "meteor test --port 3100 --once --driver-package dispatch:mocha-phantomjs",
+    "test:browser": "meteor test --port 3100 --driver-package practicalmeteor:mocha",
+    "test:watch": "TEST_WATCH=1 meteor test --port 3100 --driver-package dispatch:mocha-phantomjs",
+    "start": "meteor run"
+  },
+  "eslintConfig": {
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "allowImportExportEverywhere": true
+    },
+    "plugins": [
+      "meteor"
+    ],
+    "extends": [
+      "airbnb",
+      "plugin:meteor/recommended"
+    ],
+    "settings": {
+      "import/resolver": "meteor"
+    },
+    "rules": {
+      "import/no-unresolved": [
+        2, { "ignore": ["^meteor/"] }
+      ],
+      "meteor/no-session": [
+        0
+      ],
+      "max-len": [2,120, 2, {"ignoreComments": true}],
+      "import/no-extraneous-dependencies": 0,
+      "no-underscore-dangle": [
+        "error", { "allow": ["_id"] }
+      ]
+    },
+    "env": {
+      "browser": true,
+      "node": true
+    },
+    "globals": {
+      "Dapple": true,
+      "describe": false,
+      "it": false,
+      "before": false,
+      "beforeEach": false,
+      "after": false,
+      "afterEach": false
+    }
+  },
+  "dependencies": {
+    "meteor-node-stubs": "~0.2.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^6.1.2",
+    "eslint": "^3.2.2",
+    "eslint-config-airbnb": "^10.0.0",
+    "eslint-import-resolver-meteor": "^0.3.1",
+    "eslint-plugin-import": "^1.12.0",
+    "eslint-plugin-jsx-a11y": "^2.0.1",
+    "eslint-plugin-meteor": "^4.0.0",
+    "eslint-plugin-react": "^6.0.0"
+  }
+}
