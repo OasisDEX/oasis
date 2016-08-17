@@ -18,13 +18,23 @@ Template.registerHelper('contractExists', () => {
 
 Template.registerHelper('network', () => Session.get('network'));
 
-Template.registerHelper('contractAddress', () => Dapple['maker-otc'].objects.otc.address);
+Template.registerHelper('contractAddress', () => {
+  let contractAddress = '';
+  if (Dapple['maker-otc'].objects) {
+    contractAddress = Dapple['maker-otc'].objects.otc.address;
+  }
+  return contractAddress;
+});
 
 Template.registerHelper('contractHref', () => {
-  const network = Session.get('network');
-  const networkPrefix = (network === 'test' ? 'testnet.' : '');
-  const contractAddress = Dapple['maker-otc'].objects.otc.address;
-  return `https://${networkPrefix}etherscan.io/address/${contractAddress}`;
+  let contractHref = '';
+  if (Dapple['maker-otc'].objects) {
+    const network = Session.get('network');
+    const networkPrefix = (network === 'test' ? 'testnet.' : '');
+    const contractAddress = Dapple['maker-otc'].objects.otc.address;
+    contractHref = `https://${networkPrefix}etherscan.io/address/${contractAddress}`;
+  }
+  return contractHref;
 });
 
 Template.registerHelper('marketCloseTime', () => Session.get('close_time'));
