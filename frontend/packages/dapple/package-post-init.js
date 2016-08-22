@@ -23,9 +23,9 @@ Dapple.init = function init(env) {
 Dapple.getFirstContractBlock = () => {
   let blockNumber = 0;
   if (Dapple.env === 'live') {
-    blockNumber = 2015402;
+    blockNumber = 2100636;
   } else if (Dapple.env === 'morden') {
-    blockNumber = 1424364;
+    blockNumber = 1524881;
   }
   return blockNumber;
 };
