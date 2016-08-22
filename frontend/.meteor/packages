@@ -28,3 +28,4 @@ hwillson:stub-collections
 dispatch:mocha-phantomjs
 standard-minifier-css
 standard-minifier-js
+fourseven:scss
