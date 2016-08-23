@@ -41,23 +41,23 @@
           {{> whatisthis section="allowance"}}
         </p>
         <div class=row>
-          <section>
+          <section class="order-section">
             {{> orderbook title='Buy orders' subtitle=(concat '(click on an order listing to sell ' baseCurrency ')') priceLabel='Bid Price' priceClass='bid' orders=(findOffers 'bid') canAccept=true}}
           </section>
-          <section>
-            {{> orderbook title='Sell orders' subtitle=(concat '(click on an order listing to buy ' baseCurrency ')') priceLabel='Ask Price' priceClass='ask' orders=(findOffers 'ask') canAccept=true}}
+          <section class="order-section">
+            {{> orderbook title='SELL ORDERS' subtitle=(concat '(click on an order listing to buy ' baseCurrency ')') priceLabel='Ask Price' priceClass='ask' orders=(findOffers 'ask') canAccept=true}}
           </section>
         </div>
         <div class=row>
-          <section>
+          <section class="order-section">
             {{> neworder}}
           </section>
-          <section>
+          <section class="order-section">
             {{> myorders}}
           </section>
         </div>
         <div class=row>
-          <section>
+          <section class="order-section">
             <h2 id="allowance">
               Allowance
               {{> whatisthis section="allowance"}}
@@ -68,12 +68,12 @@
               {{/if}}
             {{/each}}
           </section>
-          <section>
+          <section class="order-section">
             {{> ethtokens}}
           </section>
         </div>
         <div class=row>
-          <section>
+          <section class="order-section">
             {{> sendtokens}}
           </section>
         </div>

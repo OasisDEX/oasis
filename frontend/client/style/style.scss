@@ -1,3 +1,39 @@
+$background-color: #F8F7F5;
+$bid-color: #1ABC9C;
+$ask-color: #8D86C9;
+
+body {
+  background-color: $background-color;
+}
+
+h2 {
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 3.99px;
+  font-size: 24px;
+}
+
+.order-section {
+  opacity: 0.89;
+  background: #FFFFFF;
+  border: 1px solid #EFF1F3;
+  box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.13);
+  border-radius: 4px;
+  width: 442px;
+  padding: 10px;
+  height: 290px;
+  float: left;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+thead th {
+  background: #F8F7F5;
+  border-radius: 4px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+
+/*
 $dark-green: darkgreen;
 $dark-red: darkred;
 
@@ -223,3 +259,4 @@ button.btn-default:disabled {
   section { float: right; width: 48% }
   section:first-of-type { float: left }
 }
+*/

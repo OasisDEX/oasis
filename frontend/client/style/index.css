@@ -1,4 +1,4 @@
-* { font: inherit; margin: 0; padding: 0 }
+/** { font: inherit; margin: 0; padding: 0 }
 * { outline: none }
 * { box-sizing: border-box }
 
@@ -106,7 +106,73 @@ section:first-of-type { float: left }
 }
 
 #spnSwitchCurrencies {
-    margin: 0px 10px;
-    vertical-align: middle;
-    cursor: pointer;
+  margin: 0px 10px;
+  vertical-align: middle;
+  cursor: pointer;
 }
+
+.buyOrdersDiv {
+  opacity: 0.89;
+  background: #FFFFFF;
+  border: 1px solid #EFF1F3;
+  box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.13);
+  border-radius: 4px;
+}
+.buyOrders {
+  font-family: '.SFNSDisplay-Regular';
+  font-size: 24px;
+  color: #222228;
+  letter-spacing: 3.99px;
+}
+.bar {
+  background: #F8F7F5;
+  border-radius: 4px;
+}
+.ETH {
+  opacity: 0.68;
+  font-family: '.AppleSystemUIFont';
+  font-size: 10px;
+  color: #D0D0D0;
+}
+.ten {
+  font-family: '.AppleSystemUIFont';
+  font-size: 14.5px;
+  color: #4A4A4A;
+}
+.fourtynine {
+  font-family: '.AppleSystemUIFont';
+  font-size: 14.5px;
+  color: #4A4A4A;
+}
+.twentyseven {
+  font-family: '.AppleSystemUIFont';
+  font-size: 14.5px;
+  color: #4A4A4A;
+}
+
+.bidPrice {
+  opacity: 0.68;
+  font-family: '.AppleSystemUIFont';
+  font-size: 10px;
+  color: #D0D0D0;
+}
+
+.owner-indicator {
+  background: #D0D0D0;
+}
+
+.line {
+  border: 1px solid #969698;
+}
+
+.rectangle {
+  opacity: 0.68;
+  border: 1px solid #666669;
+  border-radius: 3px;
+}
+
+.oval {
+  background: #FFFFFF;
+  border: 0px solid #CFD8DC;
+}
+*/
