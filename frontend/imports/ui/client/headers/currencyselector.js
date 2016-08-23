@@ -24,6 +24,9 @@ Template.currencySelector.viewmodel({
             this.quoteHelper('');
             localStorage.setItem('quoteCurrency', this.quoteCurrency());
             Session.set('quoteCurrency', this.quoteCurrency());
+            if(this.baseCurrency() == this.quoteCurrency()){
+              this.baseHelper('Tokens are the same');
+            }
             Tokens.sync();
           } else {
             this.quoteHelper('Token not found');
@@ -43,6 +46,9 @@ Template.currencySelector.viewmodel({
             this.baseHelper('');
             localStorage.setItem('baseCurrency', this.baseCurrency());
             Session.set('baseCurrency', this.baseCurrency());
+            if(this.baseCurrency() == this.quoteCurrency()){
+              this.baseHelper('Tokens are the same');
+            }
             Tokens.sync();
           } else {
             this.baseHelper('Token not found');
