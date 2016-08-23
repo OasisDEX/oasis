@@ -131,7 +131,6 @@ Template.neworder.viewmodel({
       const maxTotal = new BigNumber(this.maxTotal());
       const marketOpen = Session.get('market_open');
       const validTokenPair = (Session.get('quoteCurrency') != Session.get('baseCurrency') ? true : false);
-      console.info(validTokenPair);
       return marketOpen && price.gt(0) && amount.gt(0) && total.gt(0) && validTokenPair && 
         (type !== 'buy' || total.lte(maxTotal)) && (type !== 'sell' || amount.lte(maxAmount));
     } catch (e) {
