@@ -7,6 +7,7 @@ import '../../ui/client/widgets/offermodal.js';
 import '../../ui/client/widgets/myorders.js';
 import '../../ui/client/widgets/orders.js';
 import '../../ui/client/widgets/orderbook.html';
+import '../../ui/client/widgets/lasttrades.html';
 
 import '../../ui/client/headers/accountselector.js';
 import '../../ui/client/headers/currencyselector.js';
