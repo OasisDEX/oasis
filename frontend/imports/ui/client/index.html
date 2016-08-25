@@ -40,24 +40,24 @@
           <a href="#allowance">Allowance</a>: {{#each token in allTokens}}{{formatBalance token.allowance}} {{token._id}} | {{/each}}
           {{> whatisthis section="allowance"}}
         </p>
-        <div class=row>
-          <section class="order-section">
-            {{> orderbook title='Buy orders' subtitle=(concat '(click on an order listing to sell ' baseCurrency ')') priceLabel='Bid Price' priceClass='bid' orders=(findOffers 'bid') canAccept=true}}
+        <div class="row">
+          <section class="order-section col-md-6">
+            {{> orderbook title='BUY ORDERS' subtitle=(concat '(click on an order listing to sell ' baseCurrency ')') priceLabel='Bid Price' priceClass='bid' orders=(findOffers 'bid') canAccept=true}}
           </section>
-          <section class="order-section">
+          <section class="order-section col-md-6">
             {{> orderbook title='SELL ORDERS' subtitle=(concat '(click on an order listing to buy ' baseCurrency ')') priceLabel='Ask Price' priceClass='ask' orders=(findOffers 'ask') canAccept=true}}
           </section>
         </div>
-        <div class=row>
-          <section class="order-section">
-            {{> neworder}}
-          </section>
-          <section class="order-section">
+        <div class="row">
+          <section class="order-section col-md-6">
             {{> myorders}}
           </section>
+          <section class="order-section col-md-6">
+            {{> lasttrades}}
+          </section>
         </div>
-        <div class=row>
-          <section class="order-section">
+        <div class="row">
+          <section class="order-section col-md-6">
             <h2 id="allowance">
               Allowance
               {{> whatisthis section="allowance"}}
@@ -68,13 +68,16 @@
               {{/if}}
             {{/each}}
           </section>
-          <section class="order-section">
+          <section class="order-section col-md-6">
             {{> ethtokens}}
           </section>
         </div>
-        <div class=row>
-          <section class="order-section">
+        <div class="row">
+          <section class="order-section col-md-6">
             {{> sendtokens}}
+          </section>
+          <section class="order-section col-md-6">
+            {{> neworder}}
           </section>
         </div>
 
