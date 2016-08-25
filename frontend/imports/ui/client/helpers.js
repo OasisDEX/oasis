@@ -89,10 +89,10 @@ Template.registerHelper('findOffers', (type) => {
   const baseCurrency = Session.get('baseCurrency');
   if (type === 'ask') {
     return Offers.find({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
-                       { sort: { ask_price: 1 }, limit: 10 });
+                       { sort: { ask_price: 1 }, limit: 5 });
   } else if (type === 'bid') {
     return Offers.find({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
-                       { sort: { ask_price: 1 }, limit: 10 });
+                       { sort: { ask_price: 1 }, limit: 5 });
   } else if (type === 'mine') {
     const or = [
       { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
