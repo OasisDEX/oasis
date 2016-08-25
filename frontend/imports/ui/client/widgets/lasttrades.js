@@ -1,0 +1,1 @@
+import './lasttrades.html';
