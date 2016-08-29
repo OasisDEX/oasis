@@ -81,18 +81,41 @@ Template.registerHelper('lastTrades', () => {
     { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
     { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
   ] };
-  return Trades.find(obj, { sort: { blockNumber: -1, transactionIndex: -1 }, limit: 10 });
+  return Trades.find(obj, { sort: { blockNumber: -1, transactionIndex: -1 }, skip:1, limit: 10 });
+});
+
+Template.registerHelper('countOffers', (type) => {
+  const quoteCurrency = Session.get('quoteCurrency');
+  const baseCurrency = Session.get('baseCurrency');
+  
+  let options = {};
+  if (type === 'ask') {
+    options.sort = { ask_price: 1 };
+    return Offers.find({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency}, options).count();
+  } else if (type === 'bid') {
+    options.sort = { ask_price: 1 };
+   return Offers.find({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency}, options).count();
+  }else{
+   return 0;
+  }
 });
 
 Template.registerHelper('findOffers', (type) => {
   const quoteCurrency = Session.get('quoteCurrency');
   const baseCurrency = Session.get('baseCurrency');
+  const limit = Session.get('orderBookLimit');
+
+  let options = {};
+  if(limit){
+      options.limit = limit;
+  }
+  
   if (type === 'ask') {
-    return Offers.find({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
-                       { sort: { ask_price: 1 }, limit: 10 });
+    options.sort = { ask_price: 1 };
+    return Offers.find({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency }, options);
   } else if (type === 'bid') {
-    return Offers.find({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
-                       { sort: { ask_price: 1 }, limit: 10 });
+    options.sort = { ask_price: 1 };
+    return Offers.find({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency }, options);
   } else if (type === 'mine') {
     const or = [
       { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
