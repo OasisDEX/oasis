@@ -74,14 +74,32 @@ Template.registerHelper('allTokens', () => {
 
 Template.registerHelper('findToken', (token) => Tokens.findOne(token));
 
-Template.registerHelper('lastTrades', () => {
+Template.registerHelper('countLastTrades', () => {
   const quoteCurrency = Session.get('quoteCurrency');
   const baseCurrency = Session.get('baseCurrency');
+  const options = {};
+  options.sort = { blockNumber: -1, transactionIndex: -1 };
   const obj = { $or: [
     { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
     { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
   ] };
-  return Trades.find(obj, { sort: { blockNumber: -1, transactionIndex: -1 }, limit: 10 });
+  return Trades.find(obj, options).count();
+});
+
+Template.registerHelper('lastTrades', () => {
+  const quoteCurrency = Session.get('quoteCurrency');
+  const baseCurrency = Session.get('baseCurrency');
+  const limit = Session.get('lastTradesLimit');
+  const options = {};
+  if (limit) {
+    options.limit = limit;
+  }
+  options.sort = { blockNumber: -1, transactionIndex: -1 };
+  const obj = { $or: [
+    { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
+    { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
+  ] };
+  return Trades.find(obj, options);
 });
 
 Template.registerHelper('findOffers', (type) => {

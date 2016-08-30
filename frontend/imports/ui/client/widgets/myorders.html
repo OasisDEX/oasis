@@ -19,7 +19,7 @@
       {{/if}}
     </div>
     <div role="tabpanel" class="tab-pane {{#unless address}}active{{/unless}} o" id="lasttrades">
-      {{> orders orders=lastTrades priceLabel='Price'}}
+      {{> orders orders=lastTrades type='lastTrades' priceLabel='Price'}}
     </div>
   </div>
 </template>
