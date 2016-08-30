@@ -1,28 +1,33 @@
 <template name="neworder">
   <form id="neworder">
     <h2>
-      New order
+      {{title}} {{baseCurrency}}
       {{> whatisthis section="new-order"}}
     </h2>
     <table>
       <tbody>
-        <tr>
+        <tr class="row-input-line">
           <th>
-            Order type
+            PRICE
           </th>
           <td>
-            <div class="radio">
-              <label><input type="radio" value="buy" {{b "group: type"}}> Buy {{baseCurrency}}</label>
-              <label><input type="radio" value="sell" {{b "group: type"}}> Sell {{baseCurrency}}</label>
-            </div>
+            <input type="number" class="input" step="any" min="0" {{b "value: price, input: calcTotal"}}> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
           </td>
         </tr>
-        <tr>
+        <tr class="row-input-line">
           <th>
-            {{fancyType}} Price (in {{quoteCurrency}}/{{baseCurrency}})
+            AMOUNT
           </th>
           <td>
-            <input type="number" class="input" step="any" min="0" {{b "value: price, input: calcTotal"}}>
+            <input type="number" class="input" step="any" min="0" {{b "value: amount, input: calcTotal, enable: priceDefined, attr: { max: maxAmount }"}}> <span class="span-buy-sell-currency">{{baseCurrency}}</span>
+          </td>
+        </tr>
+        <tr class="row-input-line">
+          <th>
+            TOTAL
+          </th>
+          <td>
+            <input type="number" class="input" step="any" min="0" {{b "value: total, input: calcAmount, enable: priceDefined, attr: { max: maxTotal }"}}> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
           </td>
         </tr>
         {{#unless priceDefined}}
@@ -32,29 +37,13 @@
             </td>
           </tr>
         {{/unless}}
-        <tr>
-          <th>
-            Amount (in {{baseCurrency}})
-          </th>
-          <td>
-            <input type="number" class="input" step="any" min="0" {{b "value: amount, input: calcTotal, enable: priceDefined, attr: { max: maxAmount }"}}>
-          </td>
-        </tr>
-        <tr>
-          <th>
-            Total (in {{quoteCurrency}})
-          </th>
-          <td>
-            <input type="number" class="input" step="any" min="0" {{b "value: total, input: calcAmount, enable: priceDefined, attr: { max: maxTotal }"}}>
-          </td>
-        </tr>
       </tbody>
       <tfoot>
         <tr>
           <th>
           </th>
           <td>
-            <button class="btn btn-default" data-toggle="modal" data-target="#newOrderModal" {{b "enable: canSubmit, click: preventDefault"}}>Submit order</button>
+            <button class="btn btn-default btn-submit-order-{{type}} {{type}}" data-toggle="modal" data-target="#newOrderModal" {{b "enable: canSubmit, click: preventDefault"}}>Submit order</button>
           </td>
         </tr>
         {{#unless isMarketOpen}}

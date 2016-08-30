@@ -11,9 +11,10 @@ import './neworder.html';
 Template.neworder.viewmodel({
   lastError: '',
   bestOffer: undefined,
-  type: 'buy',
-  fancyType() {
-    return this.type() === 'buy' ? 'Bid' : 'Ask';
+  type() {
+    const orderType = Template.instance() !== null ? Template.instance().data.orderType : ''
+    console.log(orderType);
+    return orderType;
   },
   sellCurrency() {
     if (this.type() === 'buy') {
