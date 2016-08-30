@@ -17,6 +17,20 @@ table {
 }
 
 .order-section {
+  opacity: 0.89;
+  background: #FFFFFF;
+  border: 1px solid #EFF1F3;
+  box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.13);
+  border-radius: 4px;
+  width: 442px;
+  height: 290px;
+  margin-right: 35px;
+  margin-bottom: 35px;
+  padding-right: 0px;
+  padding-bottom: 10px;
+}
+
+.order-section-content {
   thead {
     th {
       border-radius: 4px;
@@ -49,25 +63,60 @@ table {
   }
 }
 
-.order-section {
-  opacity: 0.89;
-  background: #FFFFFF;
-  border: 1px solid #EFF1F3;
-  box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.13);
-  border-radius: 4px;
-  width: 442px;
-  height: 290px;
-  margin-right: 35px;
-  margin-bottom: 35px;
-  padding-right: 0px;
-  padding-bottom: 10px;
+.buy-sell-section {
+  padding-right: 20px;
+
+  tbody {
+    th {
+      opacity: 0.68;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    input {
+      font-family: Roboto-Black;
+      font-size: 27px;
+      color: #D0D0D0;
+      border: none;
+      text-align: right;
+      padding-right: 10px;
+    }
+
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+
+    tr.row-input-line {
+      td,
+      th {
+        border-bottom: 1px solid #CFD8DC;
+        padding-top: 10px;
+      }
+      td:last-child {
+        text-align: right;
+      }
+    }
+
+    .span-buy-sell-currency {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 10px;
+      color: #222228;
+      letter-spacing: 1px;
+    }
+  }
 }
 
-.bid {
+.bid,
+.buy {
   color: $bid-color;
 }
 
-.ask {
+.ask,
+.sell {
   color: $ask-color;
 }
 
@@ -82,6 +131,23 @@ table {
   height: 14px;
   display: inline-block;
   color: #848FA5
+}
+
+.btn-submit-order {
+  border: 1px solid;
+  border-radius: 100px;
+  font-size: 13.5px;
+  letter-spacing: 1.57px;
+}
+
+.btn-submit-order-buy {
+   @extend .btn-submit-order;
+   border-color: $bid-color;
+}
+
+.btn-submit-order-sell {
+   @extend .btn-submit-order;
+   border-color: $ask-color;
 }
 
 /*
