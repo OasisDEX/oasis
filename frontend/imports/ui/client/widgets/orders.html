@@ -2,7 +2,8 @@
   <table>
     <thead>
       <tr>
-        <th title={{concat quoteCurrency ' / ' baseCurrency}} class={{priceClass}}>{{priceLabel}}</th>
+        <th>TYPE</th>
+        <th title={{concat quoteCurrency ' / ' baseCurrency}}>{{priceLabel}}</th>
         <th>{{quoteCurrency}}</th>
         <th>{{baseCurrency}}</th>
         <th></th>
@@ -10,7 +11,7 @@
     </thead>
     <tbody>
       {{#each orders}}
-        {{> orderRow order=this canAccept=../canAccept showCancel=../showCancel}}
+        {{> orderRow order=this canAccept=../canAccept showCancel=../showCancel showType=../showType showDate =../showDate}}
       {{/each}}
     </tbody>
   </table>

@@ -1,6 +1,15 @@
 <template name="orderRow">
   <tr class={{order.status}} title={{timestampToString order.timestamp true}}>
-    <td class="{{order.type}}">{{formatBalance (toWei order.price)}}</td>
+    {{#if showType}}
+      <td class="{{order.type}}">
+        {{#if equals order.type 'bid'}}
+          BUY
+        {{else}}
+          SELL
+        {{/if}}
+      </td>
+    {{/if}}
+    <td {{#unless showType}} class="{{order.type}}" {{/unless}}>{{formatBalance (toWei order.price)}}</td>
     <td>{{formatBalance (order.volume quoteCurrency)}}</td>
     <td>{{formatBalance (order.volume baseCurrency)}}</td>
     <td>
