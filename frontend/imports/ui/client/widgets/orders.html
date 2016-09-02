@@ -12,5 +12,10 @@
         {{> orderRow order=this canAccept=../canAccept showCancel=../showCancel}}
       {{/each}}
     </tbody>
+    <tfoot>
+      {{#if moreBtn}}
+        <tr><td><a href="#more" class="more" data-type="{{priceClass}}">More orders ({{orderCount}})</a></td></tr>
+      {{/if}}
+    </tfoot>
   </table>
 </template>
