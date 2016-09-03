@@ -130,8 +130,8 @@ Template.neworder.viewmodel({
       const total = new BigNumber(this.total());
       const maxTotal = new BigNumber(this.maxTotal());
       const marketOpen = Session.get('market_open');
-      const validTokenPair = (Session.get('quoteCurrency') != Session.get('baseCurrency') ? true : false);
-      return marketOpen && price.gt(0) && amount.gt(0) && total.gt(0) && validTokenPair && 
+      const validTokenPair = Session.get('quoteCurrency') !== Session.get('baseCurrency');
+      return marketOpen && price.gt(0) && amount.gt(0) && total.gt(0) && validTokenPair &&
         (type !== 'buy' || total.lte(maxTotal)) && (type !== 'sell' || amount.lte(maxAmount));
     } catch (e) {
       return false;

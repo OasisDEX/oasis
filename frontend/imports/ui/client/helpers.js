@@ -87,7 +87,6 @@ Template.registerHelper('lastTrades', () => {
 Template.registerHelper('countOffers', (type) => {
   const quoteCurrency = Session.get('quoteCurrency');
   const baseCurrency = Session.get('baseCurrency');
-  
   const options = {};
   options.sort = { ask_price: 1 };
 
