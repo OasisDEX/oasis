@@ -16,6 +16,146 @@ table {
   width: 100%;
 }
 
+.bid,
+.buy,
+.quote-currency {
+  color: $bid-color;
+}
+
+.ask,
+.sell,
+.base-currency {
+  color: $ask-color;
+}
+
+.tabs {
+  width: 700px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  
+  ul {
+    border-bottom: none;
+  }
+
+  li {
+    border: 1px solid #D3D5DC;
+    border-radius: 100px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-color: #E8E9ED;
+    
+    a {
+      padding: 0px;
+      color: #4F5362;
+    }
+  }
+
+  .first-tab {
+    padding: 7px 30px 7px 35px;
+    border-radius: 100px 0 0 100px;    
+  }
+
+  .middle-tab {
+    background-color: rgba(0,0,0,0.0);
+    opacity: 0.40;
+    padding: 7px 20px 7px 20px;
+    border-radius: 0px;
+  }
+
+  .last-tab {
+    background-color: rgba(0,0,0,0.0);
+    opacity: 0.40;
+    padding: 7px 35px 7px 30px;
+    border-radius: 0px 100px 100px 0px;
+  }
+}
+
+.balance {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  color: #4F5362;
+  margin-bottom: 35px;
+
+  .span-currency-allowance {
+    font-size: 30.5px;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: 400;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  .span-total-balance-title {
+    opacity: 0.70;
+    margin-right: 10px;
+  }
+
+  .span-total-balance-amount {
+    font-weight: 700;
+  }
+
+  .btn-change-allowance {
+    border: 1px solid #A8ACB9;
+    border-radius: 100px;
+    font-size: 9px;
+    color: #A8ACB9;
+    background-color: rgba(0,0,0,0.0);
+    margin-top: 10px;
+  }
+}
+
+.currencies {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 35px;
+  display: flex;
+  justify-content: center;
+  height: 104px;
+  
+  .currencies-selectors {
+    text-align: center;
+    color: #4F5362;
+    letter-spacing: 2px;
+    margin: 0px;
+    display: block;
+    align-self: center;
+
+    .select-quote-currency {
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      border-radius: 100px 0 0 100px;
+      background-color: #E8E9ED;
+      padding: 5px 2px 5px 35px;
+      margin-right: -7px;
+      border-right: 0px;
+      border: 1px solid #D3D5DC;
+    }
+
+    .select-base-currency {
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      border-radius: 0 100px 100px 0;
+      opacity: 0.5;
+      background-color: rgba(0,0,0,0.0);
+      padding: 5px 29px 5px 8px;
+      border: 1px solid #D3D5DC;
+    }
+
+    .span-token-pair {
+      font-size: 10px;
+      font-weight: 500;
+      opacity: 0.68;
+      display: block;
+      margin-top: 15px;
+    }
+  }
+}
+
 .order-section {
   opacity: 0.89;
   background: #FFFFFF;
@@ -107,17 +247,12 @@ table {
       color: #222228;
       letter-spacing: 1px;
     }
+
+    .help-block {
+      font-size: 13px;
+      color: #D0D0D0;
+    }
   }
-}
-
-.bid,
-.buy {
-  color: $bid-color;
-}
-
-.ask,
-.sell {
-  color: $ask-color;
 }
 
 .question-circle {
@@ -130,7 +265,9 @@ table {
   width: 14px;
   height: 14px;
   display: inline-block;
-  color: #848FA5
+  color: #848FA5;
+  float: right;
+  margin-right: 20px;
 }
 
 .btn-submit-order {
@@ -138,6 +275,7 @@ table {
   border-radius: 100px;
   font-size: 13.5px;
   letter-spacing: 1.57px;
+  float: right;
 }
 
 .btn-submit-order-buy {
