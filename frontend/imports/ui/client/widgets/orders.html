@@ -2,7 +2,7 @@
   <table>
     <thead>
       <tr>
-        <th>TYPE</th>
+        {{#if showType}}<th>TYPE</th>{{/if}}
         <th title={{concat quoteCurrency ' / ' baseCurrency}}>{{priceLabel}}</th>
         <th>{{quoteCurrency}}</th>
         <th>{{baseCurrency}}</th>

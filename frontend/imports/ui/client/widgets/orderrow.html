@@ -9,7 +9,11 @@
         {{/if}}
       </td>
     {{/if}}
-    <td {{#unless showType}} class="{{order.type}}" {{/unless}}>{{formatBalance (toWei order.price)}}</td>
+    {{#unless showType}}
+      <td class={{order.type}}>{{formatBalance (toWei order.price)}}</td>
+    {{else}}
+      <td>{{formatBalance (toWei order.price)}}</td>    
+    {{/unless}}
     <td>{{formatBalance (order.volume quoteCurrency)}}</td>
     <td>{{formatBalance (order.volume baseCurrency)}}</td>
     <td>
