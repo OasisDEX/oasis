@@ -41,6 +41,11 @@ function initNetwork(newNetwork) {
   Offers.sync();
 }
 
+// Check the closing time of the market and if it's open now
+function checkMarketOpen() {
+  Offers.checkMarketOpen();
+}
+
 // CHECK FOR NETWORK
 function checkNetwork() {
   web3.version.getNode((error) => {
@@ -174,4 +179,5 @@ Meteor.startup(() => {
 
   Meteor.setInterval(checkNetwork, 2503);
   Meteor.setInterval(checkAccounts, 10657);
+  Meteor.setInterval(checkMarketOpen, 11027);
 });

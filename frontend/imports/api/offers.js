@@ -21,6 +21,9 @@ const OFFER_GAS = 1000000;
 const BUY_GAS = 1000000;
 const CANCEL_GAS = 1000000;
 
+const OFFER_LIMIT = 7;
+Session.set('orderBookLimit', OFFER_LIMIT);
+
 const helpers = {
   volume(currency) {
     let volume = '0';
@@ -65,6 +68,20 @@ Offers.helpers(_.extend(helpers, {
 Trades.helpers(helpers);
 
 /**
+ * Get if market is open
+ */
+Offers.checkMarketOpen = () => {
+   // Fetch the market close time
+  Dapple['maker-otc'].objects.otc.close_time((error, t) => {
+    if (!error) {
+      const closeTime = t.toNumber();
+      Session.set('close_time', closeTime);
+      Session.set('market_open', closeTime > (new Date() / 1000));
+    }
+  });
+};
+
+/**
  * Syncs up all offers and trades
  */
 Offers.sync = () => {
@@ -83,14 +100,7 @@ Offers.sync = () => {
     }
   });
 
-  // Fetch the market close time
-  Dapple['maker-otc'].objects.otc.close_time((error, t) => {
-    if (!error) {
-      const closeTime = t.toNumber();
-      Session.set('close_time', closeTime);
-      Session.set('market_open', closeTime > (new Date() / 1000));
-    }
-  });
+  Offers.checkMarketOpen();
 
   // Sync all past offers
   Dapple['maker-otc'].objects.otc.last_offer_id((error, n) => {
@@ -224,4 +234,4 @@ Offers.cancelOffer = (idx) => {
   });
 };
 
-export { Offers, Trades, Status };
+export { Offers, Trades, Status, OFFER_LIMIT };
