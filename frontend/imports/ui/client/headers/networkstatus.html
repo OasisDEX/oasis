@@ -1,6 +1,7 @@
 <template name="networkStatus">
+  <img alt="Maker" src="/logo.svg">  
   <p>
-      Network: {{network}}
+      <span class="bold">{{network}}</span>
       {{#unless isConnected}}
         (not connected)
       {{else}}
@@ -14,7 +15,8 @@
               (loading offers {{loadingProgress}}%)
             {{else}}
               {{#if ready}}
-                (ready)
+                <br>
+                CONNECTED
               {{/if}}
             {{/if}}
           {{/if}}
