@@ -1,13 +1,16 @@
 <template name="accountSelector">
-  <p>Accounts:
-    <select>
+  <p>Account:
+    <select class="select-change-allowance">
     {{#each accounts}}
       <option value="{{this}}" selected={{equals this address}}>{{this}}</option>
     {{/each}}
     </select>
     {{> whatisthis section="account"}}
   </p>
-  <p>Active Account:
-    <pre>{{currentAccount}}</pre>
+  {{#if ready}}
+  <p>
+    Market: <a href={{contractHref}} class="select-change-allowance">{{contractAddress}}</a>
+    {{> whatisthis section="contract"}}
   </p>
+  {{/if}}
 </template>

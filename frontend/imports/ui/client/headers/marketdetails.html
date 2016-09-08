@@ -1,9 +1,4 @@
 <template name="marketDetails">
-  <p>
-    Market Contract: <a href={{contractHref}}>{{contractAddress}}</a>
-    {{> whatisthis section="contract"}}
-  </p>
-
   {{#if contractExists}}
     {{#if isMarketOpen}}
       <p>
