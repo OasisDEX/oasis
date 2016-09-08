@@ -15,6 +15,8 @@ import '../../ui/client/headers/currencyselector.js';
 import '../../ui/client/headers/marketdetails.html';
 import '../../ui/client/headers/networkstatus.html';
 import '../../ui/client/headers/tabs.js';
+import '../../ui/client/headers/volumes.html';
+
 
 import '../../ui/client/index.html';
 import '../../ui/client/footer.html';
