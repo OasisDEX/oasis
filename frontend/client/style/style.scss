@@ -28,6 +28,47 @@ table {
   color: $ask-color;
 }
 
+.bold {
+  font-weight: 700;
+}
+
+.account-section {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  text-align: right;
+
+  .select-change-allowance {
+    border: 1px solid #D3D5DC;
+    border-radius: 100px;
+    font-size: 10px;
+    color: #D0D0D0;
+    background-color: rgba(0,0,0,0.0);
+    margin-left: 20px;
+    margin-right: 10px;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    padding: 8px 10px;
+  }  
+}
+
+.networkstatus-section {
+  p {
+    margin-left: 0px;
+    overflow: auto;
+    display: block;
+    margin-top: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  img {
+    float: left;
+    margin-right: 5px;
+    clear: both;
+  }
+}
+
 .tabs {
   width: 700px;
   margin: 0 auto;
@@ -163,7 +204,7 @@ table {
   box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.13);
   border-radius: 4px;
   width: 442px;
-  height: 290px;
+  min-height: 290px;
   margin-right: 35px;
   margin-bottom: 35px;
   padding-right: 0px;
@@ -286,6 +327,78 @@ table {
 .btn-submit-order-sell {
    @extend .btn-submit-order;
    border-color: $ask-color;
+}
+
+.modal-order {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 20px;
+  width: 490px;
+  overflow: auto;
+  
+  h4 {
+    font-size: 24px;
+    color: #222228;
+  }
+
+  th {
+    color: #222228;
+    opacity: 0.68;
+    font-weight: 500;
+  }
+
+  td {
+    font-size: 24px;
+    font-weight: 700;
+    text-align: right;
+    color: #D0D0D0;
+  }
+
+  input {
+    border: none;
+    text-align: right;
+    padding-right: 10px;
+  }
+
+  input[type=number]::-webkit-inner-spin-button, 
+  input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+  }
+
+  tr.row-input-line {
+      td,
+      th {
+        padding-top: 10px;
+      }
+      td:last-child {
+        text-align: right;
+      }
+    }
+
+  .span-owner {
+    font-size: 12px;
+  }
+
+  .span-offer-currency {
+    font-size: 10px;
+    font-weight: 700;
+    color: #222228;
+    opacity: 0.60;
+  }
+
+  .div-modal-text {
+    font-weight: 700;
+    font-size: 14px;
+    color: #222228;
+    opacity: 0.50;
+  }
+
+  .div-actions {
+    float: right;
+    margin-top: 5px;
+  }
 }
 
 /*
