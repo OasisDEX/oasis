@@ -13,12 +13,23 @@
       <strong>Update notice:</strong> If you have any open orders at the previous market <a href="https://makerdao.github.io/maker-market-archive/v0.1.0/">Maker OTC</a>; be sure to cancel them there to unlock the held funds!
     </p>
 
-    {{> networkStatus }}
+    <p>
+      {{> marketDetails}}
+    </p>
 
-    {{#if ready}}
-      {{> marketDetails }}
-      {{#if contractExists}}
+    <div class="row">
+      <section class="col-md-3 networkstatus-section">
+        {{> networkStatus }}
+      </section>
+      <section class="col-md-4">
+        {{> volumes }}
+      </section>        
+      <section class="col-md-5 account-section">        
         {{> accountSelector }}
+      </section>        
+    </div>
+    {{#if ready}}
+      {{#if contractExists}}
         <div class="row">
          {{> tabs }}        
         </div>
