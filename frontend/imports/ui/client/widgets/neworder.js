@@ -201,7 +201,7 @@ Template.neworder.viewmodel({
     }
     Offers.newOffer(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, (error) => {
       if (error != null) {
-        this.lastError(error.toString());
+        this.lastError(error.toString().split('\n')[0]);
       }
     });
   },

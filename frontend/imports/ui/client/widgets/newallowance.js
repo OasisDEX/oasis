@@ -8,8 +8,6 @@ import './newallowance.html';
 
 const APPROVE_GAS = 150000;
 
-Template.myError;
-
 Template.newallowance.viewmodel({
   value: '',
   allowance() {
@@ -48,10 +46,6 @@ Template.newallowance.viewmodel({
               { value: this.value(), token: this.templateInstance.data.token._id });
           } else {
             this.lastError(txError.toString().split('\n')[0]);
-            console.log(typeof txError);
-            console.log(txError);
-            console.log(txError.toString());
-            Template.myError = txError;
           }
         });
       } else {

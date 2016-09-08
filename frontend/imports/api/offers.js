@@ -216,7 +216,7 @@ Offers.buyOffer = (_id, _quantity) => {
       Offers.update(_id, { $set: {
         tx, status: Status.BOUGHT, helper: 'Your buy / sell order is being processed...' } });
     } else {
-      Offers.update(_id, { $set: { helper: error.toString() } });
+      Offers.update(_id, { $set: { helper: error.toString().split('\n')[0] } });
     }
   });
 };
@@ -229,7 +229,7 @@ Offers.cancelOffer = (idx) => {
       Transactions.add('offer', tx, { id: idx, status: Status.CANCELLED });
       Offers.update(idx, { $set: { tx, status: Status.CANCELLED, helper: 'Your order is being cancelled...' } });
     } else {
-      Offers.update(idx, { $set: { helper: error.toString() } });
+      Offers.update(idx, { $set: { helper: error.toString().split('\n')[0] } });
     }
   });
 };
