@@ -1,3 +1,9 @@
+@font-face {
+  font-family: 'Montserrat-SemiBold';
+  src:  url('Montserrat-SemiBold.woff2') format('woff2'),
+        url('Montserrat-SemiBold.woff') format('woff');
+}
+
 $background-color: #F8F7F5;
 $bid-color: #1ABC9C;
 $ask-color: #8D86C9;
@@ -399,6 +405,133 @@ table {
     float: right;
     margin-top: 5px;
   }
+}
+
+.no-ethereum-section {
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  color: #222228;
+  font-size: 25px;
+
+  h2 {
+    font-family: 'Montserrat-Semi-Bold', sans-serif;
+    opacity: 0.8;
+    color: #222228;
+  }
+
+  .img-maker-logo {
+    width: 364px;
+    padding-bottom: 30px;
+  }
+
+  .img-ethereum-logo {
+    width: 61px;
+    padding-top: 30px;
+    margin-bottom: 40px;
+  }
+
+  .horizontal-line {
+    color: #DCDDE0;
+    border: 0px;
+    border-top: solid 1px #DCDDE0;
+  }
+
+  p {
+    //display: inline-block;
+  }
+
+  .p-not-found{
+    opacity: 0.60;
+    width: 925px;
+    display: inline-block;
+    margin-top: 50px;
+    margin-bottom: 70px;
+  }
+
+  .p-use-clients {
+    display: inline-block;
+    color: #546979;
+    font-family: 'Montserrat-SemiBold', sans-serif;
+    display: inline-block;
+  }
+
+  .p-connect-geth {
+    opacity: 1;
+    width: 925px;
+    color: #4F5362;
+    display: inline-block;
+  }
+
+  .div-clients {
+    height: 360px;
+    display: flex;
+    justify-content: center;
+    font-size: 21px;
+    color: #4F5362;
+    margin-bottom: 50px;
+    margin-top: 50px;
+  }
+
+  .div-metamask,
+  .div-mist {
+    background-color: #FFFFFF;
+    width: 340px;
+    height: 360px;
+    padding: 33px 10px 33px 27px;
+    opacity: 0.89;
+    border: 2px solid #EFF1F3;
+    box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.13);
+    border-radius: 4px;
+    margin: 0 20px;
+  
+    h2 {
+      margin-bottom: 45px;
+    }
+
+    p {
+      display: table;
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .span-montserrat-semi-bold {
+      font-family: 'Montserrat-SemiBold', sans-serif;
+      font-size: 21px;
+      color: #4F5362;
+    }
+
+    .numberCircle {
+      display: inline-block;
+      border-radius: 50%;
+      height: 28px;
+      width: 28px;
+      line-height: 28px;
+      border-radius: 50%;
+      -moz-border-radius: 50%;
+      text-align: center;
+      border: solid 1px #CFD8DC;
+      font-size: 18px;
+      color: #222228;
+      opacity: 0.68;
+    }
+
+    .align-number {
+      display: table-cell;
+      vertical-align: middle;
+      padding-right: 20px;
+    }
+  }
+}
+
+.footer {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 21px;
+  color: #4F5362;
+  opacity: 0.70;
+  margin-top: 100px;
+  margin-bottom: 30px;
 }
 
 /*
