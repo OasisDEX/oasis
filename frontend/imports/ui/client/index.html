@@ -1,101 +1,103 @@
 <body>
   <div class="container">
-    <h1>
-      <img alt="Maker" src="/logo.svg">
-      <span>Market</span>
-    </h1>
+    {{#if isConnected}}
+      <h1>
+        <img alt="Maker" src="/logo.svg">
+        <span>Market</span>
+      </h1>
 
-    <p class="text-danger">
-      <strong>Warning!</strong> Maker Market is undergoing alpha testing: Proceed at your own risk, and use only small amounts of {{quoteCurrency}} and {{baseCurrency}}.
-    </p>
+      <p class="text-danger">
+        <strong>Warning!</strong> Maker Market is undergoing alpha testing: Proceed at your own risk, and use only small amounts of {{quoteCurrency}} and {{baseCurrency}}.
+      </p>
 
-    <p class="text-success">
-      <strong>Update notice:</strong> If you have any open orders at the previous market <a href="https://makerdao.github.io/maker-market-archive/v0.1.0/">Maker OTC</a>; be sure to cancel them there to unlock the held funds!
-    </p>
+      <p class="text-success">
+        <strong>Update notice:</strong> If you have any open orders at the previous market <a href="https://makerdao.github.io/maker-market-archive/v0.1.0/">Maker OTC</a>; be sure to cancel them there to unlock the held funds!
+      </p>
 
-    <p>
-      {{> marketDetails}}
-    </p>
+      <p>
+        {{> marketDetails}}
+      </p>
 
-    <div class="row">
-      <section class="col-md-3 networkstatus-section">
-        {{> networkStatus }}
-      </section>
-      <section class="col-md-4">
-        {{> volumes }}
-      </section>        
-      <section class="col-md-5 account-section">        
-        {{> accountSelector }}
-      </section>        
-    </div>
-    {{#if ready}}
-      {{#if contractExists}}
-        <div class="row">
-         {{> tabs }}        
-        </div>
-        <div class="row">
-          <section class="balance col-md-3">
-            {{> balance currency=quoteCurrency currencyType='quote-currency' }}
-          </section>
-          <section class="currencies col-md-3">
-            {{> currencySelector }}
-          </section>
-          <section class="balance col-md-3">
-            {{> balance currency=baseCurrency currencyType='base-currency' }}
-          </section>
-        </div>
-        <div class="row">
-          <section class="order-section buy-sell-section col-md-6">
-            {{> neworder title='BUY' orderType='buy'}}
-          </section>
-          <section class="order-section buy-sell-section col-md-6">
-            {{> neworder title='SELL' orderType='sell'}}
-          </section>
-        </div>
-        <div class="row">
-          <section class="order-section order-section-content col-md-6">
-            {{> orderbook title='BUY ORDERS' subtitle=(concat '(click on an order listing to sell ' baseCurrency ')') priceLabel='Bid Price' orders=(findOffers 'bid') canAccept=true showType=false}}
-          </section>
-          <section class="order-section order-section-content col-md-6">
-            {{> orderbook title='SELL ORDERS' subtitle=(concat '(click on an order listing to buy ' baseCurrency ')') priceLabel='Ask Price' orders=(findOffers 'ask') canAccept=true}}
-          </section>
-        </div>
-        <div class="row">
-          <section class="order-section order-section-content col-md-6">
-            {{> myorders}}
-          </section>
-          <section class="order-section order-section-content col-md-6">
-            {{> lasttrades}}
-          </section>
-        </div>
-        <div class="row">
-          <section class="order-section col-md-6">
-            <h2 id="allowance">
-              Allowance
-              {{> whatisthis section="allowance"}}
-            </h2>
-            {{#each token in allTokens}}
-              {{#if token}}
-                {{> newallowance token=token}}
-              {{/if}}
-            {{/each}}
-          </section>
-          <section class="order-section col-md-6">
-            {{> ethtokens}}
-          </section>
-        </div>
-        <div class="row">
-          <section class="order-section col-md-6">
-            {{> sendtokens}}
-          </section>
-          <section class="order-section col-md-6">
-            {{> neworder title='Sell' orderType='sell'}}
-          </section>
-        </div>
+      <div class="row">
+        <section class="col-md-3 networkstatus-section">
+          {{> networkStatus }}
+        </section>
+        <section class="col-md-4">
+          {{> volumes }}
+        </section>        
+        <section class="col-md-5 account-section">        
+          {{> accountSelector }}
+        </section>        
+      </div>
+      {{#if ready}}
+        {{#if contractExists}}
+          <div class="row">
+          {{> tabs }}        
+          </div>
+          <div class="row">
+            <section class="balance col-md-3">
+              {{> balance currency=quoteCurrency currencyType='quote-currency' }}
+            </section>
+            <section class="currencies col-md-3">
+              {{> currencySelector }}
+            </section>
+            <section class="balance col-md-3">
+              {{> balance currency=baseCurrency currencyType='base-currency' }}
+            </section>
+          </div>
+          <div class="row">
+            <section class="order-section buy-sell-section col-md-6">
+              {{> neworder title='BUY' orderType='buy'}}
+            </section>
+            <section class="order-section buy-sell-section col-md-6">
+              {{> neworder title='SELL' orderType='sell'}}
+            </section>
+          </div>
+          <div class="row">
+            <section class="order-section order-section-content col-md-6">
+              {{> orderbook title='BUY ORDERS' subtitle=(concat '(click on an order listing to sell ' baseCurrency ')') priceLabel='Bid Price' orders=(findOffers 'bid') canAccept=true showType=false}}
+            </section>
+            <section class="order-section order-section-content col-md-6">
+              {{> orderbook title='SELL ORDERS' subtitle=(concat '(click on an order listing to buy ' baseCurrency ')') priceLabel='Ask Price' orders=(findOffers 'ask') canAccept=true}}
+            </section>
+          </div>
+          <div class="row">
+            <section class="order-section order-section-content col-md-6">
+              {{> myorders}}
+            </section>
+            <section class="order-section order-section-content col-md-6">
+              {{> lasttrades}}
+            </section>
+          </div>
+          <div class="row">
+            <section class="order-section col-md-6">
+              <h2 id="allowance">
+                Allowance
+                {{> whatisthis section="allowance"}}
+              </h2>
+              {{#each token in allTokens}}
+                {{#if token}}
+                  {{> newallowance token=token}}
+                {{/if}}
+              {{/each}}
+            </section>
+            <section class="order-section col-md-6">
+              {{> ethtokens}}
+            </section>
+          </div>
+          <div class="row">
+            <section class="order-section col-md-6">
+              {{> sendtokens}}
+            </section>
+            <section class="order-section col-md-6">
+              {{> neworder title='Sell' orderType='sell'}}
+            </section>
+          </div>
 
-        {{> offermodal offer=(findOffer selectedOffer)}}
+          {{> offermodal offer=(findOffer selectedOffer)}}
+        {{/if}}
       {{/if}}
-    {{/if}}
+    {{/if}}  
     {{#unless isConnected}}
       {{> noEthereum}}
     {{/unless}}
