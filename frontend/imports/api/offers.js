@@ -21,6 +21,9 @@ const OFFER_GAS = 1000000;
 const BUY_GAS = 1000000;
 const CANCEL_GAS = 1000000;
 
+const TRADES_LIMIT = 7;
+Session.set('lastTradesLimit', TRADES_LIMIT);
+
 const OFFER_LIMIT = 7;
 Session.set('orderBookLimit', OFFER_LIMIT);
 
@@ -234,4 +237,4 @@ Offers.cancelOffer = (idx) => {
   });
 };
 
-export { Offers, Trades, Status, OFFER_LIMIT };
+export { Offers, Trades, Status };
