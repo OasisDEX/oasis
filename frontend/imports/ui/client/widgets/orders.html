@@ -9,7 +9,7 @@
     </thead>
     <tbody>
       {{#each orders}}
-        {{> orderRow order=this canAccept=../canAccept showCancel=../showCancel}}
+        {{> orderRow order=this type=priceClass canAccept=../canAccept showCancel=../showCancel}}
       {{/each}}
     </tbody>
     <tfoot>

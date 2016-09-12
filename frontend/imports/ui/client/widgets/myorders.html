@@ -13,7 +13,7 @@
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane {{#if address}}active{{/if}} o" id="myorders">
       {{#if address}}
-        {{> orders orders=(findOffers 'mine') priceLabel='Price' showCancel=true}}
+        {{> orders orders=(findOffers 'mine') type='myOrders' priceLabel='Price' showCancel=true}}
       {{else}}
         <small>Select an account to display your orders</small>
       {{/if}}
