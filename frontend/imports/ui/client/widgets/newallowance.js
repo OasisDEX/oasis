@@ -45,7 +45,7 @@ Template.newallowance.viewmodel({
             Transactions.add('allowance_'.concat(this.templateInstance.data.token._id), tx,
               { value: this.value(), token: this.templateInstance.data.token._id });
           } else {
-            this.lastError(txError.toString().split('\n')[0]);
+            this.lastError(Template.prettyError(txError));
           }
         });
       } else {

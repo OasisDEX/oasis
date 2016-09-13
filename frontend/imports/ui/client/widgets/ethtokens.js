@@ -58,7 +58,7 @@ Template.ethtokens.viewmodel({
             if (!txError) {
               Transactions.add(TRANSACTION_TYPE, tx, { type: 'deposit', amount: this.amount() });
             } else {
-              this.lastError(txError.toString().split('\n')[0]);
+              this.lastError(Template.prettyError(txError));
             }
           });
         } else {
@@ -73,7 +73,7 @@ Template.ethtokens.viewmodel({
             if (!txError) {
               Transactions.add(TRANSACTION_TYPE, tx, { type: 'withdraw', amount: this.amount() });
             } else {
-              this.lastError(txError.toString().split('\n')[0]);
+              this.lastError(Template.prettyError(txError));
             }
           });
         } else {
