@@ -5,6 +5,7 @@ import { _ } from 'meteor/underscore';
 
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
+import { prettyError } from '/imports/utils/prettyError';
 
 import './sendtokens.html';
 
@@ -57,7 +58,7 @@ Template.sendtokens.viewmodel({
           if (!txError) {
             Transactions.add(TRANSACTION_TYPE, tx, { recipient, amount: this.amount(), token: this.currency() });
           } else {
-            this.lastError(txError.toString());
+            this.lastError(prettyError(txError));
           }
         });
       } else {
