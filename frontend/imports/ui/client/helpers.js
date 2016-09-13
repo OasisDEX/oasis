@@ -207,9 +207,7 @@ Template.registerHelper('formatPrice', (value, currency) => {
 
 Template.prettyError = function(error) {
   if (typeof error !== "string") {
-    console.log("Error was not a string... converting!");
     error = error.toString();
   }
-  console.log("Returning first line of error");
   return error.split('\n')[0];
 }
