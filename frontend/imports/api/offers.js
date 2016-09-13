@@ -4,6 +4,7 @@ import { BigNumber } from 'meteor/ethereum:web3';
 import { Dapple, web3 } from 'meteor/makerotc:dapple';
 import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
+import { Template } from 'meteor/templating';
 
 import Transactions from '/imports/api/transactions';
 
