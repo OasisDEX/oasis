@@ -6,7 +6,7 @@ import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
 
 import Transactions from '/imports/api/transactions';
-import { prettyError } from '/imports/utils/prettyError'; 
+import { prettyError } from '/imports/utils/prettyError';
 
 const Offers = new Mongo.Collection(null);
 const Trades = new Mongo.Collection(null);
