@@ -1,6 +1,3 @@
-export const prettyError = function(error) {
-  if (typeof error !== "string") {
-    error = error.toString();
-  }
-  return error.split('\n')[0];
+export default function prettyError(error) {
+  return error.toString().split('\n')[0];
 }
