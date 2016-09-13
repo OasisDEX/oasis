@@ -3,6 +3,7 @@ import { BigNumber } from 'meteor/ethereum:web3';
 import { Dapple, web3 } from 'meteor/makerotc:dapple';
 
 import Transactions from '/imports/api/transactions';
+import { prettyError } from '/imports/utils/prettyError';
 
 import './newallowance.html';
 
@@ -45,7 +46,7 @@ Template.newallowance.viewmodel({
             Transactions.add('allowance_'.concat(this.templateInstance.data.token._id), tx,
               { value: this.value(), token: this.templateInstance.data.token._id });
           } else {
-            this.lastError(Template.prettyError(txError));
+            this.lastError(prettyError(txError));
           }
         });
       } else {

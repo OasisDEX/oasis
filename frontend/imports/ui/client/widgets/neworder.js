@@ -5,6 +5,7 @@ import { web3 } from 'meteor/makerotc:dapple';
 
 import Tokens from '/imports/api/tokens';
 import { Offers } from '/imports/api/offers';
+import { prettyError } from '/imports/utils/prettyError';
 
 import './neworder.html';
 
@@ -201,7 +202,7 @@ Template.neworder.viewmodel({
     }
     Offers.newOffer(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, (error) => {
       if (error != null) {
-        this.lastError(Template.prettyError(error));
+        this.lastError(prettyError(error));
       }
     });
   },
