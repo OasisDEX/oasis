@@ -11,7 +11,11 @@
     </thead>
     <tbody>
       {{#each orders}}
+<<<<<<< HEAD
         {{> orderRow order=this canAccept=../canAccept showCancel=../showCancel showType=../showType showDate =../showDate}}
+=======
+        {{> orderRow order=this type=priceClass canAccept=../canAccept showCancel=../showCancel}}
+>>>>>>> master
       {{/each}}
     </tbody>
     <tfoot>

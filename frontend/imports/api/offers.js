@@ -6,6 +6,7 @@ import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
 
 import Transactions from '/imports/api/transactions';
+import { prettyError } from '/imports/utils/prettyError';
 
 const Offers = new Mongo.Collection(null);
 const Trades = new Mongo.Collection(null);
@@ -20,6 +21,9 @@ const Status = {
 const OFFER_GAS = 1000000;
 const BUY_GAS = 1000000;
 const CANCEL_GAS = 1000000;
+
+const TRADES_LIMIT = 7;
+Session.set('lastTradesLimit', TRADES_LIMIT);
 
 const OFFER_LIMIT = 7;
 Session.set('orderBookLimit', OFFER_LIMIT);
@@ -216,7 +220,7 @@ Offers.buyOffer = (_id, _quantity) => {
       Offers.update(_id, { $set: {
         tx, status: Status.BOUGHT, helper: 'Your buy / sell order is being processed...' } });
     } else {
-      Offers.update(_id, { $set: { helper: error.toString() } });
+      Offers.update(_id, { $set: { helper: prettyError(error) } });
     }
   });
 };
@@ -229,9 +233,9 @@ Offers.cancelOffer = (idx) => {
       Transactions.add('offer', tx, { id: idx, status: Status.CANCELLED });
       Offers.update(idx, { $set: { tx, status: Status.CANCELLED, helper: 'Your order is being cancelled...' } });
     } else {
-      Offers.update(idx, { $set: { helper: error.toString() } });
+      Offers.update(idx, { $set: { helper: prettyError(error) } });
     }
   });
 };
 
-export { Offers, Trades, Status, OFFER_LIMIT };
+export { Offers, Trades, Status };

@@ -5,6 +5,7 @@ import { web3 } from 'meteor/makerotc:dapple';
 
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
+import { prettyError } from '/imports/utils/prettyError';
 
 import './ethtokens.html';
 
@@ -63,7 +64,7 @@ Template.ethtokens.viewmodel({
             if (!txError) {
               Transactions.add(TRANSACTION_TYPE, tx, { type: 'deposit', amount: this.amount() });
             } else {
-              this.lastError(txError.toString());
+              this.lastError(prettyError(txError));
             }
           });
         } else {
@@ -78,7 +79,7 @@ Template.ethtokens.viewmodel({
             if (!txError) {
               Transactions.add(TRANSACTION_TYPE, tx, { type: 'withdraw', amount: this.amount() });
             } else {
-              this.lastError(txError.toString());
+              this.lastError(prettyError(txError));
             }
           });
         } else {
