@@ -1,6 +1,9 @@
 // Import to load these templates
 import '../../ui/client/widgets/ethtokens.js';
 import '../../ui/client/widgets/lasttrades.html';
+import '../../ui/client/widgets/maindeposit.html';
+import '../../ui/client/widgets/maintrades.html';
+import '../../ui/client/widgets/maintransfer.html';
 import '../../ui/client/widgets/myorders.js';
 import '../../ui/client/widgets/newallowance.js';
 import '../../ui/client/widgets/neworder.js';
@@ -10,11 +13,11 @@ import '../../ui/client/widgets/orderbook.html';
 import '../../ui/client/widgets/sendtokens.js';
 
 import '../../ui/client/headers/accountselector.js';
-import '../../ui/client/headers/balance.js';
+import '../../ui/client/headers/balance.html';
 import '../../ui/client/headers/currencyselector.js';
 import '../../ui/client/headers/marketdetails.html';
 import '../../ui/client/headers/networkstatus.html';
-import '../../ui/client/headers/tabs.js';
+import '../../ui/client/headers/tabs.html';
 import '../../ui/client/headers/volumes.html';
 
 
