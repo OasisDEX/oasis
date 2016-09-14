@@ -1,9 +1,9 @@
 <template name="tabs">
   <div class="tabs">
-    <ul class="nav nav-tabs">
-      <li role="presentation" class="first-tab" id="trade"><a href="#">TRADE</a></li>
-      <li role="presentation" class="middle-tab" id="deposit-withdraw"><a href="#">DEPOSIT / WITHDRAW</a></li>
-      <li role="presentation" class="last-tab" id="transfer"><a href="#">TRANSFER</a></li>
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="first-tab active"><a href="#trade" aria-controls="trade" role="tab" data-toggle="tab">TRADE</a></li>
+      <li role="presentation" class="middle-tab"><a href="#deposit" aria-controls="deposit" role="tab" data-toggle="tab">DEPOSIT / WITHDRAW</a></li>
+      <li role="presentation" class="last-tab"><a href="#transfer" aria-controls="transfer" role="tab" data-toggle="tab">TRANSFER</a></li>
     </ul>
   </div>
 </template>
