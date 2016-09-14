@@ -12,8 +12,7 @@ Template.neworder.viewmodel({
   lastError: '',
   bestOffer: undefined,
   type() {
-    const orderType = Template.instance() !== null ? Template.instance().data.orderType : ''
-    console.log(orderType);
+    const orderType = Template.instance() !== null ? Template.instance().data.orderType : '';
     return orderType;
   },
   sellCurrency() {
