@@ -13,7 +13,10 @@ const DEPOSIT_GAS = 150000;
 const WITHDRAW_GAS = 150000;
 
 Template.ethtokens.viewmodel({
-  type: 'deposit',
+  type() {
+    const depositType = Template.instance() !== null ? Template.instance().data.depositType : '';
+    return depositType;
+  },
   amount: '',
   lastError: '',
   pending() {
@@ -36,8 +39,10 @@ Template.ethtokens.viewmodel({
     try {
       const amount = new BigNumber(this.amount());
       const maxAmount = new BigNumber(this.maxAmount());
+      console.log('amount:', amount, ' maxAmount:', maxAmount);
       return amount.gt(0) && amount.lte(maxAmount);
     } catch (e) {
+      console.log('error', e);
       return false;
     }
   },

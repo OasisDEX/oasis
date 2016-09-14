@@ -1,13 +1,14 @@
 <template name="ethtokens">
   <form id="ethtokens">
     <h2>
-      Deposit / Withdraw ETH
+      {{title}}
       {{> whatisthis section="eth-tokens"}}
     </h2>
     <div>
       <table>
         <tbody>
-          <tr>
+          {{#if equals type 'deposit'}}
+          <tr class="row-input-line">
             <th>
               ETH
             </th>
@@ -15,7 +16,8 @@
               {{formatBalance ETHBalance}}
             </td>
           </tr>
-          <tr>
+          {{else}}
+          <tr class="row-input-line">
             <th>
               ETH Tokens
             </th>
@@ -25,18 +27,8 @@
               {{/let}}
             </td>
           </tr>
-          <tr>
-            <th>
-              Type
-            </th>
-            <td>
-              <div class="radio">
-                <label><input type="radio" value="deposit" {{b "group: type"}}> Deposit into ETH Token</label>
-                <label><input type="radio" value="withdraw" {{b "group: type"}}> Withdraw to ETH</label>
-              </div>
-            </td>
-          </tr>
-          <tr>
+          {{/if}}
+          <tr class="row-input-line">
             <th>
               Amount
             </th>
@@ -50,7 +42,7 @@
             <th>
             </th>
             <td>
-              <button class="btn btn-default" {{b "text: type, enable: canDeposit, click: deposit"}}></button>
+              <button class="btn btn-default" {{b "enable: true, click: deposit"}}>{{title}}</button>
             </td>
           </tr>
           {{#unless equals lastError ''}}
