@@ -1,7 +1,14 @@
 <template name="networkStatus">
-  <img alt="Maker" src="/logo.svg">  
-  <p>
-      <span class="bold">{{network}}</span>
+  <div class="col-md-6">
+    <img alt="Maker" src="/logo-simple.svg">
+  </div>
+  <div class="col-md-6">
+    <div class="div-connected">
+      <p>
+        <span class="network-type">{{network}}</span>
+        {{> whatisthis section="network"}}
+      </p>
+      <p>
       {{#unless isConnected}}
         (not connected)
       {{else}}
@@ -15,13 +22,35 @@
               (loading offers {{loadingProgress}}%)
             {{else}}
               {{#if ready}}
-                <br>
-                CONNECTED
+                  <span class="green-circle"></span>
+                  <span class="network-status">CONNECTED</span>
               {{/if}}
             {{/if}}
           {{/if}}
         {{/if}}
       {{/unless}}
-      {{> whatisthis section="network"}}
-    </p>
+      </p>
+    </div>
+    <div>
+      {{#if isMarketOpen}}
+        <p>
+          <span class="network-type">CLOSING TIME</span>
+          {{> whatisthis section="network"}}
+        </p>
+        <p>
+          <img class="clock-circle" src="/clock.svg" alt="clock">
+          <span class="network-status">{{marketCloseTime}}</span>
+        </p>
+      {{else}}
+        <p>
+          <span class="network-type">MARKET STATUS</span>
+          {{> whatisthis section="network"}}
+        </p>
+        <p>
+          <span class="closed-circle"></span>
+          <span class="network-status">CLOSED</span>
+        </p>
+      {{/if}}
+    </div>
+  </div>
 </template>

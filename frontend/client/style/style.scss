@@ -58,20 +58,54 @@ table {
 }
 
 .networkstatus-section {
+  display: flex;
+  align-items: center;
+
   p {
-    margin-left: 0px;
-    overflow: auto;
-    display: block;
-    margin-top: 20px;
     font-family: 'Montserrat', sans-serif;
     font-size: 10px;
     font-weight: 500;
+    color: #4F5362;
+    margin: 0 0 5px;
   }
 
   img {
-    float: left;
     margin-right: 5px;
-    clear: both;
+  }
+
+  .div-connected {
+    margin-bottom: 10px;
+  }
+
+  .network-type {
+    font-weight: 700;
+  }
+
+  .network-status {
+    opacity: 0.8;
+  }
+
+  .circle {
+    width: 13px;
+    height: 13px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: top;
+  }
+
+  .green-circle {
+    @extend .circle;
+    background-color: #1ABC9C;
+  }
+
+  .closed-circle {
+    @extend .circle;
+    background-color: #70737F;
+  }
+
+  .clock-circle {
+    border: 1px solid rgba(112,114,127,0.60);
   }
 }
 
@@ -454,7 +488,7 @@ table {
   font-size: 25px;
 
   h2 {
-    font-family: 'Montserrat-Semi-Bold', sans-serif;
+    font-family: 'Montserrat-SemiBold', sans-serif;
     opacity: 0.8;
     color: #222228;
   }
@@ -476,23 +510,19 @@ table {
     border-top: solid 1px #DCDDE0;
   }
 
-  p {
-    //display: inline-block;
-  }
-
   .p-not-found{
-    opacity: 0.60;
+    opacity: 0.50;
     width: 925px;
     display: inline-block;
     margin-top: 50px;
     margin-bottom: 70px;
+    letter-spacing: 0.6px;
   }
 
   .p-use-clients {
     display: inline-block;
     color: #546979;
     font-family: 'Montserrat-SemiBold', sans-serif;
-    display: inline-block;
   }
 
   .p-connect-geth {
@@ -500,6 +530,7 @@ table {
     width: 925px;
     color: #4F5362;
     display: inline-block;
+    letter-spacing: 0.6px;
   }
 
   .div-clients {
