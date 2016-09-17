@@ -7,6 +7,11 @@
 $background-color: #F8F7F5;
 $bid-color: #1ABC9C;
 $ask-color: #8D86C9;
+$color-quote-currency: #795548;
+$color-base-currency: #8D86C9;
+$color-buy: #1ABC9C;
+$color-sell: #EF5350;
+
 
 body {
   background-color: $background-color;
@@ -24,15 +29,22 @@ table {
 }
 
 .bid,
-.buy,
+.buy
+{
+  color: $color-buy;
+}
+
 .quote-currency {
-  color: $bid-color;
+  color: $color-quote-currency;
 }
 
 .ask,
-.sell,
+.sell {
+  color: $color-sell;
+}
+
 .base-currency {
-  color: $ask-color;
+  color: $color-base-currency;
 }
 
 .bold {
