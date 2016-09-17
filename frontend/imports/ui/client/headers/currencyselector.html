@@ -1,9 +1,17 @@
 <template name="currencySelector">
-  <p class="currencies-selectors">
-    <select id="sltQuoteCurrency" class="select-quote-currency" {{b "options: currencies, value: quoteCurrency, change: quoteChange"}}></select>
-    <select id="sltBaseCurrency" class="select-base-currency" {{b "options: currencies, value: baseCurrency, change: baseChange"}}></select>
-    <span class="span-token-pair">TOKEN PAIR</span>    
-    <span class="text-danger" {{b "text: quoteHelper"}}></span>    
-    <span class="text-danger" {{b "text: baseHelper"}}></span>
-  </p>
+  <div class="currencies">
+    <p class="currencies-selectors">
+      <span class="select-quote-currency">
+        <span class="glyphicon glyphicon-chevron-down select-glyph" aria-hidden="true"></span>
+        <select id="sltQuoteCurrency" class="select-box-quote" {{b "options: currencies, value: quoteCurrency, change: quoteChange"}}></select>
+      </span>
+      <span class="select-base-currency">
+        <select id="sltBaseCurrency" class="select-box-base" {{b "options: currencies, value: baseCurrency, change: baseChange"}}></select>
+        <span class="glyphicon glyphicon-chevron-down select-glyph" aria-hidden="true"></span>
+      </span>
+      <span class="span-token-pair">TOKEN PAIR</span>    
+      <span class="text-danger" {{b "text: quoteHelper"}}></span>    
+      <span class="text-danger" {{b "text: baseHelper"}}></span>
+    </p>
+  </div>
 </template>

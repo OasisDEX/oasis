@@ -39,6 +39,10 @@ table {
   font-weight: 700;
 }
 
+.select-glyph {
+  color: #D3D5DC;
+}
+
 .row-header {
   margin-bottom: 20px;
 }
@@ -68,10 +72,6 @@ table {
     opacity: 0.68;
     border: none;
     margin-right: 20px;
-  }
-
-  .select-glyph {
-    color: #D3D5DC;
   }
 
   .link-contract-address {
@@ -225,6 +225,10 @@ table {
   margin-left: 15px;
 }
 
+.balance-row {
+  width: 75%;
+  margin: 0 auto;
+}
 
 .balance {
   font-family: 'Montserrat', sans-serif;
@@ -278,24 +282,37 @@ table {
     display: block;
     align-self: center;
 
-    .select-quote-currency {
+    .select-box {
       -moz-appearance: none;
       -webkit-appearance: none;
+      border: none;
+      background-color: rgba(0,0,0,0.0);
+    }
+
+    .select-box-quote {
+      @extend .select-box;
+      margin-left: 20px;
+    }
+
+    .select-box-base {
+      @extend .select-box;
+      margin-right: 20px;
+    }
+
+    .select-quote-currency {
       border-radius: 100px 0 0 100px;
       background-color: #E8E9ED;
-      padding: 5px 2px 5px 35px;
-      margin-right: -7px;
+      padding: 5px 2px 5px 12px;
       border-right: 0px;
       border: 1px solid #D3D5DC;
+      margin-right: -1px;
     }
 
     .select-base-currency {
-      -moz-appearance: none;
-      -webkit-appearance: none;
       border-radius: 0 100px 100px 0;
       opacity: 0.5;
       background-color: rgba(0,0,0,0.0);
-      padding: 5px 29px 5px 8px;
+      padding: 5px 13px 5px 8px;
       border: 1px solid #D3D5DC;
     }
 
