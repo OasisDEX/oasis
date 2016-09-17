@@ -1,33 +1,19 @@
 <body>
   <div class="container">
     {{#if isConnected}}
-      <h1>
-        <img alt="Maker" src="/logo.svg">
-        <span>Market</span>
-      </h1>
-
-      <p class="text-danger">
-        <strong>Warning!</strong> Maker Market is undergoing alpha testing: Proceed at your own risk, and use only small amounts of {{quoteCurrency}} and {{baseCurrency}}.
-      </p>
-
-      <p class="text-success">
-        <strong>Update notice:</strong> If you have any open orders at the previous market <a href="https://makerdao.github.io/maker-market-archive/v0.1.0/">Maker OTC</a>; be sure to cancel them there to unlock the held funds!
-      </p>
-
-      <p>
-        {{> marketDetails}}
-      </p>
-
       <div class="row">
-        <section class="col-md-3 networkstatus-section">
+        <section class="col-md-4 networkstatus-section">
           {{> networkStatus }}
         </section>
-        <section class="col-md-4">
+        <section class="col-md-3">
           {{> volumes }}
         </section>        
         <section class="col-md-5 account-section">        
           {{> accountSelector }}
         </section>        
+      </div>
+      <div class="row">
+        {{> messages}}
       </div>
       {{#if ready}}
         {{#if contractExists}}

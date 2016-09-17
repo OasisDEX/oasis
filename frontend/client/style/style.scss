@@ -10,6 +10,7 @@ $ask-color: #8D86C9;
 
 body {
   background-color: $background-color;
+  margin-top: 40px;
 }
 
 h2 {
@@ -43,18 +44,39 @@ table {
   font-weight: 500;
   text-align: right;
 
+  .paragraph-account {
+    margin-bottom: 28px;
+  }
+
   .select-change-allowance {
     border: 1px solid #D3D5DC;
     border-radius: 100px;
     font-size: 10px;
-    color: #D0D0D0;
+
     background-color: rgba(0,0,0,0.0);
-    margin-left: 20px;
-    margin-right: 10px;
+    //margin-left: 20px;
+    //margin-right: 10px;
+    padding: 13px 17px 13px 27px;
+    margin-left: 25px;
+  } 
+
+  .select-change-account {
     -moz-appearance: none;
     -webkit-appearance: none;
-    padding: 8px 10px;
-  }  
+    color: #222228;
+    opacity: 0.68;
+    border: none;
+    margin-right: 20px;
+  }
+
+  .select-glyph {
+    color: #D3D5DC;
+  }
+
+  .link-contract-address {
+    color: #D0D0D0;
+    margin-right: 20px;
+  }
 }
 
 .networkstatus-section {
@@ -153,6 +175,55 @@ table {
     border-radius: 0px 100px 100px 0px;
   }
 }
+
+.messages {
+  display: flex;
+  justify-content: center;
+}
+
+.div-message {
+  background: rgba(215,215,215,0.05);
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15);
+  border-radius: 3px;
+  width: 442px;
+  padding: 10px 25px;
+
+  p {
+    opacity: 0.69;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #4F5362;
+    letter-spacing: 0.58px;
+
+    .attention {
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.54px;
+    }
+
+    .warning {
+      @extend .attention;
+      color: #F07371
+    }
+
+    .update {
+      @extend .attention;
+      color: #1ABC9C;
+    }
+  }
+}
+
+.div-message-warning {
+  @extend .div-message;
+  margin-right: 15px;
+}
+
+.div-message-update {
+  @extend .div-message;
+  margin-left: 15px;
+}
+
 
 .balance {
   font-family: 'Montserrat', sans-serif;
@@ -386,8 +457,6 @@ table {
   height: 14px;
   display: inline-block;
   color: #848FA5;
-  float: right;
-  margin-right: 20px;
 }
 
 .btn-submit-order {
