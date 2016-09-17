@@ -1,10 +1,12 @@
 <template name="balance">
-  {{#let token=(findToken currency)}}
-    <span class="span-currency-allowance {{currencyType}}">{{formatBalance token.allowance}} {{currency}}</span>
-    <span class="span-total-balance-title">TOTAL BALANCE</span>
-    <span class="span-total-balance-amount">
-      {{formatBalance token.balance}} {{currency}}
-    </span>
-  {{/let}}
-  <button class="btn btn-default btn-change-allowance">change allowance</button>
+  <div class="balance">
+    {{#let token=(findToken currency)}}
+      <span class="span-currency-allowance {{currencyType}}">{{formatBalance token.allowance}} {{currency}}</span>
+      <span class="span-total-balance-title">TOTAL BALANCE</span>
+      <span class="span-total-balance-amount">
+        {{formatBalance token.balance}} {{currency}}
+      </span>
+    {{/let}}
+    <button class="btn btn-default btn-change-allowance">change allowance</button>
+  </div>
 </template>
