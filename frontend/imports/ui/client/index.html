@@ -1,18 +1,18 @@
 <body>
   <div class="container">
     {{#if isConnected}}
-      <div class="row">
-        <section class="col-md-4 networkstatus-section">
+      <div class="row row-header">
+        <section class="col-md-4">
           {{> networkStatus }}
         </section>
         <section class="col-md-3">
           {{> volumes }}
         </section>        
-        <section class="col-md-5 account-section">        
+        <section class="col-md-5">        
           {{> accountSelector }}
         </section>        
       </div>
-      <div class="row">
+      <div class="row row-header">
         {{> messages}}
       </div>
       {{#if ready}}

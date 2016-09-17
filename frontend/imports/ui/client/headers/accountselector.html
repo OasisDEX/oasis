@@ -1,21 +1,23 @@
 <template name="accountSelector">
-  <p class="paragraph-account">Account:
-    <span class="select-change-allowance"> 
-      <select class="select-change-account">
-      {{#each accounts}}
-        <option value="{{this}}" selected={{equals this address}}>{{this}}</option>
-      {{/each}}
-      </select>
-      <span class="glyphicon glyphicon-chevron-down select-glyph" aria-hidden="true"></span>
-    </span>
-  </p>
-  {{#if ready}}
-  <p>
-    Market: 
-    <span class="select-change-allowance">
-      <a class="link-contract-address" href={{contractHref}} target="_blank">{{contractAddress}}</a>
-      {{> whatisthis section="contract"}}
-    </span> 
-  </p>
-  {{/if}}
+  <div class="account-section">
+    <p class="paragraph-account">Account:
+      <span class="select-change-allowance"> 
+        <select class="select-change-account">
+        {{#each accounts}}
+          <option value="{{this}}" selected={{equals this address}}>{{this}}</option>
+        {{/each}}
+        </select>
+        <span class="glyphicon glyphicon-chevron-down select-glyph" aria-hidden="true"></span>
+      </span>
+    </p>
+    {{#if ready}}
+    <p>
+      Market: 
+      <span class="select-change-allowance">
+        <a class="link-contract-address" href={{contractHref}} target="_blank">{{contractAddress}}</a>
+        {{> whatisthis section="contract"}}
+      </span> 
+    </p>
+    {{/if}}
+  </div>
 </template>
