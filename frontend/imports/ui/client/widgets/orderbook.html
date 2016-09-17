@@ -1,11 +1,13 @@
 <template name="orderbook">
-  <h2>
-    {{title}}
-    <!--<span>{{subtitle}}</span>-->
-    {{> whatisthis section="orderbook"}}
-  </h2>
+  <div class="order-section-content">
+    <h2>
+      {{title}}
+      <!--<span>{{subtitle}}</span>-->
+      {{> whatisthis section="orderbook"}}
+    </h2>
 
-  <div class=o>
-    {{> orders orders=orders type=priceClass priceLabel=priceLabel priceClass=priceClass canAccept=canAccept showCancel=(not isMarketOpen)}}
+    <div class=o>
+      {{> orders orders=orders type=priceClass priceLabel=priceLabel priceClass=priceClass canAccept=canAccept showCancel=(not isMarketOpen)}}
+    </div>
   </div>
 </template>

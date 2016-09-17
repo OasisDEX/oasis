@@ -1,92 +1,94 @@
 <template name="neworder">
-  <form id="neworder">
-    <h2>
-      {{title}} {{baseCurrency}}
-      {{> whatisthis section="new-order"}}
-    </h2>
-    <table>
-      <tbody>
-        <tr class="row-input-line">
-          <th>
-            PRICE
-          </th>
-          <td>
-            <input type="number" class="input" step="any" min="0" {{b "value: price, input: calcTotal"}}> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
-          </td>
-        </tr>
-        <tr class="row-input-line">
-          <th>
-            AMOUNT
-          </th>
-          <td>
-            <input type="number" class="input" step="any" min="0" {{b "value: amount, input: calcTotal, enable: priceDefined, attr: { max: maxAmount }"}}> <span class="span-buy-sell-currency">{{baseCurrency}}</span>
-          </td>
-        </tr>
-        <tr class="row-input-line">
-          <th>
-            TOTAL
-          </th>
-          <td>
-            <input type="number" class="input" step="any" min="0" {{b "value: total, input: calcAmount, enable: priceDefined, attr: { max: maxTotal }"}}> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
-          </td>
-        </tr>
-        {{#unless priceDefined}}
-          <tr>
-            <td colspan="2">
-              <span class="help-block">Enter a price to unlock amount and total.</span>
+  <div class="buy-sell-section">
+    <form id="neworder">
+      <h2>
+        {{title}} {{baseCurrency}}
+        {{> whatisthis section="new-order"}}
+      </h2>
+      <table>
+        <tbody>
+          <tr class="row-input-line">
+            <th>
+              PRICE
+            </th>
+            <td>
+              <input type="number" class="input" step="any" min="0" {{b "value: price, input: calcTotal"}}> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
             </td>
           </tr>
-        {{/unless}}
-      </tbody>
-      <tfoot>
-        <tr>
-          <th>
-          </th>
-          <td>
-            <button class="btn btn-default btn-submit-order-{{type}} {{type}}" data-toggle="modal" data-target="#newOrderModal" {{b "enable: canSubmit, click: preventDefault"}}>Submit order</button>
-          </td>
-        </tr>
-        {{#unless isMarketOpen}}
-          <tr>
-            <td colspan="2">
-              <span class="help-block">The market has closed.</span>
+          <tr class="row-input-line">
+            <th>
+              AMOUNT
+            </th>
+            <td>
+              <input type="number" class="input" step="any" min="0" {{b "value: amount, input: calcTotal, enable: priceDefined, attr: { max: maxAmount }"}}> <span class="span-buy-sell-currency">{{baseCurrency}}</span>
             </td>
           </tr>
-        {{/unless}}
-        {{#unless hasBalance sellCurrency}}
-          <tr>
-            <td colspan="2">
-              <span class="help-block">You don't have enough {{#if equals sellCurrency 'ETH'}}<a href="#ethtokens">{{sellCurrency}}</a>{{else}}{{sellCurrency}}{{/if}} tokens.</span>
+          <tr class="row-input-line">
+            <th>
+              TOTAL
+            </th>
+            <td>
+              <input type="number" class="input" step="any" min="0" {{b "value: total, input: calcAmount, enable: priceDefined, attr: { max: maxTotal }"}}> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
             </td>
           </tr>
-        {{else}}
-          {{#unless hasAllowance sellCurrency}}
+          {{#unless priceDefined}}
             <tr>
               <td colspan="2">
-                <span class="help-block">You don't have enough {{sellCurrency}} <a href="#allowance">allowance</a>.</span>
+                <span class="help-block">Enter a price to unlock amount and total.</span>
               </td>
             </tr>
           {{/unless}}
-        {{/unless}}
-        {{#let offer=betterOffer}}
-          {{#if offer}}
-            <tr>
-              <td colspan="2">
-                <span class="help-block">There is a better <a href="#offerModal" data-toggle="modal" data-target="#offerModal" {{b "click: openOfferModal"}}>offer</a>.</span>
-              </td>
-            </tr>
-          {{/if}}
-        {{/let}}
-        {{#unless equals lastError ''}}
+        </tbody>
+        <tfoot>
           <tr>
-            <td colspan="2">
-              <span class="help-block">{{lastError}}</span>
+            <th>
+            </th>
+            <td>
+              <button class="btn btn-default btn-submit-order-{{type}} {{type}}" data-toggle="modal" data-target="#newOrderModal" {{b "enable: canSubmit, click: preventDefault"}}>Submit order</button>
             </td>
           </tr>
-        {{/unless}}
-      </tfoot>
-    </table>
-  </form>
+          {{#unless isMarketOpen}}
+            <tr>
+              <td colspan="2">
+                <span class="help-block">The market has closed.</span>
+              </td>
+            </tr>
+          {{/unless}}
+          {{#unless hasBalance sellCurrency}}
+            <tr>
+              <td colspan="2">
+                <span class="help-block">You don't have enough {{#if equals sellCurrency 'ETH'}}<a href="#ethtokens">{{sellCurrency}}</a>{{else}}{{sellCurrency}}{{/if}} tokens.</span>
+              </td>
+            </tr>
+          {{else}}
+            {{#unless hasAllowance sellCurrency}}
+              <tr>
+                <td colspan="2">
+                  <span class="help-block">You don't have enough {{sellCurrency}} <a href="#allowance">allowance</a>.</span>
+                </td>
+              </tr>
+            {{/unless}}
+          {{/unless}}
+          {{#let offer=betterOffer}}
+            {{#if offer}}
+              <tr>
+                <td colspan="2">
+                  <span class="help-block">There is a better <a href="#offerModal" data-toggle="modal" data-target="#offerModal" {{b "click: openOfferModal"}}>offer</a>.</span>
+                </td>
+              </tr>
+            {{/if}}
+          {{/let}}
+          {{#unless equals lastError ''}}
+            <tr>
+              <td colspan="2">
+                <span class="help-block">{{lastError}}</span>
+              </td>
+            </tr>
+          {{/unless}}
+        </tfoot>
+      </table>
+    </form>
+  </div>
 
   <div class="modal fade" id="newOrderModal" tabindex="-1" role="dialog">
     <div class="modal-dialog">

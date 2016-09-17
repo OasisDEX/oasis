@@ -1,9 +1,11 @@
 <template name="lasttrades">
-  <h2>
-    MARKET HISTORY
-  </h2>
+  <div class="order-section-content">
+    <h2>
+      MARKET HISTORY
+    </h2>
 
-  <div>
-    {{> orders orders=lastTrades type='lastTrades' priceLabel='Price' showCancel=true showType=true showDate=true}}
+    <div>
+      {{> orders orders=lastTrades type='lastTrades' priceLabel='Price' showCancel=true showType=true showDate=true}}
+    </div>
   </div>
 </template>
