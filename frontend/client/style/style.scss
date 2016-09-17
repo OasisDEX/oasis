@@ -5,13 +5,10 @@
 }
 
 $background-color: #F8F7F5;
-$bid-color: #1ABC9C;
-$ask-color: #8D86C9;
 $color-quote-currency: #795548;
 $color-base-currency: #8D86C9;
 $color-buy: #1ABC9C;
 $color-sell: #EF5350;
-
 
 body {
   background-color: $background-color;
@@ -499,12 +496,12 @@ table {
 
 .btn-submit-order-buy {
    @extend .btn-submit-order;
-   border-color: $bid-color;
+   border-color: $color-buy;
 }
 
 .btn-submit-order-sell {
    @extend .btn-submit-order;
-   border-color: $ask-color;
+   border-color: $color-sell;
 }
 
 .modal-order {
