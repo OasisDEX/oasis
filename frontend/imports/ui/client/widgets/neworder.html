@@ -44,7 +44,7 @@
             <th>
             </th>
             <td>
-              <button class="btn btn-default btn-submit-order-{{type}} {{type}}" data-toggle="modal" data-target="#newOrderModal" {{b "enable: canSubmit, click: preventDefault"}}>Submit order</button>
+              <button class="btn btn-default btn-submit-order-{{type}} {{type}}" data-toggle="modal" data-target="#newOrderModal" {{b "enable: canSubmit, click: preventDefault"}}>{{title}}</button>
             </td>
           </tr>
           {{#unless isMarketOpen}}
@@ -88,51 +88,5 @@
         </tfoot>
       </table>
     </form>
-  </div>
-
-  <div class="modal fade" id="newOrderModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Confirmation</h4>
-        </div>
-        <div class="modal-body">
-          <table>
-            <tbody>
-              <tr>
-                <th>Type</th>
-                <th>{{type}}</th>
-              </tr>
-              <tr>
-                <th>Price</th>
-                <td>{{formatBalance (toWei price)}} {{quoteCurrency}}/{{baseCurrency}}</td>
-              </tr>
-              <tr>
-                <th>Volume</th>
-                <td>{{formatBalance (toWei amount)}} {{baseCurrency}}</td>
-              </tr>
-              <tr>
-                <th>Total</th>
-                <td>{{formatBalance (toWei total)}} {{quoteCurrency}}</td>
-              </tr>
-            </tbody>
-          </table>
-          <hr>
-          <span class="text-danger">
-            <b>Warning!</b>
-            {{#if equals type 'buy'}}
-              This action will <b>remove {{formatBalance (toWei total)}} {{quoteCurrency}}</b> {{formatPrice (toWei total) quoteCurrency}} from your token balance and allowance.
-            {{else}}
-              This action will <b>remove {{formatBalance (toWei amount)}} {{baseCurrency}}</b> {{formatPrice (toWei amount) baseCurrency}} from your token balance and allowance.
-            {{/if}}
-          </span>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal" {{b "enable: canSubmit, click: submit"}}>Place order</button>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
