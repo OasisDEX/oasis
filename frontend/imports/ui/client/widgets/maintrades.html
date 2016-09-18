@@ -34,18 +34,5 @@
       {{> lasttrades}}
     </section>
   </div>
-  <div class="row">
-    <section class="order-section col-md-6">
-      <h2 id="allowance">
-        Allowance
-        {{> whatisthis section="allowance"}}
-      </h2>
-      {{#each token in allTokens}}
-        {{#if token}}
-          {{> newallowance token=token}}
-        {{/if}}
-      {{/each}}
-    </section>
-  </div>
   {{> offermodal offer=(findOffer selectedOffer)}}
 </template>
