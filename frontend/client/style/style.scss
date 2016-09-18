@@ -447,8 +447,67 @@ table {
   }
 }
 
-.deposit-section,
 .transfer-section {
+  padding-right: 30px;
+
+  th {
+    opacity: 0.68;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #222228
+  }
+
+  td {
+    text-align: right;
+  }
+
+  th,
+  td {
+    padding-bottom: 10px;
+    padding-top: 10px;
+  }
+
+  input {
+    border: none;
+    text-align: right;
+  }
+
+  input.amount {
+    font-weight: 700;
+    color: #D0D0D0;
+    font-size: 24px;    
+  }
+
+  input.recipient {
+    font-family: 'Montserrat-SemiBold', sans-serif;
+    font-size: 11px;
+    min-width: 280px;
+  }
+
+  button {
+    border: 1px solid #A8ACB9;
+    border-radius: 100px;
+    font-family: 'Montserrat', sans-serif;
+    color: #4F5362;
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: 1.57px;
+    width: 131px;
+  }
+
+  .select-box {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    background-color: rgba(0,0,0,0.0);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+  }
+}
+
+.deposit-section {
   padding-right: 30px;
 
   th {
@@ -468,6 +527,11 @@ table {
     text-align: right;
   }
 
+  th,
+  td {
+    padding-bottom: 10px;
+  }
+
 
   input {
     font-family: Roboto-Black;
@@ -480,9 +544,12 @@ table {
   button {
     border: 1px solid #A8ACB9;
     border-radius: 100px;
-    font-family: 'Montserrat-SemiBold', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     color: #4F5362;
     font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: 1.57px;
+    width: 131px;
   }
 }
 
