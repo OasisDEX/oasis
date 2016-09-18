@@ -7,6 +7,6 @@
         {{formatBalance token.balance}} {{currency}}
       </span>
     {{/let}}
-    <button class="btn btn-default btn-change-allowance">change allowance</button>
+    <button class="btn btn-default btn-change-allowance" data-toggle="modal" data-target="#allowanceModal" {{b "click: preventDefault"}}>change allowance</button>
   </div>
 </template>
