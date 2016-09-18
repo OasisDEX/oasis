@@ -39,8 +39,8 @@
             {{> whatisthis section="network"}}
           </p>
           <p>
-            <img class="clock-circle" src="/clock.svg" alt="clock">
-            <span class="network-status">{{marketCloseTime}}</span>
+            <span class="clock-circle"><img class="clock-image" src="/clock.svg" alt="clock"></span>
+            <span class="network-status">{{timestampToString marketCloseTime true}}</span>
           </p>
         {{else}}
           <p>
