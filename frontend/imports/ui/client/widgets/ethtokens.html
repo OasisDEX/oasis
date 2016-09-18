@@ -21,7 +21,7 @@
             <th>
               ETH Tokens
             </th>
-            <td>
+            <td class="token">
               {{#let token=(findToken 'ETH')}}
                 {{formatBalance token.balance}}
               {{/let}}
@@ -33,7 +33,7 @@
               Amount
             </th>
             <td>
-              <input type="number" class="input" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}>
+              <input type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}>
             </td>
           </tr>
         </tbody>

@@ -389,7 +389,7 @@ table {
   }
 
   td {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Montserrat-SemiBold', sans-serif;
     font-weight: 500;
     font-size: 14.5px;
   }
@@ -519,7 +519,6 @@ table {
   }
 
   td {
-    opacity: 0.60;
     font-family: 'Montserrat-SemiBold', sans-serif;
     font-size: 21px;
     font-weight: 500;
@@ -527,29 +526,34 @@ table {
     text-align: right;
   }
 
+  td.token {
+    opacity: 0.6;
+  }
+
   th,
   td {
     padding-bottom: 10px;
+    padding-top: 10px;
   }
 
-
   input {
-    font-family: Roboto-Black;
-    font-size: 27px;
-    color: #D0D0D0;
     border: none;
     text-align: right;
+    font-weight: 700;
+    font-size: 24px;
+    color: #D0D0D0;
   }
 
   button {
     border: 1px solid #A8ACB9;
     border-radius: 100px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat-SemiBold', sans-serif;
     color: #4F5362;
     font-size: 13.5px;
-    font-weight: 700;
+    font-weight: 500;
     letter-spacing: 1.57px;
-    width: 131px;
+    width: 116px;
+    opacity: 1;
   }
 }
 
