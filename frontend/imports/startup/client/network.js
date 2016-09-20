@@ -5,6 +5,7 @@ import { _ } from 'meteor/underscore';
 
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
+import TokenEvents from '/imports/api/tokenEvents';
 import { Offers, Status } from '/imports/api/offers';
 
 // Check which accounts are available and if defaultAccount is still available,
@@ -37,7 +38,9 @@ function initNetwork(newNetwork) {
   Session.set('network', newNetwork);
   Session.set('isConnected', true);
   Session.set('latestBlock', 0);
+  Session.set('startBlock', 0);
   Tokens.sync();
+  TokenEvents.watchTokenEvents();
   Offers.sync();
 }
 

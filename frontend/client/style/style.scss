@@ -31,7 +31,8 @@ table {
 }
 
 .bid,
-.buy
+.buy,
+.deposit
 {
   color: $color-buy;
 }
@@ -41,7 +42,9 @@ table {
 }
 
 .ask,
-.sell {
+.sell,
+.withdrawal
+{
   color: $color-sell;
 }
 
@@ -77,7 +80,7 @@ table {
     background-color: rgba(0,0,0,0.0);
     padding: 13px 17px 13px 27px;
     margin-left: 25px;
-  } 
+  }
 
   .select-change-account {
     -moz-appearance: none;
@@ -150,7 +153,7 @@ table {
   width: 450px;
   margin: 0 auto;
   margin-bottom: 20px;
-  
+
   ul.nav-tabs {
     border-bottom: none;
 
@@ -161,7 +164,7 @@ table {
       font-weight: 500;
       -moz-appearance: none;
       -webkit-appearance: none;
-      opacity: 0.40;    
+      opacity: 0.40;
 
       a {
         padding: 0px;
@@ -171,14 +174,14 @@ table {
       a.tab-link,
       a.tab-link:hover  {
         background-color: rgba(0,0,0,0.0);
-        border: none;      
+        border: none;
       }
     }
 
     li.active {
       background-color: #E8E9ED;
       opacity: 1;
-    } 
+    }
 
     .first-tab {
       padding: 7px 30px 7px 35px;
@@ -295,7 +298,7 @@ table {
   display: flex;
   justify-content: center;
   height: 104px;
-  
+
   .currencies-selectors {
     text-align: center;
     color: #4F5362;
@@ -373,7 +376,7 @@ table {
       height: 30px;
       text-align: center;
     }
-    
+
     tr {
       background: #F8F7F5;
     }
@@ -415,10 +418,10 @@ table {
       padding-right: 10px;
     }
 
-    input[type=number]::-webkit-inner-spin-button, 
-    input[type=number]::-webkit-outer-spin-button { 
-      -webkit-appearance: none; 
-      margin: 0; 
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
 
     tr.row-input-line {
@@ -476,7 +479,7 @@ table {
   input.amount {
     font-weight: 700;
     color: #D0D0D0;
-    font-size: 24px;    
+    font-size: 24px;
   }
 
   input.recipient {
@@ -526,6 +529,14 @@ table {
     text-align: right;
   }
 
+  td.deposit{
+    color: $color-buy;
+  }
+
+  td.withdrawal{
+    color: $color-sell;
+  }
+
   td.token {
     opacity: 0.6;
   }
@@ -555,6 +566,16 @@ table {
     width: 116px;
     opacity: 1;
   }
+
+  table.history{
+    td{
+      font-size: 16px;
+    }
+    td.timestamp{
+      text-align: left;
+    }
+  }
+
 }
 
 .question-circle {
@@ -597,7 +618,7 @@ table {
   padding: 20px;
   width: 490px;
   overflow: auto;
-  
+
   h4 {
     font-size: 24px;
     color: #222228;
@@ -622,10 +643,10 @@ table {
     padding-right: 10px;
   }
 
-  input[type=number]::-webkit-inner-spin-button, 
-  input[type=number]::-webkit-outer-spin-button { 
-    -webkit-appearance: none; 
-    margin: 0; 
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 
   tr.row-input-line {
@@ -736,7 +757,7 @@ table {
     box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.13);
     border-radius: 4px;
     margin: 0 20px;
-  
+
     h2 {
       margin-bottom: 45px;
     }

@@ -1,4 +1,24 @@
 <template name="ethtokens">
+  {{#if equals type 'history'}}
+    <h2>HISTORY</h2>
+    <div>
+      <table class="history">
+        <tbody>
+          {{#if history}}
+            {{#each history}}
+            <tr>
+              <td class="timestamp">{{ timestampToString this.timestamp true }}</td>
+              <td>{{ this.type }}</td>
+              <td class="{{ this.type }}">
+                {{ formatBalance(this.amount) }}
+              </td>
+            </tr>
+            {{/each}}
+          {{/if}}
+        </tbody>
+      </table>
+    </div>
+  {{else}}
   <form id="ethtokens">
     <h2>
       {{title}}
@@ -77,4 +97,5 @@
       {{/if}}
     </div>
   </form>
+  {{/if}}
 </template>

@@ -5,6 +5,7 @@ import { web3 } from 'meteor/makerotc:dapple';
 
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
+import TokenEvents from '/imports/api/tokenEvents';
 import { prettyError } from '/imports/utils/prettyError';
 
 import './ethtokens.html';
@@ -22,6 +23,16 @@ Template.ethtokens.viewmodel({
   lastError: '',
   pending() {
     return Transactions.findType(TRANSACTION_TYPE);
+  },
+  typeClass() {
+    return this.type.toLowerCase();
+  },
+  history() {
+    const address = Session.get('address');
+    return TokenEvents.find({
+      type: { $in: ['deposit', 'withdrawal'] },
+      $or: [{ to: address }, { from: address }],
+    }, { sort: { timestamp: -1 } });
   },
   maxAmount() {
     let maxAmount = '0';
@@ -62,6 +73,7 @@ Template.ethtokens.viewmodel({
         if (!error) {
           token.deposit(options, (txError, tx) => {
             if (!txError) {
+              console.log('add transaction deposit');
               Transactions.add(TRANSACTION_TYPE, tx, { type: 'deposit', amount: this.amount() });
             } else {
               this.lastError(prettyError(txError));
@@ -77,6 +89,7 @@ Template.ethtokens.viewmodel({
         if (!error) {
           token.withdraw(web3.toWei(this.amount()), { gas: WITHDRAW_GAS }, (txError, tx) => {
             if (!txError) {
+              console.log('add transaction withdraw');
               Transactions.add(TRANSACTION_TYPE, tx, { type: 'withdraw', amount: this.amount() });
             } else {
               this.lastError(prettyError(txError));
