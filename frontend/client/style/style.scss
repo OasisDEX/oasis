@@ -508,6 +508,16 @@ table {
     font-weight: 700;
     font-size: 15px;
   }
+
+  table.history{
+    td{
+      font-size: 16px;
+      text-align: left;
+    }
+    td.transfer{
+      text-align: right;
+    }
+  }
 }
 
 .deposit-section {
@@ -570,9 +580,11 @@ table {
   table.history{
     td{
       font-size: 16px;
-    }
-    td.timestamp{
       text-align: left;
+    }
+    td.withdrawal,
+    td.deposit{
+      text-align: right;
     }
   }
 

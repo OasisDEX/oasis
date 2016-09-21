@@ -156,11 +156,13 @@ Template.registerHelper('not', (b) => !b);
 
 Template.registerHelper('concat', (...args) => Array.prototype.slice.call(args, 0, -1).join(''));
 
-Template.registerHelper('timestampToString', (ts, inSeconds) => {
+Template.registerHelper('timestampToString', (ts, inSeconds, short) => {
   let timestampStr = '';
   if (ts) {
     if (inSeconds === true) {
       timestampStr = new Date(1000 * ts).toLocaleString();
+    } else if (short === true) {
+      timestampStr = new Date(ts).format('d-m-y H:i');
     } else {
       timestampStr = new Date(ts).toLocaleString();
     }
@@ -180,6 +182,15 @@ Template.registerHelper('formatBalance', (wei, format) => {
   formatValue = formatValue || '0,0.00[0000]';
 
   return EthTools.formatBalance(wei, formatValue);
+});
+
+Template.registerHelper('friendlyAddress', (address) => {
+  if (address === Blaze._globalHelpers.contractAddress()) {
+    return 'market';
+  } else if (address === Blaze._globalHelpers.address()) {
+    return 'me';
+  }
+  return address.substr(0, 16)+'...';
 });
 
 Template.registerHelper('formatPrice', (value, currency) => {

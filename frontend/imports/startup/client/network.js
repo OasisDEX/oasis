@@ -120,6 +120,7 @@ Meteor.startup(() => {
   web3.eth.filter('latest', () => {
     Tokens.sync();
     Transactions.sync();
+    TokenEvents.syncTimestamps();
   });
 
   web3.eth.isSyncing((error, sync) => {
