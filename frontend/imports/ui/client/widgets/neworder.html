@@ -44,7 +44,7 @@
             <th>
             </th>
             <td>
-              <button class="btn btn-default btn-submit-order-{{type}} {{type}}" data-toggle="modal" data-target="#newOrderModal" {{b "enable: canSubmit, click: preventDefault"}}>{{title}}</button>
+              <button class="btn btn-default btn-submit-order-{{type}} {{type}}" data-toggle="modal" data-target="#newOrderModal" {{b "enable: canSubmit, click: showConfirmation"}}>{{title}}</button>
             </td>
           </tr>
           {{#unless isMarketOpen}}
@@ -78,10 +78,10 @@
               </tr>
             {{/if}}
           {{/let}}
-          {{#unless equals lastError ''}}
+          {{#unless equals offerError ''}}
             <tr>
               <td colspan="2">
-                <span class="help-block">{{lastError}}</span>
+                <span class="help-block">{{offerError}}</span>
               </td>
             </tr>
           {{/unless}}
