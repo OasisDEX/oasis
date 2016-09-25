@@ -1,10 +1,10 @@
 <template name="balance">
   <div class="balance">
     {{#let token=(findToken currency)}}
-      <span class="span-currency-allowance {{currencyType}}">{{formatBalance token.allowance}} {{currency}}</span>
-      <span class="span-total-balance-title">TOTAL BALANCE</span>
+      <span class="span-currency-allowance {{currencyType}}">{{formatBalance token.balance}} {{currency}}</span>
+      <span class="span-total-balance-title">ALLOWANCE</span>
       <span class="span-total-balance-amount">
-        {{formatBalance token.balance}} {{currency}}
+        {{formatBalance token.allowance}} {{currency}}
       </span>
     {{/let}}
     <button class="btn btn-default btn-change-allowance" data-toggle="modal" data-target="#allowanceModal" {{b "click: preventDefault"}}>change allowance</button>
