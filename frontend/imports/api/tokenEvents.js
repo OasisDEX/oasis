@@ -52,7 +52,7 @@ class TokenEventCollection extends Mongo.Collection {
     const open = super.find({ timestamp: null }).fetch();
     // Sync all open transactions non-blocking and asynchronously
     const syncTs = (index) => {
-      console.log('syncing ts', index);
+      // console.log('syncing ts', index);
       if (index >= 0 && index < open.length) {
         web3.eth.getBlock(open[index].blockNumber, (error, result) => {
           if (!error) {
