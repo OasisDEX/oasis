@@ -392,9 +392,22 @@ table {
   }
 
   td {
-    font-family: 'Montserrat-SemiBold', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 14.5px;
+    color: #4A4A4A;
+  }
+  
+  td.bid {
+    color: $color-buy;
+  }
+
+  td.ask {
+    color: $color-sell;
+  }
+
+  .cancel {
+    border: none;
   }
 }
 
