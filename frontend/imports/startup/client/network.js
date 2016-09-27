@@ -38,9 +38,8 @@ function initNetwork(newNetwork) {
   Session.set('network', newNetwork);
   Session.set('isConnected', true);
   Session.set('latestBlock', 0);
-  Session.set('startBlock', 2320000);
+  Session.set('startBlock', 0);
   Tokens.sync();
-  TokenEvents.watchTokenEvents();
   Offers.sync();
 }
 
@@ -60,6 +59,10 @@ function checkNetwork() {
         if (res.number >= Session.get('latestBlock')) {
           Session.set('outOfSync', e != null || (new Date().getTime() / 1000) - res.timestamp > 600);
           Session.set('latestBlock', res.number);
+          if (Session.get('startBlock') === 0) {
+            console.log('setting startblock to '+(res.number - 6000));
+            Session.set('startBlock', (res.number - 6000));
+          }
         } else {
           // XXX MetaMask frequently returns old blocks
           // https://github.com/MetaMask/metamask-plugin/issues/504
@@ -184,4 +187,8 @@ Meteor.startup(() => {
   Meteor.setInterval(checkNetwork, 2503);
   Meteor.setInterval(checkAccounts, 10657);
   Meteor.setInterval(checkMarketOpen, 11027);
+});
+
+Meteor.autorun(() => {
+  TokenEvents.watchTokenEvents();
 });
