@@ -191,5 +191,3 @@ Template.neworder.viewmodel({
     this.offerType(this.type());
   },
 });
-
-

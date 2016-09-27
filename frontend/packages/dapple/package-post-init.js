@@ -45,7 +45,22 @@ const tokens = {
   },
 };
 
-Dapple.getTokens = () => ['ETH', 'MKR', 'DAI'];
+// http://numeraljs.com/ for formats
+const tokenSpecs = {
+  ETH: { precision: 18, format: '0,0.00[0000000000000000]' },
+  DAI: { precision: 18, format: '0,0.00[0000000000000000]' },
+  MKR: { precision: 18, format: '0,0.00[0000000000000000]' },
+  DGD: { precision: 9, format: '0,0.00[0000000]' },
+};
+
+Dapple.getTokens = () => ['ETH', 'MKR', 'DAI', 'DGD'];
+
+Dapple.getTokenSpecs = (symbol) => {
+  if (typeof(tokenSpecs[symbol]) !== 'undefined') {
+    return tokenSpecs[symbol];
+  }
+  return tokenSpecs['ETH'];
+};
 
 Dapple.getTokenAddress = (symbol) => tokens[Dapple.env][symbol];
 

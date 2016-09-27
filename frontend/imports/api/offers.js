@@ -53,9 +53,9 @@ const helpers = {
     const baseCurrency = Session.get('baseCurrency');
     let price = '0';
     if (this.buyWhichToken === quoteCurrency && this.sellWhichToken === baseCurrency) {
-      price = new BigNumber(this.buyHowMuch).div(new BigNumber(this.sellHowMuch)).toString(10);
+      price = new BigNumber(this.buyHowMuch).div(new BigNumber(this.sellHowMuch));
     } else if (this.buyWhichToken === baseCurrency && this.sellWhichToken === quoteCurrency) {
-      price = new BigNumber(this.sellHowMuch).div(new BigNumber(this.buyHowMuch)).toString(10);
+      price = new BigNumber(this.sellHowMuch).div(new BigNumber(this.buyHowMuch));
     }
     return price;
   },

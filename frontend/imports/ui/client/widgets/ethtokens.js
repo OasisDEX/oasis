@@ -44,7 +44,7 @@ Template.ethtokens.viewmodel({
     const address = Session.get('address');
     return TokenEvents.find({
       type: { $in: ['transfer'] },
-       $or: [{ to: address }, { from: address }],
+       /* $or: [{ to: address }, { from: address }], */
     }, { sort: { blockNumber: -1 } });
   },
   maxAmount() {

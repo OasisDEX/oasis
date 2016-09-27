@@ -17,9 +17,7 @@
               <tr>
                 <td class="timestamp">{{ timestampToString this.timestamp true }}</td>
                 <td>{{ this.type }}</td>
-                <td class="{{ this.type }}">
-                  {{ formatBalance this.amount }} {{this.token}}
-                </td>
+                <td class="{{ this.type }}">{{ formatToken this.amount this.token }} {{this.token}}</td>
               </tr>
               {{/each}}
             {{/if}}
@@ -42,8 +40,8 @@
               {{#each transferHistory}}
               <tr>
                 <td class="timestamp">{{ timestampToString this.timestamp true }}</td>
-                <td>{{ friendlyAddress(this.to) }}</td>
-                <td class="{{ this.type }} {{ currencyClass this.token }}">{{ formatBalance this.amount }} {{this.token}}</td>
+                <td><a target="_blank" href="{{ txHref (this.transactionHash) }}">{{ friendlyAddress(this.to) }}</a></td>
+                <td class="{{ this.type }} {{ currencyClass this.token }}">{{ formatToken this.amount this.token }} {{this.token}}</td>
               </tr>
               {{/each}}
             {{/if}}

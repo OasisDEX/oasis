@@ -38,7 +38,7 @@ function initNetwork(newNetwork) {
   Session.set('network', newNetwork);
   Session.set('isConnected', true);
   Session.set('latestBlock', 0);
-  Session.set('startBlock', 0);
+  Session.set('startBlock', 2320000);
   Tokens.sync();
   TokenEvents.watchTokenEvents();
   Offers.sync();
