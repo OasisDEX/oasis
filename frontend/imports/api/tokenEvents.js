@@ -68,23 +68,26 @@ class TokenEventCollection extends Mongo.Collection {
   }
 
   watchTokenEvents() {
-    const ALL_TOKENS = _.uniq([Session.get('quoteCurrency'), Session.get('baseCurrency')]);
-    ALL_TOKENS.forEach((tokenId) => {
-      Dapple.getToken(tokenId, (error, token) => {
-        if (!error) {
-          const events = token.allEvents({
-            fromBlock: Session.get('startBlock'),
-            toBlock: 'latest',
-          });
-          const self = this;
-          events.watch(function watchEvent(error, event) {
-            if (!error) {
-              self.syncEvent(tokenId, event);
-            }
-          });
-        }
+    if (Session.get('startBlock') !== 0) {
+      console.log('filtering token events from '+Session.get('startBlock'));
+      const ALL_TOKENS = _.uniq([Session.get('quoteCurrency'), Session.get('baseCurrency')]);
+      ALL_TOKENS.forEach((tokenId) => {
+        Dapple.getToken(tokenId, (error, token) => {
+          if (!error) {
+            const events = token.allEvents({
+              fromBlock: Session.get('startBlock'),
+              toBlock: 'latest',
+            });
+            const self = this;
+            events.watch(function watchEvent(error, event) {
+              if (!error) {
+                self.syncEvent(tokenId, event);
+              }
+            });
+          }
+        });
       });
-    });
+    }
   }
 
 }
