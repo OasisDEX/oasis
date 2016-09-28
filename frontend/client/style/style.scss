@@ -316,18 +316,18 @@ table {
 
     .select-box-quote {
       @extend .select-box;
-      margin-left: 20px;
+      margin-left: 12px;
     }
 
     .select-box-base {
       @extend .select-box;
-      margin-right: 20px;
+      margin-right: 12px;
     }
 
     .select-quote-currency {
       border-radius: 100px 0 0 100px;
       background-color: #E8E9ED;
-      padding: 5px 2px 5px 12px;
+      padding: 8px 2px 8px 12px;
       border-right: 0px;
       border: 1px solid #D3D5DC;
       margin-right: -1px;
@@ -337,7 +337,7 @@ table {
       border-radius: 0 100px 100px 0;
       opacity: 0.5;
       background-color: rgba(0,0,0,0.0);
-      padding: 5px 13px 5px 8px;
+      padding: 8px 13px 8px 10px;
       border: 1px solid #D3D5DC;
     }
 
