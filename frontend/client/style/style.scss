@@ -19,6 +19,7 @@ h2 {
   font-family: 'Montserrat', sans-serif;
   letter-spacing: 3.99px;
   font-size: 24px;
+  margin-top: 0;
 }
 
 table {
@@ -361,8 +362,7 @@ table {
   min-height: 290px;
   margin-right: 35px;
   margin-bottom: 35px;
-  padding-right: 0px;
-  padding-bottom: 10px;
+  padding: 30px 0px 10px 30px;
 }
 
 .order-section-content {
@@ -412,7 +412,7 @@ table {
 }
 
 .buy-sell-section {
-  padding-right: 20px;
+  padding-right: 30px;
   font-family: 'Montserrat', sans-serif;
 
   tbody {
@@ -429,6 +429,7 @@ table {
       border: none;
       text-align: right;
       padding-right: 10px;
+      max-width: 250px;
     }
 
     input[type=number]::-webkit-inner-spin-button,
