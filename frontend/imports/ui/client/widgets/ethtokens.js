@@ -16,7 +16,7 @@ const WITHDRAW_GAS = 150000;
 
 Template.ethtokens.viewmodel({
   type() {
-    const depositType = Template.instance() !== null ? Template.instance().data.depositType : '';
+    const depositType = (this !== null && this !== undefined) ? this.depositType() : '';
     return depositType;
   },
   amount: '',
@@ -50,7 +50,6 @@ Template.ethtokens.viewmodel({
   },
   deposit(event) {
     event.preventDefault();
-
     this.lastError('');
 
     if (this.type() === 'deposit') {
