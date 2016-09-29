@@ -24,29 +24,6 @@ Template.ethtokens.viewmodel({
   pending() {
     return Transactions.findType(TRANSACTION_TYPE);
   },
-  currencyClass(token) {
-    return token === Session.get('quoteCurrency') ? 'quote-currency' : 'base-currency';
-  },
-  isHistory() {
-    if (this.type() === 'history' || this.type() === 'transferHistory') {
-      return true;
-    }
-    return false;
-  },
-  history() {
-    const address = Session.get('address');
-    return TokenEvents.find({
-      type: { $in: ['deposit', 'withdrawal'] },
-      $or: [{ to: address }, { from: address }],
-    }, { sort: { blockNumber: -1 } });
-  },
-  transferHistory() {
-    const address = Session.get('address');
-    return TokenEvents.find({
-      type: { $in: ['transfer'] },
-       /* $or: [{ to: address }, { from: address }], */
-    }, { sort: { blockNumber: -1 } });
-  },
   maxAmount() {
     let maxAmount = '0';
     try {

@@ -1,0 +1,39 @@
+<template name="history">
+  <h2>HISTORY</h2>
+  <div>
+    <table class="history">
+      <thead>
+        <tr>
+          <th>DATE</th>
+          {{#if equals historyType 'deposityHistory'}}
+            <th>TYPE</th>
+          {{else}}
+            <th>RECIPIENT</th>
+          {{/if}}
+          <th>AMOUNT</th>
+        </tr>
+      </thead>
+      {{#if equals historyType 'deposityHistory'}}
+        <tbody>
+          {{#each history}}
+            <tr>
+              <td class="timestamp">{{ timestampToString this.timestamp true }}</td>
+              <td>{{ this.type }}</td>
+              <td class="{{ this.type }}">{{ formatToken this.amount this.token }} {{this.token}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      {{else}}
+        <tbody>
+          {{#each transferHistory}}
+            <tr>
+              <td class="timestamp">{{ timestampToString this.timestamp true }}</td>
+              <td><a target="_blank" href="{{ txHref (this.transactionHash) }}">{{ friendlyAddress(this.to) }}</a></td>
+              <td class="{{ this.type }} {{ currencyClass this.token }}">{{ formatToken this.amount this.token }} {{this.token}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      {{/if}}
+    </table>
+  </div>
+</template>
