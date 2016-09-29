@@ -64,7 +64,7 @@
             {{#unless hasAllowance sellCurrency}}
               <tr>
                 <td colspan="2">
-                  <span class="help-block">You don't have enough {{sellCurrency}} <a href="#allowance">allowance</a>.</span>
+                  <span class="help-block">You don't have enough {{sellCurrency}} <a href="#allowance" {{b "click: showAllowanceModal"}}>allowance</a>.</span>
                 </td>
               </tr>
             {{/unless}}

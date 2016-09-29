@@ -194,4 +194,7 @@ Template.neworder.viewmodel({
   showDepositTab() {
     $('#deposit').tab('show');
   },
+  showAllowanceModal() {
+    $('#allowanceModal').modal('show');
+  },
 });
