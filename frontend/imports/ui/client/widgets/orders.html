@@ -2,6 +2,7 @@
   <table>
     <thead>
       <tr>
+        {{#if showDate}}<th>DATE</th>{{/if}}
         {{#if showType}}<th>TYPE</th>{{/if}}
         <th title={{concat quoteCurrency ' / ' baseCurrency}}>{{priceLabel}}</th>
         <th>{{quoteCurrency}}</th>

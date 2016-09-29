@@ -1,5 +1,8 @@
 <template name="orderRow">
   <tr class={{order.status}} title={{timestampToString order.timestamp true}}>
+    {{#if showDate}}
+      <td>{{timestampToString order.timestamp true}}</td>
+    {{/if}}
     {{#if showType}}
       <td class="{{order.type}}">
         {{#if equals order.type 'bid'}}
