@@ -5,6 +5,7 @@ import { web3 } from 'meteor/makerotc:dapple';
 
 import Tokens from '/imports/api/tokens';
 import { Offers } from '/imports/api/offers';
+import { $ } from 'meteor/jquery';
 
 import '/imports/ui/client/shared.js';
 import './neworder.html';
@@ -189,5 +190,8 @@ Template.neworder.viewmodel({
     this.offerAmount(this.amount());
     this.offerTotal(this.total());
     this.offerType(this.type());
+  },
+  showDepositTab() {
+    $('#deposit').tab('show');
   },
 });
