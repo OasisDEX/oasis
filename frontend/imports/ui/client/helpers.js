@@ -5,6 +5,7 @@ import { _ } from 'meteor/underscore';
 import { BigNumber } from 'meteor/ethereum:web3';
 import { EthTools } from 'meteor/ethereum:tools';
 import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { moment } from 'meteor/momentjs:moment';
 
 import Tokens from '/imports/api/tokens';
 import { Offers, Trades } from '/imports/api/offers';
@@ -169,12 +170,11 @@ Template.registerHelper('concat', (...args) => Array.prototype.slice.call(args, 
 Template.registerHelper('timestampToString', (ts, inSeconds, short) => {
   let timestampStr = '';
   if (ts) {
-    if (inSeconds === true) {
-      timestampStr = new Date(1000 * ts).toLocaleString();
-    } else if (short === true) {
-      timestampStr = new Date(ts).format('d-m-y H:i');
+    const momentFromTimestmap = (inSeconds === true) ? moment.unix(1000 * ts) : moment.unix(ts);
+    if (short === true) {
+      timestampStr = momentFromTimestmap.format('DD.M-HH:mm:ss');
     } else {
-      timestampStr = new Date(ts).toLocaleString();
+      timestampStr = momentFromTimestmap.format();
     }
   }
   return timestampStr;
