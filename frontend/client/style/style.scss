@@ -547,15 +547,31 @@ table {
     font-size: 15px;
     opacity: 0.68;
   }
+}
 
-  table.history{
-    td{
-      font-size: 16px;
-      text-align: left;
+.history-section {
+  td {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: #4A4A4A;
+    padding-top: 10px;
+
+    a {
+      color: #4A4A4A;
     }
-    td.transfer{
-      text-align: right;
-    }
+  }
+
+  td:first-child {
+    color: #666669;
+    opacity: 0.5;
+  }
+
+  th {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    color: #222228;
+    opacity: 0.68;
   }
 }
 
