@@ -481,6 +481,14 @@ table {
 .transfer-section {
   padding-right: 30px;
 
+  tr.row-input-line {
+    td,
+    th {
+      border-bottom: 1px solid #CFD8DC;
+      border-bottom: 1px solid rgba(207,216,220, 0.35);
+    }
+  }
+
   th {
     opacity: 0.68;
     font-family: 'Montserrat', sans-serif;
@@ -495,13 +503,14 @@ table {
 
   th,
   td {
-    padding-bottom: 10px;
-    padding-top: 10px;
+    padding-bottom: 5px;
+    padding-top: 20px;
   }
 
   input {
     border: none;
     text-align: right;
+    color: #222228;
   }
 
   input.amount {
@@ -514,6 +523,7 @@ table {
     font-family: 'Montserrat-SemiBold', sans-serif;
     font-size: 11px;
     min-width: 280px;
+    opacity: 0.7;
   }
 
   button {
@@ -535,6 +545,7 @@ table {
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     font-size: 15px;
+    opacity: 0.68;
   }
 
   table.history{
