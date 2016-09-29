@@ -172,7 +172,7 @@ Template.registerHelper('timestampToString', (ts, inSeconds, short) => {
   if (ts) {
     const momentFromTimestmap = (inSeconds === true) ? moment.unix(1000 * ts) : moment.unix(ts);
     if (short === true) {
-      timestampStr = momentFromTimestmap.format('DD.M-HH:mm:ss');
+      timestampStr = momentFromTimestmap.format('DD.MM-HH:mm:ss');
     } else {
       timestampStr = momentFromTimestmap.format();
     }
