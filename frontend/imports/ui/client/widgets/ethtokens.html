@@ -12,7 +12,7 @@
             <th>
               ETH
             </th>
-            <td>
+            <td class="token">
               {{formatBalance ETHBalance}}
             </td>
           </tr>
@@ -42,7 +42,7 @@
             <th>
             </th>
             <td>
-              <button class="btn btn-default" {{b "enable: true, click: deposit"}}>{{title}}</button>
+              <button class="btn btn-default" {{b "enable: canDeposit, click: deposit"}}>{{title}}</button>
             </td>
           </tr>
           {{#unless equals lastError ''}}

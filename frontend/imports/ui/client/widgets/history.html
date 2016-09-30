@@ -6,7 +6,7 @@
         <thead>
           <tr>
             <th>DATE</th>
-            {{#if equals historyType 'deposityHistory'}}
+            {{#if equals historyType 'depositHistory'}}
               <th>TYPE</th>
             {{else}}
               <th>RECIPIENT</th>
@@ -14,7 +14,7 @@
             <th>AMOUNT</th>
           </tr>
         </thead>
-        {{#if equals historyType 'deposityHistory'}}
+        {{#if equals historyType 'depositHistory'}}
           <tbody>
             {{#each history}}
               <tr>

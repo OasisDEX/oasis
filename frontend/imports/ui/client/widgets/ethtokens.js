@@ -10,9 +10,12 @@ import { prettyError } from '/imports/utils/prettyError';
 
 import './ethtokens.html';
 
-const TRANSACTION_TYPE = 'ethtokens';
+const TRANSACTION_TYPE_WITHDRAW = 'ethtokens_withdraw';
+const TRANSACTION_TYPE_DEPOSIT = 'ethtokens_deposit';
 const DEPOSIT_GAS = 150000;
 const WITHDRAW_GAS = 150000;
+const DEPOSIT = 'deposit';
+const WITHDRAW = 'withdraw';
 
 Template.ethtokens.viewmodel({
   type() {
@@ -22,14 +25,17 @@ Template.ethtokens.viewmodel({
   amount: '',
   lastError: '',
   pending() {
-    return Transactions.findType(TRANSACTION_TYPE);
+    if (this.type() === DEPOSIT) {
+      return Transactions.findType(TRANSACTION_TYPE_DEPOSIT);
+    }
+    return Transactions.findType(TRANSACTION_TYPE_WITHDRAW);
   },
   maxAmount() {
     let maxAmount = '0';
     try {
-      if (this.type() === 'deposit') {
+      if (this.type() === DEPOSIT) {
         maxAmount = web3.fromWei(Session.get('ETHBalance'));
-      } else if (this.type() === 'withdraw') {
+      } else if (this.type() === WITHDRAW) {
         maxAmount = web3.fromWei(Tokens.findOne('ETH').balance);
       }
     } catch (e) {
@@ -52,7 +58,7 @@ Template.ethtokens.viewmodel({
     event.preventDefault();
     this.lastError('');
 
-    if (this.type() === 'deposit') {
+    if (this.type() === DEPOSIT) {
       const options = {
         gas: DEPOSIT_GAS,
         value: web3.toWei(this.amount()),
@@ -63,7 +69,7 @@ Template.ethtokens.viewmodel({
           token.deposit(options, (txError, tx) => {
             if (!txError) {
               console.log('add transaction deposit');
-              Transactions.add(TRANSACTION_TYPE, tx, { type: 'deposit', amount: this.amount() });
+              Transactions.add(TRANSACTION_TYPE_DEPOSIT, tx, { type: DEPOSIT, amount: this.amount() });
             } else {
               this.lastError(prettyError(txError));
             }
@@ -79,7 +85,7 @@ Template.ethtokens.viewmodel({
           token.withdraw(web3.toWei(this.amount()), { gas: WITHDRAW_GAS }, (txError, tx) => {
             if (!txError) {
               console.log('add transaction withdraw');
-              Transactions.add(TRANSACTION_TYPE, tx, { type: 'withdraw', amount: this.amount() });
+              Transactions.add(TRANSACTION_TYPE_WITHDRAW, tx, { type: WITHDRAW, amount: this.amount() });
             } else {
               this.lastError(prettyError(txError));
             }
