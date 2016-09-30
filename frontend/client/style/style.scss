@@ -406,6 +406,12 @@ table {
     color: $color-sell;
   }
 
+  td.timestamp {
+    font-weight: 500;
+    color: #666669;
+    opacity: 0.5;
+  }
+
   .cancel {
     border: none;
   }
