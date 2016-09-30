@@ -111,9 +111,9 @@
           {{/if}}
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-default btn-submit-order" data-dismiss="modal">Close</button>
           {{#if offer}}
-            <button type="button" class="btn btn-danger" data-dismiss="modal" disabled={{not offer.canCancel}} {{b "click: cancel"}}>Cancel Offer</button>
+            <button type="button" class="btn btn-default btn-submit-order-sell sell" data-dismiss="modal" disabled={{not offer.canCancel}} {{b "click: cancel"}}>Cancel Offer</button>
           {{/if}}
         </div>
       </div>
@@ -138,7 +138,7 @@
           {{/each}}
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-default btn-submit-order" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
