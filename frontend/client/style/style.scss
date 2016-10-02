@@ -119,6 +119,7 @@ table {
 
   .network-type {
     font-weight: 700;
+    margin-right: 8px;
   }
 
   .network-status {
@@ -416,6 +417,7 @@ table {
     font-weight: 500;
     font-size: 14.5px;
     color: #4A4A4A;
+    padding-top: 10px;
   }
   
   td.bid {
@@ -432,8 +434,15 @@ table {
     opacity: 0.5;
   }
 
+  td.order-type {
+    font-family: 'Montserrat', 'sans-serif';
+    font-weight: 700;
+    font-size: 13px;
+  }
+
   .cancel {
     border: none;
+    padding: 0px;
   }
 }
 
@@ -698,6 +707,10 @@ table {
   color: #848FA5;
   letter-spacing: normal;
   line-height: 12px;
+}
+
+.question-circle-spacing {
+  margin-right: 30px;
 }
 
 .btn-submit-order {
