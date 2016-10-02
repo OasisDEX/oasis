@@ -271,3 +271,14 @@ Template.registerHelper('formatToken', (value, token) => {
   displayValue = Blaze._globalHelpers['fromPrecision'](displayValue, tokenSpecs.precision);
   return EthTools.formatNumber(displayValue.toString(10), format);
 });
+
+Template.registerHelper('determineOrderType', (order) => {
+  const baseCurrency = Session.get('baseCurrency');
+  let type = '';
+  if (order.buyWhichToken === baseCurrency) {
+    type = 'bid';
+  } else if (order.sellWhichToken === baseCurrency) {
+    type = 'ask';
+  }
+  return type;
+});

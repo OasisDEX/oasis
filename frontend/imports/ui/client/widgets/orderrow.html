@@ -4,8 +4,8 @@
       <td class="timestamp">{{timestampToString order.timestamp false true}}</td>
     {{/if}}
     {{#if showType}}
-      <td class="{{order.type}}">
-        {{#if equals order.type 'bid'}}
+      <td class="{{determineOrderType order}}">
+        {{#if equals (determineOrderType order) 'bid'}}
           BUY
         {{else}}
           SELL
