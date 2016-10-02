@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="15px" height="15px" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 39.1 (31720) - http://www.bohemiancoding.com/sketch -->
+    <title>remove_button</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="15" height="15" rx="3"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="15" height="15" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Maker_TRADE-Copy-2" transform="translate(-662.000000, -1067.000000)">
+            <g id="down-old" transform="translate(230.000000, 377.000000)">
+                <g id="BUY_ORDERS" transform="translate(31.000000, 576.000000)">
+                    <g id="remove_button" transform="translate(401.000000, 114.000000)">
+                        <path d="M5,5 L9.94974747,9.94974747" id="Line" stroke="#969698" stroke-linecap="square"></path>
+                        <path d="M5,5 L9.94974747,9.94974747" id="Line-Copy" stroke="#969698" stroke-linecap="square" transform="translate(7.474874, 7.474874) scale(-1, 1) translate(-7.474874, -7.474874) "></path>
+                        <use id="Rectangle" stroke="#666669" mask="url(#mask-2)" stroke-width="2" opacity="0.68" xlink:href="#path-1"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
