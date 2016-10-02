@@ -439,7 +439,16 @@ table {
 
 .buy-sell-section {
   padding-right: 30px;
+  padding-bottom: 10px;
   font-family: 'Montserrat', sans-serif;
+
+  .table-fixed {
+    table-layout: fixed;
+  }
+
+  th {
+    width: 150px;
+  }
 
   tbody {
     th {
@@ -455,7 +464,7 @@ table {
       border: none;
       text-align: right;
       padding-right: 10px;
-      max-width: 250px;
+      max-width: 190px;
     }
 
     input[type=number]::-webkit-inner-spin-button,
@@ -483,23 +492,28 @@ table {
       min-width: 30px;
       display: inline-block;
     }
-
-    .help-block {
-      font-size: 13px;
-      color: #D0D0D0;
-    }
   }
 
   tfoot {
     th,
     td {
-      padding-top: 25px;
+      padding-top: 10px;
+      min-height: 36px;
     }
 
-    th {
+    .first-row {
+      padding-top: 20px;
+    }
+
+    .help-block {
       font-size: 13px;
       color: #D0D0D0;
       font-weight: 500;
+      margin: 0px;
+    }
+
+    .row-height {
+      height: 36px;
     }
   }
 }

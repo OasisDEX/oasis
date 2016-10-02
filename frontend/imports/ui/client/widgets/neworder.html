@@ -5,7 +5,7 @@
         {{title}} {{baseCurrency}}
         {{> whatisthis section="new-order"}}
       </h2>
-      <table>
+      <table class="table-fixed">
         <tbody>
           <tr class="row-input-line">
             <th>
@@ -31,20 +31,18 @@
               <input type="number" class="input" step="any" min="0" {{b "value: total, input: calcAmount, enable: priceDefined, attr: { max: maxTotal }"}}> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
             </td>
           </tr>
-          {{#unless priceDefined}}
-            <tr>
-              <td colspan="2">
-                <span class="help-block">Enter a price to unlock amount and total.</span>
-              </td>
-            </tr>
-          {{/unless}}
         </tbody>
         <tfoot>
           <tr>
-            <th>
-            </th>
-            <td>
-              <button class="btn btn-default btn-submit-order-{{type}} {{type}}" data-toggle="modal" data-target="#newOrderModal" {{b "enable: canSubmit, click: showConfirmation"}}>{{title}}</button>
+              <th class="first-row">
+                {{#unless priceDefined}}
+                  <span class="help-block">Enter a price to unlock amount and total.</span>
+                {{/unless}}
+              </th>
+            <td class="first-row">
+              <div class="row-height">
+                <button class="btn btn-default btn-submit-order-{{type}} {{type}}" data-toggle="modal" data-target="#newOrderModal" {{b "enable: canSubmit, click: showConfirmation"}}>{{title}}</button>
+              </div>
             </td>
           </tr>
           {{#unless isMarketOpen}}
