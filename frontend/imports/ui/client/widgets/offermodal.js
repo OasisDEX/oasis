@@ -247,4 +247,7 @@ Template.offermodal.viewmodel({
       }
     });
   },
+  showAllowanceModal() {
+    $('#allowanceModal').modal('show');
+  },
 });
