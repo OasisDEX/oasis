@@ -153,7 +153,8 @@ Template.offermodal.viewmodel({
       const volume = new BigNumber(this.volume());
       const total = new BigNumber(this.total());
       const marketOpen = Session.get('market_open');
-      return marketOpen && !total.isNaN() && total.gt(0) && total.lte(new BigNumber(this.maxTotal()))
+      return Session.get('orderProgress') === 0 && Session.get('buySellProgress') === 0 && marketOpen &&
+        !total.isNaN() && total.gt(0) && total.lte(new BigNumber(this.maxTotal()))
         && !volume.isNaN() && volume.gt(0) && volume.lte(new BigNumber(this.maxVolume()));
     } catch (e) {
       return false;

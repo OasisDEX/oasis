@@ -5,7 +5,7 @@ import { web3 } from 'meteor/makerotc:dapple';
 
 import Tokens from '/imports/api/tokens';
 import { Offers } from '/imports/api/offers';
-import { prettyError } from '/imports/utils/prettyError';
+import prettyError from '/imports/utils/prettyError';
 
 import './neworder.html';
 
@@ -132,11 +132,14 @@ Template.neworder.viewmodel({
       const maxTotal = new BigNumber(this.maxTotal());
       const marketOpen = Session.get('market_open');
       const validTokenPair = Session.get('quoteCurrency') !== Session.get('baseCurrency');
-      return marketOpen && price.gt(0) && amount.gt(0) && total.gt(0) && validTokenPair &&
+      return Session.get('orderProgress') === 0 && Session.get('buySellProgress') === 0 && marketOpen && price.gt(0) && amount.gt(0) && total.gt(0) && validTokenPair &&
         (type !== 'buy' || total.lte(maxTotal)) && (type !== 'sell' || amount.lte(maxAmount));
     } catch (e) {
       return false;
     }
+  },
+  orderProgress() {
+    return Session.get('orderProgress');
   },
   preventDefault(event) {
     event.preventDefault();

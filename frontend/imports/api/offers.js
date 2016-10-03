@@ -6,7 +6,7 @@ import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
 
 import Transactions from '/imports/api/transactions';
-import { prettyError } from '/imports/utils/prettyError';
+import prettyError from '/imports/utils/prettyError';
 
 const Offers = new Mongo.Collection(null);
 const Trades = new Mongo.Collection(null);
@@ -100,6 +100,7 @@ Offers.sync = () => {
       Offers.remove(result.transactionHash);
       if (Session.equals('selectedOffer', result.transactionHash)) {
         Session.set('selectedOffer', id.toString());
+        Session.set('orderProgress', 100);
       }
     }
   });
@@ -199,7 +200,7 @@ Offers.updateOffer = (idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWh
 Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callback) => {
   const sellWhichTokenAddress = Dapple.getTokenAddress(sellWhichToken);
   const buyWhichTokenAddress = Dapple.getTokenAddress(buyWhichToken);
-
+  Session.set('orderProgress', 50);
   Dapple['maker-otc'].objects.otc.offer(sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress,
     { gas: OFFER_GAS }, (error, tx) => {
       callback(error, tx);
@@ -207,19 +208,24 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
         Offers.updateOffer(tx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress,
                            web3.eth.defaultAccount, Status.PENDING);
         Transactions.add('offer', tx, { id: tx, status: Status.PENDING });
+      } else {
+        Session.set('orderProgress', 0);
       }
     });
 };
 
 Offers.buyOffer = (_id, _quantity) => {
   const id = parseInt(_id, 10);
+  Session.set('buySellProgress', 50);
   Offers.update(_id, { $unset: { helper: '' } });
   Dapple['maker-otc'].objects.otc.buy(id.toString(10), _quantity, { gas: BUY_GAS }, (error, tx) => {
     if (!error) {
       Transactions.add('offer', tx, { id: _id, status: Status.BOUGHT });
+      Session.set('buySellProgress', 100);
       Offers.update(_id, { $set: {
         tx, status: Status.BOUGHT, helper: 'Your buy / sell order is being processed...' } });
     } else {
+      Session.set('buySellProgress', 0);
       Offers.update(_id, { $set: { helper: prettyError(error) } });
     }
   });

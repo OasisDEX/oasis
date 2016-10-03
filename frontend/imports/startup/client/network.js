@@ -103,6 +103,8 @@ function initSession() {
   Session.set('syncing', false);
   Session.set('isConnected', false);
   Session.set('latestBlock', 0);
+  Session.set('orderProgress', 0);
+  Session.set('buySellProgress', 0);
   Session.set('quoteCurrency', localStorage.getItem('quoteCurrency') || 'ETH');
   Session.set('baseCurrency', localStorage.getItem('baseCurrency') || 'MKR');
 }

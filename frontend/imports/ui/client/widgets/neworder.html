@@ -57,6 +57,16 @@
             <button class="btn btn-default" data-toggle="modal" data-target="#newOrderModal" {{b "enable: canSubmit, click: preventDefault"}}>Submit order</button>
           </td>
         </tr>
+        {{#if orderProgress}}
+        <tr>
+          <td colspan="2">
+            <div class="progress">
+              <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{orderProgress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{orderProgress}}%">
+              </div>
+            </div>
+          </td>
+        </tr>
+        {{/if}}
         {{#unless isMarketOpen}}
           <tr>
             <td colspan="2">
