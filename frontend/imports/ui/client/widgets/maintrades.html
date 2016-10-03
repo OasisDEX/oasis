@@ -20,10 +20,10 @@
   </div>
   <div class="row">
     <section class="order-section col-md-6">
-      {{> orderbook title='BUY ORDERS' subtitle=(concat '(click on an order listing to sell ' baseCurrency ')') priceLabel='BID PRICE' orders=(findOffers 'bid') canAccept=true showType=false}}
+      {{> orderbook title='BUY ORDERS' subtitle=(concat '(click on an order listing to sell ' baseCurrency ')') priceClass='bid' priceLabel='BID PRICE' orders=(findOffers 'bid') canAccept=true showType=false}}
     </section>
     <section class="order-section col-md-6">
-      {{> orderbook title='SELL ORDERS' subtitle=(concat '(click on an order listing to buy ' baseCurrency ')') priceLabel='ASK PRICE' orders=(findOffers 'ask') canAccept=true}}
+      {{> orderbook title='SELL ORDERS' subtitle=(concat '(click on an order listing to buy ' baseCurrency ')') priceClass='ask' priceLabel='ASK PRICE' orders=(findOffers 'ask') canAccept=true}}
     </section>
   </div>
   <div class="row">

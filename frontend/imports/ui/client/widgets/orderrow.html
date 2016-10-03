@@ -13,12 +13,19 @@
       </td>
     {{/if}}
     {{#unless showType}}
-      <td class={{order.type}}>{{formatToken (order.price quoteCurrency)}}</td>
+      {{#if equals (determineOrderType order) 'ask'}}
+        <td class={{order.type}}>{{formatToken (order.price quoteCurrency)}}</td>
+      {{/if}}
     {{else}}
       <td>{{formatToken (order.price quoteCurrency)}}</td>
     {{/unless}}
     <td>{{formatBalance (order.volume quoteCurrency)}}</td>
     <td>{{formatBalance (order.volume baseCurrency)}}</td>
+    {{#unless showType}}
+      {{#if equals (determineOrderType order) 'bid'}}
+        <td class={{order.type}}>{{formatToken (order.price quoteCurrency)}}</td>
+      {{/if}}
+    {{/unless}}
     <td>
       {{#if order.canCancel}}
         {{#if showCancel}}
