@@ -265,11 +265,10 @@ Template.registerHelper('formatToken', (value, token) => {
   // console.log(displayValue.toString(10));
   const valid = Blaze._globalHelpers['validPrecision'](displayValue, tokenSpecs.precision);
   // console.log('valid precision', valid);
-  if (displayValue instanceof BigNumber) {
-    return displayValue;
+  if (!(displayValue instanceof BigNumber)) {
+    displayValue = Blaze._globalHelpers['fromPrecision'](displayValue, tokenSpecs.precision);
   }
-  displayValue = Blaze._globalHelpers['fromPrecision'](displayValue, tokenSpecs.precision);
-  return EthTools.formatNumber(displayValue.toString(10), format);
+  return EthTools.formatNumber(displayValue.toString(10), '0.000');
 });
 
 Template.registerHelper('determineOrderType', (order) => {
