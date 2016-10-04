@@ -19,8 +19,8 @@
     {{else}}
       <td>{{formatToken (order.price quoteCurrency)}}</td>
     {{/unless}}
-    <td>{{formatBalance (order.volume quoteCurrency)}}</td>
-    <td>{{formatBalance (order.volume baseCurrency)}}</td>
+    <td>{{formatToken (order.volume quoteCurrency)}}</td>
+    <td>{{formatToken (order.volume baseCurrency)}}</td>
     {{#unless showType}}
       {{#if equals (determineOrderType order) 'bid'}}
         <td class={{order.type}}>{{formatToken (order.price quoteCurrency)}}</td>
