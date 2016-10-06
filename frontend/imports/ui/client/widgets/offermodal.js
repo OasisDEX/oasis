@@ -6,6 +6,7 @@ import { web3 } from 'meteor/makerotc:dapple';
 
 import Tokens from '/imports/api/tokens';
 import { Offers, Status } from '/imports/api/offers';
+import convertToWei from '/imports/utils/conversion';
 
 import './offermodal.html';
 
@@ -231,15 +232,15 @@ Template.offermodal.viewmodel({
     let buyHowMuch;
     let buyWhichToken;
     if (this.offerType() === 'buy') {
-      sellHowMuch = web3.toWei(this.offerTotal());
       sellWhichToken = Session.get('quoteCurrency');
-      buyHowMuch = web3.toWei(this.offerAmount());
+      sellHowMuch = convertToWei(this.offerTotal(), sellWhichToken);
       buyWhichToken = Session.get('baseCurrency');
+      buyHowMuch = convertToWei(this.offerAmount(), buyWhichToken);
     } else {
-      sellHowMuch = web3.toWei(this.offerAmount());
       sellWhichToken = Session.get('baseCurrency');
-      buyHowMuch = web3.toWei(this.offerTotal());
+      sellHowMuch = convertToWei(this.offerAmount(), sellWhichToken);
       buyWhichToken = Session.get('quoteCurrency');
+      buyHowMuch = convertToWei(this.offerTotal(), buyWhichToken);
     }
     Offers.newOffer(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, (error) => {
       if (error != null) {
