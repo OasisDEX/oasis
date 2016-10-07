@@ -79,7 +79,7 @@
         </div>
         <div class="modal-footer">
           {{#if offer}}
-            <button type="button" class="btn btn-default btn-submit-order-buy buy" data-dismiss="modal" {{b "enable: canBuy, click: buy"}}>
+            <button type="button" class="btn btn-default btn-submit-order-buy buy btn-placement-right btn-placement-right" data-dismiss="modal" {{b "enable: canBuy, click: buy"}}>
               {{#if equals offer.type 'bid'}}SELL{{else}}BUY{{/if}} {{baseCurrency}}
             </button>
           {{/if}}
@@ -111,7 +111,7 @@
           {{/if}}
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default btn-submit-order" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-default btn-submit-order btn-placement-right" data-dismiss="modal">Close</button>
           {{#if offer}}
             <button type="button" class="btn btn-default btn-submit-order-sell sell" data-dismiss="modal" disabled={{not offer.canCancel}} {{b "click: cancel"}}>Cancel Offer</button>
           {{/if}}
@@ -138,7 +138,7 @@
           {{/each}}
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default btn-submit-order" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-default btn-submit-order btn-placement-right" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
@@ -183,8 +183,8 @@
           </span>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default btn-submit-order" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-default btn-submit-order-{{offerType}} {{offerType}}" data-dismiss="modal" {{b "enable: canSubmit, click: confirmOffer"}}>Place order</button>
+          <button type="button" class="btn btn-default btn-submit-order btn-placement-right" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-default btn-submit-order-{{offerType}} {{offerType}} btn-placement-right" data-dismiss="modal" {{b "enable: canSubmit, click: confirmOffer"}}>Place order</button>
         </div>
       </div>
     </div>
