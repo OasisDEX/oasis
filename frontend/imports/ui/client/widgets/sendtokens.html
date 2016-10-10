@@ -1,33 +1,34 @@
 <template name="sendtokens">
   <form id="sendtokens">
     <h2>
-      Transfer Tokens
+      TRANSFER
     </h2>
     <div>
       <table>
         <tbody>
           <tr>
             <th>
-              Token
+              TOKEN
             </th>
             <td>
-              <select {{b "options: currencies, value: currency"}}></select>
+              <select class="select-box" {{b "options: currencies, value: currency"}}></select>
+              <span class="glyphicon glyphicon-chevron-down select-glyph" aria-hidden="true"></span>
             </td>
           </tr>
-          <tr>
+          <tr class="row-input-line">
             <th>
-              Recipient
+              RECIPIENT
             </th>
             <td>
-              <input type="text" class="input" minlength="40" maxlength="42" pattern="(0x)?[0-9a-fA-F]{40}" {{b "value: recipient"}}>
+              <input type="text" class="input recipient" minlength="40" maxlength="42" pattern="(0x)?[0-9a-fA-F]{40}" {{b "value: recipient"}}>
             </td>
           </tr>
-          <tr>
+          <tr class="row-input-line">
             <th>
-              Amount
+              AMOUNT
             </th>
             <td>
-              <input type="number" class="input" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}>
+              <input type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}>
             </td>
           </tr>
         </tbody>
@@ -36,7 +37,7 @@
             <th>
             </th>
             <td>
-              <button class="btn btn-default" {{b "enable: canTransfer, click: transfer"}}>Transfer</button>
+              <button class="btn btn-default" {{b "enable: canTransfer, click: transfer"}}>TRANSFER</button>
             </td>
           </tr>
           {{#unless equals lastError ''}}

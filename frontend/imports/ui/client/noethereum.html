@@ -1,13 +1,28 @@
 <template name="noEthereum">
-    <h2>Ethereum not found</h2>
-    <p>Maker Market requires an Ethereum client to be running and current. Maker Market could not detect a client running which probably means it's not installed,
-        running or is misconfigured.</p>
-    <p>Please use one of the following clients:</p>
-
-    <p><b><a href="https://github.com/ethereum/mist/releases">Mist</a></b> browser, version 0.8.1 or above.
-        (install and run Mist to connect to Ethereum and browse <a href="https://mkr.market">https://mkr.market</a> from within Mist).</p>
-    <p><b><a href="https://metamask.io/">MetaMask</a></b> chrome plugin.
-        (install MetaMask to connect to Ethereum and browse <a href="https://mkr.market">https://mkr.market</a> from your Chrome browser).</p>
-    <p>While you can also connect with <b>geth</b> or <b>parity</b>, a more advanced configuration is needed. See the
-        <a href="https://github.com/MakerDAO/maker-market/wiki#network">Maker Market documentation</a> for instructions.</p>
+    <div class="no-ethereum-section">
+        <img class="img-maker-logo" alt="Maker" src="/logo.svg">
+        <hr class="horizontal-line">
+        <img class="img-ethereum-logo" alt="Ethereum" src="/ethereum-logo.svg">
+        <h2>NOT CONNECTED TO ETHEREUM</h2>
+        <p class="p-not-found">Maker Market requires an Ethereum client to be running and current. Maker Market could not detect a client running which probably means it's not installed,
+            running or is misconfigured.</p>
+        <p class="p-use-clients">Please use one of the following clients to connect to Ethereum:</p>
+        <div class="div-clients">
+            <div class="div-metamask">
+                <img class="img-logo" alt="Metamask" src="/metamask-logo.svg">
+                <h2>METAMASK</h2>
+                <p><span class="align-number"><span class="numberCircle">1</span></span>Install <a class="span-montserrat-semi-bold" href="https://metamask.io/" target="_blank">Metamask</a></p>
+                <p><span class="align-number"><span class="numberCircle">2</span></span>Use Chrome to browse <a class="span-montserrat-semi-bold" href="https://mkr.market" target="_blank">https://mkr.market"</a></p>
+            </div>
+            <div class="div-mist">
+                <img class="img-logo" alt="Mist" src="/mist-logo.svg">     
+                <h2>MIST</h2>
+                <p><span class="align-number"><span class="numberCircle">1</span></span>Install and run <a class="span-montserrat-semi-bold" href="https://github.com/ethereum/mist/releases" target="_blank">Mist</a></p>
+                <p><span class="align-number"><span class="numberCircle">2</span></span>Use Mist to browse <a class="span-montserrat-semi-bold" href="https://mkr.market" target="_blank">https://mkr.market"</a></p>
+            </div>
+        </div>
+        <p class="p-connect-geth">While you can also connect with <b>geth</b> or <b>parity</b>, a more advanced configuration is needed. See the
+            <a href="https://github.com/MakerDAO/maker-market/wiki#network" target="_blank">Maker Market documentation</a> for instructions.
+        </p>
+    </div>
 </template>

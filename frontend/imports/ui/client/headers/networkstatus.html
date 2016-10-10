@@ -1,25 +1,58 @@
 <template name="networkStatus">
-  <p>
-      Network: {{network}}
-      {{#unless isConnected}}
-        (not connected)
-      {{else}}
-        {{#if syncing}}
-          (syncing {{syncingPercentage}}%)
+  <div class="networkstatus-section">
+    <div class="col-md-6">
+      <img alt="Maker" src="/logo-simple.svg">
+    </div>
+    <div class="col-md-6">
+      <div class="div-connected">
+        <p>
+          <span class="network-type">{{network}}</span>
+          {{> whatisthis section="network"}}
+        </p>
+        <p>
+        {{#unless isConnected}}
+          (not connected)
         {{else}}
-          {{#if outOfSync}}
-            (out of sync, waiting for synchronization)
+          {{#if syncing}}
+            (syncing {{syncingPercentage}}%)
           {{else}}
-            {{#if loading}}
-              (loading offers {{loadingProgress}}%)
+            {{#if outOfSync}}
+              (out of sync, waiting for synchronization)
             {{else}}
-              {{#if ready}}
-                (ready)
+              {{#if loading}}
+                (loading offers {{loadingProgress}}%)
+              {{else}}
+                {{#if ready}}
+                    <span class="green-circle"></span>
+                    <span class="network-status">CONNECTED</span>
+                {{/if}}
               {{/if}}
             {{/if}}
           {{/if}}
+        {{/unless}}
+        </p>
+      </div>
+      <div>
+        {{#if isMarketOpen}}
+          <p>
+            <span class="network-type">CLOSING TIME</span>
+            {{> whatisthis section="network"}}
+          </p>
+          <p>
+            <span class="clock-circle"><img class="clock-image" src="/clock.svg" alt="clock"></span>
+            <span class="network-status">{{timestampToString marketCloseTime false true}}</span>
+          </p>
+        {{else}}
+          <p>
+            <span class="network-type">MARKET STATUS</span>
+            {{> whatisthis section="network"}}
+          </p>
+          <p>
+            <span class="closed-circle"></span>
+            <span class="network-status">CLOSED</span>
+          </p>
         {{/if}}
-      {{/unless}}
-      {{> whatisthis section="network"}}
-    </p>
+      </div>
+    </div>
+  </div>
 </template>

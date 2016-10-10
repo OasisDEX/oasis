@@ -6,10 +6,12 @@ import { web3 } from 'meteor/makerotc:dapple';
 
 import Tokens from '/imports/api/tokens';
 import { Offers, Status } from '/imports/api/offers';
+import convertToWei from '/imports/utils/conversion';
 
 import './offermodal.html';
 
 Template.offermodal.viewmodel({
+  share: 'newOffer',
   volume: '',
   total: '',
   autorun() {
@@ -166,5 +168,87 @@ Template.offermodal.viewmodel({
     } else {
       Offers.buyOffer(offerId, web3.toWei(new BigNumber(this.volume())));
     }
+  },
+  maxNewOfferAmount() {
+    let maxAmount = '0';
+    if (this.offerType() === 'sell') {
+      const token = Tokens.findOne(Session.get('baseCurrency'));
+      if (token) {
+        const balance = new BigNumber(token.balance);
+        const allowance = new BigNumber(token.allowance);
+        maxAmount = web3.fromWei(BigNumber.min(balance, allowance).toString(10));
+      }
+    } else {
+      maxAmount = '9e999';
+    }
+    return maxAmount;
+  },
+  maxNewOfferTotal() {
+    // Only allow change of total if price is well-defined
+    try {
+      const price = new BigNumber(this.offerPrice());
+      if ((price.isNaN() || price.isZero() || price.isNegative())) {
+        return '0';
+      }
+    } catch (e) {
+      return '0';
+    }
+    // If price is well-defined, take minimum of balance and allowance of currency, if 'buy', otherwise Infinity
+    let maxTotal = '0';
+    if (this.offerType() === 'buy') {
+      const token = Tokens.findOne(Session.get('quoteCurrency'));
+      if (token) {
+        const balance = new BigNumber(token.balance);
+        const allowance = new BigNumber(token.allowance);
+        maxTotal = web3.fromWei(BigNumber.min(balance, allowance).toString(10));
+      }
+    } else {
+      maxTotal = '9e999';
+    }
+    return maxTotal;
+  },
+  canSubmit() {
+    try {
+      const type = this.offerType();
+      const price = new BigNumber(this.offerPrice());
+      const amount = new BigNumber(this.offerAmount());
+      const maxAmount = new BigNumber(this.maxNewOfferAmount());
+      const total = new BigNumber(this.offerTotal());
+      const maxTotal = new BigNumber(this.maxNewOfferTotal());
+      const marketOpen = Session.get('market_open');
+      const validTokenPair = Session.get('quoteCurrency') !== Session.get('baseCurrency');
+      return marketOpen && price.gt(0) && amount.gt(0) && total.gt(0) && validTokenPair &&
+        (type !== 'buy' || total.lte(maxTotal)) && (type !== 'sell' || amount.lte(maxAmount));
+    } catch (e) {
+      return false;
+    }
+  },
+  confirmOffer(event) {
+    event.preventDefault();
+
+    this.offerError('');
+    let sellHowMuch;
+    let sellWhichToken;
+    let buyHowMuch;
+    let buyWhichToken;
+    if (this.offerType() === 'buy') {
+      sellWhichToken = Session.get('quoteCurrency');
+      sellHowMuch = convertToWei(this.offerTotal(), sellWhichToken);
+      buyWhichToken = Session.get('baseCurrency');
+      buyHowMuch = convertToWei(this.offerAmount(), buyWhichToken);
+    } else {
+      sellWhichToken = Session.get('baseCurrency');
+      sellHowMuch = convertToWei(this.offerAmount(), sellWhichToken);
+      buyWhichToken = Session.get('quoteCurrency');
+      buyHowMuch = convertToWei(this.offerTotal(), buyWhichToken);
+    }
+    Offers.newOffer(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, (error) => {
+      if (error != null) {
+        this.offerError(error);
+      }
+    });
+  },
+  showAllowanceModal() {
+    $('#allowanceModal').modal('show');
   },
 });

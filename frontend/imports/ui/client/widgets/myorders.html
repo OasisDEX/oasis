@@ -1,25 +1,14 @@
 <template name="myorders">
-  <h2>
-    <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="{{#if address}}active{{/if}}">
-        <a href="#myorders" aria-controls="myorders" role="tab" data-toggle="tab">My Orders</a>
-      </li>
-      <li role="presentation" class="{{#unless address}}active{{/unless}}">
-        <a href="#lasttrades" aria-controls="lasttrades" role="tab" data-toggle="tab">Last Trades</a>
-      </li>
-    </ul>
-  </h2>
-
-  <div class="tab-content">
-    <div role="tabpanel" class="tab-pane {{#if address}}active{{/if}} o" id="myorders">
+  <div class="order-section-content">
+    <h2>
+      MY ORDERS
+    </h2>
+    <div>
       {{#if address}}
-        {{> orders orders=(findOffers 'mine') type='myOrders' priceLabel='Price' showCancel=true}}
+        {{> orders orders=(findOffers 'mine') type='myOrders' priceLabel='PRICE' showCancel=true showType=true}}
       {{else}}
         <small>Select an account to display your orders</small>
       {{/if}}
-    </div>
-    <div role="tabpanel" class="tab-pane {{#unless address}}active{{/unless}} o" id="lasttrades">
-      {{> orders orders=lastTrades type='lastTrades' priceLabel='Price'}}
     </div>
   </div>
 </template>

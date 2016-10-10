@@ -5,6 +5,7 @@ import { _ } from 'meteor/underscore';
 
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
+import TokenEvents from '/imports/api/tokenEvents';
 import { Offers, Status } from '/imports/api/offers';
 
 // Check which accounts are available and if defaultAccount is still available,
@@ -37,6 +38,7 @@ function initNetwork(newNetwork) {
   Session.set('network', newNetwork);
   Session.set('isConnected', true);
   Session.set('latestBlock', 0);
+  Session.set('startBlock', 0);
   Tokens.sync();
   Offers.sync();
 }
@@ -57,6 +59,10 @@ function checkNetwork() {
         if (res.number >= Session.get('latestBlock')) {
           Session.set('outOfSync', e != null || (new Date().getTime() / 1000) - res.timestamp > 600);
           Session.set('latestBlock', res.number);
+          if (Session.get('startBlock') === 0) {
+            console.log('setting startblock to '+(res.number - 6000));
+            Session.set('startBlock', (res.number - 6000));
+          }
         } else {
           // XXX MetaMask frequently returns old blocks
           // https://github.com/MetaMask/metamask-plugin/issues/504
@@ -117,6 +123,7 @@ Meteor.startup(() => {
   web3.eth.filter('latest', () => {
     Tokens.sync();
     Transactions.sync();
+    TokenEvents.syncTimestamps();
   });
 
   web3.eth.isSyncing((error, sync) => {
@@ -180,4 +187,8 @@ Meteor.startup(() => {
   Meteor.setInterval(checkNetwork, 2503);
   Meteor.setInterval(checkAccounts, 10657);
   Meteor.setInterval(checkMarketOpen, 11027);
+});
+
+Meteor.autorun(() => {
+  TokenEvents.watchTokenEvents();
 });

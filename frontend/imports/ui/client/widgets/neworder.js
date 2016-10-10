@@ -5,16 +5,19 @@ import { web3 } from 'meteor/makerotc:dapple';
 
 import Tokens from '/imports/api/tokens';
 import { Offers } from '/imports/api/offers';
-import { prettyError } from '/imports/utils/prettyError';
+import { $ } from 'meteor/jquery';
 
+import '/imports/ui/client/shared.js';
 import './neworder.html';
 
+
 Template.neworder.viewmodel({
+  share: 'newOffer',
   lastError: '',
   bestOffer: undefined,
-  type: 'buy',
-  fancyType() {
-    return this.type() === 'buy' ? 'Bid' : 'Ask';
+  type() {
+    const orderType = (this !== null && this !== undefined) ? this.orderType() : '';
+    return orderType;
   },
   sellCurrency() {
     if (this.type() === 'buy') {
@@ -181,29 +184,17 @@ Template.neworder.viewmodel({
   openOfferModal() {
     Session.set('selectedOffer', this.bestOffer());
   },
-  submit(event) {
+  showConfirmation(event) {
     event.preventDefault();
-
-    this.lastError('');
-    let sellHowMuch;
-    let sellWhichToken;
-    let buyHowMuch;
-    let buyWhichToken;
-    if (this.type() === 'buy') {
-      sellHowMuch = web3.toWei(this.total());
-      sellWhichToken = Session.get('quoteCurrency');
-      buyHowMuch = web3.toWei(this.amount());
-      buyWhichToken = Session.get('baseCurrency');
-    } else {
-      sellHowMuch = web3.toWei(this.amount());
-      sellWhichToken = Session.get('baseCurrency');
-      buyHowMuch = web3.toWei(this.total());
-      buyWhichToken = Session.get('quoteCurrency');
-    }
-    Offers.newOffer(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, (error) => {
-      if (error != null) {
-        this.lastError(prettyError(error));
-      }
-    });
+    this.offerPrice(this.price());
+    this.offerAmount(this.amount());
+    this.offerTotal(this.total());
+    this.offerType(this.type());
+  },
+  showDepositTab() {
+    $('#deposit').tab('show');
+  },
+  showAllowanceModal() {
+    $('#allowanceModal').modal('show');
   },
 });

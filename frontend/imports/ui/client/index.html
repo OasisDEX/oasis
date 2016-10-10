@@ -1,86 +1,33 @@
 <body>
   <div class="container">
-    <h1>
-      <img alt="Maker" src="/logo.svg">
-      <span>Market</span>
-    </h1>
-
-    <p class="text-danger">
-      <strong>Warning!</strong> Maker Market is undergoing alpha testing: Proceed at your own risk, and use only small amounts of {{quoteCurrency}} and {{baseCurrency}}.
-    </p>
-
-    <p class="text-success">
-      <strong>Update notice:</strong> If you have any open orders at the previous market <a href="https://makerdao.github.io/maker-market-archive/v0.1.0/">Maker OTC</a>; be sure to cancel them there to unlock the held funds!
-    </p>
-
-    {{> networkStatus }}
-
-    {{#if ready}}
-      {{> marketDetails }}
-      {{#if contractExists}}
-        {{> accountSelector }}
-        {{> currencySelector }}
-        <p>
-          Balance: {{formatBalance ETHBalance}} ETH
-          {{> whatisthis section="balance"}}
-        </p>
-        <p>Tokens:
-          {{#each token in allTokens}}
-            {{formatBalance token.balance}}
-            {{#if equals token._id 'ETH'}}
-              <a href="#ethtokens">{{token._id}}</a> {{> whatisthis section="eth-tokens"}}
-            {{else}}
-              {{token._id}}
-            {{/if}}
-            |
-          {{/each}}
-          {{> whatisthis section="tokens"}}
-        </p>
-        <p>
-          <a href="#allowance">Allowance</a>: {{#each token in allTokens}}{{formatBalance token.allowance}} {{token._id}} | {{/each}}
-          {{> whatisthis section="allowance"}}
-        </p>
-        <div class=row>
-          <section>
-            {{> orderbook title='Buy orders' subtitle=(concat '(click on an order listing to sell ' baseCurrency ')') priceLabel='Bid Price' priceClass='bid' orders=(findOffers 'bid') canAccept=true}}
-          </section>
-          <section>
-            {{> orderbook title='Sell orders' subtitle=(concat '(click on an order listing to buy ' baseCurrency ')') priceLabel='Ask Price' priceClass='ask' orders=(findOffers 'ask') canAccept=true}}
-          </section>
-        </div>
-        <div class=row>
-          <section>
-            {{> neworder}}
-          </section>
-          <section>
-            {{> myorders}}
-          </section>
-        </div>
-        <div class=row>
-          <section>
-            <h2 id="allowance">
-              Allowance
-              {{> whatisthis section="allowance"}}
-            </h2>
-            {{#each token in allTokens}}
-              {{#if token}}
-                {{> newallowance token=token}}
-              {{/if}}
-            {{/each}}
-          </section>
-          <section>
-            {{> ethtokens}}
-          </section>
-        </div>
-        <div class=row>
-          <section>
-            {{> sendtokens}}
-          </section>
-        </div>
-
-        {{> offermodal offer=(findOffer selectedOffer)}}
+    {{#if isConnected}}
+      <div class="row row-header">
+        <section class="col-md-4">
+          {{> networkStatus }}
+        </section>
+        <section class="col-md-2">
+          {{> volumes }}
+        </section>        
+        <section class="col-md-6">        
+          {{> accountSelector }}
+        </section>        
+      </div>
+      <div class="row row-header">
+        {{> messages}}
+      </div>
+      {{#if ready}}
+        {{#if contractExists}}
+          <div class="row">
+            {{> tabs }}        
+          </div>
+          <div class="tab-content wrapper">
+            <div role="tabpanel" class="tab-pane active" id="trade">{{> maintrades}}</div>
+            <div role="tabpanel" class="tab-pane" id="transfer">{{> maintransfer}}</div>
+            <div role="tabpanel" class="tab-pane" id="deposit">{{> maindeposit}}</div>
+          </div>
+        {{/if}}
       {{/if}}
-    {{/if}}
+    {{/if}}  
     {{#unless isConnected}}
       {{> noEthereum}}
     {{/unless}}

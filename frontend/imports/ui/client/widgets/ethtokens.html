@@ -1,47 +1,39 @@
 <template name="ethtokens">
   <form id="ethtokens">
     <h2>
-      Deposit / Withdraw ETH
+      {{title}}
       {{> whatisthis section="eth-tokens"}}
     </h2>
     <div>
       <table>
         <tbody>
-          <tr>
+          {{#if equals type 'deposit'}}
+          <tr class="row-input-line">
             <th>
               ETH
             </th>
-            <td>
+            <td class="token">
               {{formatBalance ETHBalance}}
             </td>
           </tr>
-          <tr>
+          {{else}}
+          <tr class="row-input-line">
             <th>
-              ETH Tokens
+              ETH TOKENS
             </th>
-            <td>
+            <td class="token">
               {{#let token=(findToken 'ETH')}}
                 {{formatBalance token.balance}}
               {{/let}}
             </td>
           </tr>
-          <tr>
+          {{/if}}
+          <tr class="row-input-line">
             <th>
-              Type
+              AMOUNT
             </th>
             <td>
-              <div class="radio">
-                <label><input type="radio" value="deposit" {{b "group: type"}}> Deposit into ETH Token</label>
-                <label><input type="radio" value="withdraw" {{b "group: type"}}> Withdraw to ETH</label>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Amount
-            </th>
-            <td>
-              <input type="number" class="input" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}>
+              <input type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}>
             </td>
           </tr>
         </tbody>
@@ -50,7 +42,7 @@
             <th>
             </th>
             <td>
-              <button class="btn btn-default" {{b "text: type, enable: canDeposit, click: deposit"}}></button>
+              <button class="btn btn-default" {{b "enable: canDeposit, click: deposit"}}>{{title}}</button>
             </td>
           </tr>
           {{#unless equals lastError ''}}

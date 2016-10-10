@@ -1,0 +1,38 @@
+<template name="maintrades">
+  <div class="row balance-row">
+    <section class="col-md-4">
+      {{> balance currency=quoteCurrency currencyType='quote-currency' }}
+    </section>
+    <section class="col-md-4">
+      {{> currencySelector }}
+    </section>
+    <section class="col-md-4">
+      {{> balance currency=baseCurrency currencyType='base-currency' }}
+    </section>
+  </div>
+  <div class="row">
+    <section class="order-section col-md-6">
+      {{> neworder title='BUY' orderType='buy'}}
+    </section>
+    <section class="order-section col-md-6">
+      {{> neworder title='SELL' orderType='sell'}}
+    </section>
+  </div>
+  <div class="row">
+    <section class="order-section col-md-6">
+      {{> orderbook title='BUY ORDERS' subtitle=(concat '(click on an order listing to sell ' baseCurrency ')') priceClass='bid' priceLabel='BID PRICE' orders=(findOffers 'bid') canAccept=true showType=false}}
+    </section>
+    <section class="order-section col-md-6">
+      {{> orderbook title='SELL ORDERS' subtitle=(concat '(click on an order listing to buy ' baseCurrency ')') priceClass='ask' priceLabel='ASK PRICE' orders=(findOffers 'ask') canAccept=true}}
+    </section>
+  </div>
+  <div class="row">
+    <section class="order-section col-md-6">
+      {{> myorders}}
+    </section>
+    <section class="order-section col-md-6">
+      {{> lasttrades}}
+    </section>
+  </div>
+  {{> offermodal offer=(findOffer selectedOffer)}}
+</template>

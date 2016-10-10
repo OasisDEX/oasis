@@ -5,6 +5,7 @@ import { _ } from 'meteor/underscore';
 import { BigNumber } from 'meteor/ethereum:web3';
 import { EthTools } from 'meteor/ethereum:tools';
 import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { moment } from 'meteor/momentjs:moment';
 
 import Tokens from '/imports/api/tokens';
 import { Offers, Trades } from '/imports/api/offers';
@@ -35,6 +36,16 @@ Template.registerHelper('contractHref', () => {
     contractHref = `https://${networkPrefix}etherscan.io/address/${contractAddress}`;
   }
   return contractHref;
+});
+
+Template.registerHelper('txHref', (tx) => {
+  let txHref = '';
+  if (Dapple['maker-otc'].objects) {
+    const network = Session.get('network');
+    const networkPrefix = (network === 'test' ? 'testnet.' : '');
+    txHref = `https://${networkPrefix}etherscan.io/tx/${tx}`;
+  }
+  return txHref;
 });
 
 Template.registerHelper('marketCloseTime', () => Session.get('close_time'));
@@ -156,13 +167,14 @@ Template.registerHelper('not', (b) => !b);
 
 Template.registerHelper('concat', (...args) => Array.prototype.slice.call(args, 0, -1).join(''));
 
-Template.registerHelper('timestampToString', (ts, inSeconds) => {
+Template.registerHelper('timestampToString', (ts, inSeconds, short) => {
   let timestampStr = '';
   if (ts) {
-    if (inSeconds === true) {
-      timestampStr = new Date(1000 * ts).toLocaleString();
+    const momentFromTimestmap = (inSeconds === true) ? moment.unix(1000 * ts) : moment.unix(ts);
+    if (short === true) {
+      timestampStr = momentFromTimestmap.format('DD.MM-HH:mm:ss');
     } else {
-      timestampStr = new Date(ts).toLocaleString();
+      timestampStr = momentFromTimestmap.format();
     }
   }
   return timestampStr;
@@ -180,6 +192,15 @@ Template.registerHelper('formatBalance', (wei, format) => {
   formatValue = formatValue || '0,0.00[0000]';
 
   return EthTools.formatBalance(wei, formatValue);
+});
+
+Template.registerHelper('friendlyAddress', (address) => {
+  if (address === Blaze._globalHelpers.contractAddress()) {
+    return 'market';
+  } else if (address === Blaze._globalHelpers.address()) {
+    return 'me';
+  }
+  return address.substr(0, 16)+'...';
 });
 
 Template.registerHelper('formatPrice', (value, currency) => {
@@ -203,4 +224,60 @@ Template.registerHelper('formatPrice', (value, currency) => {
   } catch (e) {
     return '';
   }
+});
+
+Template.registerHelper('fromPrecision', (value, precision) => {
+  let displayValue = value;
+  try {
+    if (!(displayValue instanceof BigNumber)) {
+      displayValue = new BigNumber(displayValue);
+    }
+    return displayValue.div(Math.pow(10, precision));
+  } catch (e) {
+    return new BigNumber(0);
+  }
+});
+
+Template.registerHelper('validPrecision', (value, precision) => {
+  let displayValue = value;
+  let tokenPrecision = precision;
+  if (isNaN(tokenPrecision)) {
+    const tokenSpecs = Dapple.getTokenSpecs(precision);
+    tokenPrecision = tokenSpecs.precision;
+  }
+  try {
+    if (!(displayValue instanceof BigNumber)) {
+      displayValue = new BigNumber(displayValue);
+    }
+    if (displayValue.dp() <= precision) {
+      return true;
+    }
+    return false;
+  } catch (e) {
+    return false;
+  }
+});
+
+Template.registerHelper('formatToken', (value, token) => {
+  let displayValue = value;
+  const tokenSpecs = Dapple.getTokenSpecs(token);
+  const format = (typeof (tokenSpecs.format) !== 'undefined' ? tokenSpecs.format : '0,0.00[0000]');
+  // console.log(displayValue.toString(10));
+  const valid = Blaze._globalHelpers['validPrecision'](displayValue, tokenSpecs.precision);
+  // console.log('valid precision', valid);
+  if (!(displayValue instanceof BigNumber)) {
+    displayValue = Blaze._globalHelpers['fromPrecision'](displayValue, tokenSpecs.precision);
+  }
+  return EthTools.formatNumber(displayValue.toString(10), '0.000');
+});
+
+Template.registerHelper('determineOrderType', (order) => {
+  const baseCurrency = Session.get('baseCurrency');
+  let type = '';
+  if (order.buyWhichToken === baseCurrency) {
+    type = 'bid';
+  } else if (order.sellWhichToken === baseCurrency) {
+    type = 'ask';
+  }
+  return type;
 });
