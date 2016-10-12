@@ -11,28 +11,34 @@
     </section>
   </div>
   <div class="row">
-    <section class="order-section col-md-6">
-      {{> neworder title='BUY' orderType='buy'}}
-    </section>
-    <section class="order-section col-md-6">
-      {{> neworder title='SELL' orderType='sell'}}
-    </section>
+    <div class="order-center">
+      <section class="order-section col-md-6">
+        {{> neworder title='BUY' orderType='buy'}}
+      </section>
+      <section class="order-section col-md-6">
+        {{> neworder title='SELL' orderType='sell'}}
+      </section>
+    </div>
   </div>
   <div class="row">
-    <section class="order-section col-md-6">
-      {{> orderbook title='BUY ORDERS' subtitle=(concat '(click on an order listing to sell ' baseCurrency ')') priceClass='bid' priceLabel='BID PRICE' orders=(findOffers 'bid') canAccept=true showType=false}}
-    </section>
-    <section class="order-section col-md-6">
-      {{> orderbook title='SELL ORDERS' subtitle=(concat '(click on an order listing to buy ' baseCurrency ')') priceClass='ask' priceLabel='ASK PRICE' orders=(findOffers 'ask') canAccept=true}}
-    </section>
+    <div class="order-center">
+      <section class="order-section col-md-6">
+        {{> orderbook title='BUY ORDERS' subtitle=(concat '(click on an order listing to sell ' baseCurrency ')') priceClass='bid' priceLabel='BID PRICE' orders=(findOffers 'bid') canAccept=true showType=false}}
+      </section>
+      <section class="order-section col-md-6">
+        {{> orderbook title='SELL ORDERS' subtitle=(concat '(click on an order listing to buy ' baseCurrency ')') priceClass='ask' priceLabel='ASK PRICE' orders=(findOffers 'ask') canAccept=true}}
+      </section>
+    </div>
   </div>
   <div class="row">
-    <section class="order-section col-md-6">
-      {{> myorders}}
-    </section>
-    <section class="order-section col-md-6">
-      {{> lasttrades}}
-    </section>
+    <div class="order-center">
+      <section class="order-section col-md-6">
+        {{> myorders}}
+      </section>
+      <section class="order-section col-md-6">
+        {{> lasttrades}}
+      </section>
+    </div>
   </div>
   {{> offermodal offer=(findOffer selectedOffer)}}
 </template>

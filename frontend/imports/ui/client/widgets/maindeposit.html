@@ -1,15 +1,19 @@
 <template name="maindeposit">
   <div class="row">
-    <section class="order-section col-md-6 deposit-section">
-      {{> ethtokens title='DEPOSIT' depositType='deposit'}}
-    </section>
-    <section class="order-section col-md-6 deposit-section">
-      {{> ethtokens title='WITHDRAW' depositType='withdraw'}}
-    </section>
+    <div class="order-center">
+      <section class="order-section col-md-6 deposit-section">
+        {{> ethtokens title='DEPOSIT' depositType='deposit'}}
+      </section>
+      <section class="order-section col-md-6 deposit-section">
+        {{> ethtokens title='WITHDRAW' depositType='withdraw'}}
+      </section>
+    </div>
   </div>
   <div class="row">
-    <section class="order-section col-md-6 order-section-content">
-      {{> history historyType='depositHistory'}}
-    </section>
+    <div class="order-center">
+      <section class="order-section col-md-6 order-section-content">
+        {{> history historyType='depositHistory'}}
+      </section>
+    </div>
   </div>
 </template>
