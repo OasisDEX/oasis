@@ -58,6 +58,7 @@ table {
 
 .select-glyph {
   color: #D3D5DC;
+  z-index: -1;
 }
 
 .row-header {
@@ -70,31 +71,35 @@ table {
   text-align: right;
   padding-right: 15px;
 
-  .paragraph-account {
-    margin-bottom: 28px;
-  }
-
   .select-change-allowance {
     border: 1px solid #D3D5DC;
     border-radius: 100px;
     font-size: 10px;
     background-color: rgba(0,0,0,0.0);
-    padding: 13px 17px 13px 27px;
     margin-left: 25px;
+    display: inline-block;
+    padding: 0px 17px 0px 10px;
   }
 
   .select-change-account {
     -moz-appearance: none;
     -webkit-appearance: none;
+    background-color: rgba(0,0,0,0.0);
     color: #222228;
     opacity: 0.68;
     border: none;
-    margin-right: 20px;
+    margin-right: -18px;
+    padding: 13px 33px 13px 17px;
+    z-index: 1;
+    position: relative;
+    cursor: pointer;
   }
 
   .link-contract-address {
     color: #D0D0D0;
-    margin-right: 20px;
+    margin-right: 11px;
+    padding: 13px 0px 13px 17px;
+    display: inline-block;
   }
 }
 
@@ -335,33 +340,46 @@ table {
       -webkit-appearance: none;
       border: none;
       background-color: rgba(0,0,0,0.0);
+      padding: 8px 0px 8px 0px;
+      cursor: pointer;
     }
 
     .select-box-quote {
       @extend .select-box;
-      margin-left: 12px;
+      margin-left: -25px;
+      padding-right: 2px;
+      padding-left: 36px;
     }
 
     .select-box-base {
       @extend .select-box;
-      margin-right: 12px;
+      margin-right: -25px;
+      padding-left: 10px;
+      padding-right: 33px;
+    }
+
+    .select-currency {
+      display: inline-block;
+      border: 1px solid #D3D5DC;
+      position: relative;
+      z-index: 1;
     }
 
     .select-quote-currency {
+      @extend .select-currency;
       border-radius: 100px 0 0 100px;
       background-color: #E8E9ED;
-      padding: 8px 2px 8px 12px;
+      padding: 0px 0px 0px 12px;
       border-right: 0px;
-      border: 1px solid #D3D5DC;
-      margin-right: -1px;
+      margin-right: -6px;
     }
 
     .select-base-currency {
+      @extend .select-currency;
       border-radius: 0 100px 100px 0;
       opacity: 0.5;
       background-color: rgba(0,0,0,0.0);
-      padding: 8px 13px 8px 10px;
-      border: 1px solid #D3D5DC;
+      padding: 0px 12px 0px 0px;
     }
 
     .span-token-pair {
