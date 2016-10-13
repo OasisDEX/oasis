@@ -638,6 +638,11 @@ table {
     font-weight: 700;
     font-size: 15px;
     opacity: 0.68;
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+    padding-right: 15px;
+    margin-right: -15px;
   }
 }
 
