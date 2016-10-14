@@ -4,6 +4,11 @@
       <tr>
         {{#if showDate}}<th>DATE</th>{{/if}}
         {{#if showType}}<th>TYPE</th>{{/if}}
+        {{#unless equals priceClass 'ask'}}
+          {{#unless equals priceClass 'bid'}}
+          <th>PRICE</th>
+          {{/unless}}
+        {{/unless}}
         {{#if equals priceClass 'ask'}}
           <th title={{concat quoteCurrency ' / ' baseCurrency}}>{{priceLabel}}</th>
         {{/if}}
