@@ -35,7 +35,7 @@ Template.newallowance.viewmodel({
 
     this.lastError('');
 
-    const contractAddress = Dapple['maker-otc'].objects.otc.address;
+    const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
     const options = { gas: APPROVE_GAS };
 
     // XXX EIP20

@@ -13,7 +13,8 @@ Dapple.init = function init(env) {
   }
   if (env !== false) {
     // Check if contract exists on new environment
-    web3.eth.getCode(Dapple['maker-otc'].objects.otc.address, (error, code) => {
+    const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
+    web3.eth.getCode(contractAddress, (error, code) => {
       Session.set('contractExists', !error && typeof code === 'string' && code !== '' && code !== '0x');
     });
   }

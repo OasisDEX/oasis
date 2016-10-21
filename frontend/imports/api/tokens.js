@@ -32,7 +32,7 @@ class TokensCollection extends Mongo.Collection {
                   super.upsert(tokenId, { $set: { balance: balance.toString(10) } });
                 }
               });
-              const contractAddress = Dapple['maker-otc'].objects.otc.address;
+              const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
               token.allowance(address, contractAddress, (callError, allowance) => {
                 if (!error) {
                   super.upsert(tokenId, { $set: { allowance: allowance.toString(10) } });
