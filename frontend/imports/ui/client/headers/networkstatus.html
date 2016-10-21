@@ -14,6 +14,7 @@
           (not connected)
         {{else}}
           {{#if syncing}}
+            <span class="yellow-circle"></span>
             (syncing {{syncingPercentage}}%)
           {{else}}
             {{#if outOfSync}}
