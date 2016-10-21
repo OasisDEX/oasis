@@ -146,6 +146,11 @@ table {
     background-color: #1ABC9C;
   }
 
+  .yellow-circle {
+    @extend .circle;
+    background-color: #F5BD00;
+  }
+
   .closed-circle {
     @extend .circle;
     background-color: #70737F;
@@ -415,7 +420,7 @@ table {
 }
 
 .order-section-second {
-  @extend .order-section;  
+  @extend .order-section;
   margin-left: 17px;
 }
 
@@ -462,7 +467,7 @@ table {
     color: #4A4A4A;
     padding-top: 10px;
   }
-  
+
   td.bid {
     color: $color-buy;
   }

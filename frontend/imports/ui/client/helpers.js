@@ -53,7 +53,9 @@ Template.registerHelper('marketCloseTime', () => Session.get('close_time'));
 Template.registerHelper('isMarketOpen', () => Session.get('market_open'));
 
 Template.registerHelper('ready', () =>
-  Session.get('isConnected') && !Session.get('syncing') && !Session.get('outOfSync')
+  // XXX disabled 'syncing' as parity is being very bouncy
+  // Session.get('isConnected') && !Session.get('syncing') && !Session.get('outOfSync')
+  Session.get('isConnected') && !Session.get('outOfSync')
 );
 
 Template.registerHelper('isConnected', () => Session.get('isConnected'));
