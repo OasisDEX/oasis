@@ -27,6 +27,7 @@ Template.currencySelector.viewmodel({
             if (this.baseCurrency() === this.quoteCurrency()) {
               this.baseHelper('Tokens are the same');
             }
+            location.hash = '#trade-' + this.quoteCurrency() + '-' + this.baseCurrency();
             Tokens.sync();
           } else {
             this.quoteHelper('Token not found');
@@ -49,6 +50,7 @@ Template.currencySelector.viewmodel({
             if (this.baseCurrency() === this.quoteCurrency()) {
               this.baseHelper('Tokens are the same');
             }
+            location.hash = '#trade-' + this.quoteCurrency() + '-' + this.baseCurrency();
             Tokens.sync();
           } else {
             this.baseHelper('Token not found');
