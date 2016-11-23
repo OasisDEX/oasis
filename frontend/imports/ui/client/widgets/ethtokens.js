@@ -47,10 +47,8 @@ Template.ethtokens.viewmodel({
     try {
       const amount = new BigNumber(this.amount());
       const maxAmount = new BigNumber(this.maxAmount());
-      console.log('amount:', amount, ' maxAmount:', maxAmount);
       return amount.gt(0) && amount.lte(maxAmount);
     } catch (e) {
-      console.log('error', e);
       return false;
     }
   },

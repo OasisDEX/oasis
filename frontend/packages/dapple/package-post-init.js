@@ -1,16 +1,21 @@
 // console.log('package-post-init start')
 Dapple.init = function init(env) {
-  if (env === 'test' || env === 'morden') {
-    Dapple.env = 'morden';
-    Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.morden);
-    Dapple.makerjs = new Dapple.Maker(web3, 'morden');
+  if (env === 'test' || env === 'ropsten') {
+    Dapple.env = 'ropsten';
+    Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.ropsten);
+    Dapple.makerjs = new Dapple.Maker(web3, 'ropsten');
   } else if (env === 'live' || env === 'main') {
     Dapple.env = 'live';
     Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.live);
     Dapple.makerjs = new Dapple.Maker(web3, 'live');
   } else if (env === 'private' || env === 'default') {
     Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.default);
+  } else if (env === 'morden') {
+    Dapple.env = 'morden';
+    Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.morden);
+    Dapple.makerjs = new Dapple.Maker(web3, 'morden');
   }
+
   if (env !== false) {
     // Check if contract exists on new environment
     const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
@@ -25,6 +30,8 @@ Dapple.getFirstContractBlock = () => {
   let blockNumber = 0;
   if (Dapple.env === 'live') {
     blockNumber = 2100636;
+  } else if (Dapple.env === 'ropsten') {
+    blockNumber = 23612;
   } else if (Dapple.env === 'morden') {
     blockNumber = 1524881;
   }
@@ -32,17 +39,29 @@ Dapple.getFirstContractBlock = () => {
 };
 
 const tokens = {
+  ropsten: {
+    ETH: '0xecE9Fa304cC965B00afC186f5D0281a00D3dbBFD',
+    DAI: '0x0000000000000000000000000000000000000000',
+    MKR: '0x0000000000000000000000000000000000000000',
+    DGD: '0x0000000000000000000000000000000000000000',
+    GNT: '0xe5a929f1d916061a77ad45ed11d41d0e7ad62548',
+    WGNT: '0x5853e263edcfb4d053a6683fa60f45817eeb9598',
+  },
   morden: {
     ETH: '0x52fe88b987c7829e5d5a61c98f67c9c14e6a7a90',
     DAI: '0xa6581e37bb19afddd5c11f1d4e5fb16b359eb9fc',
     MKR: '0xffb1c99b389ba527a9194b1606b3565a07da3eef',
     DGD: '0x3c6f5633b30aa3817fa50b17e5bd30fb49bddd95',
+    GNT: '0x0000000000000000000000000000000000000000',
+    WGNT: '0x0000000000000000000000000000000000000000',
   },
   live: {
     ETH: '0xecf8f87f810ecf450940c9f60066b4a7a501d6a7',
     DAI: '0x0000000000000000000000000000000000000000',
     MKR: '0xc66ea802717bfb9833400264dd12c2bceaa34a6d',
     DGD: '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a',
+    GNT: '0x0000000000000000000000000000000000000000',
+    WGNT: '0x0000000000000000000000000000000000000000',
   },
 };
 
@@ -52,9 +71,11 @@ const tokenSpecs = {
   DAI: { precision: 18, format: '0,0.00[0000000000000000]' },
   MKR: { precision: 18, format: '0,0.00[0000000000000000]' },
   DGD: { precision: 9, format: '0,0.00[0000000]' },
+  GNT: { precision: 18, format: '0,0.00[0000000000000000]' },
+  WGNT: { precision: 18, format: '0,0.00[0000000000000000]' },
 };
 
-Dapple.getTokens = () => ['ETH', 'MKR', 'DAI', 'DGD'];
+Dapple.getTokens = () => ['ETH', 'MKR', 'DAI', 'DGD', 'WGNT'];
 
 Dapple.getTokenSpecs = (symbol) => {
   if (typeof(tokenSpecs[symbol]) !== 'undefined') {
