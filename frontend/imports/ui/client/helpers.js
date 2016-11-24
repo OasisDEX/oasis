@@ -31,7 +31,7 @@ Template.registerHelper('contractHref', () => {
   let contractHref = '';
   if (Dapple['maker-otc'].objects) {
     const network = Session.get('network');
-    const networkPrefix = (network === 'test' ? 'testnet.' : '');
+    const networkPrefix = (network === 'ropsten' ? 'testnet.' : '');
     const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
     contractHref = `https://${networkPrefix}etherscan.io/address/${contractAddress}`;
   }
@@ -42,7 +42,7 @@ Template.registerHelper('txHref', (tx) => {
   let txHref = '';
   if (Dapple['maker-otc'].objects) {
     const network = Session.get('network');
-    const networkPrefix = (network === 'test' ? 'testnet.' : '');
+    const networkPrefix = (network === 'ropsten' ? 'testnet.' : '');
     txHref = `https://${networkPrefix}etherscan.io/tx/${tx}`;
   }
   return txHref;
