@@ -1,0 +1,80 @@
+<template name="gnttokens">
+  <form id="gnttokens">
+    <h2>
+      {{title}}
+      {{> whatisthis section="eth-tokens"}}
+    </h2>
+    <div>
+      <table>
+        <tbody>
+          {{#if equals type 'deposit'}}
+          <tr class="row-input-line">
+            <th>
+              GNT
+            </th>
+            <td class="token">
+              {{formatBalance GNTBalance}}
+            </td>
+          </tr>
+          {{else}}
+          <tr class="row-input-line">
+            <th>
+              GNT TOKENS
+            </th>
+            <td class="token">
+              {{#let token=(findToken 'GNT')}}
+                {{formatBalance token.balance}}
+              {{/let}}
+            </td>
+          </tr>
+          {{/if}}
+          <tr class="row-input-line">
+            <th>
+              AMOUNT
+            </th>
+            <td>
+              <input type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>
+            </th>
+            <td>
+              <button class="btn btn-default" {{b "enable: canDeposit, click: deposit"}}>{{title}}</button>
+            </td>
+          </tr>
+          {{#unless equals lastError ''}}
+            <tr>
+              <td colspan="2">
+                {{lastError}}
+              </td>
+            </tr>
+          {{/unless}}
+        </tfoot>
+      </table>
+      {{#if pending}}
+        <table>
+          <tbody>
+            <tr>
+              <th colspan="2" style="text-align: center">
+                Pending
+              </th>
+            </tr>
+            {{#each pending}}
+              <tr>
+                <th>
+                  {{this.type}}
+                </th>
+                <td>
+                  {{this.amount}}
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      {{/if}}
+    </div>
+  </form>
+</template>
