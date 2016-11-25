@@ -2,3 +2,6 @@
 	path = dapple_packages/maker-otc
 	url = https://github.com/MakerDAO/maker-otc.git
 	branch = master
+[submodule "dapple_packages/token-wrapper"]
+	path = dapple_packages/token-wrapper
+	url = https://github.com/makerdao/token-wrapper.git
