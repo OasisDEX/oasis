@@ -4,6 +4,7 @@ var gulp = require('gulp')
 var gulpsync = require('gulp-sync')(gulp)
 var ghPages = require('gulp-gh-pages')
 var surge = require('gulp-surge')
+var rename = require('gulp-rename');
 
 // npm run build
 gulp.task('build-dapple-maker-otc', function (cb) {
@@ -23,7 +24,8 @@ gulp.task('copy-dapple-maker-otc', ['build-dapple-maker-otc'], function (){
   return gulp.src([
       'dapple_packages/maker-otc/build/meteor.js'
   ])
-  .pipe(gulp.dest('frontend/packages/dapple/build/maker-otc.js'))
+  .pipe(rename('maker-otc.js'))
+  .pipe(gulp.dest('frontend/packages/dapple/build/'))
 })
 
 gulp.task('build-dapple-token-wrapper', function (cb) {
@@ -43,7 +45,8 @@ gulp.task('copy-dapple-token-wrapper', ['build-dapple-token-wrapper'], function 
   return gulp.src([
       'dapple_packages/token-wrapper/build/meteor.js'
   ])
-  .pipe(gulp.dest('frontend/packages/dapple/build/token-wrapper.js'))
+  .pipe(rename('token-wrapper.js'))
+  .pipe(gulp.dest('frontend/packages/dapple/build/'))
 })
 
 // meteor-build-client ../build
