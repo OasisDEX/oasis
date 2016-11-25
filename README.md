@@ -49,7 +49,7 @@ To run the frontend, start meteor:
 cd frontend && meteor
 ```
 
-If you got the error message `File not found: build/meteor.js`, then you forgot to run the build step from above.
+If you got the error message `File not found: build/maker-otc.js` or `File not found: build/token-wrapper.js`, then you forgot to run the build step from above.
 
 You can access the user interface on [http://localhost:3000/](http://localhost:3000/)
 
