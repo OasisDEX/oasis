@@ -79,6 +79,8 @@ Template.registerHelper('address', () => Session.get('address'));
 
 Template.registerHelper('ETHBalance', () => Session.get('ETHBalance'));
 
+Template.registerHelper('GNTBalance', () => Session.get('GNTBalance'));
+
 Template.registerHelper('allTokens', () => {
   const quoteCurrency = Session.get('quoteCurrency');
   const baseCurrency = Session.get('baseCurrency');

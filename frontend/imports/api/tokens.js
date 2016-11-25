@@ -19,6 +19,19 @@ class TokensCollection extends Mongo.Collection {
         }
       });
 
+      // Get GNTBalance
+      // XXX EIP20
+      Dapple.getToken('GNT', (error, token) => {
+        if (!error) {
+          token.balanceOf(address, (callError, balance) => {
+            const newGNTBalance = balance.toString(10);
+            if (!error && !Session.equals('GNTBalance', newGNTBalance)) {
+              Session.set('GNTBalance', newGNTBalance);
+            }
+          });
+        }
+      });
+
       const ALL_TOKENS = _.uniq([Session.get('quoteCurrency'), Session.get('baseCurrency')]);
 
       if (network !== 'private') {

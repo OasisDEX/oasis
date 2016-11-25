@@ -34,9 +34,9 @@ Template.gnttokens.viewmodel({
     let maxAmount = '0';
     try {
       if (this.type() === DEPOSIT) {
-        maxAmount = web3.fromWei(Session.get('ETHBalance'));
+        maxAmount = web3.fromWei(Session.get('GNTBalance'));
       } else if (this.type() === WITHDRAW) {
-        maxAmount = web3.fromWei(Tokens.findOne('ETH').balance);
+        maxAmount = web3.fromWei(Tokens.findOne('GNTW').balance);
       }
     } catch (e) {
       maxAmount = '0';
