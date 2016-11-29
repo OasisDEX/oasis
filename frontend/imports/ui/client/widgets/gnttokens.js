@@ -10,8 +10,10 @@ import { prettyError } from '/imports/utils/prettyError';
 
 import './gnttokens.html';
 
+const TRANSACTION_TYPE_CREATE_BROCKER = 'gnttokens_create_broker';
+const TRANSACTION_TYPE_TRANSFER = 'gnttokens_transfer';
+const TRANSACTION_TYPE_CLEAR = 'gnttokens_clear';
 const TRANSACTION_TYPE_WITHDRAW = 'gnttokens_withdraw';
-const TRANSACTION_TYPE_DEPOSIT = 'gnttokens_deposit';
 const DEPOSIT_GAS = 150000;
 const WITHDRAW_GAS = 150000;
 const DEPOSIT = 'deposit';
@@ -26,7 +28,9 @@ Template.gnttokens.viewmodel({
   lastError: '',
   pending() {
     if (this.type() === DEPOSIT) {
-      return Transactions.findType(TRANSACTION_TYPE_DEPOSIT);
+      return Transactions.findType(TRANSACTION_TYPE_CREATE_BROCKER) ||
+        Transactions.findType(TRANSACTION_TYPE_TRANSFER) ||
+        Transactions.findType(TRANSACTION_TYPE_CLEAR);
     }
     return Transactions.findType(TRANSACTION_TYPE_WITHDRAW);
   },
@@ -66,27 +70,28 @@ Template.gnttokens.viewmodel({
           // Create broker
           token.createBroker((txError, tx) => {
             if (!txError) {
-              web3.eth.getTransactionReceipt(tx, (e, result) => {
-                if (!e && result != null) {
-                  if (result.logs.length > 0) {
-                    const broker = result.logs[0].topics[1];
-                    console.log("Broker result: ", result);
-                    // We get the broker, we transfer GNT to it
-                    Dapple.getToken('GNT', (err, gntToken) => {
-                      gntToken.transfer(broker, web3.toWei(this.amount()), (transferError, res) => {
-                        console.log('Transfer: ', res);
-                        Dapple['token-wrapper'].classes['DepositBroker'].at(broker).clear((clearError, clearResult) => console.log(clearResult));
-                      });
-                    });
-                  } else {
-                    //Session.set('newTransactionMessage', { message: 'Transaction failed' + tx, type: 'danger' });
-                    console.error('tx_oog', tx, result.gasUsed);
-                  }
-                } else {
-                  console.log('transaction receipt', e, result);
-                  //Session.set('newTransactionMessage', { message: 'Transation successful' + document.tx, type: 'success' });
-                }
-              });
+              Transactions.add(TRANSACTION_TYPE_CREATE_BROCKER, tx, { type: DEPOSIT, amount: this.amount() });
+              // web3.eth.getTransactionReceipt(tx, (e, result) => {
+              //   if (!e && result != null) {
+              //     if (result.logs.length > 0) {
+              //       const broker = result.logs[0].topics[1];
+              //       console.log("Broker result: ", result);
+              //       // We get the broker, we transfer GNT to it
+              //       Dapple.getToken('GNT', (err, gntToken) => {
+              //         gntToken.transfer(broker, web3.toWei(this.amount()), (transferError, res) => {
+              //           console.log('Transfer: ', res);
+              //           Dapple['token-wrapper'].classes['DepositBroker'].at(broker).clear((clearError, clearResult) => console.log(clearResult));
+              //         });
+              //       });
+              //     } else {
+              //       //Session.set('newTransactionMessage', { message: 'Transaction failed' + tx, type: 'danger' });
+              //       console.error('tx_oog', tx, result.gasUsed);
+              //     }
+              //   } else {
+              //     console.log('transaction receipt', e, result);
+              //     //Session.set('newTransactionMessage', { message: 'Transation successful' + document.tx, type: 'success' });
+              //   }
+              // });
             } else {
               this.lastError(prettyError(txError));
             }
