@@ -59,26 +59,53 @@ Template.gnttokens.viewmodel({
     if (this.type() === DEPOSIT) {
       const options = {
         gas: DEPOSIT_GAS,
-        value: web3.toWei(this.amount()),
       };
       // XXX EIP20
-      Dapple.getToken('W-ETH', (error, token) => {
+      Dapple.getToken('W-GNT', (error, token) => {
         if (!error) {
-          token.deposit(options, (txError, tx) => {
+          // Create broker
+          token.createBroker((txError, tx) => {
             if (!txError) {
-              console.log('add transaction deposit');
-              Transactions.add(TRANSACTION_TYPE_DEPOSIT, tx, { type: DEPOSIT, amount: this.amount() });
+              web3.eth.getTransactionReceipt(tx, (e, result) => {
+                if (!e && result != null) {
+                  if (result.logs.length > 0) {
+                    const broker = result.logs[0].topics[1];
+                    console.log("Broker result: ", result);
+                    // We get the broker, we transfer GNT to it
+                    Dapple.getToken('GNT', (err, gntToken) => {
+                      gntToken.transfer(broker, web3.toWei(this.amount()), (transferError, res) => {
+                        console.log('Transfer: ', res);
+                        Dapple['token-wrapper'].classes['DepositBroker'].at(broker).clear((clearError, clearResult) => console.log(clearResult));
+                      });
+                    });
+                  } else {
+                    //Session.set('newTransactionMessage', { message: 'Transaction failed' + tx, type: 'danger' });
+                    console.error('tx_oog', tx, result.gasUsed);
+                  }
+                } else {
+                  console.log('transaction receipt', e, result);
+                  //Session.set('newTransactionMessage', { message: 'Transation successful' + document.tx, type: 'success' });
+                }
+              });
             } else {
               this.lastError(prettyError(txError));
             }
           });
+          // token.deposit(options, (txError, tx) => {
+          //   if (!txError) {
+          //     console.log('add transaction deposit');
+          //     Transactions.add(TRANSACTION_TYPE_DEPOSIT, tx, { type: DEPOSIT, amount: this.amount() });
+          //   } else {
+          //     this.lastError(prettyError(txError));
+          //   }
+          // });
         } else {
           this.lastError(error.toString());
         }
       });
     } else {
       // XXX EIP20
-      Dapple.getToken('W-ETH', (error, token) => {
+      Dapple.getToken('W-GNT', (error, token) => {
         if (!error) {
           token.withdraw(web3.toWei(this.amount()), { gas: WITHDRAW_GAS }, (txError, tx) => {
             if (!txError) {
