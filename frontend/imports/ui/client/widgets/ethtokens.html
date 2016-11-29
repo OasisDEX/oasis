@@ -2,7 +2,7 @@
   <form id="ethtokens">
     <h2>
       {{title}}
-      {{> whatisthis section="eth-tokens"}}
+      {{> whatisthis section="w-eth-wrapped-eth-tokens"}}
     </h2>
     <div>
       <table>
@@ -19,10 +19,10 @@
           {{else}}
           <tr class="row-input-line">
             <th>
-              ETH TOKENS
+              W-ETH
             </th>
             <td class="token">
-              {{#let token=(findToken 'ETH')}}
+              {{#let token=(findToken 'W-ETH')}}
                 {{formatBalance token.balance}}
               {{/let}}
             </td>

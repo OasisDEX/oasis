@@ -4712,7 +4712,7 @@ Dapple['Maker'] = (function builder () {
 
   Maker.prototype.getToken = function (symbol, callback) {
     var tokenClass = 'DSTokenFrontend';
-    if (symbol === 'ETH') {
+    if (symbol === 'W-ETH') {
       tokenClass = 'DSEthToken';
     }
     var _this = this

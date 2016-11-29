@@ -346,15 +346,15 @@ table {
     .select-box-quote {
       @extend .select-box;
       margin-left: -25px;
-      padding-right: 2px;
-      padding-left: 36px;
+      padding-right: 8px;
+      padding-left: 28px;
     }
 
     .select-box-base {
       @extend .select-box;
       margin-right: -25px;
-      padding-left: 10px;
-      padding-right: 33px;
+      padding-left: 8px;
+      padding-right: 28px;
     }
 
     .select-currency {

@@ -40,48 +40,48 @@ Dapple.getFirstContractBlock = () => {
 
 const tokens = {
   ropsten: {
-    ETH: '0xecE9Fa304cC965B00afC186f5D0281a00D3dbBFD',
+    'W-ETH': '0xecE9Fa304cC965B00afC186f5D0281a00D3dbBFD',
     DAI: '0x0000000000000000000000000000000000000000',
     MKR: '0xA7F6C9A5052a08a14ff0e3349094B6EFBc591Ea4',
     DGD: '0x0000000000000000000000000000000000000000',
     GNT: '0x237470c3f62de047c4b6008fc94024b980b041e5',
-    GNTW: '0x71ddcf50dce273e57875f45aa80aa6a03d291eaa',
+    'W-GNT': '0x71ddcf50dce273e57875f45aa80aa6a03d291eaa',
   },
   morden: {
-    ETH: '0x52fe88b987c7829e5d5a61c98f67c9c14e6a7a90',
+    'W-ETH': '0x52fe88b987c7829e5d5a61c98f67c9c14e6a7a90',
     DAI: '0xa6581e37bb19afddd5c11f1d4e5fb16b359eb9fc',
     MKR: '0xffb1c99b389ba527a9194b1606b3565a07da3eef',
     DGD: '0x3c6f5633b30aa3817fa50b17e5bd30fb49bddd95',
     GNT: '0x0000000000000000000000000000000000000000',
-    GNTW: '0x0000000000000000000000000000000000000000',
+    'W-GNT': '0x0000000000000000000000000000000000000000',
   },
   live: {
-    ETH: '0xecf8f87f810ecf450940c9f60066b4a7a501d6a7',
+    'W-ETH': '0xecf8f87f810ecf450940c9f60066b4a7a501d6a7',
     DAI: '0x0000000000000000000000000000000000000000',
     MKR: '0xc66ea802717bfb9833400264dd12c2bceaa34a6d',
     DGD: '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a',
     GNT: '0x0000000000000000000000000000000000000000',
-    GNTW: '0x0000000000000000000000000000000000000000',
+    'W-GNT': '0x0000000000000000000000000000000000000000',
   },
 };
 
 // http://numeraljs.com/ for formats
 const tokenSpecs = {
-  ETH: { precision: 18, format: '0,0.00[0000000000000000]' },
+  'W-ETH': { precision: 18, format: '0,0.00[0000000000000000]' },
   DAI: { precision: 18, format: '0,0.00[0000000000000000]' },
   MKR: { precision: 18, format: '0,0.00[0000000000000000]' },
   DGD: { precision: 9, format: '0,0.00[0000000]' },
   GNT: { precision: 18, format: '0,0.00[0000000000000000]' },
-  GNTW: { precision: 18, format: '0,0.00[0000000000000000]' },
+  'W-GNT': { precision: 18, format: '0,0.00[0000000000000000]' },
 };
 
-Dapple.getTokens = () => ['ETH', 'MKR', 'DAI', 'DGD', 'GNTW'];
+Dapple.getTokens = () => ['W-ETH', 'MKR', 'DAI', 'DGD', 'W-GNT'];
 
 Dapple.getTokenSpecs = (symbol) => {
   if (typeof(tokenSpecs[symbol]) !== 'undefined') {
     return tokenSpecs[symbol];
   }
-  return tokenSpecs['ETH'];
+  return tokenSpecs['W-ETH'];
 };
 
 Dapple.getTokenAddress = (symbol) => tokens[Dapple.env][symbol];
@@ -98,7 +98,7 @@ Dapple.getToken = (symbol, callback) => {
     return;
   }
   let tokenClass = 'DSTokenFrontend';
-  if (symbol === 'ETH') {
+  if (symbol === 'W-ETH') {
     tokenClass = 'DSEthToken';
   }
   const address = Dapple.getTokenAddress(symbol);

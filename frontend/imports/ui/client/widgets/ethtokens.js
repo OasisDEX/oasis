@@ -36,7 +36,7 @@ Template.ethtokens.viewmodel({
       if (this.type() === DEPOSIT) {
         maxAmount = web3.fromWei(Session.get('ETHBalance'));
       } else if (this.type() === WITHDRAW) {
-        maxAmount = web3.fromWei(Tokens.findOne('ETH').balance);
+        maxAmount = web3.fromWei(Tokens.findOne('W-ETH').balance);
       }
     } catch (e) {
       maxAmount = '0';
@@ -62,7 +62,7 @@ Template.ethtokens.viewmodel({
         value: web3.toWei(this.amount()),
       };
       // XXX EIP20
-      Dapple.getToken('ETH', (error, token) => {
+      Dapple.getToken('W-ETH', (error, token) => {
         if (!error) {
           token.deposit(options, (txError, tx) => {
             if (!txError) {
@@ -78,7 +78,7 @@ Template.ethtokens.viewmodel({
       });
     } else {
       // XXX EIP20
-      Dapple.getToken('ETH', (error, token) => {
+      Dapple.getToken('W-ETH', (error, token) => {
         if (!error) {
           token.withdraw(web3.toWei(this.amount()), { gas: WITHDRAW_GAS }, (txError, tx) => {
             if (!txError) {

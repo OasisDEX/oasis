@@ -112,7 +112,7 @@ function initSession() {
   Session.set('syncing', false);
   Session.set('isConnected', false);
   Session.set('latestBlock', 0);
-  Session.set('quoteCurrency', localStorage.getItem('quoteCurrency') || 'ETH');
+  Session.set('quoteCurrency', localStorage.getItem('quoteCurrency') || 'W-ETH');
   Session.set('baseCurrency', localStorage.getItem('baseCurrency') || 'MKR');
 }
 

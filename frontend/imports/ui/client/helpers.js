@@ -215,7 +215,7 @@ Template.registerHelper('formatPrice', (value, currency) => {
       displayValue = new BigNumber(displayValue);
     }
 
-    if (currency === 'ETH') {
+    if (currency === 'W-ETH') {
       const usd = EthTools.ticker.findOne('usd');
       if (usd) {
         const usdValue = displayValue.times(usd.price);
