@@ -99,16 +99,15 @@ class TokenEventCollection extends Mongo.Collection {
         Session.set('GNTDepositProgress', 0);
         Session.set('GNTDepositProgressMessage', '');
       } else {
-        console.log(document);
         const broker = document.receipt.logs[0].topics[1];
-        console.log('Broker Created: ', broker);
+        console.log('Broker: ', broker);
         Session.set('GNTDepositProgress', 50);
         Session.set('GNTDepositProgressMessage', 'Transfering to Broker...');
         // We get the broker, we transfer GNT to it
         Dapple.getToken('GNT', (err, gntToken) => {
           gntToken.transfer(broker, web3.toWei(document.object.amount), (txError, tx) => {
             if (!txError) {
-              console.log(tx);
+              console.log('TX Transfer to Broker:', tx);
               Transactions.add('gnttokens_transfer', tx, { type: 'deposit', broker });
             } else {
               Session.set('GNTDepositProgress', 0);
@@ -132,7 +131,7 @@ class TokenEventCollection extends Mongo.Collection {
         Session.set('GNTDepositProgressMessage', 'Clearing Broker...');
         Dapple['token-wrapper'].classes.DepositBroker.at(document.object.broker.slice(-40)).clear((txError, tx) => {
           if (!txError) {
-            console.log(tx);
+            console.log('TX Clear Broker:', tx);
             Transactions.add('gnttokens_clear', tx, { type: 'deposit' });
           } else {
             Session.set('GNTDepositProgress', 0);

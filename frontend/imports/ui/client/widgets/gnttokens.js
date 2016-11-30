@@ -65,7 +65,7 @@ Template.gnttokens.viewmodel({
           token.getBroker.call((e, broker) => {
             if (!e) {
               // Check value of broker
-              if (broker !== 0) {
+              if (broker !== '0x0000000000000000000000000000000000000000') {
                 const tx = Session.get('address') + Date.now();
                 Transactions.insert({
                   type: 'gnttokens_create_broker',
@@ -83,7 +83,7 @@ Template.gnttokens.viewmodel({
                 // Create broker
                 token.createBroker((txError, tx) => {
                   if (!txError) {
-                    console.log(tx);
+                    console.log('TX Create Broker:', tx);
                     Session.set('GNTDepositProgress', 25);
                     Session.set('GNTDepositProgressMessage', 'Creating Broker...');
                     Transactions.add('gnttokens_create_broker', tx, { type: DEPOSIT, amount: this.amount() });
