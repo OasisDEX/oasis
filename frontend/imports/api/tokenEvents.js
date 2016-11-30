@@ -2,6 +2,7 @@ import { Mongo } from 'meteor/mongo';
 import { Session } from 'meteor/session';
 import { Dapple, web3 } from 'meteor/makerotc:dapple';
 import { _ } from 'meteor/underscore';
+import Transactions from './transactions';
 
 class TokenEventCollection extends Mongo.Collection {
   fromLabel() {
@@ -88,6 +89,74 @@ class TokenEventCollection extends Mongo.Collection {
         });
       });
     }
+  }
+
+  watchBrokerCreation() {
+    Transactions.observeRemoved('gnttokens_create_broker', (document) => {
+      if (document.receipt.logs.length === 0) {
+        console.log('Creating Broker went wrong');
+        Session.set('GNTDepositProgress', 0);
+        Session.set('GNTDepositProgressMessage', '');
+
+      } else {
+        console.log(document);
+        const broker = document.receipt.logs[0].topics[1];
+        console.log("Broker Created: ", broker);
+        Session.set('GNTDepositProgress', 50);
+        Session.set('GNTDepositProgressMessage', 'Transfering to Broker...');
+        // We get the broker, we transfer GNT to it
+        Dapple.getToken('GNT', (err, gntToken) => {
+          gntToken.transfer(broker, web3.toWei(document.object.amount), (txError, tx) => {
+            if(!txError) {
+              console.log(tx);
+              Transactions.add('gnttokens_transfer', tx, { type: 'deposit', broker: broker });
+            }
+            else {
+              Session.set('GNTDepositProgress', 0);
+              Session.set('GNTDepositProgressMessage', '');
+            }
+          });
+        });
+      }
+    });
+  }
+
+  watchBrokerTransfer() {
+    Transactions.observeRemoved('gnttokens_transfer', (document) => {
+      if (document.receipt.logs.length === 0) {
+        console.log('Transfering to Broker went wrong');
+        Session.set('GNTDepositProgress', 0);
+        Session.set('GNTDepositProgressMessage', '');
+      } else {
+        console.log('Transfer to Broker done');
+        Session.set('GNTDepositProgress', 75);
+        Session.set('GNTDepositProgressMessage', 'Clearing Broker...');
+        Dapple['token-wrapper'].classes['DepositBroker'].at(document.object.broker.slice(-40)).clear((error, tx) => {
+          if(!txError) {
+            console.log(tx);
+            Transactions.add('gnttokens_clear', tx, { type: 'deposit' });
+          }
+          else {
+            Session.set('GNTDepositProgress', 0);
+            Session.set('GNTDepositProgressMessage', '');
+          }
+        });
+      }
+    });
+  }
+
+  watchBrokerClear() {
+    Transactions.observeRemoved('gnttokens_clear', (document) => {
+      if (document.receipt.logs.length === 0) {
+        console.log('Clearing Broker went wrong');
+        Session.set('GNTDepositProgress', 0);
+        Session.set('GNTDepositProgressMessage', '');
+      } else {
+        console.log('Deposit done');
+        Session.set('GNTDepositProgress', 100);
+        Session.set('GNTDepositProgressMessage', 'Deposit Done!');
+      }
+    });
   }
 
 }

@@ -114,6 +114,8 @@ function initSession() {
   Session.set('latestBlock', 0);
   Session.set('quoteCurrency', localStorage.getItem('quoteCurrency') || 'W-ETH');
   Session.set('baseCurrency', localStorage.getItem('baseCurrency') || 'MKR');
+  Session.set('GNTDepositProgress', 0);
+  Session.set('GNTDepositProgressMessage', '');
 }
 
 /**
@@ -194,4 +196,7 @@ Meteor.startup(() => {
 
 Meteor.autorun(() => {
   TokenEvents.watchTokenEvents();
+  TokenEvents.watchBrokerCreation();
+  TokenEvents.watchBrokerTransfer();
+  TokenEvents.watchBrokerClear();
 });
