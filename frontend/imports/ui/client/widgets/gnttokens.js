@@ -59,21 +59,39 @@ Template.gnttokens.viewmodel({
     this.lastError('');
 
     if (this.type() === DEPOSIT) {
-      const options = {
-        gas: DEPOSIT_GAS,
-      };
       // XXX EIP20
       Dapple.getToken('W-GNT', (error, token) => {
         if (!error) {
-          // Create broker
-          token.createBroker((txError, tx) => {
-            if (!txError) {
-              console.log(tx);
-              Session.set('GNTDepositProgress', 25);
-              Session.set('GNTDepositProgressMessage', 'Creating Broker...');
-              Transactions.add('gnttokens_create_broker', tx, { type: DEPOSIT, amount: this.amount() });
-            } else {
-              this.lastError(prettyError(txError));
+          token.getBroker.call((e, broker) => {
+            if (!e) {
+              // Check value of broker
+              if (broker !== 0) {
+                const tx = Session.get('address') + Date.now();
+                Transactions.insert({
+                  type: 'gnttokens_create_broker',
+                  tx,
+                  object: {
+                    type: DEPOSIT,
+                    amount: this.amount(),
+                  },
+                  receipt: {
+                    logs: [{ topics: ['', broker] }],
+                  },
+                });
+                Transactions.remove({ tx });
+              } else {
+                // Create broker
+                token.createBroker((txError, tx) => {
+                  if (!txError) {
+                    console.log(tx);
+                    Session.set('GNTDepositProgress', 25);
+                    Session.set('GNTDepositProgressMessage', 'Creating Broker...');
+                    Transactions.add('gnttokens_create_broker', tx, { type: DEPOSIT, amount: this.amount() });
+                  } else {
+                    this.lastError(prettyError(txError));
+                  }
+                });
+              }
             }
           });
         } else {

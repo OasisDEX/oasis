@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { Session } from 'meteor/session';
 import { Dapple, web3 } from 'meteor/makerotc:dapple';
@@ -70,7 +71,7 @@ class TokenEventCollection extends Mongo.Collection {
 
   watchTokenEvents() {
     if (Session.get('startBlock') !== 0) {
-      console.log('filtering token events from '+Session.get('startBlock'));
+      console.log('filtering token events from ', Session.get('startBlock'));
       const ALL_TOKENS = _.uniq([Session.get('quoteCurrency'), Session.get('baseCurrency')]);
       ALL_TOKENS.forEach((tokenId) => {
         Dapple.getToken(tokenId, (error, token) => {
@@ -80,8 +81,8 @@ class TokenEventCollection extends Mongo.Collection {
               toBlock: 'latest',
             });
             const self = this;
-            events.watch(function watchEvent(error, event) {
-              if (!error) {
+            events.watch((err, event) => {
+              if (!err) {
                 self.syncEvent(tokenId, event);
               }
             });
@@ -97,21 +98,19 @@ class TokenEventCollection extends Mongo.Collection {
         console.log('Creating Broker went wrong');
         Session.set('GNTDepositProgress', 0);
         Session.set('GNTDepositProgressMessage', '');
-
       } else {
         console.log(document);
         const broker = document.receipt.logs[0].topics[1];
-        console.log("Broker Created: ", broker);
+        console.log('Broker Created: ', broker);
         Session.set('GNTDepositProgress', 50);
         Session.set('GNTDepositProgressMessage', 'Transfering to Broker...');
         // We get the broker, we transfer GNT to it
         Dapple.getToken('GNT', (err, gntToken) => {
           gntToken.transfer(broker, web3.toWei(document.object.amount), (txError, tx) => {
-            if(!txError) {
+            if (!txError) {
               console.log(tx);
-              Transactions.add('gnttokens_transfer', tx, { type: 'deposit', broker: broker });
-            }
-            else {
+              Transactions.add('gnttokens_transfer', tx, { type: 'deposit', broker });
+            } else {
               Session.set('GNTDepositProgress', 0);
               Session.set('GNTDepositProgressMessage', '');
             }
@@ -131,12 +130,11 @@ class TokenEventCollection extends Mongo.Collection {
         console.log('Transfer to Broker done');
         Session.set('GNTDepositProgress', 75);
         Session.set('GNTDepositProgressMessage', 'Clearing Broker...');
-        Dapple['token-wrapper'].classes['DepositBroker'].at(document.object.broker.slice(-40)).clear((txError, tx) => {
-          if(!txError) {
+        Dapple['token-wrapper'].classes.DepositBroker.at(document.object.broker.slice(-40)).clear((txError, tx) => {
+          if (!txError) {
             console.log(tx);
             Transactions.add('gnttokens_clear', tx, { type: 'deposit' });
-          }
-          else {
+          } else {
             Session.set('GNTDepositProgress', 0);
             Session.set('GNTDepositProgressMessage', '');
           }
@@ -155,6 +153,10 @@ class TokenEventCollection extends Mongo.Collection {
         console.log('Deposit done');
         Session.set('GNTDepositProgress', 100);
         Session.set('GNTDepositProgressMessage', 'Deposit Done!');
+        Meteor.setTimeout(() => {
+          Session.set('GNTDepositProgress', 0);
+          Session.set('GNTDepositProgressMessage', '');
+        }, 10000);
       }
     });
   }

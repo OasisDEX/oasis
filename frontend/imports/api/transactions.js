@@ -4,7 +4,7 @@ import { web3 } from 'meteor/makerotc:dapple';
 class TransactionsCollection extends Mongo.Collection {
 
   add(type, transactionHash, object) {
-    //console.log('tx', type, transactionHash, object);
+    // console.log('tx', type, transactionHash, object);
     super.insert({ type, tx: transactionHash, object });
   }
 
