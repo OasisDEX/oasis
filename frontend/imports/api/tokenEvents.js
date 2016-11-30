@@ -131,7 +131,7 @@ class TokenEventCollection extends Mongo.Collection {
         console.log('Transfer to Broker done');
         Session.set('GNTDepositProgress', 75);
         Session.set('GNTDepositProgressMessage', 'Clearing Broker...');
-        Dapple['token-wrapper'].classes['DepositBroker'].at(document.object.broker.slice(-40)).clear((error, tx) => {
+        Dapple['token-wrapper'].classes['DepositBroker'].at(document.object.broker.slice(-40)).clear((txError, tx) => {
           if(!txError) {
             console.log(tx);
             Transactions.add('gnttokens_clear', tx, { type: 'deposit' });
