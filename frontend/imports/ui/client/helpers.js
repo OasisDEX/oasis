@@ -184,6 +184,10 @@ Template.registerHelper('timestampToString', (ts, inSeconds, short) => {
   return timestampStr;
 });
 
+Template.registerHelper('log', (value) => {
+  console.log(value);
+});
+
 Template.registerHelper('fromWei', (s) => web3.fromWei(s));
 
 Template.registerHelper('toWei', (s) => web3.toWei(s));
