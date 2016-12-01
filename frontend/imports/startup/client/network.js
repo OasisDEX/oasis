@@ -6,6 +6,7 @@ import { _ } from 'meteor/underscore';
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
 import TokenEvents from '/imports/api/tokenEvents';
+import WGNT from '/imports/api/wgnt';
 import { Offers, Status } from '/imports/api/offers';
 
 // Check which accounts are available and if defaultAccount is still available,
@@ -197,7 +198,7 @@ Meteor.startup(() => {
 
 Meteor.autorun(() => {
   TokenEvents.watchTokenEvents();
-  TokenEvents.watchBrokerCreation();
-  TokenEvents.watchBrokerTransfer();
-  TokenEvents.watchBrokerClear();
+  WGNT.watchBrokerCreation();
+  WGNT.watchBrokerTransfer();
+  WGNT.watchBrokerClear();
 });
