@@ -32,6 +32,18 @@ class TokensCollection extends Mongo.Collection {
         }
       });
 
+      // FIXME: this will get called every time we sync, but we need to show W-GNT balance in deposit/withdraw window
+      // XXX EIP20
+      Dapple.getToken('W-GNT', (error, token) => {
+        if (!error) {
+          token.balanceOf(address, (callError, balance) => {
+            if (!error) {
+              super.upsert('W-GNT', { $set: { balance: balance.toString(10) } });
+            }
+          });
+        }
+      });
+
       const ALL_TOKENS = _.uniq([Session.get('quoteCurrency'), Session.get('baseCurrency')]);
 
       if (network !== 'private') {
