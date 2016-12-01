@@ -116,6 +116,7 @@ function initSession() {
   Session.set('baseCurrency', localStorage.getItem('baseCurrency') || 'MKR');
   Session.set('GNTDepositProgress', 0);
   Session.set('GNTDepositProgressMessage', '');
+  Session.set('GNTDepositErrorMessage', '');
 }
 
 /**

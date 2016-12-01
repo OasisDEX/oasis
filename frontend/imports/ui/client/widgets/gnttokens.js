@@ -32,6 +32,9 @@ Template.gnttokens.viewmodel({
   progressMessage() {
     return Session.get('GNTDepositProgressMessage');
   },
+  errorMessage() {
+    return Session.get('GNTDepositErrorMessage');
+  },
   maxAmount() {
     let maxAmount = '0';
     try {
@@ -62,6 +65,9 @@ Template.gnttokens.viewmodel({
       // XXX EIP20
       Dapple.getToken('W-GNT', (error, token) => {
         if (!error) {
+          Session.set('GNTDepositProgress', 10);
+          Session.set('GNTDepositProgressMessage', 'Checking if Broker already exists...');
+          Session.set('GNTDepositErrorMessage', '');
           token.getBroker.call((e, broker) => {
             if (!e) {
               // Check value of broker
@@ -81,21 +87,23 @@ Template.gnttokens.viewmodel({
                 Transactions.remove({ tx });
               } else {
                 // Create broker
+                Session.set('GNTDepositProgress', 20);
+                Session.set('GNTDepositProgressMessage', 'Creating Broker... (waiting for your approval)');
                 token.createBroker((txError, tx) => {
                   if (!txError) {
                     console.log('TX Create Broker:', tx);
-                    Session.set('GNTDepositProgress', 25);
-                    Session.set('GNTDepositProgressMessage', 'Creating Broker...');
+                    Session.set('GNTDepositProgress', 30);
+                    Session.set('GNTDepositProgressMessage', 'Creating Broker... (waiting for transaction confirmation)');
                     Transactions.add('gnttokens_create_broker', tx, { type: DEPOSIT, amount: this.amount() });
                   } else {
-                    this.lastError(prettyError(txError));
+                    Session.set('GNTDepositErrorMessage', prettyError(txError));
                   }
                 });
               }
             }
           });
         } else {
-          this.lastError(error.toString());
+          Session.set('GNTDepositErrorMessage', error.toString());
         }
       });
     } else {
