@@ -91,6 +91,55 @@ class TokenEventCollection extends Mongo.Collection {
       });
     }
   }
+
+  watchGNTTokenEvents() {
+    const self = this;
+
+    Dapple.getToken('GNT', (errorGNT, GNT) => {
+      if(!errorGNT) {
+        Dapple.getToken('W-GNT', (errorWGNT, WGNT) => {
+          if(!errorWGNT) {
+            WGNT.getBroker.call((errorBroker, broker) => {
+              if(!errorBroker && broker !== '0x0000000000000000000000000000000000000000')
+              {
+                GNT.Transfer({from: broker, to: WGNT.address}, { fromBlock: Session.get('startBlock') }, (errorDeposit, eventDeposit) => {
+                  if(!errorDeposit) {
+                    let row = {
+                      blockNumber: eventDeposit.blockNumber,
+                      transactionHash: eventDeposit.transactionHash,
+                      timestamp: null,
+                      token: Dapple.getTokenByAddress(WGNT.address),
+                      type: 'deposit',
+                      from: Session.get('address'),
+                      to: WGNT.address,
+                      amount: eventDeposit.args.value.toNumber()
+                    };
+                    super.insert(row);
+                  }
+                });
+
+                GNT.Transfer({from: WGNT.address, to: Session.get('address')}, { fromBlock: Session.get('startBlock') }, (ErrorWithdrawal, eventWithdrawal) => {
+                  if(!ErrorWithdrawal) {
+                    let row = {
+                      blockNumber: eventWithdrawal.blockNumber,
+                      transactionHash: eventWithdrawal.transactionHash,
+                      timestamp: null,
+                      token: Dapple.getTokenByAddress(WGNT.address),
+                      type: 'withdrawal',
+                      from: WGNT.address,
+                      to: Session.get('address'),
+                      amount: eventWithdrawal.args.value.toNumber()
+                    };
+                    super.insert(row);
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+  }
 }
 
 export default new TokenEventCollection(null);

@@ -198,6 +198,7 @@ Meteor.startup(() => {
 
 Meteor.autorun(() => {
   TokenEvents.watchTokenEvents();
+  TokenEvents.watchGNTTokenEvents();
   WGNT.watchBrokerCreation();
   WGNT.watchBrokerTransfer();
   WGNT.watchBrokerClear();
