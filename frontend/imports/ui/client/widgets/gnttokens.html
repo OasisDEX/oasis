@@ -54,6 +54,11 @@
           {{/unless}}
         </tfoot>
       </table>
+      {{#if equals type 'deposit'}}
+      {{#if brokerBalance }}
+      You have an outstanding balance of {{formatBalance brokerBalance}} in your broker. Click the button below to convert it to W-GNT.
+      {{/if}}
+      {{/if}}
       {{#if equals type 'withdraw'}}
       {{#if pending}}
         <table>

@@ -13,6 +13,13 @@ Template.accountSelector.helpers({
   currentAccount() {
     return Session.get('address');
   },
+  gntBroker() {
+    return Session.get('GNTBroker');
+  },
+  gntBrokerBalance() {
+    const balance = web3.toBigNumber(Session.get('GNTBrokerBalance'));
+    return balance.toNumber();
+  },
 });
 
 Template.accountSelector.events({

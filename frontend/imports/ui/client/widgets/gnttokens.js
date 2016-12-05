@@ -23,6 +23,21 @@ Template.gnttokens.viewmodel({
   },
   amount: '',
   lastError: '',
+  broker() {
+    // const wgnt = Tokens.findOne('W-GNT');
+    // if (wgnt) {
+    //   return wgnt.broker;
+    // }
+    // return null;
+    return Session.get('GNTBroker');
+  },
+  brokerBalance() {
+    const balance = Session.get('GNTBrokerBalance');
+    if (balance !== '0') {
+      return balance;
+    }
+    return 0;
+  },
   pending() {
     return Transactions.findType(TRANSACTION_TYPE_WITHDRAW);
   },
