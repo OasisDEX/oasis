@@ -25,15 +25,32 @@
     },
     "rules": {
       "import/no-unresolved": [
-        2, { "ignore": ["^meteor/"] }
+        2,
+        {
+          "ignore": [
+            "^meteor/"
+          ]
+        }
       ],
       "meteor/no-session": [
         0
       ],
-      "max-len": [2,120, 2, {"ignoreComments": true}],
+      "max-len": [
+        2,
+        120,
+        2,
+        {
+          "ignoreComments": true
+        }
+      ],
       "import/no-extraneous-dependencies": 0,
       "no-underscore-dangle": [
-        "error", { "allow": ["_id"] }
+        "error",
+        {
+          "allow": [
+            "_id"
+          ]
+        }
       ]
     },
     "env": {
@@ -51,6 +68,7 @@
     }
   },
   "dependencies": {
+    "babel-runtime": "^6.18.0",
     "meteor-node-stubs": "~0.2.0"
   },
   "devDependencies": {
