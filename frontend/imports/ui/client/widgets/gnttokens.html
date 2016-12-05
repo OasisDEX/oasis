@@ -54,15 +54,19 @@
           {{/unless}}
         </tfoot>
       </table>
+      {{> progressblock progress=progress progressMessage=progressMessage errorMessage=errorMessage}}
       {{#if equals type 'deposit'}}
       {{#unless progress}}
       {{#if brokerBalance }}
-      You have an outstanding balance of {{formatBalance brokerBalance}} in your broker. 
-      <a id="clearBroker" href="#" {{b "click: clearBroker"}}>Click the here to convert it to W-GNT.</a>
+        <div class="messageDiv alert alert-warning">
+          <span id='brokerMessage'>
+            You have an outstanding balance of {{formatBalance brokerBalance}} GNT in your broker. 
+            <a id="clearBroker" href="#" {{b "click: clearBroker"}}>Click here to convert it to W-GNT.</a>
+          </span>
+        </div>
       {{/if}}
       {{/unless}}
       {{/if}}
-      {{> progressblock progress=progress progressMessage=progressMessage errorMessage=errorMessage}}
     </div>
   </form>
 </template>
