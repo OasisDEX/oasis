@@ -174,11 +174,11 @@ Template.registerHelper('concat', (...args) => Array.prototype.slice.call(args, 
 Template.registerHelper('timestampToString', (ts, inSeconds, short) => {
   let timestampStr = '';
   if (ts) {
-    const momentFromTimestmap = (inSeconds === true) ? moment.unix(ts) : moment.unix(ts / 1000);
+    const momentFromTimestamp = (inSeconds === true) ? moment.unix(ts) : moment.unix(ts / 1000);
     if (short === true) {
-      timestampStr = momentFromTimestmap.format('DD.MM-HH:mm:ss');
+      timestampStr = momentFromTimestamp.format('DD.MM-HH:mm:ss');
     } else {
-      timestampStr = momentFromTimestmap.format();
+      timestampStr = momentFromTimestamp.format();
     }
   }
   return timestampStr;
