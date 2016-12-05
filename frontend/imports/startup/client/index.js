@@ -1,4 +1,5 @@
 // Import to load these templates
+import '../../ui/client/widgets/progressblock.js';
 import '../../ui/client/widgets/ethtokens.js';
 import '../../ui/client/widgets/gnttokens.js';
 import '../../ui/client/widgets/history.js';

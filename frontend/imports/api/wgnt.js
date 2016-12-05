@@ -78,6 +78,23 @@ class WGNT {
       }
     });
   }
+
+  watchWithdraw() {
+    Transactions.observeRemoved('gnttokens_withdraw', (document) => {
+      if (document.receipt.logs.length === 0) {
+        Session.set('GNTWithdrawProgress', 0);
+        Session.set('GNTWithdrawProgressMessage', '');
+        Session.set('GNTWithdrawErrorMessage', 'Withdrawing went wrong. Please execute the withdraw again.');
+      } else {
+        Session.set('GNTWithdrawProgress', 100);
+        Session.set('GNTWithdrawProgressMessage', 'Withdraw Done!');
+        Meteor.setTimeout(() => {
+          Session.set('GNTWithdrawProgress', 0);
+          Session.set('GNTWithdrawProgressMessage', '');
+        }, 10000);
+      }
+    });
+  }
 }
 
 export default new WGNT();

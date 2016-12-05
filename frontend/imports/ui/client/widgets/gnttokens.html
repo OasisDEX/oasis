@@ -54,46 +54,7 @@
           {{/unless}}
         </tfoot>
       </table>
-      {{#if equals type 'withdraw'}}
-      {{#if pending}}
-        <table>
-          <tbody>
-            <tr>
-              <th colspan="2" style="text-align: center">
-                Pending
-              </th>
-            </tr>
-            {{#each pending}}
-              <tr>
-                <th>
-                  {{this.type}}
-                </th>
-                <td>
-                  {{this.amount}}
-                </td>
-              </tr>
-            {{/each}}
-          </tbody>
-        </table>
-      {{/if}}
-      {{/if}}
-      {{#if equals type 'deposit'}}
-      {{#if progress}}
-      <div class="progress">
-        <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%"></div>
-      </div>
-      {{/if}}
-      {{#if progressMessage}}
-        <div class="messageDiv alert alert-info">
-          <span id='progressMessage'>{{{progressMessage}}}</span>
-        </div>
-      {{/if}}
-      {{#if errorMessage}}
-        <div class="messageDiv alert alert-danger">
-          <span id='errorMessage'>{{{errorMessage}}}</span>
-        </div>
-      {{/if}}
-      {{/if}}
+      {{> progressblock progress=progress progressMessage=progressMessage errorMessage=errorMessage}}
     </div>
   </form>
 </template>
