@@ -54,27 +54,7 @@
           {{/unless}}
         </tfoot>
       </table>
-      {{#if pending}}
-        <table>
-          <tbody>
-            <tr>
-              <th colspan="2" style="text-align: center">
-                Pending
-              </th>
-            </tr>
-            {{#each pending}}
-              <tr>
-                <th>
-                  {{this.type}}
-                </th>
-                <td>
-                  {{this.amount}}
-                </td>
-              </tr>
-            {{/each}}
-          </tbody>
-        </table>
-      {{/if}}
+      {{> progressblock progress=progress progressMessage=progressMessage errorMessage=errorMessage}}
     </div>
   </form>
 </template>

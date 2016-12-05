@@ -6,6 +6,7 @@ import { _ } from 'meteor/underscore';
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
 import TokenEvents from '/imports/api/tokenEvents';
+import WETH from '/imports/api/weth';
 import WGNT from '/imports/api/wgnt';
 import { Offers, Status } from '/imports/api/offers';
 
@@ -115,9 +116,18 @@ function initSession() {
   Session.set('latestBlock', 0);
   Session.set('quoteCurrency', localStorage.getItem('quoteCurrency') || 'W-ETH');
   Session.set('baseCurrency', localStorage.getItem('baseCurrency') || 'MKR');
+  Session.set('ETHDepositProgress', 0);
+  Session.set('ETHDepositProgressMessage', '');
+  Session.set('ETHDepositErrorMessage', '');
+  Session.set('ETHWithdrawProgress', 0);
+  Session.set('ETHWithdrawProgressMessage', '');
+  Session.set('ETHWithdrawErrorMessage', '');
   Session.set('GNTDepositProgress', 0);
   Session.set('GNTDepositProgressMessage', '');
   Session.set('GNTDepositErrorMessage', '');
+  Session.set('GNTWithdrawProgress', 0);
+  Session.set('GNTWithdrawProgressMessage', '');
+  Session.set('GNTWithdrawErrorMessage', '');
 }
 
 /**
@@ -202,4 +212,7 @@ Meteor.autorun(() => {
   WGNT.watchBrokerCreation();
   WGNT.watchBrokerTransfer();
   WGNT.watchBrokerClear();
+  WGNT.watchWithdraw();
+  WETH.watchDeposit();
+  WETH.watchWithdraw();
 });

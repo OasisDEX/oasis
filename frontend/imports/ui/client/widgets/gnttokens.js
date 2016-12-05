@@ -6,7 +6,7 @@ import { web3 } from 'meteor/makerotc:dapple';
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
 import TokenEvents from '/imports/api/tokenEvents';
-import { prettyError } from '/imports/utils/prettyError';
+import prettyError from '/imports/utils/prettyError';
 
 import './gnttokens.html';
 
@@ -38,17 +38,33 @@ Template.gnttokens.viewmodel({
     }
     return 0;
   },
+  clearBroker(event) {
+    event.preventDefault();
+    Dapple['token-wrapper'].classes.DepositBroker.at(this.broker()).clear((txError, tx) => {
+      if (!txError) {
+        console.log('TX Clear Broker:', tx);
+        Session.set('GNTDepositProgress', 90);
+        Session.set('GNTDepositProgressMessage', 'Clearing Broker... (waiting for transaction confirmation)');
+        Session.set('GNTDepositErrorMessage', '');
+        Transactions.add('gnttokens_clear', tx, { type: 'deposit' });
+      } else {
+        Session.set('GNTDepositProgress', 0);
+        Session.set('GNTDepositProgressMessage', '');
+        Session.set('GNTDepositErrorMessage', prettyError(txError));
+      }
+    });
+  },
   pending() {
     return Transactions.findType(TRANSACTION_TYPE_WITHDRAW);
   },
   progress() {
-    return Session.get('GNTDepositProgress');
+    return Session.get('GNT' + this.type().charAt(0).toUpperCase() + this.type().slice(1) + 'Progress');
   },
   progressMessage() {
-    return Session.get('GNTDepositProgressMessage');
+    return Session.get('GNT' + this.type().charAt(0).toUpperCase() + this.type().slice(1) + 'ProgressMessage');
   },
   errorMessage() {
-    return Session.get('GNTDepositErrorMessage');
+    return Session.get('GNT' + this.type().charAt(0).toUpperCase() + this.type().slice(1) + 'ErrorMessage');
   },
   maxAmount() {
     let maxAmount = '0';
@@ -111,6 +127,8 @@ Template.gnttokens.viewmodel({
                     Session.set('GNTDepositProgressMessage', 'Creating Broker... (waiting for transaction confirmation)');
                     Transactions.add('gnttokens_create_broker', tx, { type: DEPOSIT, amount: this.amount() });
                   } else {
+                    Session.set('GNTDepositProgress', 0);
+                    Session.set('GNTDepositProgressMessage', '');
                     Session.set('GNTDepositErrorMessage', prettyError(txError));
                   }
                 });
@@ -118,6 +136,8 @@ Template.gnttokens.viewmodel({
             }
           });
         } else {
+          Session.set('GNTDepositProgress', 0);
+          Session.set('GNTDepositProgressMessage', '');
           Session.set('GNTDepositErrorMessage', error.toString());
         }
       });
@@ -125,16 +145,24 @@ Template.gnttokens.viewmodel({
       // XXX EIP20
       Dapple.getToken('W-GNT', (error, token) => {
         if (!error) {
+          Session.set('GNTWithdrawProgress', 33);
+          Session.set('GNTWithdrawProgressMessage', 'Starting withdraw... (waiting for your approval)');
+          Session.set('GNTWithdrawErrorMessage', '');
           token.withdraw(web3.toWei(this.amount()), { gas: WITHDRAW_GAS }, (txError, tx) => {
             if (!txError) {
-              console.log('add transaction withdraw');
+              Session.set('GNTWithdrawProgress', 66);
+              Session.set('GNTWithdrawProgressMessage', 'Executing withdraw... (waiting for transaction confirmation)');
               Transactions.add(TRANSACTION_TYPE_WITHDRAW, tx, { type: WITHDRAW, amount: this.amount() });
             } else {
-              this.lastError(prettyError(txError));
+              Session.set('GNTWithdrawProgress', 0);
+              Session.set('GNTWithdrawProgressMessage', '');
+              Session.set('GNTWithdrawErrorMessage', prettyError(txError));
             }
           });
         } else {
-          this.lastError(error.toString());
+          Session.set('GNTWithdrawProgress', 0);
+          Session.set('GNTWithdrawProgressMessage', '');
+          Session.set('GNTWithdrawErrorMessage', error.toString());
         }
       });
     }
