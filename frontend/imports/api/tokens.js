@@ -47,12 +47,16 @@ class TokensCollection extends Mongo.Collection {
               Session.set('GNTBalance', newGNTBalance);
             }
           });
-          token.balanceOf(Session.get('GNTBroker'), (callError, balance) => {
-            if (!callError) {
-              const newGNTBrokerBalance = balance.toString(10);
-              Session.set('GNTBrokerBalance', newGNTBrokerBalance);
-            }
-          });
+          if (Session.get('GNTBroker') === '0x0000000000000000000000000000000000000000') {
+            Session.set('GNTBrokerBalance', 0);
+          } else {
+            token.balanceOf(Session.get('GNTBroker'), (callError, balance) => {
+              if (!callError) {
+                const newGNTBrokerBalance = balance.toString(10);
+                Session.set('GNTBrokerBalance', newGNTBrokerBalance);
+              }
+            });
+          }
         }
       });
 
