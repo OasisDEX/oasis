@@ -10,7 +10,8 @@ Template.currencySelector.viewmodel({
     this.quoteCurrency(Session.get('quoteCurrency'));
     this.baseCurrency(Session.get('baseCurrency'));
   },
-  currencies: Dapple.getTokens(),
+  quoteCurrencies: Dapple.getQuoteTokens(),
+  baseCurrencies: Dapple.getTokens(),
   quoteCurrency: '',
   baseCurrency: '',
   quoteHelper: '',
