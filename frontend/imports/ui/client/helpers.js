@@ -276,7 +276,7 @@ Template.registerHelper('formatToken', (value, token) => {
   if (!(displayValue instanceof BigNumber)) {
     displayValue = Blaze._globalHelpers['fromPrecision'](displayValue, tokenSpecs.precision);
   }
-  return EthTools.formatNumber(displayValue.toString(10), '0.000');
+  return EthTools.formatNumber(displayValue.toString(10), '0.00000');
 });
 
 Template.registerHelper('determineOrderType', (order) => {
