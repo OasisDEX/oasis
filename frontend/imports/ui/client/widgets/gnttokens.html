@@ -1,8 +1,8 @@
-<template name="ethtokens">
-  <form id="ethtokens">
+<template name="gnttokens">
+  <form id="gnttokens">
     <h2>
       {{title}}
-      {{> whatisthis section="w-eth-wrapped-eth-tokens"}}
+      {{> whatisthis section="w-gnt-wrapped-gnt-tokens"}}
     </h2>
     <div>
       <table>
@@ -10,19 +10,19 @@
           {{#if equals type 'deposit'}}
           <tr class="row-input-line">
             <th>
-              ETH
+              GNT
             </th>
             <td class="token">
-              {{formatBalance ETHBalance}}
+              {{formatBalance GNTBalance}}
             </td>
           </tr>
           {{else}}
           <tr class="row-input-line">
             <th>
-              W-ETH
+              W-GNT
             </th>
             <td class="token">
-              {{#let token=(findToken 'W-ETH')}}
+              {{#let token=(findToken 'W-GNT')}}
                 {{formatBalance token.balance}}
               {{/let}}
             </td>
@@ -55,6 +55,18 @@
         </tfoot>
       </table>
       {{> progressblock progress=progress progressMessage=progressMessage errorMessage=errorMessage}}
+      {{#if equals type 'deposit'}}
+      {{#unless progress}}
+      {{#if brokerBalance }}
+        <div class="messageDiv alert alert-warning">
+          <span id='brokerMessage'>
+            You have an outstanding balance of {{formatBalance brokerBalance}} GNT in your broker. 
+            <a id="clearBroker" href="#" {{b "click: clearBroker"}}>Click here to convert it to W-GNT.</a>
+          </span>
+        </div>
+      {{/if}}
+      {{/unless}}
+      {{/if}}
     </div>
   </form>
 </template>

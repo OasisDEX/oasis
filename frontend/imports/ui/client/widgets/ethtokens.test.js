@@ -41,9 +41,9 @@ describe('EthTokens View Model', () => {
       Session.set('ETHBalance', '1230000000000000000');
       chai.assert.equal(vm.maxAmount(), '1.23');
     });
-    it('should return ETH token balance when withdrawing', () => {
+    it('should return W-ETH balance when withdrawing', () => {
       vm.type('withdraw');
-      Tokens.insert({ _id: 'ETH', balance: '3450000000000000000' });
+      Tokens.insert({ _id: 'W-ETH', balance: '3450000000000000000' });
       chai.assert.equal(vm.maxAmount(), '3.45');
     });
   });
@@ -70,7 +70,7 @@ describe('EthTokens View Model', () => {
   describe('deposit', () => {
     beforeEach(() => {
       Session.set('ETHBalance', '1230000000000000000');
-      Tokens.insert({ _id: 'ETH', balance: '3450000000000000000' });
+      Tokens.insert({ _id: 'W-ETH', balance: '3450000000000000000' });
     });
     it('should call token.deposit when depositing', () => {
       const tokenSpy = new DappleTokenSpy(true, true);

@@ -2,4 +2,5 @@ packages/dapple/package.js
 packages/dapple/package-pre-init.js
 packages/dapple/package-post-init.js
 packages/dapple/maker.js
-packages/dapple/build/meteor.js
+packages/dapple/build/maker-otc.js
+packages/dapple/build/token-wrapper.js

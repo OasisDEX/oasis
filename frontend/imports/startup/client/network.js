@@ -6,6 +6,8 @@ import { _ } from 'meteor/underscore';
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
 import TokenEvents from '/imports/api/tokenEvents';
+import WETH from '/imports/api/weth';
+import WGNT from '/imports/api/wgnt';
 import { Offers, Status } from '/imports/api/offers';
 
 // Check which accounts are available and if defaultAccount is still available,
@@ -60,7 +62,7 @@ function checkNetwork() {
           Session.set('outOfSync', e != null || (new Date().getTime() / 1000) - res.timestamp > 600);
           Session.set('latestBlock', res.number);
           if (Session.get('startBlock') === 0) {
-            console.log('setting startblock to '+(res.number - 6000));
+            console.log(`Setting startblock to ${res.number - 6000}`);
             Session.set('startBlock', (res.number - 6000));
           }
         } else {
@@ -79,8 +81,11 @@ function checkNetwork() {
           let network = false;
           if (!e) {
             switch (res.hash) {
+              case '0x41941023680923e0fe4d74a34bdac8141f2540e3ae90623718e47d66d1ca4a2d':
+                network = 'ropsten';
+                break;
               case '0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303':
-                network = 'test';
+                network = 'morden';
                 break;
               case '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3':
                 network = 'main';
@@ -109,8 +114,20 @@ function initSession() {
   Session.set('syncing', false);
   Session.set('isConnected', false);
   Session.set('latestBlock', 0);
-  Session.set('quoteCurrency', localStorage.getItem('quoteCurrency') || 'ETH');
+  Session.set('quoteCurrency', localStorage.getItem('quoteCurrency') || 'W-ETH');
   Session.set('baseCurrency', localStorage.getItem('baseCurrency') || 'MKR');
+  Session.set('ETHDepositProgress', 0);
+  Session.set('ETHDepositProgressMessage', '');
+  Session.set('ETHDepositErrorMessage', '');
+  Session.set('ETHWithdrawProgress', 0);
+  Session.set('ETHWithdrawProgressMessage', '');
+  Session.set('ETHWithdrawErrorMessage', '');
+  Session.set('GNTDepositProgress', 0);
+  Session.set('GNTDepositProgressMessage', '');
+  Session.set('GNTDepositErrorMessage', '');
+  Session.set('GNTWithdrawProgress', 0);
+  Session.set('GNTWithdrawProgressMessage', '');
+  Session.set('GNTWithdrawErrorMessage', '');
 }
 
 /**
@@ -191,4 +208,11 @@ Meteor.startup(() => {
 
 Meteor.autorun(() => {
   TokenEvents.watchTokenEvents();
+  TokenEvents.watchGNTTokenEvents();
+  WGNT.watchBrokerCreation();
+  WGNT.watchBrokerTransfer();
+  WGNT.watchBrokerClear();
+  WGNT.watchWithdraw();
+  WETH.watchDeposit();
+  WETH.watchWithdraw();
 });

@@ -18,6 +18,50 @@ if (typeof web3 === 'undefined' && typeof Web3 === 'undefined') {
 // Dappsys definition
 Dapple['dappsys'] = (function builder () {
   var environments = {
+    'ropsten': {
+        'objects': {
+          'auth_factory1': {
+            'class': 'DSAuthFactory',
+            'address': '0x0000000000000000000000000000000000000000'
+          },
+          'data_factory1': {
+            'class': 'DSDataFactory',
+            'address': '0x0000000000000000000000000000000000000000'
+          },
+          'multisig_factory1': {
+            'class': 'DSMultisigFactory',
+            'address': '0x0000000000000000000000000000000000000000'
+          },
+          'token_factory1': {
+            'class': 'DSTokenFactory',
+            'address': '0x0000000000000000000000000000000000000000'
+          },
+          'token_installer1': {
+            'class': 'DSTokenInstaller',
+            'address': '0x0000000000000000000000000000000000000000'
+          },
+          'factory1': {
+            'class': 'DSFactory1',
+            'address': '0x0000000000000000000000000000000000000000'
+          },
+          'eth_token1': {
+            'class': 'DSEthToken',
+            'address': '0x0000000000000000000000000000000000000000'
+          },
+          'token_registry': {
+            'class': 'DSTokenRegistry',
+            'address': '0x0000000000000000000000000000000000000000'
+          },
+          'multisig': {
+            'class': 'DSEasyMultisig',
+            'address': '0x0000000000000000000000000000000000000000'
+          },
+          'echo': {
+            'class': 'DSEcho',
+            'address': '0x0000000000000000000000000000000000000000'
+          }
+        }
+      },
       'morden': {
         'objects': {
           'auth_factory1': {
@@ -4668,7 +4712,7 @@ Dapple['Maker'] = (function builder () {
 
   Maker.prototype.getToken = function (symbol, callback) {
     var tokenClass = 'DSTokenFrontend';
-    if (symbol === 'ETH') {
+    if (symbol === 'W-ETH') {
       tokenClass = 'DSEthToken';
     }
     var _this = this

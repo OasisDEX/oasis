@@ -5,8 +5,7 @@ import { web3 } from 'meteor/makerotc:dapple';
 
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
-import TokenEvents from '/imports/api/tokenEvents';
-import { prettyError } from '/imports/utils/prettyError';
+import { uppercaseFirstLetter, formatError } from '/imports/utils/functions';
 
 import './ethtokens.html';
 
@@ -24,11 +23,14 @@ Template.ethtokens.viewmodel({
   },
   amount: '',
   lastError: '',
-  pending() {
-    if (this.type() === DEPOSIT) {
-      return Transactions.findType(TRANSACTION_TYPE_DEPOSIT);
-    }
-    return Transactions.findType(TRANSACTION_TYPE_WITHDRAW);
+  progress() {
+    return Session.get(`ETH${uppercaseFirstLetter(this.type())}Progress`);
+  },
+  progressMessage() {
+    return Session.get(`ETH${uppercaseFirstLetter(this.type())}ProgressMessage`);
+  },
+  errorMessage() {
+    return Session.get(`ETH${uppercaseFirstLetter(this.type())}ErrorMessage`);
   },
   maxAmount() {
     let maxAmount = '0';
@@ -36,7 +38,7 @@ Template.ethtokens.viewmodel({
       if (this.type() === DEPOSIT) {
         maxAmount = web3.fromWei(Session.get('ETHBalance'));
       } else if (this.type() === WITHDRAW) {
-        maxAmount = web3.fromWei(Tokens.findOne('ETH').balance);
+        maxAmount = web3.fromWei(Tokens.findOne('W-ETH').balance);
       }
     } catch (e) {
       maxAmount = '0';
@@ -47,10 +49,8 @@ Template.ethtokens.viewmodel({
     try {
       const amount = new BigNumber(this.amount());
       const maxAmount = new BigNumber(this.maxAmount());
-      console.log('amount:', amount, ' maxAmount:', maxAmount);
       return amount.gt(0) && amount.lte(maxAmount);
     } catch (e) {
-      console.log('error', e);
       return false;
     }
   },
@@ -64,34 +64,51 @@ Template.ethtokens.viewmodel({
         value: web3.toWei(this.amount()),
       };
       // XXX EIP20
-      Dapple.getToken('ETH', (error, token) => {
+      Dapple.getToken('W-ETH', (error, token) => {
         if (!error) {
+          Session.set('ETHDepositProgress', 33);
+          Session.set('ETHDepositProgressMessage', 'Starting deposit... (waiting for your approval)');
+          Session.set('ETHDepositErrorMessage', '');
           token.deposit(options, (txError, tx) => {
             if (!txError) {
-              console.log('add transaction deposit');
+              Session.set('ETHDepositProgress', 66);
+              Session.set('ETHDepositProgressMessage', 'Executing deposit... (waiting for transaction confirmation)');
+              Session.set('ETHDepositErrorMessage', '');
               Transactions.add(TRANSACTION_TYPE_DEPOSIT, tx, { type: DEPOSIT, amount: this.amount() });
             } else {
-              this.lastError(prettyError(txError));
+              Session.set('ETHDepositProgress', 0);
+              Session.set('ETHDepositProgressMessage', '');
+              Session.set('ETHDepositErrorMessage', formatError(txError));
             }
           });
         } else {
-          this.lastError(error.toString());
+          Session.set('ETHDepositProgress', 0);
+          Session.set('ETHDepositProgressMessage', '');
+          Session.set('ETHDepositErrorMessage', error.toString());
         }
       });
     } else {
       // XXX EIP20
-      Dapple.getToken('ETH', (error, token) => {
+      Dapple.getToken('W-ETH', (error, token) => {
         if (!error) {
+          Session.set('ETHWithdrawProgress', 33);
+          Session.set('ETHWithdrawProgressMessage', 'Starting withdraw... (waiting for your approval)');
+          Session.set('ETHWithdrawErrorMessage', '');
           token.withdraw(web3.toWei(this.amount()), { gas: WITHDRAW_GAS }, (txError, tx) => {
             if (!txError) {
-              console.log('add transaction withdraw');
+              Session.set('ETHWithdrawProgress', 66);
+              Session.set('ETHWithdrawProgressMessage', 'Executing withdraw... (waiting for transaction confirmation)');
               Transactions.add(TRANSACTION_TYPE_WITHDRAW, tx, { type: WITHDRAW, amount: this.amount() });
             } else {
-              this.lastError(prettyError(txError));
+              Session.set('ETHWithdrawProgress', 0);
+              Session.set('ETHWithdrawProgressMessage', '');
+              Session.set('ETHWithdrawErrorMessage', formatError(txError));
             }
           });
         } else {
-          this.lastError(error.toString());
+          Session.set('ETHWithdrawProgress', 0);
+          Session.set('ETHWithdrawProgressMessage', '');
+          Session.set('ETHWithdrawErrorMessage', error.toString());
         }
       });
     }

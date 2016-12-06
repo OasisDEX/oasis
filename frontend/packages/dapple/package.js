@@ -13,7 +13,8 @@ Package.onUse((api) => {
   api.use('ethereum:web3', 'client');
 
   api.addFiles(['package-pre-init.js'], 'client');
-  api.addFiles(['build/meteor.js'], 'client');
+  api.addFiles(['build/maker-otc.js'], 'client');
+  api.addFiles(['build/token-wrapper.js'], 'client');
   api.addFiles(['maker.js'], 'client');
   api.addFiles(['package-post-init.js'], 'client');
 

@@ -1,4 +1,5 @@
 import { Session } from 'meteor/session';
+import { Blaze } from 'meteor/blaze';
 import { Spacebars } from 'meteor/spacebars';
 import { Template } from 'meteor/templating';
 import { _ } from 'meteor/underscore';
@@ -31,7 +32,7 @@ Template.registerHelper('contractHref', () => {
   let contractHref = '';
   if (Dapple['maker-otc'].objects) {
     const network = Session.get('network');
-    const networkPrefix = (network === 'test' ? 'testnet.' : '');
+    const networkPrefix = (network === 'ropsten' ? 'testnet.' : '');
     const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
     contractHref = `https://${networkPrefix}etherscan.io/address/${contractAddress}`;
   }
@@ -42,7 +43,7 @@ Template.registerHelper('txHref', (tx) => {
   let txHref = '';
   if (Dapple['maker-otc'].objects) {
     const network = Session.get('network');
-    const networkPrefix = (network === 'test' ? 'testnet.' : '');
+    const networkPrefix = (network === 'ropsten' ? 'testnet.' : '');
     txHref = `https://${networkPrefix}etherscan.io/tx/${tx}`;
   }
   return txHref;
@@ -78,6 +79,8 @@ Template.registerHelper('loadingProgress', () => Session.get('loadingProgress'))
 Template.registerHelper('address', () => Session.get('address'));
 
 Template.registerHelper('ETHBalance', () => Session.get('ETHBalance'));
+
+Template.registerHelper('GNTBalance', () => Session.get('GNTBalance'));
 
 Template.registerHelper('allTokens', () => {
   const quoteCurrency = Session.get('quoteCurrency');
@@ -172,14 +175,18 @@ Template.registerHelper('concat', (...args) => Array.prototype.slice.call(args, 
 Template.registerHelper('timestampToString', (ts, inSeconds, short) => {
   let timestampStr = '';
   if (ts) {
-    const momentFromTimestmap = (inSeconds === true) ? moment.unix(1000 * ts) : moment.unix(ts);
+    const momentFromTimestamp = (inSeconds === true) ? moment.unix(ts) : moment.unix(ts / 1000);
     if (short === true) {
-      timestampStr = momentFromTimestmap.format('DD.MM-HH:mm:ss');
+      timestampStr = momentFromTimestamp.format('DD.MM-HH:mm:ss');
     } else {
-      timestampStr = momentFromTimestmap.format();
+      timestampStr = momentFromTimestamp.format();
     }
   }
   return timestampStr;
+});
+
+Template.registerHelper('log', (value) => {
+  console.log(value);
 });
 
 Template.registerHelper('fromWei', (s) => web3.fromWei(s));
@@ -197,12 +204,14 @@ Template.registerHelper('formatBalance', (wei, format) => {
 });
 
 Template.registerHelper('friendlyAddress', (address) => {
+  /* eslint-disable no-underscore-dangle */
   if (address === Blaze._globalHelpers.contractAddress()) {
     return 'market';
   } else if (address === Blaze._globalHelpers.address()) {
     return 'me';
   }
-  return address.substr(0, 16)+'...';
+  return `${address.substr(0, 16)}...`;
+  /* eslint-enable no-underscore-dangle */
 });
 
 Template.registerHelper('formatPrice', (value, currency) => {
@@ -213,7 +222,7 @@ Template.registerHelper('formatPrice', (value, currency) => {
       displayValue = new BigNumber(displayValue);
     }
 
-    if (currency === 'ETH') {
+    if (currency === 'W-ETH') {
       const usd = EthTools.ticker.findOne('usd');
       if (usd) {
         const usdValue = displayValue.times(usd.price);
@@ -263,14 +272,16 @@ Template.registerHelper('validPrecision', (value, precision) => {
 Template.registerHelper('formatToken', (value, token) => {
   let displayValue = value;
   const tokenSpecs = Dapple.getTokenSpecs(token);
-  const format = (typeof (tokenSpecs.format) !== 'undefined' ? tokenSpecs.format : '0,0.00[0000]');
+  // const format = (typeof (tokenSpecs.format) !== 'undefined' ? tokenSpecs.format : '0,0.00[0000]');
   // console.log(displayValue.toString(10));
-  const valid = Blaze._globalHelpers['validPrecision'](displayValue, tokenSpecs.precision);
+  // const valid = Blaze._globalHelpers.validPrecision(displayValue, tokenSpecs.precision);
   // console.log('valid precision', valid);
   if (!(displayValue instanceof BigNumber)) {
-    displayValue = Blaze._globalHelpers['fromPrecision'](displayValue, tokenSpecs.precision);
+    /* eslint-disable no-underscore-dangle */
+    displayValue = Blaze._globalHelpers.fromPrecision(displayValue, tokenSpecs.precision);
+    /* eslint-enable no-underscore-dangle */
   }
-  return EthTools.formatNumber(displayValue.toString(10), '0.000');
+  return EthTools.formatNumber(displayValue.toString(10), '0.00000');
 });
 
 Template.registerHelper('determineOrderType', (order) => {

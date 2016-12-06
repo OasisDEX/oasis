@@ -1,0 +1,17 @@
+<template name="progressblock">
+  {{#if progress}}
+  <div class="progress">
+    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%"></div>
+  </div>
+  {{/if}}
+  {{#if progressMessage}}
+    <div class="messageDiv alert alert-info">
+      <span>{{{progressMessage}}}</span>
+    </div>
+  {{/if}}
+  {{#if errorMessage}}
+    <div class="messageDiv alert alert-danger">
+      <span>{{{errorMessage}}}</span>
+    </div>
+  {{/if}}
+</template>

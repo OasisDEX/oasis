@@ -5,7 +5,7 @@ import { _ } from 'meteor/underscore';
 
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
-import { prettyError } from '/imports/utils/prettyError';
+import { formatError } from '/imports/utils/functions';
 
 import './sendtokens.html';
 
@@ -14,7 +14,7 @@ const TRANSACTION_TYPE = 'transfer';
 
 Template.sendtokens.viewmodel({
   currency: 'MKR',
-  currencies: _.without(Dapple.getTokens(), 'ETH'),
+  currencies: _.without(Dapple.getTokens(), 'W-ETH'),
   recipient: '',
   lastError: '',
   pending() {
@@ -58,7 +58,7 @@ Template.sendtokens.viewmodel({
           if (!txError) {
             Transactions.add(TRANSACTION_TYPE, tx, { recipient, amount: this.amount(), token: this.currency() });
           } else {
-            this.lastError(prettyError(txError));
+            this.lastError(formatError(txError));
           }
         });
       } else {

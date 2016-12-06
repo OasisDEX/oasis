@@ -6,6 +6,7 @@ import './orders.html';
 import './orderrow.js';
 
 Template.orders.helpers({
+  /* eslint-disable no-underscore-dangle */
   moreBtn: function showMoreBtn() {
     const type = Template.instance().data.type;
     if (type && type === 'lastTrades') {
@@ -22,6 +23,7 @@ Template.orders.helpers({
     }
     return parseInt(Blaze._globalHelpers.countOffers(this.priceClass), 10);
   },
+  /* eslint-enable no-underscore-dangle */
 });
 
 Template.orders.events({

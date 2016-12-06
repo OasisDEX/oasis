@@ -19,6 +19,47 @@ class TokensCollection extends Mongo.Collection {
         }
       });
 
+      // FIXME: this will get called every time we sync, but we need to show W-GNT balance in deposit/withdraw window
+      // XXX EIP20
+      Dapple.getToken('W-GNT', (error, token) => {
+        if (!error) {
+          token.balanceOf(address, (callError, balance) => {
+            if (!error) {
+              super.upsert('W-GNT', { $set: { balance: balance.toString(10) } });
+              token.getBroker.call((e, broker) => {
+                if (!e) {
+                  super.upsert('W-GNT', { $set: { broker } });
+                  Session.set('GNTBroker', broker);
+                }
+              });
+            }
+          });
+        }
+      });
+
+      // Get GNTBalance
+      // XXX EIP20
+      Dapple.getToken('GNT', (error, token) => {
+        if (!error) {
+          token.balanceOf(address, (callError, balance) => {
+            const newGNTBalance = balance.toString(10);
+            if (!error && !Session.equals('GNTBalance', newGNTBalance)) {
+              Session.set('GNTBalance', newGNTBalance);
+            }
+          });
+          if (Session.get('GNTBroker') === '0x0000000000000000000000000000000000000000') {
+            Session.set('GNTBrokerBalance', 0);
+          } else {
+            token.balanceOf(Session.get('GNTBroker'), (callError, balance) => {
+              if (!callError) {
+                const newGNTBrokerBalance = balance.toString(10);
+                Session.set('GNTBrokerBalance', newGNTBrokerBalance);
+              }
+            });
+          }
+        }
+      });
+
       const ALL_TOKENS = _.uniq([Session.get('quoteCurrency'), Session.get('baseCurrency')]);
 
       if (network !== 'private') {
