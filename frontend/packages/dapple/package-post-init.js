@@ -79,6 +79,8 @@ const tokenSpecs = {
   'W-GNT': { precision: 18, format: '0,0.00[0000000000000000]' },
 };
 
+Dapple.getQuoteTokens = () => ['W-ETH', 'DAI'];
+
 Dapple.getTokens = () => ['W-ETH', 'MKR', 'DAI', 'DGD', 'W-GNT'];
 
 Dapple.getTokenSpecs = (symbol) => {
@@ -101,7 +103,7 @@ Dapple.getToken = (symbol, callback) => {
     callback(`Unknown token "${symbol}"`, null);
     return;
   }
-  
+
   let tokenClass = 'DSTokenFrontend';
   const address = Dapple.getTokenAddress(symbol);
   let that = Dapple.makerjs.dappsys;
