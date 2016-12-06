@@ -1,9 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { formatError } from '/imports/utils/functions';
 import Transactions from './transactions';
-import prettyError from '/imports/utils/prettyError';
-
 
 class WGNT {
   watchBrokerCreation() {
@@ -23,12 +22,13 @@ class WGNT {
             if (!txError) {
               console.log('TX Transfer to Broker:', tx);
               Session.set('GNTDepositProgress', 50);
-              Session.set('GNTDepositProgressMessage', 'Transfering to Broker... (waiting for transaction confirmation)');
+              Session.set('GNTDepositProgressMessage',
+                'Transfering to Broker... (waiting for transaction confirmation)');
               Transactions.add('gnttokens_transfer', tx, { type: 'deposit', broker });
             } else {
               Session.set('GNTDepositProgress', 0);
               Session.set('GNTDepositProgressMessage', '');
-              Session.set('GNTDepositErrorMessage', prettyError(txError));
+              Session.set('GNTDepositErrorMessage', formatError(txError));
             }
           });
         });
@@ -55,7 +55,7 @@ class WGNT {
           } else {
             Session.set('GNTDepositProgress', 0);
             Session.set('GNTDepositProgressMessage', '');
-            Session.set('GNTDepositErrorMessage', prettyError(txError));
+            Session.set('GNTDepositErrorMessage', formatError(txError));
           }
         });
       }
@@ -67,7 +67,8 @@ class WGNT {
       if (document.receipt.logs.length === 0) {
         Session.set('GNTDepositProgress', 0);
         Session.set('GNTDepositProgressMessage', '');
-        Session.set('GNTDepositErrorMessage', 'Clearing Broker went wrong. Please execute the clearing manually again to get the deposit.');
+        Session.set('GNTDepositErrorMessage',
+          'Clearing Broker went wrong. Please execute the clearing manually again to get the deposit.');
       } else {
         Session.set('GNTDepositProgress', 100);
         Session.set('GNTDepositProgressMessage', 'Deposit Done!');

@@ -62,7 +62,7 @@ function checkNetwork() {
           Session.set('outOfSync', e != null || (new Date().getTime() / 1000) - res.timestamp > 600);
           Session.set('latestBlock', res.number);
           if (Session.get('startBlock') === 0) {
-            console.log('setting startblock to '+(res.number - 6000));
+            console.log(`Setting startblock to ${res.number - 6000}`);
             Session.set('startBlock', (res.number - 6000));
           }
         } else {

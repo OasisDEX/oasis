@@ -3,6 +3,7 @@ import { Template } from 'meteor/templating';
 import { $ } from 'meteor/jquery';
 import { BigNumber } from 'meteor/ethereum:web3';
 import { web3 } from 'meteor/makerotc:dapple';
+import { formatError } from '/imports/utils/functions';
 
 import Tokens from '/imports/api/tokens';
 import { Offers, Status } from '/imports/api/offers';
@@ -244,7 +245,7 @@ Template.offermodal.viewmodel({
     }
     Offers.newOffer(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, (error) => {
       if (error != null) {
-        this.offerError(error);
+        this.offerError(formatError(error));
       }
     });
   },

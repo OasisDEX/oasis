@@ -6,7 +6,7 @@ import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
 
 import Transactions from '/imports/api/transactions';
-import { prettyError } from '/imports/utils/prettyError';
+import { formatError } from '/imports/utils/functions';
 
 const Offers = new Mongo.Collection(null);
 const Trades = new Mongo.Collection(null);
@@ -220,7 +220,7 @@ Offers.buyOffer = (_id, _quantity) => {
       Offers.update(_id, { $set: {
         tx, status: Status.BOUGHT, helper: 'Your buy / sell order is being processed...' } });
     } else {
-      Offers.update(_id, { $set: { helper: prettyError(error) } });
+      Offers.update(_id, { $set: { helper: formatError(error) } });
     }
   });
 };
@@ -233,7 +233,7 @@ Offers.cancelOffer = (idx) => {
       Transactions.add('offer', tx, { id: idx, status: Status.CANCELLED });
       Offers.update(idx, { $set: { tx, status: Status.CANCELLED, helper: 'Your order is being cancelled...' } });
     } else {
-      Offers.update(idx, { $set: { helper: prettyError(error) } });
+      Offers.update(idx, { $set: { helper: formatError(error) } });
     }
   });
 };

@@ -1,9 +1,7 @@
-import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { Session } from 'meteor/session';
 import { Dapple, web3 } from 'meteor/makerotc:dapple';
 import { _ } from 'meteor/underscore';
-import Transactions from './transactions';
 
 class TokenEventCollection extends Mongo.Collection {
   fromLabel() {
@@ -16,7 +14,7 @@ class TokenEventCollection extends Mongo.Collection {
     if (typeof (event.event) === 'undefined') {
       return;
     }
-    let row = {
+    const row = {
       blockNumber: event.blockNumber,
       transactionHash: event.transactionHash,
       timestamp: null,
@@ -71,7 +69,7 @@ class TokenEventCollection extends Mongo.Collection {
 
   watchTokenEvents() {
     if (Session.get('startBlock') !== 0) {
-      console.log('filtering token events from ', Session.get('startBlock'));
+      // console.log('filtering token events from ', Session.get('startBlock'));
       const ALL_TOKENS = _.uniq([Session.get('quoteCurrency'), Session.get('baseCurrency')]);
       ALL_TOKENS.forEach((tokenId) => {
         Dapple.getToken(tokenId, (error, token) => {
@@ -93,46 +91,47 @@ class TokenEventCollection extends Mongo.Collection {
   }
 
   watchGNTTokenEvents() {
-    const self = this;
-
     Dapple.getToken('GNT', (errorGNT, GNT) => {
-      if(!errorGNT) {
+      if (!errorGNT) {
         Dapple.getToken('W-GNT', (errorWGNT, WGNT) => {
-          if(!errorWGNT) {
+          if (!errorWGNT) {
             WGNT.getBroker.call((errorBroker, broker) => {
-              if(!errorBroker && broker !== '0x0000000000000000000000000000000000000000')
-              {
-                GNT.Transfer({from: broker, to: WGNT.address}, { fromBlock: Session.get('startBlock') }, (errorDeposit, eventDeposit) => {
-                  if(!errorDeposit) {
-                    let row = {
-                      blockNumber: eventDeposit.blockNumber,
-                      transactionHash: eventDeposit.transactionHash,
-                      timestamp: null,
-                      token: Dapple.getTokenByAddress(WGNT.address),
-                      type: 'deposit',
-                      from: Session.get('address'),
-                      to: WGNT.address,
-                      amount: eventDeposit.args.value.toNumber()
-                    };
-                    super.insert(row);
-                  }
-                });
+              if (!errorBroker && broker !== '0x0000000000000000000000000000000000000000') {
+                /* eslint-disable new-cap */
+                GNT.Transfer({ from: broker, to: WGNT.address },
+                  { fromBlock: Session.get('startBlock') }, (errorDeposit, eventDeposit) => {
+                    if (!errorDeposit) {
+                      const row = {
+                        blockNumber: eventDeposit.blockNumber,
+                        transactionHash: eventDeposit.transactionHash,
+                        timestamp: null,
+                        token: Dapple.getTokenByAddress(WGNT.address),
+                        type: 'deposit',
+                        from: Session.get('address'),
+                        to: WGNT.address,
+                        amount: eventDeposit.args.value.toNumber(),
+                      };
+                      super.insert(row);
+                    }
+                  });
 
-                GNT.Transfer({from: WGNT.address, to: Session.get('address')}, { fromBlock: Session.get('startBlock') }, (ErrorWithdrawal, eventWithdrawal) => {
-                  if(!ErrorWithdrawal) {
-                    let row = {
-                      blockNumber: eventWithdrawal.blockNumber,
-                      transactionHash: eventWithdrawal.transactionHash,
-                      timestamp: null,
-                      token: Dapple.getTokenByAddress(WGNT.address),
-                      type: 'withdrawal',
-                      from: WGNT.address,
-                      to: Session.get('address'),
-                      amount: eventWithdrawal.args.value.toNumber()
-                    };
-                    super.insert(row);
-                  }
-                });
+                GNT.Transfer({ from: WGNT.address, to: Session.get('address') },
+                  { fromBlock: Session.get('startBlock') }, (ErrorWithdrawal, eventWithdrawal) => {
+                    if (!ErrorWithdrawal) {
+                      const row = {
+                        blockNumber: eventWithdrawal.blockNumber,
+                        transactionHash: eventWithdrawal.transactionHash,
+                        timestamp: null,
+                        token: Dapple.getTokenByAddress(WGNT.address),
+                        type: 'withdrawal',
+                        from: WGNT.address,
+                        to: Session.get('address'),
+                        amount: eventWithdrawal.args.value.toNumber(),
+                      };
+                      super.insert(row);
+                    }
+                  });
+                /* eslint-enable new-cap */
               }
             });
           }

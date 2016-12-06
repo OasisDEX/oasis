@@ -1,4 +1,5 @@
 import { Session } from 'meteor/session';
+import { Blaze } from 'meteor/blaze';
 import { Spacebars } from 'meteor/spacebars';
 import { Template } from 'meteor/templating';
 import { _ } from 'meteor/underscore';
@@ -203,12 +204,14 @@ Template.registerHelper('formatBalance', (wei, format) => {
 });
 
 Template.registerHelper('friendlyAddress', (address) => {
+  /* eslint-disable no-underscore-dangle */
   if (address === Blaze._globalHelpers.contractAddress()) {
     return 'market';
   } else if (address === Blaze._globalHelpers.address()) {
     return 'me';
   }
-  return address.substr(0, 16)+'...';
+  return `${address.substr(0, 16)}...`;
+  /* eslint-enable no-underscore-dangle */
 });
 
 Template.registerHelper('formatPrice', (value, currency) => {
@@ -269,12 +272,14 @@ Template.registerHelper('validPrecision', (value, precision) => {
 Template.registerHelper('formatToken', (value, token) => {
   let displayValue = value;
   const tokenSpecs = Dapple.getTokenSpecs(token);
-  const format = (typeof (tokenSpecs.format) !== 'undefined' ? tokenSpecs.format : '0,0.00[0000]');
+  // const format = (typeof (tokenSpecs.format) !== 'undefined' ? tokenSpecs.format : '0,0.00[0000]');
   // console.log(displayValue.toString(10));
-  const valid = Blaze._globalHelpers['validPrecision'](displayValue, tokenSpecs.precision);
+  // const valid = Blaze._globalHelpers.validPrecision(displayValue, tokenSpecs.precision);
   // console.log('valid precision', valid);
   if (!(displayValue instanceof BigNumber)) {
-    displayValue = Blaze._globalHelpers['fromPrecision'](displayValue, tokenSpecs.precision);
+    /* eslint-disable no-underscore-dangle */
+    displayValue = Blaze._globalHelpers.fromPrecision(displayValue, tokenSpecs.precision);
+    /* eslint-enable no-underscore-dangle */
   }
   return EthTools.formatNumber(displayValue.toString(10), '0.00000');
 });

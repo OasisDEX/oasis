@@ -5,8 +5,7 @@ import { web3 } from 'meteor/makerotc:dapple';
 
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
-import TokenEvents from '/imports/api/tokenEvents';
-import prettyError from '/imports/utils/prettyError';
+import { uppercaseFirstLetter, formatError } from '/imports/utils/functions';
 
 import './ethtokens.html';
 
@@ -25,13 +24,13 @@ Template.ethtokens.viewmodel({
   amount: '',
   lastError: '',
   progress() {
-    return Session.get('ETH' + this.type().charAt(0).toUpperCase() + this.type().slice(1) + 'Progress');
+    return Session.get(`ETH${uppercaseFirstLetter(this.type())}Progress`);
   },
   progressMessage() {
-    return Session.get('ETH' + this.type().charAt(0).toUpperCase() + this.type().slice(1) + 'ProgressMessage');
+    return Session.get(`ETH${uppercaseFirstLetter(this.type())}ProgressMessage`);
   },
   errorMessage() {
-    return Session.get('ETH' + this.type().charAt(0).toUpperCase() + this.type().slice(1) + 'ErrorMessage');
+    return Session.get(`ETH${uppercaseFirstLetter(this.type())}ErrorMessage`);
   },
   maxAmount() {
     let maxAmount = '0';
@@ -79,7 +78,7 @@ Template.ethtokens.viewmodel({
             } else {
               Session.set('ETHDepositProgress', 0);
               Session.set('ETHDepositProgressMessage', '');
-              Session.set('ETHDepositErrorMessage', prettyError(txError));
+              Session.set('ETHDepositErrorMessage', formatError(txError));
             }
           });
         } else {
@@ -103,7 +102,7 @@ Template.ethtokens.viewmodel({
             } else {
               Session.set('ETHWithdrawProgress', 0);
               Session.set('ETHWithdrawProgressMessage', '');
-              Session.set('ETHWithdrawErrorMessage', prettyError(txError));
+              Session.set('ETHWithdrawErrorMessage', formatError(txError));
             }
           });
         } else {
