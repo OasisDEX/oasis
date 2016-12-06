@@ -79,12 +79,12 @@ const tokenSpecs = {
   'W-GNT': { precision: 18, format: '0,0.00[0000000000000000]' },
 };
 
-Dapple.getQuoteTokens = () => ['W-ETH', 'DAI'];
+Dapple.getQuoteTokens = () => ['W-ETH'];
 
 Dapple.getTokens = () => ['W-ETH', 'MKR', 'DAI', 'DGD', 'W-GNT'];
 
 Dapple.getTokenSpecs = (symbol) => {
-  if (typeof(tokenSpecs[symbol]) !== 'undefined') {
+  if (typeof (tokenSpecs[symbol]) !== 'undefined') {
     return tokenSpecs[symbol];
   }
   return tokenSpecs['W-ETH'];
