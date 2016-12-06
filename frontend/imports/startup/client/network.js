@@ -107,6 +107,28 @@ function checkNetwork() {
   });
 }
 
+function doHashChange() {
+  let quoteCurrency = null;
+  let baseCurrency = null;
+
+  if (location.hash !== '') {
+    if (location.hash.indexOf('#trade/') !== -1) {
+      const coins = location.hash.replace('#trade/', '').split('/');
+      if (coins.length === 2) {
+        quoteCurrency = coins[0].toUpperCase();
+        baseCurrency = coins[1].toUpperCase();
+      }
+    }
+  }
+
+  Session.set('quoteCurrency', quoteCurrency || localStorage.getItem('quoteCurrency') || 'W-ETH');
+  Session.set('baseCurrency', baseCurrency || localStorage.getItem('baseCurrency') || 'MKR');
+}
+
+$(window).on('hashchange', () => {
+  doHashChange();
+});
+
 function initSession() {
   Session.set('network', false);
   Session.set('loading', false);
@@ -114,8 +136,9 @@ function initSession() {
   Session.set('syncing', false);
   Session.set('isConnected', false);
   Session.set('latestBlock', 0);
-  Session.set('quoteCurrency', localStorage.getItem('quoteCurrency') || 'W-ETH');
-  Session.set('baseCurrency', localStorage.getItem('baseCurrency') || 'MKR');
+
+  doHashChange();
+
   Session.set('ETHDepositProgress', 0);
   Session.set('ETHDepositProgressMessage', '');
   Session.set('ETHDepositErrorMessage', '');
