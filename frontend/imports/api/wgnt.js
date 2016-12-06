@@ -4,6 +4,9 @@ import { Dapple, web3 } from 'meteor/makerotc:dapple';
 import { formatError } from '/imports/utils/functions';
 import Transactions from './transactions';
 
+const TRANSFER_TO_BROKER_GAS = 150000;
+const CLEAR_BROKER_GAS = 150000;
+
 class WGNT {
   watchBrokerCreation() {
     Transactions.observeRemoved('gnttokens_create_broker', (document) => {
@@ -18,19 +21,20 @@ class WGNT {
         Session.set('GNTDepositProgressMessage', 'Transfering to Broker... (Waiting for your approval)');
         // We get the broker, we transfer GNT to it
         Dapple.getToken('GNT', (err, gntToken) => {
-          gntToken.transfer(broker, web3.toWei(document.object.amount), (txError, tx) => {
-            if (!txError) {
-              console.log('TX Transfer to Broker:', tx);
-              Session.set('GNTDepositProgress', 50);
-              Session.set('GNTDepositProgressMessage',
-                'Transfering to Broker... (waiting for transaction confirmation)');
-              Transactions.add('gnttokens_transfer', tx, { type: 'deposit', broker });
-            } else {
-              Session.set('GNTDepositProgress', 0);
-              Session.set('GNTDepositProgressMessage', '');
-              Session.set('GNTDepositErrorMessage', formatError(txError));
-            }
-          });
+          gntToken.transfer(broker, web3.toWei(document.object.amount), { gas: TRANSFER_TO_BROKER_GAS },
+            (txError, tx) => {
+              if (!txError) {
+                console.log('TX Transfer to Broker:', tx);
+                Session.set('GNTDepositProgress', 50);
+                Session.set('GNTDepositProgressMessage',
+                  'Transfering to Broker... (waiting for transaction confirmation)');
+                Transactions.add('gnttokens_transfer', tx, { type: 'deposit', broker });
+              } else {
+                Session.set('GNTDepositProgress', 0);
+                Session.set('GNTDepositProgressMessage', '');
+                Session.set('GNTDepositErrorMessage', formatError(txError));
+              }
+            });
         });
       }
     });
@@ -46,18 +50,19 @@ class WGNT {
         console.log('Transfer to Broker done');
         Session.set('GNTDepositProgress', 75);
         Session.set('GNTDepositProgressMessage', 'Clearing Broker... (Waiting for your approval)');
-        Dapple['token-wrapper'].classes.DepositBroker.at(document.object.broker.slice(-40)).clear((txError, tx) => {
-          if (!txError) {
-            console.log('TX Clear Broker:', tx);
-            Session.set('GNTDepositProgress', 90);
-            Session.set('GNTDepositProgressMessage', 'Clearing Broker... (waiting for transaction confirmation)');
-            Transactions.add('gnttokens_clear', tx, { type: 'deposit' });
-          } else {
-            Session.set('GNTDepositProgress', 0);
-            Session.set('GNTDepositProgressMessage', '');
-            Session.set('GNTDepositErrorMessage', formatError(txError));
-          }
-        });
+        Dapple['token-wrapper'].classes.DepositBroker.at(
+          document.object.broker.slice(-40)).clear({ gas: CLEAR_BROKER_GAS }, (txError, tx) => {
+            if (!txError) {
+              console.log('TX Clear Broker:', tx);
+              Session.set('GNTDepositProgress', 90);
+              Session.set('GNTDepositProgressMessage', 'Clearing Broker... (waiting for transaction confirmation)');
+              Transactions.add('gnttokens_clear', tx, { type: 'deposit' });
+            } else {
+              Session.set('GNTDepositProgress', 0);
+              Session.set('GNTDepositProgressMessage', '');
+              Session.set('GNTDepositErrorMessage', formatError(txError));
+            }
+          });
       }
     });
   }

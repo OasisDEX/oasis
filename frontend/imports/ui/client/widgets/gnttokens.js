@@ -11,6 +11,7 @@ import './gnttokens.html';
 
 const TRANSACTION_TYPE_WITHDRAW = 'gnttokens_withdraw';
 const WITHDRAW_GAS = 150000;
+const CLEAR_BROKER_GAS = 150000;
 const DEPOSIT = 'deposit';
 const WITHDRAW = 'withdraw';
 
@@ -33,7 +34,7 @@ Template.gnttokens.viewmodel({
   },
   clearBroker(event) {
     event.preventDefault();
-    Dapple['token-wrapper'].classes.DepositBroker.at(this.broker()).clear((txError, tx) => {
+    Dapple['token-wrapper'].classes.DepositBroker.at(this.broker()).clear({ gas: CLEAR_BROKER_GAS }, (txError, tx) => {
       if (!txError) {
         Session.set('GNTDepositProgress', 90);
         Session.set('GNTDepositProgressMessage', 'Clearing Broker... (waiting for transaction confirmation)');
