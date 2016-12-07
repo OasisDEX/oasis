@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Dapple, web3 } from 'meteor/makerotc:dapple';
 import { _ } from 'meteor/underscore';
+import { $ } from 'meteor/jquery';
 
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
@@ -118,6 +119,8 @@ function doHashChange() {
         quoteCurrency = coins[0].toUpperCase();
         baseCurrency = coins[1].toUpperCase();
       }
+    } else if (location.hash.indexOf('#deposit') !== -1) {
+      console.log('deposit');
     }
   }
 
