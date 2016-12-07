@@ -31,6 +31,11 @@ import '../../ui/client/noethereum.html';
 import '../../ui/client/whatisthis.html';
 
 import '../../ui/client/helpers.js';
+import { doTabShow } from '../../utils/functions.js';
 
 // Start network
 import './network.js';
+
+Template.maindeposit.onRendered(function(){
+  doTabShow();
+});
