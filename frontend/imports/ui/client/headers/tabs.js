@@ -1,11 +1,21 @@
 import { Template } from 'meteor/templating';
+import { Session } from 'meteor/session';
+import { doHashChange } from '/imports/utils/functions';
 
 import './tabs.html';
 
 Template.tabs.viewmodel({
-
-});
-
-Template.tabs.events({
-
+  currentTab: '',
+  changeTab(e) {
+    const tab = e.target.hash;
+    if (tab !== this.currentTab) {
+      this.currentTab = tab;
+      if (tab !== '#trade') {
+        location.hash = tab;
+      } else {
+        location.hash = `#trade/${Session.get('quoteCurrency')}/${Session.get('baseCurrency')}`;
+      }
+      doHashChange();
+    }
+  },
 });

@@ -10,6 +10,7 @@ import TokenEvents from '/imports/api/tokenEvents';
 import WETH from '/imports/api/weth';
 import WGNT from '/imports/api/wgnt';
 import { Offers, Status } from '/imports/api/offers';
+import { doHashChange } from '/imports/utils/functions';
 
 // Check which accounts are available and if defaultAccount is still available,
 // Otherwise set it to localStorage, Session, or first element in accounts
@@ -106,26 +107,6 @@ function checkNetwork() {
       }
     }
   });
-}
-
-function doHashChange() {
-  let quoteCurrency = null;
-  let baseCurrency = null;
-
-  if (location.hash !== '') {
-    if (location.hash.indexOf('#trade/') !== -1) {
-      const coins = location.hash.replace('#trade/', '').split('/');
-      if (coins.length === 2) {
-        quoteCurrency = coins[0].toUpperCase();
-        baseCurrency = coins[1].toUpperCase();
-      }
-    } else if (location.hash.indexOf('#deposit') !== -1) {
-      console.log('deposit');
-    }
-  }
-
-  Session.set('quoteCurrency', quoteCurrency || localStorage.getItem('quoteCurrency') || 'W-ETH');
-  Session.set('baseCurrency', baseCurrency || localStorage.getItem('baseCurrency') || 'MKR');
 }
 
 $(window).on('hashchange', () => {

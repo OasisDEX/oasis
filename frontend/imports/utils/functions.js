@@ -1,3 +1,6 @@
+import { Session } from 'meteor/session';
+import { $ } from 'meteor/jquery';
+
 export function uppercaseFirstLetter(word) {
   return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 }
@@ -6,4 +9,26 @@ export function uppercaseFirstLetter(word) {
 // See: https://github.com/MetaMask/metamask-plugin/issues/672
 export function formatError(error) {
   return error.toString().split('\n')[0];
+}
+
+export function doHashChange() {
+  let quoteCurrency = null;
+  let baseCurrency = null;
+
+  if (location.hash !== '') {
+    if (location.hash.indexOf('#trade') !== -1) {
+      const coins = location.hash.replace('#trade/', '').split('/');
+      if (coins.length === 2) {
+        quoteCurrency = coins[0].toUpperCase();
+        baseCurrency = coins[1].toUpperCase();
+        Session.set('quoteCurrency', quoteCurrency || localStorage.getItem('quoteCurrency') || 'W-ETH');
+        Session.set('baseCurrency', baseCurrency || localStorage.getItem('baseCurrency') || 'MKR');
+      }
+      $('.nav-tabs a[href=#trade]').tab('show');
+    } else if (location.hash.indexOf('#deposit') !== -1) {
+      $('.nav-tabs a[href=#deposit]').tab('show');
+    } else if (location.hash.indexOf('#transfer') !== -1) {
+      $('.nav-tabs a[href=#transfer]').tab('show');
+    }
+  }
 }
