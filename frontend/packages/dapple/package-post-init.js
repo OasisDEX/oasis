@@ -81,6 +81,8 @@ const tokenSpecs = {
 
 Dapple.getQuoteTokens = () => ['W-ETH'];
 
+Dapple.getBaseTokens = () => ['MKR', 'DAI', 'DGD', 'W-GNT'];
+
 Dapple.getTokens = () => ['W-ETH', 'MKR', 'DAI', 'DGD', 'W-GNT'];
 
 Dapple.getTokenSpecs = (symbol) => {
