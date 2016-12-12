@@ -31,8 +31,8 @@ export function doHashChange() {
 
   if (location.hash.indexOf('#deposit') === -1 && location.hash.indexOf('#transfer') === -1) {
     if (location.hash.indexOf('#trade') === -1) {
-      location.hash = `#trade/${localStorage.getItem('quoteCurrency') || 'W-ETH'}
-                      /${localStorage.getItem('baseCurrency') || 'MKR'}`;
+      location.hash = `#trade/${localStorage.getItem('quoteCurrency') || 'W-ETH'}`
+                      + `/${localStorage.getItem('baseCurrency') || 'MKR'}`;
     }
     const coins = location.hash.replace('#trade/', '').split('/');
     if (coins.length === 2) {
