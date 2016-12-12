@@ -710,11 +710,13 @@ table {
   }
 
   input {
-    border: none;
+    border: 1px solid;
     text-align: right;
+    margin-left: 20px;
     font-weight: 700;
     font-size: 24px;
     color: #D0D0D0;
+    width: 50%;
   }
 
   button {
