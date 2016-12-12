@@ -45,7 +45,7 @@ class TokenEventCollection extends Mongo.Collection {
     if (typeof (row.amount) !== 'undefined') {
       row.amount = row.amount.toString(10);
     }
-    super.insert(row);
+    super.upsert({ transactionHash: event.transactionHash }, row, { upsert: true });
   }
 
   syncTimestamps() {
@@ -111,7 +111,7 @@ class TokenEventCollection extends Mongo.Collection {
                         to: WGNT.address,
                         amount: eventDeposit.args.value.toNumber(),
                       };
-                      super.insert(row);
+                      super.upsert({ transactionHash: eventDeposit.transactionHash }, row, { upsert: true });
                     }
                   });
 
@@ -128,7 +128,7 @@ class TokenEventCollection extends Mongo.Collection {
                         to: Session.get('address'),
                         amount: eventWithdrawal.args.value.toNumber(),
                       };
-                      super.insert(row);
+                      super.upsert({ transactionHash: eventWithdrawal.transactionHash }, row, { upsert: true });
                     }
                   });
                 /* eslint-enable new-cap */
