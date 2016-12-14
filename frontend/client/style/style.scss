@@ -521,10 +521,14 @@ table {
       font-family: Roboto-Black;
       font-size: 27px;
       color: #D0D0D0;
-      border: none;
+      border: 1px solid;
       text-align: right;
       padding-right: 10px;
-      max-width: 190px;
+      max-width: 175px;
+      
+      &[disabled] {
+        border: none;
+      }
     }
 
     input[type=number]::-webkit-inner-spin-button,
@@ -536,7 +540,7 @@ table {
     tr.row-input-line {
       td,
       th {
-        border-bottom: 1px solid #CFD8DC;
+        //border-bottom: 1px solid #CFD8DC;
         padding-top: 10px;
       }
       td:last-child {
@@ -549,8 +553,10 @@ table {
       font-size: 10px;
       color: #222228;
       letter-spacing: 1px;
-      min-width: 30px;
+      width: 45px;
       display: inline-block;
+      text-align: left;
+      margin-left: 2px;
     }
   }
 
@@ -858,11 +864,9 @@ table {
     color: #222228;
     opacity: 0.60;
     width: 46px;
-    display: block;
-    float: right;
-    margin-top: 12px;
+    display: inline-block;
     text-align: left;
-    padding-left: 10px;
+    margin-left: 10px;
   }
 
   .div-modal-text {
