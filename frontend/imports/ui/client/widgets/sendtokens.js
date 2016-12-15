@@ -14,7 +14,7 @@ const TRANSACTION_TYPE = 'transfer';
 
 Template.sendtokens.viewmodel({
   currency: 'MKR',
-  currencies: _.without(Dapple.getTokens(), 'W-ETH'),
+  currencies: Dapple.getTokens(),
   recipient: '',
   lastError: '',
   pending() {

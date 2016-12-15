@@ -2,11 +2,15 @@
   <div class="currencies">
     <p class="currencies-selectors">
       <span class="select-quote-currency">
+        {{#if showDropdownQuoteCurrencies}}
         <span class="glyphicon glyphicon-chevron-down select-glyph" aria-hidden="true"></span>
-        <select id="sltQuoteCurrency" class="select-box-quote" {{b "options: quoteCurrencies, value: quoteCurrency, change: quoteChange"}}></select>
+        {{/if}}
+        <select id="sltQuoteCurrency" class="select-box-quote" disabled={{not showDropdownQuoteCurrencies}} {{b "options: quoteCurrencies, value: quoteCurrency, change: quoteChange"}}></select>
       </span>
       <span class="select-base-currency">
-        <select id="sltBaseCurrency" class="select-box-base" {{b "options: baseCurrencies, value: baseCurrency, change: baseChange"}}></select>
+        {{#if showDropdownBaseCurrencies}}
+        <select id="sltBaseCurrency" class="select-box-base" disabled={{not showDropdownBaseCurrencies}}  {{b "options: baseCurrencies, value: baseCurrency, change: baseChange"}}></select>
+        {{/if}}
         <span class="glyphicon glyphicon-chevron-down select-glyph" aria-hidden="true"></span>
       </span>
       <span class="span-token-pair">TOKEN PAIR</span>    
