@@ -1,11 +1,12 @@
 import { Template } from 'meteor/templating';
 import { BigNumber } from 'meteor/ethereum:web3';
 import { Dapple, web3 } from 'meteor/makerotc:dapple';
-import { _ } from 'meteor/underscore';
 
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
 import { formatError } from '/imports/utils/functions';
+
+import { convertToAbsolute } from '/imports/utils/conversion';
 
 import './sendtokens.html';
 
@@ -54,7 +55,7 @@ Template.sendtokens.viewmodel({
     // XXX EIP20
     Dapple.getToken(this.currency(), (error, token) => {
       if (!error) {
-        token.transfer(recipient, web3.toWei(this.amount()), options, (txError, tx) => {
+        token.transfer(recipient, convertToAbsolute(this.amount(), this.currency()), options, (txError, tx) => {
           if (!txError) {
             Transactions.add(TRANSACTION_TYPE, tx, { recipient, amount: this.amount(), token: this.currency() });
           } else {
