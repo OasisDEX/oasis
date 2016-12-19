@@ -124,14 +124,17 @@ Offers.sync = () => {
   // Watch Trade events
   Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: Dapple.getFirstContractBlock() }, (error, trade) => {
     if (!error) {
+      const buyWhichToken = Dapple.getTokenByAddress(trade.args.buy_which_token);
+      const sellWhichToken = Dapple.getTokenByAddress(trade.args.sell_which_token);
+
       // Transform arguments
       const args = {
         buyWhichToken_address: trade.args.buy_which_token,
-        buyWhichToken: Dapple.getTokenByAddress(trade.args.buy_which_token),
+        buyWhichToken,
         sellWhichToken_address: trade.args.sell_which_token,
-        sellWhichToken: Dapple.getTokenByAddress(trade.args.sell_which_token),
-        buyHowMuch: trade.args.buy_how_much.toString(10),
-        sellHowMuch: trade.args.sell_how_much.toString(10),
+        sellWhichToken,
+        buyHowMuch: convertTo18Precision(trade.args.buy_how_much.toString(10), buyWhichToken),
+        sellHowMuch: convertTo18Precision(trade.args.sell_how_much.toString(10), sellWhichToken),
       };
       // Get block for timestamp
       web3.eth.getBlock(trade.blockNumber, (blockError, block) => {
