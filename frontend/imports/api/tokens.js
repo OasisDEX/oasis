@@ -71,13 +71,19 @@ class TokensCollection extends Mongo.Collection {
             if (!error) {
               token.balanceOf(address, (callError, balance) => {
                 if (!error) {
-                  super.upsert(tokenId, { $set: { balance: convertTo18Precision(balance, tokenId).toString(10), realBalance: balance.toString(10) } });
+                  super.upsert(tokenId, { $set: {
+                    balance: convertTo18Precision(balance, tokenId).toString(10),
+                    realBalance: balance.toString(10),
+                  } });
                 }
               });
               const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
               token.allowance(address, contractAddress, (callError, allowance) => {
                 if (!error) {
-                  super.upsert(tokenId, { $set: { allowance: convertTo18Precision(allowance, tokenId).toString(10), realAllowance: allowance.toString(10) } });
+                  super.upsert(tokenId, { $set: {
+                    allowance: convertTo18Precision(allowance, tokenId).toString(10),
+                    realAllowance: allowance.toString(10),
+                  } });
                 }
               });
             }

@@ -11,10 +11,10 @@ export function convertToAbsolute(amount, token) {
       value = new BigNumber(amount);
     }
     return value.times(Math.pow(10, precision)).valueOf();
-  } else {
-    console.log('Token not found when converting');
-    return false;
   }
+
+  console.log('Token not found when converting');
+  return false;
 }
 
 export function convertTo18Precision(amount, token) {
@@ -29,8 +29,8 @@ export function convertTo18Precision(amount, token) {
       value = new BigNumber(amount);
     }
     return value.times(Math.pow(10, 18 - precision)).valueOf();
-  } else {
-    console.log('Token not found when converting');
-    return false;
   }
+
+  console.log('Token not found when converting');
+  return false;
 }
