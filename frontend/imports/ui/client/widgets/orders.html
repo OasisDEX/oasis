@@ -1,23 +1,26 @@
 <template name="orders">
-  <table>
+  <table class="t-scroll">
     <thead>
       <tr>
-        {{#if showDate}}<th>DATE</th>{{/if}}
-        {{#if showType}}<th>TYPE</th>{{/if}}
+        <th></th>
+        {{#if showDate}}<th class="th-date">DATE</th>{{/if}}
+        {{#if showType}}<th class="th-type">TYPE</th>{{/if}}
         {{#unless equals priceClass 'ask'}}
           {{#unless equals priceClass 'bid'}}
-          <th>PRICE</th>
+          <th class="th-price">PRICE</th>
           {{/unless}}
         {{/unless}}
         {{#if equals priceClass 'ask'}}
-          <th title={{concat quoteCurrency ' / ' baseCurrency}}>{{priceLabel}}</th>
+          <th class="th-price-label" title={{concat quoteCurrency ' / ' baseCurrency}}>{{priceLabel}}</th>
         {{/if}}
-        <th>{{quoteCurrency}}</th>
-        <th>{{baseCurrency}}</th>
+
+        <th class="th-base-currency">{{baseCurrency}}</th>
+        <th class="th-quote-currency">{{quoteCurrency}}</th>
+
         {{#if equals priceClass 'bid'}}
-          <th title={{concat quoteCurrency ' / ' baseCurrency}}>{{priceLabel}}</th>
+          <th class="th-price-label" title={{concat quoteCurrency ' / ' baseCurrency}}>{{priceLabel}}</th>
         {{/if}}
-        <th></th>
+        <th></th>        
       </tr>
     </thead>
     <tbody>
@@ -29,9 +32,5 @@
       
     </tfoot>
   </table>
-  <div class="div-more">
-    {{#if moreBtn}}
-      <a href="#more" class="btn btn-default btn-submit-order more" data-type="{{priceClass}}">See all ({{orderCount}})</a>
-    {{/if}}
-  </div>
+
 </template>

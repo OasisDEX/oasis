@@ -3,6 +3,46 @@ $color-quote-currency: #795548;
 $color-base-currency: #8D86C9;
 $color-buy: #26A69A;
 $color-sell: #EF5350;
+$color-more: #4F5362;
+$border-more: #A8ACB9;
+
+/* MIXIN TABLE SCROLLING */
+@mixin quantity-query( $number, $comparison: 'equal' ) {
+  $nth: '';
+  @if index( ('greater' 'more' '>'), $comparison ) {
+    $nth: 'n + #{$number}';
+  } @else if index( ('less' 'fewer' '<'), $comparison ) {
+    $nth: '-n + #{$number}';
+  } @else if index( ('equal' 'same' '='), $comparison ) {
+    $nth: $number;
+  } @else {
+    @warn "Sorry, that's an invalid $comparison value."
+  }
+  &:nth-last-child(#{$nth}):first-child {
+    &,
+    & ~ * {
+      @content;
+    }
+  }
+}
+@mixin qq-equal( $number ) {
+  @include quantity-query( $number, equal ) {
+    @content;
+  }
+}
+@mixin qq-greater( $number ) {
+  @include quantity-query( $number, greater ) {
+    @content;
+  }
+}
+@mixin qq-less( $number ) {
+  @include quantity-query( $number, less ) {
+    @content;
+  }
+}
+$i: '';
+$max: 7;
+/* MIXIN TABLE SCROLLING */
 
 body {
   background-color: $background-color;
@@ -14,6 +54,7 @@ h2 {
   letter-spacing: 3.99px;
   font-size: 24px;
   margin-top: 0;
+  margin-bottom: 20px;
 }
 
 table {
@@ -73,6 +114,15 @@ table {
     margin-left: 25px;
     display: inline-block;
     padding: 0px 17px 0px 10px;
+
+    .question-circle {
+      @extend .question-circle;
+      display: inline-block!important;
+      float: none!important;
+    }
+
+
+
   }
 
   .select-change-account {
@@ -166,7 +216,7 @@ table {
     border-bottom: none;
 
     li {
-      border: 1px solid #D3D5DC;
+      border: 1px solid #C4C6CC;
       font-family: 'Montserrat', sans-serif;
       font-size: 12px;
       font-weight: 500;
@@ -176,12 +226,16 @@ table {
       padding: 0;
 
       a {
-        color: #4F5362;
+        color: #A3A5AB;
         min-width: 100%;
         height: 33px;
         display: block;
         padding: 7px 28px 7px 29px;
         cursor: pointer;
+      }
+      a:active,
+      a.active {
+        color: #4F5362;
       }
 
       a.tab-link,
@@ -203,6 +257,8 @@ table {
     .middle-tab {
       background-color: rgba(0,0,0,0.0);
       border-radius: 0px;
+      margin-left: -1px;
+      margin-right: -1px;
     }
 
     .last-tab {
@@ -215,8 +271,8 @@ table {
   ul:after {
     content: "";
     position: absolute;
-    border-top: 1px solid #DCDDE0;
-    top: 15px;
+    border-top: 1px solid #C4C6CC;
+    top: 17px;
   }
 
   ul:before {
@@ -226,7 +282,7 @@ table {
 
   ul:after {
     left: 100%;
-    margin-left: -20px;
+    margin-left: -28px;
     width: 270px;
   }
 }
@@ -399,14 +455,15 @@ table {
 
 .order-section {
   opacity: 0.89;
-  background: #FFFFFF;
+  background: #FEFEFE;
   border: 1px solid #EFF1F3;
   box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.13);
   border-radius: 4px;
   width: 442px;
-  min-height: 290px;
+  min-height: 305px;
   margin: 0px 17px 35px 17px;
   padding: 30px 0px 10px 30px;
+  overflow: hidden;
 }
 
 .order-section-first {
@@ -420,6 +477,9 @@ table {
 }
 
 .order-section-content {
+  h2 {
+    padding-right: 30px;
+  }
   thead {
     th {
       font-family: 'Montserrat', sans-serif;
@@ -427,7 +487,7 @@ table {
       font-size: 10px;
       opacity: 0.68;
       height: 30px;
-      text-align: center;
+      text-align: right;
       color: #222228;
     }
 
@@ -439,6 +499,7 @@ table {
     th:last-child {
       border-bottom-right-radius: 4px;
       border-top-right-radius: 4px;
+      width: 30px;
     }
 
     tr {
@@ -452,9 +513,16 @@ table {
 
     &.clickable {
       cursor: pointer;
-      
+      border-top: 1px #ffffff solid;
+      border-bottom: 1px #ffffff solid;      
       &:hover {
-        background: #e2e2e2;
+        border-bottom: 1px #DCDDE0 solid;
+        border-top: 1px #DCDDE0 solid;
+      }
+    }
+    &.helper-row {
+      td {
+        text-align: center;
       }
     }
   }
@@ -469,6 +537,7 @@ table {
     font-size: 14.5px;
     color: #4A4A4A;
     padding-top: 10px;
+    text-align: right;
   }
 
   td.bid {
@@ -481,7 +550,7 @@ table {
 
   td.timestamp {
     font-weight: 500;
-    color: #666669;
+    color: #979797;
     opacity: 0.5;
   }
 
@@ -511,17 +580,24 @@ table {
   }
 
   tbody {
+    tr {
+      th {
+        transform: translateY(5px);
+      }
+    }
     th {
       opacity: 0.68;
       font-size: 15px;
       font-weight: 500;
-    }
-
+      &:first-of-type {
+        color: #68686C;
+      }
+    }   
     input {
       font-family: Roboto-Black;
       font-size: 27px;
       color: #D0D0D0;
-      border: 1px solid;
+      border: none;
       text-align: right;
       padding-right: 10px;
       max-width: 170px;
@@ -540,7 +616,7 @@ table {
     tr.row-input-line {
       td,
       th {
-        //border-bottom: 1px solid #CFD8DC;
+        border-bottom: 1px #CFD8DC solid;
         padding-top: 10px;
       }
       td:last-child {
@@ -551,7 +627,7 @@ table {
     .span-buy-sell-currency {
       font-weight: 700;
       font-size: 10px;
-      color: #222228;
+      color: #68686C; /* #222228;*/
       letter-spacing: 1px;
       width: 52px;
       display: inline-block;
@@ -694,14 +770,21 @@ table {
     font-family: 'Montserrat', sans-serif;
     font-size: 17px;
     font-weight: 500;
-    color: #222228
+    color: #68686C;  /* #222228 */
   }
-
+  tfoot {
+    tr {
+      td {
+        padding-top: 55px;
+        padding-bottom: 0px;
+      }
+    }
+  }
   td {
     font-family: 'Montserrat-SemiBold', sans-serif;
     font-size: 21px;
     font-weight: 500;
-    color: #4F5362;
+    color: #68686C; /* #4F5362; */
     text-align: right;
   }
 
@@ -715,6 +798,15 @@ table {
 
   td.token {
     opacity: 0.6;
+    .span-buy-sell-currency {
+      font-weight: 700;
+      font-size: 10px;
+      color: #68686C; /* #222228; */
+      letter-spacing: 1px;
+      display: inline-block;
+      text-align: left;
+      margin-left: 2px;
+    }
   }
 
   th,
@@ -722,15 +814,23 @@ table {
     padding-bottom: 10px;
     padding-top: 10px;
   }
-
+  tr.row-input-line {
+    &:last-of-type {
+      border-bottom: 1px #CFD8DC solid;
+      td {
+        padding-bottom: 0px;
+      }
+    }
+  }
   input {
-    border: 1px solid;
+    border: none;
     text-align: right;
     margin-left: 20px;
     font-weight: 700;
     font-size: 24px;
     color: #D0D0D0;
-    width: 50%;
+    /* width: 50%; */
+    background: #fdfdfd;
   }
 
   button {
@@ -767,10 +867,11 @@ table {
   text-align: center;
   width: 14px;
   height: 14px;
-  display: inline-block;
+  /* display: inline-block; */
   color: #848FA5;
   letter-spacing: normal;
   line-height: 12px;
+  float: right;
 }
 
 .question-circle-spacing {
@@ -781,9 +882,11 @@ table {
   border: 1px solid;
   border-radius: 100px;
   font-size: 13.5px;
+  font-family: 'Montserrat-SemiBold', sans-serif;
   letter-spacing: 1.57px;
   opacity: 1;
   margin-left: 15px;
+  padding: 6px 25px;
 }
 
 .btn-submit-order-buy {
@@ -795,6 +898,13 @@ table {
    @extend .btn-submit-order;
    border-color: $color-sell;
 }
+
+.btn-submit-order-more {
+   @extend .btn-submit-order;
+   border-color: $border-more;
+   color: $color-more;
+}
+
 
 .btn-placement-right {
   float: right;
@@ -1012,4 +1122,109 @@ table {
   opacity: 0.70;
   margin-top: 100px;
   margin-bottom: 30px;
+}
+
+.t-scroll {
+    width: 100%;
+    border-spacing: 0;
+    thead tr {
+        display: block;
+        width: 100%;
+        th {
+            &:first-of-type {
+              width: 30px;
+            }
+            &.th-date {
+              max-width: 80px; 
+            } 
+            &.th-type {
+              max-width: 40px; 
+            }             
+            height: 30px;
+            line-height: 30px;
+            width: 100%;
+            @for $i from 1 through $max {
+              @include qq-equal(5) {
+                max-width: 100px;
+              }
+              @include qq-equal(6) {
+                max-width: 75px;
+              } 
+              @include qq-equal(7) {
+                max-width: 60px;
+              }    
+            }            
+            position: relative;
+            float: left;
+            &.th-recipient {
+              max-width: 90px!important;
+            }
+            &th-amount {
+              max-width: 110px!important;
+            }
+            &:last-of-type {
+              width: 30px;
+            }                         
+        }        
+    }
+    tbody {
+        width: calc(100% - 30px);
+        height: 155px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: block;
+        margin-top: 10px;
+        tr {
+          height: 30px;
+          width: 100%;
+          display: block;
+          td {
+            &:first-of-type {
+              width: 30px;
+            }
+            &.timestamp {
+              white-space: nowrap;
+              max-width: 80px;              
+            }
+            &.order-type {
+              max-width: 40px;
+            }
+            height: 30px;             
+            width: 100%;
+
+            @for $i from 1 through $max {
+              @include qq-equal(5) {
+                max-width: 100px;
+              }
+              @include qq-equal(6) {
+                max-width: 75px;
+              } 
+              @include qq-equal(7) {
+                max-width: 60px;
+              }    
+            }
+
+            padding: 5px 0;
+            position: relative;
+            float: left;
+            &:last-of-type {
+              width: 30px;
+            }
+            &.transaction-hash {
+              white-space: nowrap; 
+              overflow: hidden;
+              text-overflow: ellipsis;
+              max-width: 90px!important;
+            }          
+            &.transfer {
+              max-width: 110px!important;
+            }   
+          }
+        }
+    }    
+}
+
+/* BOOTSTRAP RESETS */
+.alert-warning {
+  margin-top: 30px;
 }

@@ -1,5 +1,14 @@
 <template name="orderRow">
   <tr class={{order.status}}{{#if canAccept}} clickable{{/if}} title={{timestampToString order.timestamp true true}}>
+    <td>
+      {{#if order.canCancel}}
+        {{#if showCancel}}
+          <button type="button" class="btn btn-default cancel">
+            <img src="remove_button.svg" alt="Cancel order">
+          </button>
+        {{/if}}
+      {{/if}}
+    </td>    
     {{#if showDate}}
       <td class="timestamp">{{timestampToString order.timestamp true true}}</td>
     {{/if}}
@@ -26,19 +35,11 @@
         <td class={{order.type}}>{{formatToken order.price}}</td>
       {{/if}}
     {{/unless}}
-    <td>
-      {{#if order.canCancel}}
-        {{#if showCancel}}
-          <button type="button" class="btn btn-default cancel">
-            <img src="remove_button.svg" alt="Cancel order">
-          </button>
-        {{/if}}
-      {{/if}}
-    </td>
+    <td></td>
   </tr>
   {{#if order.helper}}
     <tr class="helper-row">
-      <td colspan="4">{{order.helper}}</td>
+      <td colspan="5">{{order.helper}}</td>
     </tr>
   {{/if}}
 </template>
