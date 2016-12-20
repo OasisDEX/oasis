@@ -1115,13 +1115,26 @@ table {
 }
 
 .footer {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 500;
-  font-size: 21px;
-  color: #4F5362;
-  opacity: 0.70;
-  margin-top: 100px;
-  margin-bottom: 30px;
+  .container {
+    padding: 40px 80px;
+  }
+  p {
+    margin: 17px 0;
+    &.title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      text-transform: uppercase;
+      color: #4A4A4A;
+    }
+    a {
+      font-family: 'Montserrat-SemiBold', sans-serif;
+      font-size: 14px;
+      color: #546979;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
 }
 
 .t-scroll {
@@ -1222,6 +1235,11 @@ table {
           }
         }
     }    
+}
+
+.hr-footer {
+  max-width: 980px;
+  margin: 50px auto 0px auto;
 }
 
 /* BOOTSTRAP RESETS */
