@@ -1320,7 +1320,21 @@ section.markets {
   @extend .select-market;
 }
 #container-market {
-  @extend .select-market; 
+  @extend .select-market;
+  max-height: 260px;
+  table {
+    background: #fcfcfb;
+    min-height: 230px;
+  } 
+  tbody tr {
+    border-top: 1px transparent solid;
+    border-bottom: 1px transparent solid;    
+  }
+  tbody tr:hover {
+    background: #F8F7F5;
+    border-top: 1px #DCDDE0 solid;
+    border-bottom: 1px #DCDDE0 solid;    
+  }
 }
 
 
