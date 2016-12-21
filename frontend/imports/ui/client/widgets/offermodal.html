@@ -149,31 +149,35 @@
       <div class="modal-content modal-order">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Confirmation</h4>
+            <h4 class="modal-title">{{offerType}} OFFER</h4>
         </div>
         <div class="modal-body">
           <table>
             <tbody>
-              <tr>
+              <!--<tr>
                 <th>Type</th>
                 <td>{{offerType}}</td>
+              </tr>-->
+              <tr>
+                <th>OWNER</th>
+                <td><span class="owner-address">0x6e484915EdA37ddc1s8Ca97CA3se9548f014A58A</span></td>
               </tr>
               <tr>
                 <th>Price</th>
-                <td>{{formatBalance (toWei offerPrice)}} {{quoteCurrency}}/{{baseCurrency}}</td>
+                <td><span class="value price">{{formatBalance (toWei offerPrice)}}</span> <span class="base-currency">{{baseCurrency}}</span></td><!-- {{quoteCurrency}}/  -->
               </tr>
               <tr>
                 <th>Volume</th>
-                <td>{{formatBalance (toWei offerAmount)}} {{baseCurrency}}</td>
+                <td><span class="value">{{formatBalance (toWei offerAmount)}}</span> <span class="base-currency">{{baseCurrency}}</span></td>
               </tr>
               <tr>
                 <th>Total</th>
-                <td>{{formatBalance (toWei offerTotal)}} {{quoteCurrency}}</td>
+                <td><span class="value">{{formatBalance (toWei offerTotal)}}</span> <span class="quote-currency">{{quoteCurrency}}</span></td>
               </tr>
             </tbody>
           </table>
           <hr>
-          <span class="text-danger">
+          <span class="text-clarifications">
             <b>Warning!</b>
             {{#if equals offerType 'buy'}}
               This action will <b>remove {{formatBalance (toWei offerTotal)}} {{quoteCurrency}}</b> {{formatPrice (toWei offerTotal) quoteCurrency}} from your token balance and allowance.
@@ -181,10 +185,11 @@
               This action will <b>remove {{formatBalance (toWei offerAmount)}} {{baseCurrency}}</b> {{formatPrice (toWei offerAmount) baseCurrency}} from your token balance and allowance.
             {{/if}}
           </span>
+          <hr>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default btn-submit-order btn-placement-right" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-default btn-submit-order-{{offerType}} {{offerType}} btn-placement-right" data-dismiss="modal" {{b "enable: canSubmit, click: confirmOffer"}}>Place order</button>
+          <button type="button" class="btn btn-default btn-submit-order btn-submit-order-{{offerType}} {{offerType}} btn-placement-right btn-place-order" data-dismiss="modal" {{b "enable: canSubmit, click: confirmOffer"}}>{{offerType}} {{baseCurrency}}</button>
+          <button type="button" class="btn btn-default btn-submit-order btn-placement-right btn-cancel-order" data-dismiss="modal">Cancel</button>
         </div>
       </div>
     </div>

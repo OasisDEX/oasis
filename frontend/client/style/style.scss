@@ -5,6 +5,8 @@ $color-buy: #26A69A;
 $color-sell: #EF5350;
 $color-more: #4F5362;
 $border-more: #A8ACB9;
+$color-place-order: #4F5362;
+$color-cancel-order: #A8ACB9;
 
 /* MIXIN TABLE SCROLLING */
 @mixin quantity-query( $number, $comparison: 'equal' ) {
@@ -889,6 +891,7 @@ table {
   opacity: 1;
   margin-left: 15px;
   padding: 6px 25px;
+  text-transform: uppercase;
 }
 
 .btn-submit-order-buy {
@@ -910,6 +913,20 @@ table {
 
 .btn-placement-right {
   float: right;
+}
+
+.btn-place-order {
+  color: $color-place-order;
+  border-color: $color-place-order;
+  padding: 13px 25px;
+  height: 46px;   
+}
+.btn-cancel-order {
+  color: $color-cancel-order;
+  border-color: $color-cancel-order;
+  padding: 13px 25px;
+  height: 46px;
+  float: left;   
 }
 
 .div-more {
@@ -1339,6 +1356,74 @@ section.markets {
 
 
 /* BOOTSTRAP RESETS */
-.alert-warning {
+.alert {
   margin-top: 30px;
+}
+.progress {
+  margin-top: 20px;
+}
+/* MODAL RESET */
+
+.modal-content {
+  border: 1px #EFF1F3 solid;
+  background: #FCFBFB;
+  box-shadow: 0 2px 15px 0 rgba(0,0,0,0.13);
+  span.value {
+    width: calc(100% - 60px);
+    display: block;
+    float: left;
+    position: relative;
+    &.price {
+      color: #616675;
+    }     
+  }
+  .currency {
+    color: #222228;
+    font-weight: bold;
+    font-size: 12px;
+    letter-spacing: 1px;
+    width: 50px;
+    margin-left: 10px;
+    display: block;
+    float: left;
+    position: relative;
+    text-align: left;    
+  }
+  .base-currency {
+    @extend .currency;
+  }
+  .quote-currency {
+    @extend .currency;
+  }
+  .text-clarifications {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.4);
+    b {
+      color: #222228;
+    }
+  }
+  .owner-address {
+    opacity: 0.6;
+    font-size: 12px;
+    color: #4F5362;    
+  }
+}
+.modal-header {
+  border: none;
+}
+.modal-title {
+  text-transform: uppercase;
+}
+.modal-body {
+  th {
+    text-transform: uppercase;
+  }
+  tr {
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px rgba(207, 216, 220, 0.15) solid;
+  }
+}
+.modal-footer {
+  border-top: none;
 }
