@@ -5,10 +5,10 @@
         <tbody>
           <tr>
             <th>
-              {{token._id}}
+              <!--{{token._id}}-->CURRENT
             </th>
             <td>
-              <input class="input" type="number" min="0" step="any" placeholder={{fromWei token.allowance}} {{b "value: value"}}>
+              <input class="input" type="number" min="0" step="any" placeholder={{fromWei token.allowance}} {{b "value: value"}}><span class="allowance-currency">{{token._id}}</span>
             </td>
           </tr>
         </tbody>
@@ -27,13 +27,15 @@
             </td>
           </tr>
           {{/each}}
-          <tr>
-            <td colspan="2">
-              <button class="btn btn-default" {{b "enable: canChange, click: change"}}>
-                Change {{token._id}} allowance
-              </button>
-            </td>
-          </tr>
+          <!--
+            <tr>
+              <td colspan="2">
+                <button class="btn btn-default" {{b "enable: canChange, click: change"}}>
+                  Change {{token._id}} allowance
+                </button>
+              </td>
+            </tr>
+          -->
         </tfoot>
       </table>
     </div>

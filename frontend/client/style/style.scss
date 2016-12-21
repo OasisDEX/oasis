@@ -340,7 +340,7 @@ table {
 
 .balance-row {
   margin: 0 auto;
-  display: none;
+  /*display: none;*/
 }
 
 .balance {
@@ -598,8 +598,9 @@ table {
       }
     }   
     input {
-      font-family: Roboto-Black;
+      font-family: 'Roboto';
       font-size: 27px;
+      font-weight: bold;
       color: #D0D0D0;
       border: none;
       text-align: right;
@@ -920,6 +921,7 @@ table {
   border-color: $color-place-order;
   padding: 13px 25px;
   height: 46px;   
+  background: none;
 }
 .btn-cancel-order {
   color: $color-cancel-order;
@@ -927,6 +929,7 @@ table {
   padding: 13px 25px;
   height: 46px;
   float: left;   
+  background: none;
 }
 
 .div-more {
@@ -1363,7 +1366,9 @@ section.markets {
   margin-top: 20px;
 }
 /* MODAL RESET */
-
+.modal-backdrop {
+  display: none!important;
+}
 .modal-content {
   border: 1px #EFF1F3 solid;
   background: #FCFBFB;
@@ -1388,6 +1393,11 @@ section.markets {
     float: left;
     position: relative;
     text-align: left;    
+  }
+  .allowance-currency {
+    @extend .currency;
+    float: right;
+    transform: translateY(5px);
   }
   .base-currency {
     @extend .currency;
@@ -1422,6 +1432,26 @@ section.markets {
     height: 50px;
     line-height: 50px;
     border-bottom: 1px rgba(207, 216, 220, 0.15) solid;
+  }
+  input {
+    font-family: 'Roboto';
+    font-weight: bolder;
+    font-size: 24px;
+    color: #D0D0D0;
+    border: none;
+    text-align: right;
+    padding-right: 10px;
+    max-width: 170px;
+    background: none;
+
+    &[disabled] {
+      border: none;
+    }
+  }
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
   }
 }
 .modal-footer {
