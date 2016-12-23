@@ -251,11 +251,11 @@ Template.registerHelper('fromPrecision', (value, precision) => {
 
 Template.registerHelper('validPrecision', (value, precision) => {
   let displayValue = value;
-  let tokenPrecision = precision;
+  /* let tokenPrecision = precision;
   if (isNaN(tokenPrecision)) {
     const tokenSpecs = Dapple.getTokenSpecs(precision);
     tokenPrecision = tokenSpecs.precision;
-  }
+  }*/
   try {
     if (!(displayValue instanceof BigNumber)) {
       displayValue = new BigNumber(displayValue);
@@ -269,16 +269,11 @@ Template.registerHelper('validPrecision', (value, precision) => {
   }
 });
 
-Template.registerHelper('formatToken', (value, token) => {
+Template.registerHelper('formatToken', (value) => {
   let displayValue = value;
-  const tokenSpecs = Dapple.getTokenSpecs(token);
-  // const format = (typeof (tokenSpecs.format) !== 'undefined' ? tokenSpecs.format : '0,0.00[0000]');
-  // console.log(displayValue.toString(10));
-  // const valid = Blaze._globalHelpers.validPrecision(displayValue, tokenSpecs.precision);
-  // console.log('valid precision', valid);
   if (!(displayValue instanceof BigNumber)) {
     /* eslint-disable no-underscore-dangle */
-    displayValue = Blaze._globalHelpers.fromPrecision(displayValue, tokenSpecs.precision);
+    displayValue = Blaze._globalHelpers.fromPrecision(displayValue, 18);
     /* eslint-enable no-underscore-dangle */
   }
   return EthTools.formatNumber(displayValue.toString(10), '0.00000');

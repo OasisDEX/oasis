@@ -20,7 +20,7 @@
               <tr>
                 <td class="timestamp">{{ timestampToString this.timestamp true true}}</td>
                 <td>{{ this.type }}</td>
-                <td class="{{ this.type }}">{{ formatToken this.amount this.token }} {{this.token}}</td>
+                <td class="{{ this.type }}">{{ formatToken this.amount }} {{this.token}}</td>
               </tr>
             {{/each}}
           </tbody>
@@ -30,7 +30,7 @@
               <tr>
                 <td class="timestamp">{{ timestampToString this.timestamp true true}}</td>
                 <td><a target="_blank" href="{{ txHref (this.transactionHash) }}">{{ friendlyAddress(this.to) }}</a></td>
-                <td class="{{ this.type }} {{ currencyClass this.token }}">{{ formatToken this.amount this.token }} {{this.token}}</td>
+                <td class="{{ this.type }} {{ currencyClass this.token }}">{{ formatToken this.amount }} {{this.token}}</td>
               </tr>
             {{/each}}
           </tbody>

@@ -8,7 +8,7 @@ import { $ } from 'meteor/jquery';
 import Transactions from '/imports/api/transactions';
 import { formatError } from '/imports/utils/functions';
 
-import { convertToAbsolute, convertTo18Precision } from '/imports/utils/conversion';
+import { convertToTokenPrecision, convertTo18Precision } from '/imports/utils/conversion';
 
 const Offers = new Mongo.Collection(null);
 const Trades = new Mongo.Collection(null);
@@ -208,8 +208,8 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
   const sellWhichTokenAddress = Dapple.getTokenAddress(sellWhichToken);
   const buyWhichTokenAddress = Dapple.getTokenAddress(buyWhichToken);
 
-  const sellHowMuchAbsolute = convertToAbsolute(sellHowMuch, sellWhichToken);
-  const buyHowMuchAbsolute = convertToAbsolute(buyHowMuch, buyWhichToken);
+  const sellHowMuchAbsolute = convertToTokenPrecision(sellHowMuch, sellWhichToken);
+  const buyHowMuchAbsolute = convertToTokenPrecision(buyHowMuch, buyWhichToken);
 
   Dapple['maker-otc'].objects.otc.offer(sellHowMuchAbsolute, sellWhichTokenAddress,
                                         buyHowMuchAbsolute, buyWhichTokenAddress,
@@ -226,7 +226,7 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
 Offers.buyOffer = (_id, _quantity, _token) => {
   const id = parseInt(_id, 10);
 
-  const quantityAbsolute = convertToAbsolute(_quantity, _token);
+  const quantityAbsolute = convertToTokenPrecision(_quantity, _token);
 
   Offers.update(_id, { $unset: { helper: '' } });
   Dapple['maker-otc'].objects.otc.buy(id.toString(10), quantityAbsolute, { gas: BUY_GAS }, (error, tx) => {

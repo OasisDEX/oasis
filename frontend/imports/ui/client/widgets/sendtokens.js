@@ -6,7 +6,7 @@ import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
 import { formatError } from '/imports/utils/functions';
 
-import { convertToAbsolute } from '/imports/utils/conversion';
+import { convertToTokenPrecision } from '/imports/utils/conversion';
 
 import './sendtokens.html';
 
@@ -55,7 +55,7 @@ Template.sendtokens.viewmodel({
     // XXX EIP20
     Dapple.getToken(this.currency(), (error, token) => {
       if (!error) {
-        token.transfer(recipient, convertToAbsolute(this.amount(), this.currency()), options, (txError, tx) => {
+        token.transfer(recipient, convertToTokenPrecision(this.amount(), this.currency()), options, (txError, tx) => {
           if (!txError) {
             Transactions.add(TRANSACTION_TYPE, tx, { recipient, amount: this.amount(), token: this.currency() });
           } else {
