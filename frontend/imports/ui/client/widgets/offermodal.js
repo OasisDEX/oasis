@@ -7,9 +7,12 @@ import { formatError } from '/imports/utils/functions';
 
 import Tokens from '/imports/api/tokens';
 import { Offers, Status } from '/imports/api/offers';
-import convertToWei from '/imports/utils/conversion';
 
 import './offermodal.html';
+
+// TODO: DELETE THIS, TESTING PURPOSE
+window.Tokens = Tokens;
+
 
 Template.offermodal.viewmodel({
   share: 'newOffer',
@@ -164,10 +167,12 @@ Template.offermodal.viewmodel({
   },
   buy() {
     const offerId = this.templateInstance.data.offer._id;
+    const offer = Offers.findOne(offerId);
+
     if (this.templateInstance.data.offer.type() === 'bid') {
-      Offers.buyOffer(offerId, web3.toWei(new BigNumber(this.total())));
+      Offers.buyOffer(offerId, new BigNumber(this.total()), offer.sellWhichToken);
     } else {
-      Offers.buyOffer(offerId, web3.toWei(new BigNumber(this.volume())));
+      Offers.buyOffer(offerId, new BigNumber(this.volume()), offer.sellWhichToken);
     }
   },
   maxNewOfferAmount() {
@@ -234,14 +239,14 @@ Template.offermodal.viewmodel({
     let buyWhichToken;
     if (this.offerType() === 'buy') {
       sellWhichToken = Session.get('quoteCurrency');
-      sellHowMuch = convertToWei(this.offerTotal(), sellWhichToken);
+      sellHowMuch = this.offerTotal();
       buyWhichToken = Session.get('baseCurrency');
-      buyHowMuch = convertToWei(this.offerAmount(), buyWhichToken);
+      buyHowMuch = this.offerAmount();
     } else {
       sellWhichToken = Session.get('baseCurrency');
-      sellHowMuch = convertToWei(this.offerAmount(), sellWhichToken);
+      sellHowMuch = this.offerAmount();
       buyWhichToken = Session.get('quoteCurrency');
-      buyHowMuch = convertToWei(this.offerTotal(), buyWhichToken);
+      buyHowMuch = this.offerTotal();
     }
     Offers.newOffer(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, (error) => {
       if (error != null) {

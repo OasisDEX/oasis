@@ -5,6 +5,8 @@ import { Dapple, web3 } from 'meteor/makerotc:dapple';
 import Transactions from '/imports/api/transactions';
 import { formatError } from '/imports/utils/functions';
 
+import { convertToTokenPrecision } from '/imports/utils/conversion';
+
 import './newallowance.html';
 
 const APPROVE_GAS = 150000;
@@ -41,14 +43,15 @@ Template.newallowance.viewmodel({
     // XXX EIP20
     Dapple.getToken(this.templateInstance.data.token._id, (error, token) => {
       if (!error) {
-        token.approve(contractAddress, web3.toWei(this.value()), options, (txError, tx) => {
-          if (!txError) {
-            Transactions.add('allowance_'.concat(this.templateInstance.data.token._id), tx,
-              { value: this.value(), token: this.templateInstance.data.token._id });
-          } else {
-            this.lastError(formatError(txError));
-          }
-        });
+        token.approve(contractAddress,
+              convertToTokenPrecision(this.value(), this.templateInstance.data.token._id), options, (txError, tx) => {
+                if (!txError) {
+                  Transactions.add('allowance_'.concat(this.templateInstance.data.token._id), tx,
+                    { value: this.value(), token: this.templateInstance.data.token._id });
+                } else {
+                  this.lastError(formatError(txError));
+                }
+              });
       } else {
         this.lastError(error.toString());
       }

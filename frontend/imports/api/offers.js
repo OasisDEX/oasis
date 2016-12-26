@@ -8,6 +8,8 @@ import { $ } from 'meteor/jquery';
 import Transactions from '/imports/api/transactions';
 import { formatError } from '/imports/utils/functions';
 
+import { convertToTokenPrecision, convertTo18Precision } from '/imports/utils/conversion';
+
 const Offers = new Mongo.Collection(null);
 const Trades = new Mongo.Collection(null);
 
@@ -122,14 +124,17 @@ Offers.sync = () => {
   // Watch Trade events
   Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: Dapple.getFirstContractBlock() }, (error, trade) => {
     if (!error) {
+      const buyWhichToken = Dapple.getTokenByAddress(trade.args.buy_which_token);
+      const sellWhichToken = Dapple.getTokenByAddress(trade.args.sell_which_token);
+
       // Transform arguments
       const args = {
         buyWhichToken_address: trade.args.buy_which_token,
-        buyWhichToken: Dapple.getTokenByAddress(trade.args.buy_which_token),
+        buyWhichToken,
         sellWhichToken_address: trade.args.sell_which_token,
-        sellWhichToken: Dapple.getTokenByAddress(trade.args.sell_which_token),
-        buyHowMuch: trade.args.buy_how_much.toString(10),
-        sellHowMuch: trade.args.sell_how_much.toString(10),
+        sellWhichToken,
+        buyHowMuch: convertTo18Precision(trade.args.buy_how_much.toString(10), buyWhichToken),
+        sellHowMuch: convertTo18Precision(trade.args.sell_how_much.toString(10), sellWhichToken),
       };
       // Get block for timestamp
       web3.eth.getBlock(trade.blockNumber, (blockError, block) => {
@@ -170,8 +175,11 @@ Offers.syncOffer = (id, max) => {
 };
 
 Offers.updateOffer = (idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress, owner, status) => {
-  let sellHowMuchValue = sellHowMuch;
-  let buyHowMuchValue = buyHowMuch;
+  const sellToken = Dapple.getTokenByAddress(sellWhichTokenAddress);
+  const buyToken = Dapple.getTokenByAddress(buyWhichTokenAddress);
+
+  let sellHowMuchValue = convertTo18Precision(sellHowMuch, sellToken);
+  let buyHowMuchValue = convertTo18Precision(buyHowMuch, buyToken);
   if (!(sellHowMuchValue instanceof BigNumber)) {
     sellHowMuchValue = new BigNumber(sellHowMuchValue);
   }
@@ -184,9 +192,9 @@ Offers.updateOffer = (idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWh
     status,
     helper: status === Status.PENDING ? 'Your new order is being placed...' : '',
     buyWhichTokenAddress,
-    buyWhichToken: Dapple.getTokenByAddress(buyWhichTokenAddress),
+    buyWhichToken: buyToken,
     sellWhichTokenAddress,
-    sellWhichToken: Dapple.getTokenByAddress(sellWhichTokenAddress),
+    sellWhichToken: sellToken,
     buyHowMuch: buyHowMuchValue.toString(10),
     sellHowMuch: sellHowMuchValue.toString(10),
     ask_price: buyHowMuchValue.div(sellHowMuchValue).toNumber(),
@@ -200,21 +208,28 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
   const sellWhichTokenAddress = Dapple.getTokenAddress(sellWhichToken);
   const buyWhichTokenAddress = Dapple.getTokenAddress(buyWhichToken);
 
-  Dapple['maker-otc'].objects.otc.offer(sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress,
+  const sellHowMuchAbsolute = convertToTokenPrecision(sellHowMuch, sellWhichToken);
+  const buyHowMuchAbsolute = convertToTokenPrecision(buyHowMuch, buyWhichToken);
+
+  Dapple['maker-otc'].objects.otc.offer(sellHowMuchAbsolute, sellWhichTokenAddress,
+                                        buyHowMuchAbsolute, buyWhichTokenAddress,
     { gas: OFFER_GAS }, (error, tx) => {
       callback(error, tx);
       if (!error) {
-        Offers.updateOffer(tx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress,
+        Offers.updateOffer(tx, sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress,
                            web3.eth.defaultAccount, Status.PENDING);
         Transactions.add('offer', tx, { id: tx, status: Status.PENDING });
       }
     });
 };
 
-Offers.buyOffer = (_id, _quantity) => {
+Offers.buyOffer = (_id, _quantity, _token) => {
   const id = parseInt(_id, 10);
+
+  const quantityAbsolute = convertToTokenPrecision(_quantity, _token);
+
   Offers.update(_id, { $unset: { helper: '' } });
-  Dapple['maker-otc'].objects.otc.buy(id.toString(10), _quantity, { gas: BUY_GAS }, (error, tx) => {
+  Dapple['maker-otc'].objects.otc.buy(id.toString(10), quantityAbsolute, { gas: BUY_GAS }, (error, tx) => {
     if (!error) {
       Transactions.add('offer', tx, { id: _id, status: Status.BOUGHT });
       Offers.update(_id, { $set: {
