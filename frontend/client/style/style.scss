@@ -1269,11 +1269,14 @@ table {
         &:first-child, &:last-child {
           width: 10px!important;
         }
+        &.th-date {
+          max-width: 80px!important;
+        }
         &.th-recipient {
-          max-width: 120px!important;
+          max-width: 130px!important;
         }
         &.th-amount {
-          max-width: 120px!important;
+          max-width: 130px!important;
         }
       }
     }
@@ -1284,15 +1287,50 @@ table {
         &:first-child, &:last-child {
           width: 10px!important;
         }
+        &.timestamp {
+          max-width: 80px!important;
+        }
         &.transaction-hash {
-          max-width: 120px!important;
+          max-width: 130px!important;
+          padding-left: 10px;
         }
         &.transfer {
-          max-width: 120px!important;
+          max-width: 130px!important;
+          padding-left: 10px;
         }
       }
     }
   }   
+}
+
+.t-balance {
+  thead {
+    tr {
+      th {
+        &:first-child, &:last-child {
+          width: 10px!important;
+        }        
+        max-width: 155px!important;
+        &:nth-child(2) {
+          max-width: 70px!important;
+        }        
+      }
+    }
+  }
+  tbody {
+    width: 100%;
+    tr {
+      td {
+        &:first-child, &:last-child {
+          width: 10px!important;
+        }        
+        max-width: 155px!important;
+        &:nth-child(2) {
+          max-width: 70px!important;
+        }          
+      }
+    }
+  }
 }
 
 .hr-footer {
@@ -1371,6 +1409,12 @@ section.markets {
   h2 {
     padding-left: 30px;
   }
+}
+section.depositbalance {
+  padding-left: 0px;
+  h2 {
+    padding-left: 30px;
+  }  
 }
 #container-chart {
   @extend .select-market;
