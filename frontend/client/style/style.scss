@@ -830,12 +830,13 @@ table {
   input {
     border: none;
     text-align: right;
-    margin-left: 20px;
+    /*margin-left: 20px;*/
     font-weight: 700;
     font-size: 24px;
     color: #D0D0D0;
     /* width: 50%; */
     background: #fdfdfd;
+    width: calc (100% - 20px);
   }
 
   button {
