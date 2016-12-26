@@ -2,25 +2,29 @@
   <div class="history-section">
     <h2>HISTORY</h2>
     <div>
-      <table class="history">
+      <table class="t-scroll t-history">
         <thead>
           <tr>
-            <th>DATE</th>
+            <th></th>
+            <th class="th-date">DATE</th>
             {{#if equals historyType 'depositHistory'}}
-              <th>TYPE</th>
+              <th class="th-type">TYPE</th>
             {{else}}
-              <th>RECIPIENT</th>
+              <th class="th-recipient">RECIPIENT</th>
             {{/if}}
-            <th>AMOUNT</th>
+            <th class="th-amount">AMOUNT</th>
+            <th></th>
           </tr>
         </thead>
         {{#if equals historyType 'depositHistory'}}
           <tbody>
             {{#each history}}
               <tr>
+                <td></td>
                 <td class="timestamp">{{ timestampToString this.timestamp true true}}</td>
                 <td>{{ this.type }}</td>
                 <td class="{{ this.type }}">{{ formatToken this.amount this.token }} {{this.token}}</td>
+                <td></td>
               </tr>
             {{/each}}
           </tbody>
@@ -28,9 +32,11 @@
           <tbody>
             {{#each transferHistory}}
               <tr>
+                <td></td>
                 <td class="timestamp">{{ timestampToString this.timestamp true true}}</td>
-                <td><a target="_blank" href="{{ txHref (this.transactionHash) }}">{{ friendlyAddress(this.to) }}</a></td>
+                <td class="transaction-hash"><a target="_blank" href="{{ txHref (this.transactionHash) }}">{{ friendlyAddress(this.to) }}</a></td>
                 <td class="{{ this.type }} {{ currencyClass this.token }}">{{ formatToken this.amount this.token }} {{this.token}}</td>
+                <td></td>
               </tr>
             {{/each}}
           </tbody>

@@ -7,6 +7,7 @@ import './orderrow.js';
 
 Template.orders.helpers({
   /* eslint-disable no-underscore-dangle */
+  /* replaced by scrolling orders
   moreBtn: function showMoreBtn() {
     const type = Template.instance().data.type;
     if (type && type === 'lastTrades') {
@@ -16,6 +17,7 @@ Template.orders.helpers({
     const totalOffers = Blaze._globalHelpers.countOffers(type);
     return (this.orders.count() < totalOffers);
   },
+  */
   orderCount: function countOffersOrders() {
     const type = Template.instance().data.type;
     if (type && type === 'lastTrades') {

@@ -2,10 +2,12 @@
   <div class="balance">
     {{#let token=(findToken currency)}}
       <span class="span-currency-allowance {{currencyType}}">{{formatBalance token.balance '0,0.00[0]'}} {{currency}}</span>
-      <span class="span-total-balance-title">ALLOWANCE</span>
-      <span class="span-total-balance-amount">
-        {{formatBalance token.allowance}} {{currency}}
-      </span>
+      <div class="col-md-12">
+        <span class="span-total-balance-title">ALLOWANCE</span>
+        <span class="span-total-balance-amount">
+          {{formatBalance token.allowance}} {{currency}}
+        </span>
+      </div>
     {{/let}}
     <button class="btn btn-default btn-change-allowance" data-toggle="modal" data-target="#allowanceModal" {{b "click: preventDefault"}}>change allowance</button>
   </div>

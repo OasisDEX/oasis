@@ -14,6 +14,7 @@
             </th>
             <td class="token">
               {{formatBalance ETHBalance}}
+              <span class="span-buy-sell-currency">ETH</span>  
             </td>
           </tr>
           {{else}}
@@ -24,6 +25,7 @@
             <td class="token">
               {{#let token=(findToken 'W-ETH')}}
                 {{formatBalance token.balance}}
+              <span class="span-buy-sell-currency">W-ETH</span>                
               {{/let}}
             </td>
           </tr>
