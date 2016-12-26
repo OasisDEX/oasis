@@ -609,6 +609,7 @@ table {
       
       &[disabled] {
         border: none;
+        background: #F8F7F5;
       }
     }
 
@@ -1355,6 +1356,13 @@ section.markets {
     background: #F8F7F5;
     border-top: 1px #DCDDE0 solid;
     border-bottom: 1px #DCDDE0 solid;    
+    cursor: pointer;
+  }
+  tbody tr.selected {
+    background: #F8F7F5;
+    border-top: 1px #DCDDE0 solid;
+    border-bottom: 1px #DCDDE0 solid;    
+    cursor: pointer;    
   }
 }
 
