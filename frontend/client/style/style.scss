@@ -235,6 +235,7 @@ table {
         padding: 7px 28px 7px 29px;
         cursor: pointer;
         line-height: 19px;
+        text-align: center;
       }
       a:active,
       a.active {
@@ -262,6 +263,7 @@ table {
       border-radius: 0px;
       margin-left: -1px;
       margin-right: -1px;
+      width: 223px;
     }
 
     .last-tab {
@@ -285,8 +287,7 @@ table {
 
   ul:after {
     left: 100%;
-    margin-left: -28px;
-    width: 270px;
+    width: 250px;
   }
 }
 
@@ -837,7 +838,7 @@ table {
     color: #D0D0D0;
     /* width: 50%; */
     background: #fdfdfd;
-    width: calc (100% - 20px);
+    width: calc(100% - 20px);
   }
 
   button {
@@ -1259,6 +1260,39 @@ table {
           }
         }
     }    
+}
+
+.t-history {
+  thead {
+    tr {
+      th {
+        &:first-child, &:last-child {
+          width: 10px!important;
+        }
+        &.th-recipient {
+          max-width: 120px!important;
+        }
+        &.th-amount {
+          max-width: 120px!important;
+        }
+      }
+    }
+  } 
+  tbody {
+    tr {
+      td {
+        &:first-child, &:last-child {
+          width: 10px!important;
+        }
+        &.transaction-hash {
+          max-width: 120px!important;
+        }
+        &.transfer {
+          max-width: 120px!important;
+        }
+      }
+    }
+  }   
 }
 
 .hr-footer {
