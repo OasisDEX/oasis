@@ -8,7 +8,7 @@
       </div>
       <div class="col-md-6">
         <span class="select-market-container"> 
-            <select class="select-market-graph">
+            <select class="select-market-graph" {{b "value: currentChart, change: chartChange"}}>
                 <option value="DEPTH" selected>DEPTH</option>
                 <option value="VOLUME">VOLUME</option>
             </select>
@@ -16,10 +16,10 @@
         </span>
       </div>
     </div>
-    <div id="market-chart-depth" class="market-chart">
+    <div id="market-chart-depth" class="market-chart {{showDepth}}">
     </div>
-    <div id="market-chart-volume" class="market-chart">
-    </div>    
+    <div id="market-chart-volume" class="market-chart {{showVolume}}">
+    </div>
   </div>
 <script>
 $(function () {
