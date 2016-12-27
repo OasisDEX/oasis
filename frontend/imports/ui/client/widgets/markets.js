@@ -22,6 +22,9 @@ Template.markets.viewmodel({
   baseCurrency: '',
   quoteHelper: '',
   baseHelper: '',
+  selected(token) {
+    return token === this.baseCurrency() ? 'selected' : '';
+  },
   quoteChange() {
     // XXX EIP20
     Dapple.getToken(this.quoteCurrency(), (error, token) => {

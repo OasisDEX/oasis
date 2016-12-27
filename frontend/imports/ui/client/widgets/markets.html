@@ -27,7 +27,7 @@
         </thead>
         <tbody>
           {{#each baseCurrencies}}
-          <tr class="clickable" {{b "click: baseChange(this)"}}>
+          <tr class="clickable {{selected(this)}}" {{b "click: baseChange(this)"}}>
             <td></td>
             <td>{{this}}</td>
             <td>3.100</td>
