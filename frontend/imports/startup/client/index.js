@@ -1,4 +1,5 @@
 // Import to load these templates
+import '../../ui/client/widgets/depositbalance.js';
 import '../../ui/client/widgets/chart.js';
 import '../../ui/client/widgets/progressblock.js';
 import '../../ui/client/widgets/ethtokens.js';
