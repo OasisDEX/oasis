@@ -28,8 +28,10 @@ Template.depositbalance.viewmodel({
   },
   baseChange(e) {
     if (e.currentTarget.id === 'eth-balance') {
+      Session.set('tokenTemplate', 'ethtokens');
       this.selectedToken('ETH');
     } else if (e.currentTarget.id === 'gnt-balance') {
+      Session.set('tokenTemplate', 'gnttokens');
       this.selectedToken('GNT');
     }
   },
