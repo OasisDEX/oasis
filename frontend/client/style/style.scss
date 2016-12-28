@@ -232,7 +232,7 @@ table {
         min-width: 100%;
         height: 33px;
         display: block;
-        padding: 7px 28px 7px 29px;
+        padding: 7px 28px;
         cursor: pointer;
         line-height: 19px;
         text-align: center;
@@ -263,7 +263,7 @@ table {
       border-radius: 0px;
       margin-left: -1px;
       margin-right: -1px;
-      width: 223px;
+      width: 225px;
     }
 
     .last-tab {
@@ -1332,6 +1332,56 @@ table {
     }
   }
 }
+
+.t-deposit {
+  thead {
+    tr {
+      th {
+        &:first-child, &:last-child {
+          width: 10px!important;
+        }
+        &.th-date {
+          max-width: 80px!important;
+        }
+        &.th-type {
+          max-width: 80px!important;
+          padding-left: 10px;          
+        }
+        &.th-coin {
+          max-width: 70px!important;
+        }        
+        &.th-amount {
+          max-width: 130px!important;
+          padding-left: 10px;          
+        }
+      }
+    }
+  } 
+  tbody {
+    tr {
+      td {
+        &:first-child, &:last-child {
+          width: 10px!important;
+        }
+        &.timestamp {
+          max-width: 80px!important;
+        }
+        &.type {
+          max-width: 80px!important;
+          padding-left: 10px;
+        }
+        &.coin {
+          max-width: 70px!important;
+        }        
+        &.deposit {
+          max-width: 130px!important;
+          padding-left: 10px;
+        }
+      }
+    }
+  }   
+}
+
 
 .hr-footer {
   max-width: 980px;
