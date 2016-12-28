@@ -19,18 +19,18 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <tr class="clickable" {{b "click: baseChange()"}}>
             <td></td>
             <td>ETH</td>
-            <td>500.000 ETH</td>
-            <td>212.000 W-ETH</td>
+            <td>{{formatBalance ETHBalance}} ETH</td>
+            <td>{{wethBalance}} W-ETH</td>
             <td></td>
           </tr>
-          <tr>
+          <tr class="clickable" {{b "click: baseChange()"}}>
             <td></td>
             <td>GNT</td>
-            <td>12.000 GNT</td>
-            <td>11.000 W-GNT</td>
+            <td>{{formatBalance GNTBalance}} GNT</td>
+            <td>{{wgntBalance}} W-GNT</td>
             <td></td>
           </tr>                             
         </tbody>
