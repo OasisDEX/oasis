@@ -36,7 +36,11 @@
               <tr>
                 <td></td>
                 <td class="timestamp">{{ timestampToString this.timestamp true true}}</td>
-                <td class="transaction-hash"><a target="_blank" href="{{ txHref (this.transactionHash) }}">{{ friendlyAddress(this.to) }}</a></td>
+                {{#if equals historyType 'depositHistory'}}
+                  <td class="transaction-hash"><a target="_blank" href="{{ txHref (this.transactionHash) }}">{{ friendlyAddress(this.to) }}</a></td>
+                {{else}}
+                  <td class="transaction-hash-recipient"><a target="_blank" href="{{ txHref (this.transactionHash) }}">{{ friendlyAddress(this.to) }}</a></td>
+                {{/if}}                
                 <td class="coin">{{this.token}}</td>
                 <td class="{{ this.type }} {{ currencyClass this.token }}">{{ formatToken this.amount }}</td>
                 <td></td>

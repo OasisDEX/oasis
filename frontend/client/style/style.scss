@@ -1344,15 +1344,18 @@ table {
           max-width: 80px!important;
         }
         &.th-type {
-          max-width: 80px!important;
-          padding-left: 10px;          
+          max-width: 90px!important;                 
         }
+        &.th-recipient {
+          max-width: 110px!important;
+          padding-left: 10px;          
+        }        
         &.th-coin {
-          max-width: 70px!important;
+          max-width: 60px!important;
+          padding-left: 10px;           
         }        
         &.th-amount {
-          max-width: 130px!important;
-          padding-left: 10px;          
+          max-width: 100px!important;        
         }
       }
     }
@@ -1366,16 +1369,23 @@ table {
         &.timestamp {
           max-width: 80px!important;
         }
-        &.type {
-          max-width: 80px!important;
-          padding-left: 10px;
+        &.type,
+        &.transaction-hash {
+          max-width: 90px!important;
         }
+        &.transaction-hash-recipient {
+          max-width: 110px!important;
+          text-overflow: ellipsis;
+          overflow: hidden;   
+          padding-left: 10px;       
+        }            
         &.coin {
-          max-width: 70px!important;
-        }        
-        &.deposit {
-          max-width: 130px!important;
-          padding-left: 10px;
+          max-width: 60px!important;
+        }
+        &.transfer,    
+        &.deposit,
+        &.withdraw {
+          max-width: 100px!important;
         }
       }
     }
