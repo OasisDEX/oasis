@@ -6,10 +6,11 @@ import Tokens from '/imports/api/tokens';
 import './depositbalance.html';
 
 Template.depositbalance.viewmodel({
+  selectedToken: 'ETH',
   wethBalance() {
     try {
       const token = Tokens.findOne('W-ETH');
-      return web3.fromWei(token.balance).toString(10);
+      return token.balance;
     } catch (e) {
       return '0';
     }
@@ -17,15 +18,19 @@ Template.depositbalance.viewmodel({
   wgntBalance() {
     try {
       const token = Tokens.findOne('W-GNT');
-      return web3.fromWei(token.balance).toString(10);
+      return token.balance;
     } catch (e) {
       return '0';
     }
   },
   selected(token) {
-    return token === this.baseCurrency() ? 'selected' : '';
+    return token === this.selectedToken() ? 'selected' : '';
   },
-  baseChange() {
-    console.log('token');
+  baseChange(e) {
+    if (e.currentTarget.id === 'eth-balance') {
+      this.selectedToken('ETH');
+    } else if (e.currentTarget.id === 'gnt-balance') {
+      this.selectedToken('GNT');
+    }
   },
 });

@@ -4,7 +4,7 @@
       <div class="col-md-12">
         <h2>
           BALANCE
-        </h2>        
+        </h2>
       </div>
     </div>
     <div>
@@ -14,25 +14,25 @@
             <th></th>
             <th>COIN</th>
             <th>WALLET</th>
-            <th>DEPOSIT</th>                        
-            <th></th>        
+            <th>DEPOSIT</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr class="clickable" {{b "click: baseChange()"}}>
+          <tr id="eth-balance" class="clickable {{selected 'ETH'}}" {{b "click: baseChange"}}>
             <td></td>
             <td>ETH</td>
             <td>{{formatBalance ETHBalance}} ETH</td>
-            <td>{{wethBalance}} W-ETH</td>
+            <td>{{formatBalance wethBalance}} W-ETH</td>
             <td></td>
           </tr>
-          <tr class="clickable" {{b "click: baseChange()"}}>
+          <tr id="gnt-balance" class="clickable {{selected 'GNT'}}" {{b "click: baseChange"}}>
             <td></td>
             <td>GNT</td>
             <td>{{formatBalance GNTBalance}} GNT</td>
-            <td>{{wgntBalance}} W-GNT</td>
+            <td>{{formatBalance wgntBalance}} W-GNT</td>
             <td></td>
-          </tr>                             
+          </tr>
         </tbody>
         <tfoot>
         </tfoot>
