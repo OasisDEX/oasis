@@ -1265,6 +1265,8 @@ table {
 .t-history {
   thead {
     tr {
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;      
       th {
         &:first-child, &:last-child {
           width: 10px!important;
@@ -1348,11 +1350,17 @@ table {
         }
         &.th-recipient {
           max-width: 110px!important;
-          padding-left: 10px;          
+          padding-left: 10px;  
+          text-align: center;                  
         }        
         &.th-coin {
           max-width: 60px!important;
-          padding-left: 10px;           
+          padding-left: 10px;
+          &.transfer {
+            max-width: 60px!important;
+            text-align: center!important;
+            margin-left: 10px!important;
+          }           
         }        
         &.th-amount {
           max-width: 100px!important;        
@@ -1371,16 +1379,26 @@ table {
         }
         &.type,
         &.transaction-hash {
-          max-width: 90px!important;
+          max-width: 90px!important;            
         }
         &.transaction-hash-recipient {
           max-width: 110px!important;
           text-overflow: ellipsis;
           overflow: hidden;   
           padding-left: 10px;       
+          background: rgba(248, 247, 245, 0.3);
+          text-align: center;
+          border-radius: 8px;         
         }            
         &.coin {
           max-width: 60px!important;
+          &.deposit {
+            background: rgba(248, 247, 245, 0.3);
+            text-align: center;
+            border-radius: 8px;   
+            max-width: 60px!important;
+            margin-left: 10px;
+          }       
         }
         &.transfer,    
         &.deposit,
