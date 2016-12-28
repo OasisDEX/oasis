@@ -9,10 +9,10 @@
             <th class="th-date">DATE</th>
             {{#if equals historyType 'depositHistory'}}
               <th class="th-type">TYPE</th>
-            <th class="th-coin">COIN</th>              
             {{else}}
               <th class="th-recipient">RECIPIENT</th>
             {{/if}}
+            <th class="th-coin">COIN</th>
             <th class="th-amount">AMOUNT</th>
             <th></th>
           </tr>
@@ -24,8 +24,8 @@
                 <td></td>
                 <td class="timestamp">{{ timestampToString this.timestamp true true}}</td>
                 <td class="type">{{ this.type }}</td>
-                <td class="coin">COIN</td>                
-                <td class="{{ this.type }}">{{ formatToken this.amount }} {{this.token}}</td>
+                <td class="coin">{{this.token}}</td>
+                <td class="{{ this.type }}">{{ formatToken this.amount }}</td>
                 <td></td>
               </tr>
             {{/each}}
@@ -37,7 +37,8 @@
                 <td></td>
                 <td class="timestamp">{{ timestampToString this.timestamp true true}}</td>
                 <td class="transaction-hash"><a target="_blank" href="{{ txHref (this.transactionHash) }}">{{ friendlyAddress(this.to) }}</a></td>
-                <td class="{{ this.type }} {{ currencyClass this.token }}">{{ formatToken this.amount }} {{this.token}}</td>
+                <td class="coin">{{this.token}}</td>
+                <td class="{{ this.type }} {{ currencyClass this.token }}">{{ formatToken this.amount }}</td>
                 <td></td>
               </tr>
             {{/each}}
