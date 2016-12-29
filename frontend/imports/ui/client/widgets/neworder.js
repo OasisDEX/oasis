@@ -116,6 +116,22 @@ Template.neworder.viewmodel({
       return false;
     }
   },
+  quoteAllowance() {
+    const token = Tokens.findOne(Session.get('quoteCurrency'));
+    if (token) {
+      const allowance = new BigNumber(token.allowance);
+      return allowance;
+    }
+    return 0;
+  },
+  baseAllowance() {
+    const token = Tokens.findOne(Session.get('baseCurrency'));
+    if (token) {
+      const allowance = new BigNumber(token.allowance);
+      return allowance;
+    }
+    return 0;
+  },
   hasAllowance(currency) {
     try {
       const token = Tokens.findOne(currency);

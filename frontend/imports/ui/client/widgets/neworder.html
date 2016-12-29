@@ -9,6 +9,18 @@
         <tbody>
           <tr class="row-input-line">
             <th>
+              YOU HAVE
+            </th>
+            <td>
+              {{#if equals type 'buy'}}
+              <input type="number" class="input" disabled value={{formatBalance quoteAllowance}}> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
+              {{else}}
+              <input type="number" class="input" disabled value={{formatBalance baseAllowance}}> <span class="span-buy-sell-currency">{{baseCurrency}}</span>
+              {{/if}}
+            </td>
+          </tr>
+          <tr class="row-input-line">
+            <th>
               PRICE
             </th>
             <td>
