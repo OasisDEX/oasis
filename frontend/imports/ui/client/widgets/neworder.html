@@ -3,15 +3,15 @@
     <form id="neworder">
       <h2>
         {{title}} {{baseCurrency}}
-        {{> whatisthis section="new-order"}}
+        <!-- {{> whatisthis section="new-order"}} -->
       </h2>
       <table class="table-fixed">
         <tbody>
           <tr class="row-input-line">
-            <th>
-              YOU HAVE
+            <th class="available">
+              AVAILABLE
             </th>
-            <td>
+            <td class="available">
               {{#if equals type 'buy'}}
               <input type="number" class="input" disabled value={{formatBalance quoteAllowance}}> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
               {{else}}

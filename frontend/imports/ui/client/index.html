@@ -12,12 +12,12 @@
           {{> accountSelector }}
         </section>        
       </div>
-      <div class="row row-header">
+      <div class="row row-header row-messages">
         {{> messages}}
       </div>
       {{#if ready}}
         {{#if contractExists}}
-          <div class="row">
+          <div class="row row-tabs">
             {{> tabs }}        
           </div>
           <div class="tab-content">

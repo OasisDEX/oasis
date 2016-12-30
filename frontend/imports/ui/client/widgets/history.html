@@ -26,7 +26,7 @@
                 <td class="timestamp">{{ timestampToString this.timestamp true true}}</td>
                 <td class="type">{{ this.type }}</td>
                 <td class="coin">{{this.token}}</td>             
-                <td class="{{ this.type }}">{{ formatToken this.amount }}</td>
+                <td class="amount {{ this.type }}">{{ formatToken this.amount }}</td>
                 <td></td>
               </tr>
             {{/each}}

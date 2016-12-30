@@ -57,6 +57,8 @@ h2 {
   font-size: 24px;
   margin-top: 0;
   margin-bottom: 20px;
+  color: #222228;
+  letter-spacing: 3.99px;
 }
 
 table {
@@ -101,7 +103,13 @@ table {
 .row-header {
   margin-bottom: 20px;
 }
-
+.row-messages {
+  margin-bottom: 0px;
+}
+.row-tabs {
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
 .account-section {
   font-family: 'Montserrat', sans-serif;
   font-weight: 500;
@@ -109,7 +117,7 @@ table {
   padding-right: 15px;
 
   .select-change-allowance {
-    border: 1px solid #D3D5DC;
+    border: 1px solid rgba(211, 213, 220, 0.68);
     border-radius: 100px;
     font-size: 10px;
     background-color: rgba(0,0,0,0.0);
@@ -139,6 +147,8 @@ table {
     z-index: 1;
     position: relative;
     cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
   }
 
   .link-contract-address {
@@ -146,6 +156,10 @@ table {
     margin-right: 11px;
     padding: 13px 0px 13px 17px;
     display: inline-block;
+    opacity: 0.68;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    color: #D0D0D0;
   }
 }
 
@@ -172,10 +186,19 @@ table {
   .network-type {
     font-weight: 700;
     margin-right: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    color: #4F5362;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
   }
 
   .network-status {
     opacity: 0.8;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    color: #4F5362;
+    letter-spacing: 1.3px;
   }
 
   .circle {
@@ -184,7 +207,7 @@ table {
     border-radius: 20px;
     display: inline-block;
     margin-right: 5px;
-    vertical-align: top;
+    vertical-align: sub;
   }
 
   .green-circle {
@@ -203,20 +226,17 @@ table {
   }
 
   .clock-image {
-    vertical-align: top;
+    vertical-align: sub;
   }
 }
 
 .tabs {
-  width: 450px;
+  width: 444px;
   margin: 0 auto;
-  margin-bottom: 20px;
-  min-height: 36px;
+  min-height: 38px;
   position: relative;
-
   ul.nav-tabs {
     border-bottom: none;
-
     li {
       border: 1px solid #C4C6CC;
       font-family: 'Montserrat', sans-serif;
@@ -228,14 +248,16 @@ table {
       padding: 0;
 
       a {
-        color: #A3A5AB;
+        color: #4F5362;
         min-width: 100%;
-        height: 33px;
+        height: 38px;
         display: block;
-        padding: 7px 28px 7px 27px;
+        padding: 7px;
         cursor: pointer;
-        line-height: 19px;
+        line-height: 24px;
         text-align: center;
+        font-size: 12px;
+        letter-spacing: 1px;
       }
       a:active,
       a.active {
@@ -256,19 +278,19 @@ table {
 
     .first-tab {
       border-radius: 100px 0 0 100px;
+      width: 124px;
     }
 
     .middle-tab {
       background-color: rgba(0,0,0,0.0);
       border-radius: 0px;
-      margin-left: -1px;
-      margin-right: -1px;
-      width: 225px;
+      width: 196px;
     }
 
     .last-tab {
       background-color: rgba(0,0,0,0.0);
       border-radius: 0px 100px 100px 0px;
+      width: 124px;
     }
   }
 
@@ -277,7 +299,7 @@ table {
     content: "";
     position: absolute;
     border-top: 1px solid #C4C6CC;
-    top: 17px;
+    top: 50%;
   }
 
   ul:before {
@@ -298,11 +320,10 @@ table {
 
 .div-message {
   background: rgba(215,215,215,0.05);
-  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15);
+  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.15);
   border-radius: 3px;
   width: 442px;
-  padding: 10px 25px;
-
+  padding: 8px 24px;
   p {
     opacity: 0.69;
     font-family: 'Montserrat', sans-serif;
@@ -310,11 +331,13 @@ table {
     font-size: 14px;
     color: #4F5362;
     letter-spacing: 0.58px;
-
+    margin-bottom: 0px;
+    line-height: 18px;
     .attention {
-      font-weight: 700;
+      font-weight: bold;
       font-size: 13px;
       letter-spacing: 0.54px;
+      margin-right: 15px;
     }
 
     .warning {
@@ -460,8 +483,8 @@ table {
 
 .order-section {
   opacity: 0.89;
-  background: #FEFEFE;
-  border: 1px solid #EFF1F3;
+  background: #FCFCFB;
+  border: 1px solid #D0D0D0;
   box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.13);
   border-radius: 4px;
   width: 442px;
@@ -509,6 +532,8 @@ table {
 
     tr {
       background: #F8F7F5;
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
     }
   }
 
@@ -518,8 +543,8 @@ table {
 
     &.clickable {
       cursor: pointer;
-      border-top: 1px #ffffff solid;
-      border-bottom: 1px #ffffff solid;      
+      border-top: 1px transparent solid;
+      border-bottom: 1px transparent solid;      
       &:hover {
         border-bottom: 1px #DCDDE0 solid;
         border-top: 1px #DCDDE0 solid;
@@ -594,8 +619,9 @@ table {
       opacity: 0.68;
       font-size: 15px;
       font-weight: 500;
+      font-family: 'Montserrat', sans-serif;
       &:first-of-type {
-        color: #68686C;
+        color: #222228;
       }
     }   
     input {
@@ -607,10 +633,10 @@ table {
       text-align: right;
       padding-right: 10px;
       max-width: 170px;
-      
+      background: none;      
       &[disabled] {
         border: none;
-        background: #F8F7F5;
+        background: none;
       }
     }
 
@@ -620,11 +646,20 @@ table {
       margin: 0;
     }
 
-    tr.row-input-line {
+    tr.row-input-line {      
       td,
       th {
         border-bottom: 1px #CFD8DC solid;
-        padding-top: 10px;
+        padding-top: 10px;      
+        &.available {
+          border: none;
+          input {
+          opacity: 0.68;
+          font-family: 'Montserrat', sans-serif;
+          font-size: 17px;
+          color: #222228;            
+          }
+        }          
       }
       td:last-child {
         text-align: right;
@@ -659,6 +694,7 @@ table {
       color: #D0D0D0;
       font-weight: 500;
       margin: 0px;
+      display: none;
     }
 
     .row-height {
@@ -869,17 +905,17 @@ table {
 .question-circle {
   border-radius: 50%;
   font-size: 9px;
-  border: 1px solid #CFD8DC;
-  background-color: #FFFFFF;
-
+  border: 0.8px solid #CFD8DC;
+  background-color: #F8F7F5;
   text-align: center;
   width: 14px;
   height: 14px;
   /* display: inline-block; */
   color: #848FA5;
-  letter-spacing: normal;
   line-height: 12px;
   float: right;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: normal;
 }
 
 .question-circle-spacing {
@@ -1206,12 +1242,11 @@ table {
         }        
     }
     tbody {
-        width: calc(100% - 30px);
+        width: 100%;
         height: 155px;
         overflow-y: auto;
         overflow-x: hidden;
         display: block;
-        margin-top: 10px;
         tr {
           height: 30px;
           width: 100%;
@@ -1284,6 +1319,7 @@ table {
     }
   } 
   tbody {
+    width: 100%;    
     tr {
       td {
         &:first-child, &:last-child {
@@ -1360,6 +1396,7 @@ table {
             max-width: 60px!important;
             text-align: center!important;
             margin-left: 10px!important;
+            padding-left: 0px;
           }           
         }        
         &.th-amount {
@@ -1369,6 +1406,7 @@ table {
     }
   } 
   tbody {
+    width: 100%;
     tr {
       td {
         &:first-child, &:last-child {
@@ -1402,7 +1440,8 @@ table {
         }
         &.transfer,    
         &.deposit,
-        &.withdraw {
+        &.withdraw,
+        &.amount {
           max-width: 100px!important;
         }
       }
@@ -1410,13 +1449,61 @@ table {
   }   
 }
 
+.t-markets {
+  @extend .t-scroll;
+  thead {
+    tr {
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;      
+      th {
+        &:first-child {
+          width: 20px!important;
+        }
+        &.th-coin {
+          max-width: 100px!important;
+        }
+        &.th-price {
+          max-width: 130px!important;
+        }
+        &.th-volume {
+          max-width: 130px!important;
+        }
+        &:last-child {
+          width: 40px!important;
+        }        
+      }
+    }
+  } 
+  tbody {
+    width: 100%;    
+    tr {
+      td {
+        &:first-child {
+          width: 20px!important;
+        }
+        &.td-coin {
+          max-width: 100px!important;
+        }
+        &.td-price {
+          max-width: 130px!important;
+        }
+        &.td-volume {
+          max-width: 130px!important;
+        }
+        &:last-child {
+          width: 40px!important;
+        }          
+      }
+    }
+  }     
+}
 
 .hr-footer {
   max-width: 980px;
   margin: 50px auto 0px auto;
 }
 .tab-content {
-  margin-top: 40px;
+  margin-top: 0px;
 }
 
 .market-chart {
@@ -1438,6 +1525,42 @@ table {
   }
   .highcharts-axis.highcharts-xaxis {
       display: none;
+  }
+  .highcharts-tooltip {
+      white-space:normal !important;
+      width: 120px;
+      height: 75px;
+      border-radius: 4px;
+      padding: 6px 9px;      
+  }
+  .row-tooltip {
+    padding-left: 15px;
+    padding-right: 15px;    
+  }
+  .col-tooltip  {
+    height: 18px;   
+    border-bottom: 1px #F7F8F9 solid;
+    padding: 0px!important;
+  }
+  .tooltip-left {
+    text-align: left;
+    float: left;
+    padding-top: 6px;
+    padding-bottom: 6px;    
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    color: #4A4A4A;
+    line-height: 6px;
+  }
+  .tooltip-right {
+    text-align: right;
+    float: right;   
+    padding-top: 6px;   
+    padding-bottom: 6px;       
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    color: #4A4A4A;  
+    line-height: 6px;      
   }
 }
 
@@ -1462,7 +1585,7 @@ table {
     display: block;
     padding: 0px 17px 0px 10px;
     float: right;
-    margin-right: 25px;
+    margin-right: 35px;
     transform: translateY(-6px);    
     .select-market-graph {
       -moz-appearance: none;
@@ -1515,7 +1638,7 @@ section.depositbalance {
   }
   tbody tr.selected {
     background: #F8F7F5;
-    border-top: 1px #DCDDE0 solid;
+    border-top: 1px transparent solid;
     border-bottom: 1px #DCDDE0 solid;    
     cursor: pointer;    
   }
@@ -1528,6 +1651,12 @@ section.depositbalance {
 }
 .progress {
   margin-top: 20px;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
 }
 /* MODAL RESET */
 .modal-backdrop {
@@ -1596,6 +1725,13 @@ section.depositbalance {
     height: 50px;
     line-height: 50px;
     border-bottom: 1px rgba(207, 216, 220, 0.15) solid;
+    span.base-currency {
+      line-height: 15px;
+      margin-top: 13px;      
+    }
+    span.quote-currency {
+      line-height: 15px;
+    }
   }
   input {
     font-family: 'Roboto';

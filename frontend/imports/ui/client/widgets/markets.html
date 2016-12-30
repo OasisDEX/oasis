@@ -15,13 +15,13 @@
       </div>
     </div>
     <div>
-      <table class="t-scroll">
+      <table class="t-markets">
         <thead>
           <tr>
             <th></th>
-            <th>COIN</th>
-            <th>PRICE</th>
-            <th>VOLUME</th>                        
+            <th class="th-coin">COIN</th>
+            <th class="th-price">PRICE</th>
+            <th class="th-volume">VOLUME</th>                        
             <th></th>        
           </tr>
         </thead>
@@ -29,11 +29,11 @@
           {{#each baseCurrencies}}
           <tr class="clickable {{selected(this)}}" {{b "click: baseChange(this)"}}>
             <td></td>
-            <td>{{this}}</td>
-            <td>3.100</td>
-            <td>917.000</td>
+            <td class="td-coin">{{this}}</td>
+            <td class="td-price">3.100</td>
+            <td class="td-volume">917.000</td>
             <td></td>
-          </tr>
+          </tr>        
           {{/each}}
         </tbody>
         <tfoot>
