@@ -164,15 +164,15 @@
               </tr>
               <tr>
                 <th>Price</th>
-                <td><span class="value price">{{formatBalance (toWei offerPrice)}}</span> <span class="base-currency">{{baseCurrency}}</span></td><!-- {{quoteCurrency}}/  -->
+                <td><span class="value price">{{formatBalance (toWei offerPrice)}}</span> <span class="base-currency">{{baseCurrency}} /</span> <span class="quote-currency">{{quoteCurrency}}</span></td>
               </tr>
               <tr>
                 <th>Volume</th>
-                <td><span class="value">{{formatBalance (toWei offerAmount)}}</span> <span class="base-currency">{{baseCurrency}}</span></td>
+                <td><span class="value">{{formatBalance (toWei offerAmount)}}</span> <span class="base-currency">{{baseCurrency}} /</span></td>
               </tr>
               <tr>
                 <th>Total</th>
-                <td><span class="value">{{formatBalance (toWei offerTotal)}}</span> <span class="quote-currency">{{quoteCurrency}}</span></td>
+                <td><span class="value">{{formatBalance (toWei offerTotal)}}</span> <span class="base-currency">{{baseCurrency}} /</span></td>
               </tr>
             </tbody>
           </table>

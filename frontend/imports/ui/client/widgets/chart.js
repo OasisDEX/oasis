@@ -30,7 +30,7 @@ Template.chart.helpers({
         chart: {
           type: 'area',
           height: 215,
-          width: 400,
+          width: 380,
         },
         title: {
           text: '',
@@ -45,13 +45,25 @@ Template.chart.helpers({
             enabled: false,
           },
         },
-
+        tooltip: {
+          valueDecimals: 2,
+          valuePrefix: 'PRICE ',
+          valueSuffix: '',
+          backgroundColor: '#ffffff',
+          borderWidth: 1,
+          borderColor: '#D8D8D8',
+          shared: true,
+          useHTML: true,
+          headerFormat: '',
+          pointFormat: '<div class="row row-tooltip"><div class="col-md-6 col-tooltip"><span class="tooltip-left">PRICE</span></div><div class="col-md-6 col-tooltip"><span class="tooltip-right">0,93001</span></div><div class="col-md-6 col-tooltip"><span class="tooltip-left">SUM(ETH)</span></div><div class="col-md-6 col-tooltip"><span class="tooltip-right">2357</span></div><div class="col-md-6 col-tooltip"><span class="tooltip-left">SUM(MKR)</span></div><div class="col-md-6 col-tooltip"><span class="tooltip-right">2675</span></div></div>',
+          footerFormat: '',
+        },
         yAxis: {
           title: {
             text: '',
           },
-          minorGridLineWidth: 0,
-          gridLineWidth: 0,
+          minorGridLineWidth: 1,
+          gridLineWidth: 1,
           alternateGridColor: null,
           plotBands: [{ // Light air
             from: 0,
@@ -125,11 +137,6 @@ Template.chart.helpers({
               },
             },
           }],
-        },
-        tooltip: {
-          valueDecimals: 2,
-          valuePrefix: 'PRICE ',
-          valueSuffix: '',
         },
         plotOptions: {
           spline: {
@@ -160,7 +167,7 @@ Template.chart.helpers({
           color: '#EF5350',
           fillOpacity: 0.1,
           name: 'SUM(MKR)',
-          data: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0, 1200, 2100, 3600, 4700, 5900, 6100, 7500, 8900, 9300, 10900, 12100, 14000, 12600, 14500, 15000],
+          data: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0, 1200, 2100, 3600, 4700, 5900, 6100, 7500, 8900, 9300, 10900, 12100, 14000, 12600, 14500, 15000, 13456],
         }],
         navigation: {
           menuItemStyle: {
@@ -180,7 +187,7 @@ Template.chart.helpers({
         chart: {
           type: 'area',
           height: 215,
-          width: 400,
+          width: 380,
         },
         title: {
           text: '',
@@ -195,13 +202,25 @@ Template.chart.helpers({
             enabled: false,
           },
         },
-
+        tooltip: {
+          valueDecimals: 2,
+          valuePrefix: 'PRICE ',
+          valueSuffix: '',
+          backgroundColor: '#ffffff',
+          borderWidth: 1,
+          borderColor: '#D8D8D8',  
+          shared: true,
+          useHTML: true,
+          headerFormat: '',
+          pointFormat: '<div class="row row-tooltip"><div class="col-md-6 col-tooltip"><span class="tooltip-left">PRICE</span></div><div class="col-md-6 col-tooltip"><span class="tooltip-right">0,93001</span></div><div class="col-md-6 col-tooltip"><span class="tooltip-left">SUM(ETH)</span></div><div class="col-md-6 col-tooltip"><span class="tooltip-right">2357</span></div><div class="col-md-6 col-tooltip"><span class="tooltip-left">SUM(MKR)</span></div><div class="col-md-6 col-tooltip"><span class="tooltip-right">2675</span></div></div>',
+          footerFormat: '',
+        },
         yAxis: {
           title: {
             text: '',
           },
-          minorGridLineWidth: 0,
-          gridLineWidth: 0,
+          minorGridLineWidth: 1,
+          gridLineWidth: 1,
           alternateGridColor: null,
           plotBands: [{ // Light air
             from: 0,
@@ -275,11 +294,6 @@ Template.chart.helpers({
               },
             },
           }],
-        },
-        tooltip: {
-          valueDecimals: 2,
-          valuePrefix: 'PRICE ',
-          valueSuffix: '',
         },
         plotOptions: {
           spline: {
