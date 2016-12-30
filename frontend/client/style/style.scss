@@ -807,18 +807,27 @@ table {
 
 .deposit-section {
   padding-right: 30px;
-
+  h2 {
+    margin-bottom: 40px;
+  }
   th {
     opacity: 0.68;
     font-family: 'Montserrat', sans-serif;
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 500;
-    color: #68686C;  /* #222228 */
+    color: #222228;
+  }
+  tbody {
+    tr.row-input-line {
+    }
+    tr.tr-empty {
+      height: 15px;      
+    }
   }
   tfoot {
     tr {
       td {
-        padding-top: 55px;
+        padding-top: 50px;
         padding-bottom: 0px;
       }
     }
@@ -829,6 +838,14 @@ table {
     font-weight: 500;
     color: #68686C; /* #4F5362; */
     text-align: right;
+    .span-deposit-withdraw-currency {
+      opacity: 0.67;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 10px;
+      color: #222228;
+      letter-spacing: 1px;      
+    }     
   }
 
   td.deposit{
@@ -840,16 +857,20 @@ table {
   }
 
   td.token {
-    opacity: 0.6;
+    opacity: 0.68;
+    font-family: 'Roboto';
+    font-weight: 500;
+    font-size: 19px;
+    color: #222228;    
     .span-buy-sell-currency {
       font-weight: 700;
       font-size: 10px;
-      color: #68686C; /* #222228; */
+      color: #222228;
       letter-spacing: 1px;
       display: inline-block;
       text-align: left;
       margin-left: 2px;
-    }
+    }   
   }
 
   th,
@@ -869,12 +890,13 @@ table {
     border: none;
     text-align: right;
     /*margin-left: 20px;*/
-    font-weight: 700;
-    font-size: 24px;
+    font-family: 'Roboto';
+    font-weight: 500;
+    font-size: 22px;
     color: #D0D0D0;
     /* width: 50%; */
     background: #fdfdfd;
-    width: calc(100% - 20px);
+    width: calc(100% - 50px);
   }
 
   button {
@@ -911,11 +933,14 @@ table {
   width: 14px;
   height: 14px;
   /* display: inline-block; */
-  color: #848FA5;
+  color: #848FA5!important;
   line-height: 12px;
   float: right;
   font-family: 'Montserrat', sans-serif;
   letter-spacing: normal;
+  a {
+    color: #848FA5!important;
+  }
 }
 
 .question-circle-spacing {

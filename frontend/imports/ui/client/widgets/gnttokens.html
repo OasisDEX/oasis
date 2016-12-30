@@ -17,6 +17,7 @@
               <span class="span-buy-sell-currency">GNT</span>                
             </td>
           </tr>
+          <tr class="tr-empty"></tr>
           {{else}}
           <tr class="row-input-line">
             <th>
@@ -35,7 +36,7 @@
               AMOUNT
             </th>
             <td>
-              <input type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}>
+              <input type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}> <span class="span-deposit-withdraw-currency">W-GNT</span>
             </td>
           </tr>
         </tbody>
