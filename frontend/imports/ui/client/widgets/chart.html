@@ -4,7 +4,7 @@
       <div class="col-md-6">
         <h2>
           CHART
-        </h2>        
+        </h2>
       </div>
       <div class="col-md-6">
         <span class="select-market-container"> 
@@ -16,7 +16,8 @@
         </span>
       </div>
     </div>
-    <div id="market-chart-depth" class="market-chart {{showDepth}}">
+    <div>
+      <canvas id="market-chart-depth" class="market-chart {{showDepth}}" width="380" height="215"></canvas>
         {{createDepthChart}}
     </div>
     <div id="market-chart-volume" class="market-chart {{showVolume}}">
