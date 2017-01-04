@@ -2,6 +2,9 @@ import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
 
 import Tokens from '/imports/api/tokens';
+import { Trades } from '/imports/api/offers';
+
+import { convertTo18Precision } from '/imports/utils/conversion';
 
 import './markets.html';
 
@@ -22,6 +25,44 @@ Template.markets.viewmodel({
   baseCurrency: '',
   quoteHelper: '',
   baseHelper: '',
+  price(token) {
+    const trade = Trades.findOne(
+      { $or: [
+        { buyWhichToken: token, sellWhichToken: this.quoteCurrency() },
+        { buyWhichToken: this.quoteCurrency(), sellWhichToken: token },
+      ] },
+      { sort: { timestamp: -1 } }
+    );
+
+    if (typeof trade === 'undefined') {
+      return 'N/A';
+    }
+
+    if (trade.buyWhichToken === this.quoteCurrency()) {
+      return new BigNumber(trade.buyHowMuch).div(new BigNumber(trade.sellHowMuch)).toNumber();
+    }
+    return new BigNumber(trade.sellHowMuch).div(new BigNumber(trade.buyHowMuch)).toNumber();
+  },
+  volume(token) {
+    let vol = new BigNumber(0);
+
+    const trades = Trades.find({ $or: [
+      { buyWhichToken: token, sellWhichToken: this.quoteCurrency() },
+      { buyWhichToken: this.quoteCurrency(), sellWhichToken: token },
+    ],
+      timestamp: { $gte: (Date.now() / 1000) - (60 * 60 * 24) },
+    });
+
+    trades.forEach((trade) => {
+      if (trade.buyWhichToken === this.quoteCurrency()) {
+        vol = vol.add(new BigNumber(trade.sellHowMuch));
+      } else {
+        vol = vol.add(new BigNumber(trade.buyHowMuch));
+      }
+    });
+
+    return vol.toNumber();
+  },
   selected(token) {
     return token === this.baseCurrency() ? 'selected' : '';
   },

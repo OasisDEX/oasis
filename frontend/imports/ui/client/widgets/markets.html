@@ -21,7 +21,7 @@
             <th></th>
             <th class="th-coin">COIN</th>
             <th class="th-price">PRICE</th>
-            <th class="th-volume">VOLUME</th>                        
+            <th class="th-volume">VOLUME (24hr)</th>                        
             <th></th>        
           </tr>
         </thead>
@@ -30,8 +30,8 @@
           <tr class="clickable {{selected(this)}}" {{b "click: baseChange(this)"}}>
             <td></td>
             <td class="td-coin">{{this}}</td>
-            <td class="td-price">3.100</td>
-            <td class="td-volume">917.000</td>
+            <td class="td-price">{{price this}}</td>
+            <td class="td-volume">{{formatBalance (volume this)}}</td>
             <td></td>
           </tr>        
           {{/each}}
