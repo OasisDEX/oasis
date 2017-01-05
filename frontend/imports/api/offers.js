@@ -122,29 +122,58 @@ Offers.sync = () => {
   });
 
   // Watch Trade events
-  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: Dapple.getFirstContractBlock() }, (error, trade) => {
+  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: Dapple.getFirstContractBlock() }).get((error, trades) => {
     if (!error) {
-      const buyWhichToken = Dapple.getTokenByAddress(trade.args.buy_which_token);
-      const sellWhichToken = Dapple.getTokenByAddress(trade.args.sell_which_token);
+      let trade = null;
+      let buyWhichToken = null;
+      let sellWhichToken = null;
+      let args = {};
+      const promises = [];
+      let block = null;
 
-      // Transform arguments
-      const args = {
-        buyWhichToken_address: trade.args.buy_which_token,
-        buyWhichToken,
-        sellWhichToken_address: trade.args.sell_which_token,
-        sellWhichToken,
-        buyHowMuch: convertTo18Precision(trade.args.buy_how_much.toString(10), buyWhichToken),
-        sellHowMuch: convertTo18Precision(trade.args.sell_how_much.toString(10), sellWhichToken),
-      };
-      // Get block for timestamp
-      web3.eth.getBlock(trade.blockNumber, (blockError, block) => {
-        if (!error) {
+      for (let i = 0; i < trades.length; i++) {
+        promises.push(Offers.getBlock(trades[i].blockNumber));
+      }
+
+      Promise.all(promises).then((resultProm) => {
+        for (let i = 0; i < trades.length; i++) {
+          trade = trades[i];
+          buyWhichToken = Dapple.getTokenByAddress(trade.args.buy_which_token);
+          sellWhichToken = Dapple.getTokenByAddress(trade.args.sell_which_token);
+
+          // Transform arguments
+          args = {
+            buyWhichToken_address: trade.args.buy_which_token,
+            buyWhichToken,
+            sellWhichToken_address: trade.args.sell_which_token,
+            sellWhichToken,
+            buyHowMuch: convertTo18Precision(trade.args.buy_how_much.toString(10), buyWhichToken),
+            sellHowMuch: convertTo18Precision(trade.args.sell_how_much.toString(10), sellWhichToken),
+          };
+
+          block = resultProm[i];
+
           Trades.upsert(trade.transactionHash, _.extend(block, trade, args));
+          Session.set('loadingTradeHistory', false);
         }
       });
     }
   });
 };
+
+Offers.getBlock = function getBlock(blockNumber) {
+  const p = new Promise((resolve, reject) => {
+    web3.eth.getBlock(blockNumber, (blockError, block) => {
+      if (!blockError) {
+        resolve(block);
+      } else {
+        reject(blockError);
+      }
+    });
+  });
+  return p;
+};
+
 
 /**
  * Syncs up a single offer

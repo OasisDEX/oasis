@@ -30,8 +30,20 @@
           <tr class="clickable {{selected(this)}}" {{b "click: baseChange(this)"}}>
             <td></td>
             <td class="td-coin">{{this}}</td>
-            <td class="td-price">{{price this}}</td>
-            <td class="td-volume">{{formatBalance (volume this)}}</td>
+            <td class="td-price">
+              {{#if loadingTradeHistory}}
+                Loading
+              {{else}}
+                {{price this}}
+              {{/if}}
+            </td>
+            <td class="td-volume">
+              {{#if loadingTradeHistory}}
+                Loading
+              {{else}}
+                {{formatBalance (volume this)}}
+              {{/if}}
+            </td>
             <td></td>
           </tr>        
           {{/each}}

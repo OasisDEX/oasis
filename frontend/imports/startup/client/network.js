@@ -135,6 +135,7 @@ function initSession() {
   Session.set('GNTWithdrawProgress', 0);
   Session.set('GNTWithdrawProgressMessage', '');
   Session.set('GNTWithdrawErrorMessage', '');
+  Session.set('loadingTradeHistory', true);
 }
 
 /**

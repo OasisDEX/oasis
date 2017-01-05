@@ -4,8 +4,6 @@ import { Template } from 'meteor/templating';
 import Tokens from '/imports/api/tokens';
 import { Trades } from '/imports/api/offers';
 
-import { convertTo18Precision } from '/imports/utils/conversion';
-
 import './markets.html';
 
 Template.markets.viewmodel({
@@ -25,6 +23,9 @@ Template.markets.viewmodel({
   baseCurrency: '',
   quoteHelper: '',
   baseHelper: '',
+  loadingTradeHistory() {
+    return Session.get('loadingTradeHistory');
+  },
   price(token) {
     const trade = Trades.findOne(
       { $or: [
