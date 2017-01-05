@@ -44,6 +44,12 @@ Template.offermodal.viewmodel({
   sellCurrency() {
     return this.type() === 'bid' ? Session.get('baseCurrency') : Session.get('quoteCurrency');
   },
+  quoteToken() {
+    return Tokens.findOne(Session.get('quoteCurrency'));
+  },
+  baseToken() {
+    return Tokens.findOne(Session.get('baseCurrency'));
+  },
   hasBalance() {
     try {
       const token = Tokens.findOne(this.sellCurrency());
@@ -254,7 +260,8 @@ Template.offermodal.viewmodel({
       }
     });
   },
-  showAllowanceModal() {
-    $('#allowanceModal').modal('show');
+  showAllowanceModal(token) {
+    console.log(token);
+    $(`#allowanceModal${token}`).modal('show');
   },
 });

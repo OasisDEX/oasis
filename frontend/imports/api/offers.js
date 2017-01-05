@@ -131,32 +131,36 @@ Offers.sync = () => {
       const promises = [];
       let block = null;
 
-      for (let i = 0; i < trades.length; i++) {
-        promises.push(Offers.getBlock(trades[i].blockNumber));
-      }
-
-      Promise.all(promises).then((resultProm) => {
+      if (trades.length > 0) {
         for (let i = 0; i < trades.length; i++) {
-          trade = trades[i];
-          buyWhichToken = Dapple.getTokenByAddress(trade.args.buy_which_token);
-          sellWhichToken = Dapple.getTokenByAddress(trade.args.sell_which_token);
-
-          // Transform arguments
-          args = {
-            buyWhichToken_address: trade.args.buy_which_token,
-            buyWhichToken,
-            sellWhichToken_address: trade.args.sell_which_token,
-            sellWhichToken,
-            buyHowMuch: convertTo18Precision(trade.args.buy_how_much.toString(10), buyWhichToken),
-            sellHowMuch: convertTo18Precision(trade.args.sell_how_much.toString(10), sellWhichToken),
-          };
-
-          block = resultProm[i];
-
-          Trades.upsert(trade.transactionHash, _.extend(block, trade, args));
-          Session.set('loadingTradeHistory', false);
+          promises.push(Offers.getBlock(trades[i].blockNumber));
         }
-      });
+
+        Promise.all(promises).then((resultProm) => {
+          for (let i = 0; i < trades.length; i++) {
+            trade = trades[i];
+            buyWhichToken = Dapple.getTokenByAddress(trade.args.buy_which_token);
+            sellWhichToken = Dapple.getTokenByAddress(trade.args.sell_which_token);
+
+            // Transform arguments
+            args = {
+              buyWhichToken_address: trade.args.buy_which_token,
+              buyWhichToken,
+              sellWhichToken_address: trade.args.sell_which_token,
+              sellWhichToken,
+              buyHowMuch: convertTo18Precision(trade.args.buy_how_much.toString(10), buyWhichToken),
+              sellHowMuch: convertTo18Precision(trade.args.sell_how_much.toString(10), sellWhichToken),
+            };
+
+            block = resultProm[i];
+
+            Trades.upsert(trade.transactionHash, _.extend(block, trade, args));
+            Session.set('loadingTradeHistory', false);
+          }
+        });
+      } else {
+        Session.set('loadingTradeHistory', false);
+      }
     }
   });
 };

@@ -1,43 +1,54 @@
 <template name="newallowance">
-  <form>
-    <div>
-      <table>
-        <tbody>
-          <tr>
-            <th>
-              <!--{{token._id}}-->CURRENT
-            </th>
-            <td>
-              <input class="input" type="number" min="0" step="any" placeholder={{fromWei token.allowance}} {{b "value: value"}}><span class="allowance-currency">{{token._id}}</span>
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          {{#unless equals lastError ''}}
-            <tr>
-              <td colspan="2">
-                {{lastError}}
-              </td>
-            </tr>
-          {{/unless}}
-          {{#each pending}}
-          <tr>
-            <td colspan="2">
-              Pending: {{this.value}} {{this.token}}
-            </td>
-          </tr>
-          {{/each}}
-          <!--
-            <tr>
-              <td colspan="2">
-                <button class="btn btn-default" {{b "enable: canChange, click: change"}}>
-                  Change {{token._id}} allowance
-                </button>
-              </td>
-            </tr>
-          -->
-        </tfoot>
-      </table>
+  <div class="modal fade" id="allowanceModal{{token._id}}" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content modal-order">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">
+            Allowance {{token._id}}
+          </h4>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>
+                      CURRENT
+                    </th>
+                    <td>
+                      <input class="input" type="number" min="0" step="any" placeholder={{fromWei token.allowance}} {{b "value: value"}}><span class="allowance-currency">{{token._id}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  {{#unless equals lastError ''}}
+                    <tr>
+                      <td colspan="2">
+                        {{lastError}}
+                      </td>
+                    </tr>
+                  {{/unless}}
+                  {{#each pending}}
+                  <tr>
+                    <td colspan="2">
+                      Pending: {{this.value}} {{this.token}}
+                    </td>
+                  </tr>
+                  {{/each}}
+                </tfoot>
+              </table>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default btn-submit-order btn-submit-order btn-placement-right btn-place-order" {{b "enable: canChange, click: change"}}>Change</button>
+          <button type="button" class="btn btn-default btn-submit-order btn-placement-right btn-cancel-order" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
     </div>
-  </form>
+  </div>
+  <!--
+  -->
 </template>

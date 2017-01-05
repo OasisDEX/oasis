@@ -116,19 +116,31 @@ Template.neworder.viewmodel({
       return false;
     }
   },
+  quoteAvailable() {
+    const token = Tokens.findOne(Session.get('quoteCurrency'));
+    if (token) {
+      return token.balance;
+    }
+    return 0;
+  },
+  baseAvailable() {
+    const token = Tokens.findOne(Session.get('baseCurrency'));
+    if (token) {
+      return token.balance;
+    }
+    return 0;
+  },
   quoteAllowance() {
     const token = Tokens.findOne(Session.get('quoteCurrency'));
     if (token) {
-      const allowance = new BigNumber(token.allowance);
-      return allowance;
+      return token.allowance;
     }
     return 0;
   },
   baseAllowance() {
     const token = Tokens.findOne(Session.get('baseCurrency'));
     if (token) {
-      const allowance = new BigNumber(token.allowance);
-      return allowance;
+      return token.allowance;
     }
     return 0;
   },
@@ -210,7 +222,7 @@ Template.neworder.viewmodel({
   showDepositTab() {
     $('#deposit').tab('show');
   },
-  showAllowanceModal() {
-    $('#allowanceModal').modal('show');
+  showAllowanceModal(token) {
+    $(`#allowanceModal${token}`).modal('show');
   },
 });

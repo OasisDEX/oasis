@@ -1,5 +1,6 @@
 import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
+import { BigNumber } from 'meteor/ethereum:web3';
 
 import Tokens from '/imports/api/tokens';
 import { Trades } from '/imports/api/offers';
