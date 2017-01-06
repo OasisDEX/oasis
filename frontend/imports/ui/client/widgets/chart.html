@@ -18,10 +18,11 @@
     </div>
     <div>
       <canvas id="market-chart-depth" class="market-chart {{showDepth}}" width="380" height="215"></canvas>
-        {{createDepthChart}}
+      {{createDepthChart}}
     </div>
-    <div id="market-chart-volume" class="market-chart {{showVolume}}">
-        {{createVolumeChart}}
+    <div>
+      <canvas id="market-chart-volume" class="market-chart {{showVolume}}" width="380" height="215"></canvas>
+      {{createVolumeChart}}
     </div>
   </div>
 </template>
