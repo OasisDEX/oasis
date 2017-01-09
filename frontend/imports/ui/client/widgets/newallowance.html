@@ -5,17 +5,38 @@
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title">
-            Allowance {{token._id}}
+            My Allowance
           </h4>
         </div>
         <div class="modal-body">
+          <ul>
+            <li>You need to first grant access to withdraw from your personal account by setting the allowance</li>
+            <li>Specify the maximum that can be withdrawn. It will decrease each time you place or fill and order</li>
+            <li>Disable it by setting the allowance to 0</li>
+          </ul>
           <form>
             <div>
               <table>
                 <tbody>
                   <tr>
                     <th>
-                      CURRENT
+                      Allowance
+                    </th>
+                    <td>
+                      {{fromWei token.allowance}} <span class="allowance-currency">{{token._id}}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      Available
+                    </th>
+                    <td>
+                      {{fromWei token.balance}} <span class="allowance-currency">{{token._id}}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      Set
                     </th>
                     <td>
                       <input class="input" type="number" min="0" step="any" placeholder={{fromWei token.allowance}} {{b "value: value"}}><span class="allowance-currency">{{token._id}}</span>

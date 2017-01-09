@@ -9,18 +9,6 @@
         <tbody>
           <tr class="row-input-line">
             <th class="available">
-              AVAILABLE
-            </th>
-            <td class="available">
-              {{#if equals type 'buy'}}
-              <input type="text" class="input" disabled value={{formatBalance quoteAvailable}}> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
-              {{else}}
-              <input type="text" class="input" disabled value={{formatBalance baseAvailable}}> <span class="span-buy-sell-currency">{{baseCurrency}}</span>
-              {{/if}}
-            </td>
-          </tr>
-          <tr class="row-input-line">
-            <th class="available">
               ALLOWANCE
             </th>
             <td class="available">
@@ -28,6 +16,18 @@
               <input type="text" class="input" disabled value={{formatBalance quoteAllowance}}> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
               {{else}}
               <input type="text" class="input" disabled value={{formatBalance baseAllowance}}> <span class="span-buy-sell-currency">{{baseCurrency}}</span>
+              {{/if}}
+            </td>
+          </tr>
+          <tr class="row-input-line">
+            <th class="available">
+              AVAILABLE
+            </th>
+            <td class="available">
+              {{#if equals type 'buy'}}
+              <input type="text" class="input" disabled value={{formatBalance quoteAvailable}}> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
+              {{else}}
+              <input type="text" class="input" disabled value={{formatBalance baseAvailable}}> <span class="span-buy-sell-currency">{{baseCurrency}}</span>
               {{/if}}
             </td>
           </tr>

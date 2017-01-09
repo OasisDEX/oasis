@@ -16,12 +16,22 @@
         </span>
       </div>
     </div>
-    <div>
-      <canvas id="market-chart-depth" class="market-chart {{showDepth}}" width="380" height="215"></canvas>
+    <div class={{showDepth}}>
+      {{#if outOfSync}}
+        <div class="loading-depth-chart">(out of sync, waiting for synchronization)</div>
+      {{else}}
+        {{#if loading}}
+          <div class="loading-depth-chart">(loading offers {{loadingProgress}}%)</div>
+        {{/if}}
+      {{/if}}
+      <canvas id="market-chart-depth" class="market-chart" width="380" height="215"></canvas>
       {{createDepthChart}}
     </div>
-    <div>
-      <canvas id="market-chart-volume" class="market-chart {{showVolume}}" width="380" height="215"></canvas>
+    <div class={{showVolume}}>
+      {{#if loadingTradeHistory}}
+        <div class="loading-volume-chart">Loading History...</div>
+      {{/if}}
+      <canvas id="market-chart-volume" class="market-chart" width="380" height="215"></canvas>
       {{createVolumeChart}}
     </div>
   </div>

@@ -15,6 +15,22 @@
             <table>
               <tbody>
                 <tr class="row-input-line">
+                  <th>ALLOWANCE</th>
+                  {{#if equals offer.type 'bid'}}
+                    <td>{{formatBalance baseToken.allowance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
+                  {{else}}
+                    <td>{{formatBalance quoteToken.allowance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
+                  {{/if}}
+                </tr>
+                <tr class="row-input-line">
+                  <th>AVAILABLE</th>
+                  {{#if equals offer.type 'bid'}}
+                    <td>{{formatBalance baseToken.balance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
+                  {{else}}
+                    <td>{{formatBalance quoteToken.balance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
+                  {{/if}}
+                </tr>
+                <tr class="row-input-line">
                   <th>OWNER</th>
                   <td><span class="span-owner">{{offer.owner}} {{#if equals offer.owner address}}(<span class="text-success">you</span>){{/if}}</span></td>
                 </tr>
@@ -137,10 +153,22 @@
         <div class="modal-body">
           <table>
             <tbody>
-              <!--<tr>
-                <th>Type</th>
-                <td>{{offerType}}</td>
-              </tr>-->
+              <tr class="row-input-line">
+                <th>ALLOWANCE</th>
+                {{#if equals offerType 'buy'}}
+                  <td>{{formatBalance quoteToken.allowance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
+                {{else}}
+                  <td>{{formatBalance baseToken.allowance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
+                {{/if}}
+              </tr>
+              <tr class="row-input-line">
+                <th>AVAILABLE</th>
+                {{#if equals offerType 'buy'}}
+                  <td>{{formatBalance quoteToken.balance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
+                {{else}}
+                  <td>{{formatBalance baseToken.balance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
+                {{/if}}
+              </tr>
               <tr>
                 <th>OWNER</th>
                 <td><span class="owner-address">0x6e484915EdA37ddc1s8Ca97CA3se9548f014A58A</span></td>
@@ -151,11 +179,11 @@
               </tr>
               <tr>
                 <th>Volume</th>
-                <td><span class="value">{{formatBalance (toWei offerAmount)}}</span> <span class="base-currency">{{baseCurrency}} /</span></td>
+                <td><span class="value">{{formatBalance (toWei offerAmount)}}</span> <span class="base-currency">{{baseCurrency}}</span></td>
               </tr>
               <tr>
                 <th>Total</th>
-                <td><span class="value">{{formatBalance (toWei offerTotal)}}</span> <span class="base-currency">{{baseCurrency}} /</span></td>
+                <td><span class="value">{{formatBalance (toWei offerTotal)}}</span> <span class="base-currency">{{baseCurrency}}</span></td>
               </tr>
             </tbody>
           </table>
