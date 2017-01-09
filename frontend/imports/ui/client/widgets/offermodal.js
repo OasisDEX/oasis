@@ -260,8 +260,8 @@ Template.offermodal.viewmodel({
       }
     });
   },
-  showAllowanceModal(token) {
-    console.log(token);
+  showAllowanceModal() {
+    const token = $('#allowance-popup-link').data('link');
     $(`#allowanceModal${token}`).modal('show');
   },
 });

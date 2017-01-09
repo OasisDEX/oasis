@@ -72,7 +72,7 @@
               {{else}}
                 {{#unless hasAllowance}}
                   <span class="text-danger">
-                    You don't have enough {{sellCurrency}} <a href="#allowance" {{b "click: showAllowanceModal(sellCurrency)"}}>allowance</a>.
+                    You don't have enough {{sellCurrency}} <a href="#allowance" id="allowance-popup-link" data-link={{sellCurrency}} {{b "click: showAllowanceModal()"}}>allowance</a>.
                   </span>
                 {{else}}
                   <span class="text-danger">
