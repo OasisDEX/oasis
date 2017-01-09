@@ -1,3 +1,11 @@
+/* MEDIA QUERIES BREAKPOINTS */
+
+$xxs: 480px;
+$xs: 768px;
+$sm: 992px;
+$md: 1200px;
+$lg: 1024px;
+
 /* COLOURS */
 
 $background-color: #F8F7F5;
@@ -1037,13 +1045,15 @@ table {
     color: #222228;
     opacity: 0.68;
     font-weight: 500;
+    font-size: 15px;    
   }
 
   td {
-    font-size: 24px;
-    font-weight: 700;
+    font-size: 18px;
+    font-weight: bold;
     text-align: right;
-    color: #D0D0D0;
+    font-family: 'Roboto';    
+    color: #68686C;
   }
 
   input {
@@ -1731,14 +1741,19 @@ section.depositbalance {
     display: block;
     float: left;
     position: relative;
+    font-family: 'Roboto';
+    font-size: 24px;
+    color: #D0D0D0;
     &.price {
-      color: #616675;
+      color: #68686C;
+      font-family: 'Roboto';
+      font-size: 22px;
     }     
   }
   .currency {
     color: #222228;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 10px;
     letter-spacing: 1px;
     width: 50px;
     margin-left: 10px;
@@ -1746,6 +1761,7 @@ section.depositbalance {
     float: left;
     position: relative;
     text-align: left;    
+    opacity: 0.6;
   }
   .allowance-currency {
     @extend .currency;
@@ -1766,9 +1782,11 @@ section.depositbalance {
     }
   }
   .owner-address {
-    opacity: 0.6;
-    font-size: 12px;
-    color: #4F5362;    
+    font-size: 13px;
+    font-weight: bold;
+    color: #68686C;
+    font-family: 'Roboto';
+    margin-right: 15px;
   }
 }
 .modal-header {
@@ -1778,6 +1796,19 @@ section.depositbalance {
   text-transform: uppercase;
 }
 .modal-body {
+   .order-warning {
+     margin-top: 8px;
+   }
+  .my-allowance-instructions {
+    background: #FBFAF9;
+    border-radius: 8px;
+    padding: 20px;
+    div.my-allowance {
+      p {
+        color: rgba(34, 34, 40, 0.68);        
+      }
+    }
+  }
   th {
     text-transform: uppercase;
   }
@@ -1816,4 +1847,10 @@ section.depositbalance {
 }
 .modal-footer {
   border-top: none;
+}
+
+.modal-dialog {
+    @media (min-width: #{$xs - 1}) {
+      width: 490px;
+    } 
 }
