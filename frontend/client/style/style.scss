@@ -1,3 +1,5 @@
+/* COLOURS */
+
 $background-color: #F8F7F5;
 $color-quote-currency: #795548;
 $color-base-currency: #8D86C9;
@@ -7,6 +9,13 @@ $color-more: #4F5362;
 $border-more: #A8ACB9;
 $color-place-order: #4F5362;
 $color-cancel-order: #A8ACB9;
+
+/* FONTS */
+
+.montserrat-semibold {
+    font-family: 'Montserrat-SemiBold', sans-serif;
+    font-weight: 700;  
+}
 
 /* MIXIN TABLE SCROLLING */
 @mixin quantity-query( $number, $comparison: 'equal' ) {
@@ -113,9 +122,9 @@ table {
 .account-section {
   font-family: 'Montserrat', sans-serif;
   font-weight: 500;
+  font-size: 13px;  
   text-align: right;
   padding-right: 15px;
-
   .select-change-allowance {
     border: 1px solid rgba(211, 213, 220, 0.68);
     border-radius: 100px;
@@ -184,10 +193,9 @@ table {
   }
 
   .network-type {
-    font-weight: 700;
-    margin-right: 8px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 10px;
+    @extend .montserrat-semibold;
+    margin-right: 8px;    
+    font-size: 13px;
     color: #4F5362;
     letter-spacing: 1.3px;
     text-transform: uppercase;
@@ -553,6 +561,7 @@ table {
     &.helper-row {
       td {
         text-align: center;
+        width: 100%!important;
       }
     }
   }
@@ -727,7 +736,7 @@ table {
 
   th,
   td {
-    padding-bottom: 5px;
+    padding-bottom: 0px;
     padding-top: 20px;
   }
 
@@ -739,15 +748,19 @@ table {
 
   input.amount {
     font-weight: 700;
-    color: #D0D0D0;
-    font-size: 24px;
+    font-size: 22px;
+    opacity: 0.7;
+    color: #D0D0D0;    
+    background: none;
   }
 
   input.recipient {
-    font-family: 'Montserrat-SemiBold', sans-serif;
-    font-size: 11px;
+    @extend .montserrat-semibold;
+    font-size: 22px;
     min-width: 280px;
     opacity: 0.7;
+    color: #D0D0D0;
+    background: none;
   }
 
   button {
@@ -759,8 +772,17 @@ table {
     font-weight: 700;
     letter-spacing: 1.57px;
     width: 131px;
+    height: 36px;
+    margin-top: 35px;
   }
-
+  .span-transfer-currency {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    opacity: 0.67;
+    font-size: 10px;
+    color: #222228;
+    letter-spacing: 1px;  
+  }
   .select-box {
     -moz-appearance: none;
     -webkit-appearance: none;
@@ -832,9 +854,8 @@ table {
     }
   }
   td {
-    font-family: 'Montserrat-SemiBold', sans-serif;
+    @extend .montserrat-semibold;
     font-size: 21px;
-    font-weight: 500;
     color: #68686C; /* #4F5362; */
     text-align: right;
     .span-deposit-withdraw-currency {
@@ -899,12 +920,11 @@ table {
   }
 
   button {
+    @extend .montserrat-semibold;    
     border: 1px solid #A8ACB9;
     border-radius: 100px;
-    font-family: 'Montserrat-SemiBold', sans-serif;
     color: #4F5362;
     font-size: 13.5px;
-    font-weight: 500;
     letter-spacing: 1.57px;
     width: 116px;
     opacity: 1;
@@ -947,10 +967,10 @@ table {
 }
 
 .btn-submit-order {
+  @extend .montserrat-semibold;  
   border: 1px solid;
   border-radius: 100px;
   font-size: 13.5px;
-  font-family: 'Montserrat-SemiBold', sans-serif;
   letter-spacing: 1.57px;
   opacity: 1;
   margin-left: 15px;
@@ -1085,7 +1105,7 @@ table {
   font-size: 25px;
 
   h2 {
-    font-family: 'Montserrat-SemiBold', sans-serif;
+    @extend .montserrat-semibold;  
     opacity: 0.8;
     color: #222228;
   }
@@ -1119,7 +1139,7 @@ table {
   .p-use-clients {
     display: inline-block;
     color: #546979;
-    font-family: 'Montserrat-SemiBold', sans-serif;
+    @extend .montserrat-semibold;  
   }
 
   .p-connect-geth {
@@ -1167,7 +1187,7 @@ table {
     }
 
     .span-montserrat-semi-bold {
-      font-family: 'Montserrat-SemiBold', sans-serif;
+      @extend .montserrat-semibold;  
       font-size: 21px;
       color: #4F5362;
     }
@@ -1212,7 +1232,7 @@ table {
       color: #4A4A4A;
     }
     a {
-      font-family: 'Montserrat-SemiBold', sans-serif;
+      @extend .montserrat-semibold;  
       font-size: 14px;
       color: #546979;
       &:hover {
@@ -1623,7 +1643,7 @@ table {
       z-index: 1;
       position: relative;
       cursor: pointer;
-      font-family: 'Montserrat-SemiBold', sans-serif;
+      @extend .montserrat-semibold;  
       font-size: 12px;
     }
   }
@@ -1639,6 +1659,12 @@ section.depositbalance {
   h2 {
     padding-left: 30px;
   }  
+}
+#container-transfer {
+  @extend .select-market;
+  .select-market-container {
+    margin-right: 0px;
+  }
 }
 #container-chart {
   @extend .select-market;
@@ -1661,7 +1687,7 @@ section.depositbalance {
     cursor: pointer;
   }
   tbody tr.selected {
-    background: #F8F7F5;
+    background: rgba(248, 247, 245, 0.3);
     border-top: 1px transparent solid;
     border-bottom: 1px #DCDDE0 solid;    
     cursor: pointer;    
@@ -1681,6 +1707,16 @@ section.depositbalance {
 }
 .text-right {
   text-align: right;
+}
+.npl {
+    padding-left: 0px;
+}
+.npr {
+    padding-right: 0px;
+}
+.nplr {
+    padding-left: 0px;
+    padding-right: 0px;
 }
 /* MODAL RESET */
 .modal-backdrop {
