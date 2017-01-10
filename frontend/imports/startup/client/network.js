@@ -116,6 +116,7 @@ $(window).on('hashchange', () => {
 function initSession() {
   Session.set('network', false);
   Session.set('loading', false);
+  Session.set('loadingProgress', 0);
   Session.set('outOfSync', false);
   Session.set('syncing', false);
   Session.set('isConnected', false);

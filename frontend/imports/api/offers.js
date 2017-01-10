@@ -200,8 +200,9 @@ Offers.syncOffer = (id, max) => {
       if (max > 0 && id > 1) {
         Session.set('loadingProgress', Math.round(100 * ((max - id) / max)));
         Offers.syncOffer(id - 1, max);
-      } else if (max > 0) {
+      } else {
         Session.set('loading', false);
+        Session.set('loadingProgress', 100);
       }
     }
   });

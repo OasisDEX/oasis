@@ -24,9 +24,6 @@ Template.markets.viewmodel({
   baseCurrency: '',
   quoteHelper: '',
   baseHelper: '',
-  loadingTradeHistory() {
-    return Session.get('loadingTradeHistory');
-  },
   price(token) {
     const trade = Trades.findOne(
       { $or: [
