@@ -25,6 +25,20 @@ $color-cancel-order: #A8ACB9;
     font-weight: 700;  
 }
 
+/* CUSTOM SCROLLBAR TABLE SCROLLING */
+
+.t-scroll tbody::-webkit-scrollbar {
+    width: 8px;
+} 
+.t-scroll tbody::-webkit-scrollbar-track {
+  background-color: #FAFAFA;
+  padding: 20px;
+} 
+.t-scroll tbody::-webkit-scrollbar-thumb {
+  background-color: #EEEEEE;
+  border-radius: 5.5px;
+}
+
 /* MIXIN TABLE SCROLLING */
 @mixin quantity-query( $number, $comparison: 'equal' ) {
   $nth: '';
@@ -61,7 +75,7 @@ $color-cancel-order: #A8ACB9;
 }
 $i: '';
 $max: 7;
-/* MIXIN TABLE SCROLLING */
+/* / MIXIN TABLE SCROLLING */
 
 body {
   background-color: $background-color;
@@ -141,15 +155,12 @@ table {
     margin-left: 25px;
     display: inline-block;
     padding: 0px 17px 0px 10px;
-
+    width: 330px;
     .question-circle {
       @extend .question-circle;
       display: inline-block!important;
       float: none!important;
     }
-
-
-
   }
 
   .select-change-account {
@@ -610,6 +621,15 @@ table {
   .cancel {
     border: none;
     padding: 0px;
+    width: 29px;
+    height: 16px;
+    border-radius: 7px;    
+    &:hover {
+      
+    }
+    img {
+      transform: translate(0px,-3px);
+    }
   }
 }
 
@@ -760,6 +780,7 @@ table {
     opacity: 0.7;
     color: #D0D0D0;    
     background: none;
+    width: 200px;
   }
 
   input.recipient {
@@ -1296,7 +1317,8 @@ table {
         }        
     }
     tbody {
-        width: 100%;
+        /* width: 100%; */
+        width: 95%;
         height: 155px;
         overflow-y: auto;
         overflow-x: hidden;
@@ -1460,7 +1482,8 @@ table {
     }
   } 
   tbody {
-    width: 100%;
+    /*width: 100%;*/
+    width: 95%;
     tr {
       td {
         &:first-child, &:last-child {
@@ -1691,13 +1714,13 @@ section.depositbalance {
     border-bottom: 1px transparent solid;    
   }
   tbody tr:hover {
-    background: #F8F7F5;
+    background: rgba(248, 247, 245, 0.5);
     border-top: 1px #DCDDE0 solid;
     border-bottom: 1px #DCDDE0 solid;    
     cursor: pointer;
   }
   tbody tr.selected {
-    background: rgba(248, 247, 245, 0.3);
+    background: rgba(248, 247, 245, 0.5);
     border-top: 1px transparent solid;
     border-bottom: 1px #DCDDE0 solid;    
     cursor: pointer;    
