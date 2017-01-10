@@ -63,6 +63,8 @@ const helpers = {
   },
 };
 
+Offers.syncedOffers = [];
+
 Offers.helpers(_.extend(helpers, {
   canCancel() {
     const marketOpen = Session.get('market_open');
@@ -116,7 +118,12 @@ Offers.sync = () => {
       if (lastOfferId > 0) {
         Session.set('loading', true);
         Session.set('loadingProgress', 0);
-        Offers.syncOffer(lastOfferId, lastOfferId);
+        for (let i = lastOfferId; i >= 1; i--) {
+          Offers.syncOffer(i, lastOfferId);
+        }
+      } else {
+        Session.set('loading', false);
+        Session.set('loadingProgress', 100);
       }
     }
   });
@@ -182,7 +189,7 @@ Offers.getBlock = function getBlock(blockNumber) {
 /**
  * Syncs up a single offer
  */
-Offers.syncOffer = (id, max) => {
+Offers.syncOffer = (id, max = 0) => {
   Dapple['maker-otc'].objects.otc.offers(id, (error, data) => {
     if (!error) {
       const idx = id.toString();
@@ -197,9 +204,10 @@ Offers.syncOffer = (id, max) => {
           $('#offerModal').modal('hide');
         }
       }
+      Offers.syncedOffers.push(id);
+
       if (max > 0 && id > 1) {
-        Session.set('loadingProgress', Math.round(100 * ((max - id) / max)));
-        Offers.syncOffer(id - 1, max);
+        Session.set('loadingProgress', Math.round(100 * (Offers.syncedOffers.length / max)));
       } else {
         Session.set('loading', false);
         Session.set('loadingProgress', 100);
