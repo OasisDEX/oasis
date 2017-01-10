@@ -10,6 +10,12 @@ import Chart from 'chart.js';
 import './chart.html';
 
 Template.chart.viewmodel({
+  autorun() {
+    Meteor.defer(() => {
+      this.createDepthChart();
+      this.createVolumeChart();
+    });
+  },
   currentChart: 'DEPTH',
   showDepth() {
     return this.currentChart() === 'DEPTH' ? '' : 'hidden';
@@ -17,12 +23,27 @@ Template.chart.viewmodel({
   showVolume() {
     return this.currentChart() === 'VOLUME' ? '' : 'hidden';
   },
-  chartChange() {
-  },
-});
-
-Template.chart.helpers({
+  depthChart: null,
+  volumeChart: null,
   createDepthChart() {
+    if (this.depthChart()) return;
+    const ctx = document.getElementById('market-chart-depth');
+    const myChart = new Chart(ctx, {
+      type: 'line',
+      data: {},
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+            },
+          }],
+        },
+      },
+    });
+    this.depthChart(myChart);
+  },
+  fillDepthChart() {
     if (Session.get('isConnected') && !Session.get('outOfSync')
         && !Session.get('loading') && Session.get('loadingProgress') === 100) {
       const quoteCurrency = Session.get('quoteCurrency');
@@ -114,48 +135,51 @@ Template.chart.helpers({
         }
         bidAmountsGraph.push({ x: vals[i], y: amount });
       }
-
-      // Use Meteor.defer() to craete chart after DOM is ready:
-      Meteor.defer(() => {
-        const ctx = document.getElementById('market-chart-depth');
-        const myChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: $.map(vals, (v) => v.toFixed(5).replace(/0{0,3}$/, '')),
-            datasets: [
-              {
-                label: 'Buy',
-                data: bidAmountsGraph,
-                backgroundColor: 'rgba(38, 166, 154, 0.2)',
-                borderColor: 'rgba(38, 166, 154, 1)',
-                borderWidth: 2,
-                // fill: false,
-                pointRadius: 1,
-              },
-              {
-                label: 'Sell',
-                data: askAmountsGraph,
-                backgroundColor: 'rgba(239, 83, 80, 0.2)',
-                borderColor: 'rgba(239, 83, 80, 1)',
-                borderWidth: 2,
-                // fill: false,
-                pointRadius: 1,
-              }],
-          },
-          options: {
-            scales: {
-              yAxes: [{
-                ticks: {
-                  beginAtZero: true,
-                },
-              }],
-            },
-          },
-        });
-      });
+      const myChart = this.depthChart();
+      myChart.data.labels = $.map(vals, (v) => v.toFixed(5).replace(/0{0,3}$/, ''));
+      myChart.data.datasets = [
+        {
+          label: 'Buy',
+          data: bidAmountsGraph,
+          backgroundColor: 'rgba(38, 166, 154, 0.2)',
+          borderColor: 'rgba(38, 166, 154, 1)',
+          borderWidth: 2,
+          // fill: false,
+          pointRadius: 1,
+        },
+        {
+          label: 'Sell',
+          data: askAmountsGraph,
+          backgroundColor: 'rgba(239, 83, 80, 0.2)',
+          borderColor: 'rgba(239, 83, 80, 1)',
+          borderWidth: 2,
+          // fill: false,
+          pointRadius: 1,
+        }];
+      myChart.update();
+      this.depthChart(myChart);
     }
   },
   createVolumeChart() {
+    if (this.volumeChart()) return;
+    const ctx = document.getElementById('market-chart-volume');
+
+    const myChart = new Chart(ctx, {
+      type: 'line',
+      data: {},
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+            },
+          }],
+        },
+      },
+    });
+    this.volumeChart(myChart);
+  },
+  fillVolumeChart() {
     if (!Session.get('loadingTradeHistory')) {
       const quoteCurrency = Session.get('quoteCurrency');
       const baseCurrency = Session.get('baseCurrency');
@@ -194,36 +218,20 @@ Template.chart.helpers({
           vol[day] = vol[day].add(new BigNumber(trade.buyHowMuch));
         }
       });
+      const myChart = this.volumeChart();
+      myChart.data.labels = $.map(days, (d) => d.format('ll'));
+      myChart.data.datasets = [{
+        label: 'Volume',
+        data: $.map(vol, (v) => EthTools.formatBalance(v.toNumber()).replace(',', '')),
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 2,
+        // fill: false,
+        pointRadius: 1,
+      }];
 
-      // Use Meteor.defer() to craete chart after DOM is ready:
-      Meteor.defer(() => {
-        const ctx = document.getElementById('market-chart-volume');
-
-        const myChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: $.map(days, (d) => d.format('ll')),
-            datasets: [{
-              label: 'Volume',
-              data: $.map(vol, (v) => EthTools.formatBalance(v.toNumber()).replace(',', '')),
-              backgroundColor: 'rgba(255, 99, 132, 0.2)',
-              borderColor: 'rgba(255, 99, 132, 1)',
-              borderWidth: 2,
-              // fill: false,
-              pointRadius: 0,
-            }],
-          },
-          options: {
-            scales: {
-              yAxes: [{
-                ticks: {
-                  beginAtZero: true,
-                },
-              }],
-            },
-          },
-        });
-      });
+      myChart.update();
+      this.volumeChart(myChart);
     }
   },
 });

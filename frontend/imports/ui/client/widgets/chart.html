@@ -25,14 +25,14 @@
         {{/if}}
       {{/if}}
       <canvas id="market-chart-depth" class="market-chart" width="380" height="215"></canvas>
-      {{createDepthChart}}
+      {{fillDepthChart}}
     </div>
     <div class={{showVolume}}>
       {{#if loadingTradeHistory}}
         <div class="loading-volume-chart">Loading History...</div>
       {{/if}}
       <canvas id="market-chart-volume" class="market-chart" width="380" height="215"></canvas>
-      {{createVolumeChart}}
+      {{fillVolumeChart}}
     </div>
   </div>
 </template>
