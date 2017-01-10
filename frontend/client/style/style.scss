@@ -25,6 +25,20 @@ $color-cancel-order: #A8ACB9;
     font-weight: 700;  
 }
 
+/* CUSTOM SCROLLBAR TABLE SCROLLING */
+
+.t-scroll tbody::-webkit-scrollbar {
+    width: 8px;
+} 
+.t-scroll tbody::-webkit-scrollbar-track {
+  background-color: #FAFAFA;
+  padding: 20px;
+} 
+.t-scroll tbody::-webkit-scrollbar-thumb {
+  background-color: #EEEEEE;
+  border-radius: 5.5px;
+}
+
 /* MIXIN TABLE SCROLLING */
 @mixin quantity-query( $number, $comparison: 'equal' ) {
   $nth: '';
@@ -61,7 +75,7 @@ $color-cancel-order: #A8ACB9;
 }
 $i: '';
 $max: 7;
-/* MIXIN TABLE SCROLLING */
+/* / MIXIN TABLE SCROLLING */
 
 body {
   background-color: $background-color;
@@ -1303,7 +1317,8 @@ table {
         }        
     }
     tbody {
-        width: 100%;
+        /* width: 100%; */
+        width: 95%;
         height: 155px;
         overflow-y: auto;
         overflow-x: hidden;
@@ -1467,7 +1482,8 @@ table {
     }
   } 
   tbody {
-    width: 100%;
+    /*width: 100%;*/
+    width: 95%;
     tr {
       td {
         &:first-child, &:last-child {
