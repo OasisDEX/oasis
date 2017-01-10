@@ -1300,7 +1300,19 @@ table {
                 max-width: 75px;
               } 
               @include qq-equal(7) {
-                max-width: 60px;
+                max-width: 85px;
+                &:first-of-type {
+                  width: 0px;
+                }
+                &.th-date {
+                  max-width: 80px!important;
+                }
+                &.th-type {
+                  max-width: 35px;
+                }
+                &:last-of-type {
+                  width: 0px;
+                }                 
               }    
             }            
             position: relative;
@@ -1340,7 +1352,6 @@ table {
             }
             height: 30px;             
             width: 100%;
-
             @for $i from 1 through $max {
               @include qq-equal(5) {
                 max-width: 100px;
@@ -1349,7 +1360,19 @@ table {
                 max-width: 75px;
               } 
               @include qq-equal(7) {
-                max-width: 60px;
+                max-width: 85px;
+                &:first-of-type {
+                  width: 0px;
+                }
+                &.timestamp {
+                  max-width: 80px!important;
+                }
+                &.order-type {
+                  width: 35px;
+                }
+                &:last-of-type {
+                  width: 0px;
+                }                                
               }    
             }
 
