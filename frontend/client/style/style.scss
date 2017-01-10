@@ -1679,7 +1679,17 @@ table {
       display: block;
   }
 }
-
+.loading-depth-chart {
+  width: 340px;
+  height: 175px;
+  line-height: 175px;
+  position: absolute;
+  top: 85px;
+  left: 70px;
+  z-index: 100000;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.5);
+}
 .select-market {
   .select-market-container {
     border: 1px solid #D3D5DC;
