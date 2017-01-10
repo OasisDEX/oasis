@@ -24,14 +24,14 @@
           <div class="loading-depth-chart">(loading offers {{loadingProgress}}%)</div>
         {{/if}}
       {{/if}}
-      <canvas id="market-chart-depth" class="market-chart" width="380" height="215"></canvas>
+      <canvas id="market-chart-depth" class="market-chart" width="345" height="215"></canvas>
       {{fillDepthChart}}
     </div>
     <div class={{showVolume}}>
       {{#if loadingTradeHistory}}
         <div class="loading-volume-chart">Loading History...</div>
       {{/if}}
-      <canvas id="market-chart-volume" class="market-chart" width="380" height="215"></canvas>
+      <canvas id="market-chart-volume" class="market-chart" width="345" height="215"></canvas>
       {{fillVolumeChart}}
     </div>
   </div>
