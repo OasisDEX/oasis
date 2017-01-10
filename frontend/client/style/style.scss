@@ -1667,10 +1667,14 @@ table {
 /* MARKET CHART */
 #market-chart-depth {
  @extend .market-chart;
+ max-width: 375px!important;
+ max-height: 215px!important;
 }
 
 #market-chart-volume {
  @extend .market-chart;
+  max-width: 375px!important;
+  max-height: 215px!important;
   path.highcharts-point {
       display: block;
   }

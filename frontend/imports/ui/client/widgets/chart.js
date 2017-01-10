@@ -4,7 +4,7 @@ import { moment } from 'meteor/momentjs:moment';
 import { Session } from 'meteor/session';
 import { BigNumber } from 'meteor/ethereum:web3';
 import { EthTools } from 'meteor/ethereum:tools';
-import { $ } from 'meteor/jquery';
+import { _ } from 'meteor/underscore';
 import { Offers, Trades } from '/imports/api/offers';
 import Chart from 'chart.js';
 import './chart.html';
@@ -91,11 +91,11 @@ Template.chart.viewmodel({
         }
 
         // It is necessary to update all the previous prices adding the actual amount (to make a cumulative graph)
-        bidAmounts = $.map(bidAmounts, (b, i) => ((i < bidAmounts.length - 1) ? b.add(bid.buyHowMuch) : b));
+        bidAmounts = bidAmounts.map((b, i) => ((i < bidAmounts.length - 1) ? b.add(bid.buyHowMuch) : b));
       });
 
       // All price values (bids & asks)
-      const vals = bidPrices.concat(askPrices).sort((a, b) => (a < b ? -1 : 1));
+      const vals = _.uniq(bidPrices.concat(askPrices).sort((a, b) => (a < b ? -1 : 1)));
 
       // Preparing arrays for graph
       const askAmountsGraph = [];
@@ -136,25 +136,41 @@ Template.chart.viewmodel({
         bidAmountsGraph.push({ x: vals[i], y: amount });
       }
       const myChart = this.depthChart();
-      myChart.data.labels = $.map(vals, (v) => v.toFixed(5).replace(/0{0,3}$/, ''));
+      myChart.data.labels = vals.map((v) => v.toFixed(5).replace(/0{0,3}$/, ''));
       myChart.data.datasets = [
         {
           label: 'Buy',
           data: bidAmountsGraph,
           backgroundColor: 'rgba(38, 166, 154, 0.2)',
           borderColor: 'rgba(38, 166, 154, 1)',
-          borderWidth: 2,
+          borderWidth: 3,
           // fill: false,
-          pointRadius: 1,
+          pointStyle: 'circle',
+          pointRadius: 3,
+          pointBorderWidth: 1,
+          pointBorderColor: '#1ABC9C',
+          pointBackgroundColor: '#1ABC9C',
+          hoverBackgroundColor: '#1ABC9C',
+          hoverBorderColor: '#1ABC9C',
+          hoverBorderWidth: 5,
+          steppedLine: true,
         },
         {
           label: 'Sell',
           data: askAmountsGraph,
           backgroundColor: 'rgba(239, 83, 80, 0.2)',
-          borderColor: 'rgba(239, 83, 80, 1)',
-          borderWidth: 2,
+          borderColor: '#EF5350',
+          borderWidth: 3,
           // fill: false,
-          pointRadius: 1,
+          pointStyle: 'circle',
+          pointRadius: 3,
+          pointBorderWidth: 1,
+          pointBorderColor: '#EF5350',
+          pointBackgroundColor: '#EF5350',
+          hoverBackgroundColor: '#EF5350',
+          hoverBorderColor: '#EF5350',
+          hoverBorderWidth: 5,
+          steppedLine: true,
         }];
       myChart.update();
       this.depthChart(myChart);
@@ -216,11 +232,12 @@ Template.chart.viewmodel({
       myChart.data.datasets = [{
         label: 'Volume',
         data: Object.keys(vol).map((key) => EthTools.formatBalance(vol[key].toNumber()).replace(',', '')),
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-        borderWidth: 2,
+        backgroundColor: 'rgba(140, 133, 200, 0.1)',
+        borderColor: '#8D86C9',
+        borderWidth: 3,
         // fill: false,
-        pointRadius: 1,
+        pointBackgroundColor: '#8D86C9',
+        pointRadius: 3,
       }];
 
       myChart.update();
