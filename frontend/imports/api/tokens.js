@@ -75,6 +75,7 @@ class TokensCollection extends Mongo.Collection {
                     balance: convertTo18Precision(balance, tokenId).toString(10),
                     realBalance: balance.toString(10),
                   } });
+                  Session.set('balanceLoaded', true);
                 }
               });
               const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
@@ -84,6 +85,7 @@ class TokensCollection extends Mongo.Collection {
                     allowance: convertTo18Precision(allowance, tokenId).toString(10),
                     realAllowance: allowance.toString(10),
                   } });
+                  Session.set('allowanceLoaded', true);
                 }
               });
             }

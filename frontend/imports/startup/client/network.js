@@ -122,6 +122,9 @@ function initSession() {
   Session.set('isConnected', false);
   Session.set('latestBlock', 0);
 
+  Session.set('balanceLoaded', false);
+  Session.set('allowanceLoaded', false);
+
   doHashChange();
 
   Session.set('ETHDepositProgress', 0);

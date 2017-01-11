@@ -78,6 +78,9 @@ Template.registerHelper('loadingProgress', () => Session.get('loadingProgress'))
 
 Template.registerHelper('loadingTradeHistory', () => Session.get('loadingTradeHistory'));
 
+Template.registerHelper('loadedCurrencies', () => Session.get('balanceLoaded') === true
+  && Session.get('allowanceLoaded') === true);
+
 Template.registerHelper('address', () => Session.get('address'));
 
 Template.registerHelper('ETHBalance', () => Session.get('ETHBalance'));
