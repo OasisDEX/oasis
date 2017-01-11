@@ -204,19 +204,18 @@ Template.chart.viewmodel({
       for (let i = 6; i >= 0; i--) {
         day = moment(Date.now()).startOf('day').subtract(i, 'days');
         days.push(day);
-        vol[day.unix()] = new BigNumber(0);
+        vol[day.unix() * 1000] = new BigNumber(0);
       }
 
       const trades = Trades.find({ $or: [
         { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
         { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
       ],
-        timestamp: { $gte: days[0].unix() / 1000 },
+        timestamp: { $gte: days[0].unix() },
       });
 
       trades.forEach((trade) => {
-        day = moment(trade.timestamp * 1000).startOf('day').unix();
-
+        day = moment.unix(trade.timestamp).startOf('day').unix() * 1000;
         if (trade.buyWhichToken === quoteCurrency) {
           vol[day] = vol[day].add(new BigNumber(trade.sellHowMuch));
         } else {

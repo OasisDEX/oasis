@@ -21,7 +21,7 @@
         <div class="loading-depth-chart">(out of sync, waiting for synchronization)</div>
       {{else}}
         {{#if loading}}
-          <div class="loading-depth-chart">(loading offers {{loadingProgress}}%)</div>
+          <div class="loading-depth-chart">{{{loadingIcon}}} Loading offers {{loadingProgress}}%</div>
         {{/if}}
       {{/if}}
       <canvas id="market-chart-depth" class="market-chart" width="345" height="215"></canvas>
@@ -29,7 +29,7 @@
     </div>
     <div class={{showVolume}}>
       {{#if loadingTradeHistory}}
-        <div class="loading-volume-chart">Loading History...</div>
+        <div class="loading-volume-chart">{{{loadingIcon}}} Loading history...</div>
       {{/if}}
       <canvas id="market-chart-volume" class="market-chart" width="345" height="215"></canvas>
       {{fillVolumeChart}}

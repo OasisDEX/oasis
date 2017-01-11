@@ -291,3 +291,5 @@ Template.registerHelper('determineOrderType', (order) => {
   }
   return type;
 });
+
+Template.registerHelper('loadingIcon', () => '<img src="loading.svg" alt="Loading..." />');
