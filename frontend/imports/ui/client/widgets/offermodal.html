@@ -15,14 +15,6 @@
             <table>
               <tbody>
                 <tr class="row-input-line">
-                  <th>ALLOWANCE</th>
-                  {{#if equals offer.type 'bid'}}
-                    <td>{{formatBalance baseToken.allowance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
-                  {{else}}
-                    <td>{{formatBalance quoteToken.allowance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
-                  {{/if}}
-                </tr>
-                <tr class="row-input-line">
                   <th>AVAILABLE</th>
                   {{#if equals offer.type 'bid'}}
                     <td>{{formatBalance baseToken.balance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
@@ -36,7 +28,7 @@
                 </tr>
                 <tr class="row-input-line">
                   <th>PRICE</th>
-                  <td>{{formatBalance (toWei offer.price)}} <span class="span-offer-currency">{{quoteCurrency}} / {{baseCurrency}}</span></td>
+                  <td>{{formatBalance (toWei offer.price)}} <span class="span-offer-currency">{{quoteCurrency}}</span></td>
                 </tr>
                 <tr class="row-input-line">
                   <th>VOLUME</th>
@@ -162,14 +154,6 @@
           <table>
             <tbody>
               <tr class="row-input-line">
-                <th>ALLOWANCE</th>
-                {{#if equals offerType 'buy'}}
-                  <td>{{formatBalance quoteToken.allowance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
-                {{else}}
-                  <td>{{formatBalance baseToken.allowance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
-                {{/if}}
-              </tr>
-              <tr class="row-input-line">
                 <th>AVAILABLE</th>
                 {{#if equals offerType 'buy'}}
                   <td>{{formatBalance quoteToken.balance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
@@ -183,7 +167,7 @@
               </tr>
               <tr>
                 <th>Price</th>
-                <td><span class="value price">{{formatBalance (toWei offerPrice)}}</span> <span class="base-currency">{{baseCurrency}} /</span> <span class="quote-currency">{{quoteCurrency}}</span></td>
+                <td><span class="value price">{{formatBalance (toWei offerPrice)}}</span> <span class="quote-currency">{{quoteCurrency}}</span></td>
               </tr>
               <tr>
                 <th>Volume</th>
