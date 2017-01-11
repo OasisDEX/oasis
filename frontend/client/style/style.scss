@@ -610,12 +610,15 @@ table {
     font-weight: 500;
     color: #979797;
     opacity: 0.5;
+    font-size: 10px;
+    line-height: 20px;    
   }
 
   td.order-type {
     font-family: 'Montserrat', 'sans-serif';
     font-weight: 700;
-    font-size: 13px;
+    font-size: 10px;
+    line-height: 20px;    
   }
 
   .cancel {
@@ -869,6 +872,15 @@ table {
   }
   tbody {
     tr.row-input-line {
+      th {
+        padding-top: 20px;
+        padding-bottom: 7px;
+        padding-left: 7px;
+      }
+      td.token {
+        padding-bottom: 10px;
+        padding-top: 20px;        
+      }
     }
     tr.tr-empty {
       height: 15px;      
@@ -1305,10 +1317,19 @@ table {
                   width: 0px;
                 }
                 &.th-date {
-                  max-width: 80px!important;
+                  max-width: 55px!important;
                 }
                 &.th-type {
                   max-width: 40px;
+                }
+                &.th-quote-currency {
+                  max-width: 110px;
+                }
+                &.th-base-currency {
+                  max-width: 110px;
+                }                
+                &:nth-child(4n) {
+                  max-width: 65px;
                 }
                 &:last-of-type {
                   width: 0px;
@@ -1335,6 +1356,7 @@ table {
         overflow-y: auto;
         overflow-x: hidden;
         display: block;
+        margin-top: 10px;
         tr {
           height: 30px;
           width: 100%;
@@ -1365,11 +1387,20 @@ table {
                   width: 0px;
                 }
                 &.timestamp {
-                  max-width: 80px!important;
+                  max-width: 55px!important;
                 }
                 &.order-type {
                   width: 40px;
                 }
+                &:nth-child(4n) {
+                  max-width: 65px;
+                }  
+                &:nth-child(5n) {
+                  max-width: 110px;
+                }                                
+                &:nth-child(6n) {
+                  max-width: 110px;
+                }                  
                 &:last-of-type {
                   width: 0px;
                 }                                
@@ -1553,23 +1584,23 @@ table {
   @extend .t-scroll;
   thead {
     tr {
-      border-top-left-radius: 8px;
-      border-bottom-left-radius: 8px;      
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;    
       th {
         &:first-child {
           width: 20px!important;
         }
         &.th-coin {
-          max-width: 100px!important;
+          max-width: 80px!important;
         }
         &.th-price {
-          max-width: 130px!important;
+          max-width: 150px!important;
         }
         &.th-volume {
-          max-width: 130px!important;
+          max-width: 150px!important;
         }
         &:last-child {
-          width: 40px!important;
+          width: 30px!important;
         }        
       }
     }
@@ -1582,16 +1613,16 @@ table {
           width: 20px!important;
         }
         &.td-coin {
-          max-width: 100px!important;
+          max-width: 80px!important;
         }
         &.td-price {
-          max-width: 130px!important;
+          max-width: 150px!important;
         }
         &.td-volume {
-          max-width: 130px!important;
+          max-width: 150px!important;
         }
         &:last-child {
-          width: 40px!important;
+          width: 30px!important;
         }          
       }
     }
@@ -1758,7 +1789,7 @@ section.depositbalance {
   }
   tbody tr.selected {
     background: rgba(248, 247, 245, 0.5);
-    border-top: 1px transparent solid;
+    border-top: 1px #DCDDE0 solid;
     border-bottom: 1px #DCDDE0 solid;    
     cursor: pointer;    
   }
@@ -1905,6 +1936,17 @@ section.depositbalance {
   margin: 0;
   }
 }
+
+
+
+.market-history {
+  tbody {
+    tr {
+      cursor: pointer;
+    }
+  }
+}
+
 .modal-footer {
   border-top: none;
 }
