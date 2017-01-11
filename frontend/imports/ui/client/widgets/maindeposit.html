@@ -1,21 +1,21 @@
 <template name="maindeposit">
   <div class="row">
     <div class="order-center">
-      <section class="order-section col-md-6 deposit-section">
-        {{> UI.dynamic template=tokenTemplate data=depositData}}
-      </section>
       <section class="order-section col-md-6 depositbalance">
         {{> depositbalance title='BALANCE'}}
+      </section>
+      <section class="order-section col-md-6 order-section-content">
+        {{> history historyType='depositHistory'}}
       </section>
     </div>   
   </div>
   <div class="row">
     <div class="order-center">
       <section class="order-section col-md-6 deposit-section">
-        {{> UI.dynamic template=tokenTemplate data=withdrawData}}
+        {{> UI.dynamic template=tokenTemplate data=depositData}}
       </section>
-      <section class="order-section col-md-6 order-section-content">
-        {{> history historyType='depositHistory'}}
+      <section class="order-section col-md-6 deposit-section">
+        {{> UI.dynamic template=tokenTemplate data=withdrawData}}
       </section>
     </div>
   </div>

@@ -5,17 +5,16 @@ import { Session } from 'meteor/session';
 import { BigNumber } from 'meteor/ethereum:web3';
 import { EthTools } from 'meteor/ethereum:tools';
 import { _ } from 'meteor/underscore';
+import { ReactiveVar } from 'meteor/reactive-var'
 import { Offers, Trades } from '/imports/api/offers';
 import Chart from 'chart.js';
 import './chart.html';
 
+const charts = [];
+const depthChart = new ReactiveVar(false, typeof charts.depth !== 'undefined');
+const volumeChart = new ReactiveVar(false, typeof charts.volume !== 'undefined');
+
 Template.chart.viewmodel({
-  autorun() {
-    Meteor.defer(() => {
-      this.createDepthChart();
-      this.createVolumeChart();
-    });
-  },
   currentChart: 'DEPTH',
   showDepth() {
     return this.currentChart() === 'DEPTH' ? '' : 'hidden';
@@ -23,28 +22,28 @@ Template.chart.viewmodel({
   showVolume() {
     return this.currentChart() === 'VOLUME' ? '' : 'hidden';
   },
-  depthChart: null,
-  volumeChart: null,
-  createDepthChart() {
-    if (this.depthChart()) return;
-    const ctx = document.getElementById('market-chart-depth');
-    const myChart = new Chart(ctx, {
-      type: 'line',
-      data: {},
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true,
-            },
-          }],
-        },
-      },
-    });
-    this.depthChart(myChart);
-  },
   fillDepthChart() {
-    if (Session.get('isConnected') && !Session.get('outOfSync')
+    Meteor.defer(() => {
+      if (typeof charts.depth === 'undefined') {
+        const ctx = document.getElementById('market-chart-depth');
+        charts.depth = new Chart(ctx, {
+          type: 'line',
+          data: {},
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true,
+                },
+              }],
+            },
+          },
+        });
+      }
+    });
+
+    if (depthChart
+        && Session.get('isConnected') && !Session.get('outOfSync')
         && !Session.get('loading') && Session.get('loadingProgress') === 100) {
       const quoteCurrency = Session.get('quoteCurrency');
       const baseCurrency = Session.get('baseCurrency');
@@ -135,9 +134,8 @@ Template.chart.viewmodel({
         }
         bidAmountsGraph.push({ x: vals[i], y: amount });
       }
-      const myChart = this.depthChart();
-      myChart.data.labels = vals.map((v) => v.toFixed(5).replace(/0{0,3}$/, ''));
-      myChart.data.datasets = [
+      charts.depth.data.labels = vals.map((v) => v.toFixed(5).replace(/0{0,3}$/, ''));
+      charts.depth.data.datasets = [
         {
           label: 'Buy',
           data: bidAmountsGraph,
@@ -172,31 +170,31 @@ Template.chart.viewmodel({
           hoverBorderWidth: 5,
           steppedLine: true,
         }];
-      myChart.update();
-      this.depthChart(myChart);
+      charts.depth.update();
     }
   },
-  createVolumeChart() {
-    if (this.volumeChart()) return;
-    const ctx = document.getElementById('market-chart-volume');
-
-    const myChart = new Chart(ctx, {
-      type: 'line',
-      data: {},
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true,
-            },
-          }],
-        },
-      },
-    });
-    this.volumeChart(myChart);
-  },
   fillVolumeChart() {
-    if (!Session.get('loadingTradeHistory')) {
+    Meteor.defer(() => {
+      if (typeof charts.volume === 'undefined') {
+        const ctx = document.getElementById('market-chart-volume');
+        charts.volume = new Chart(ctx, {
+          type: 'line',
+          data: {},
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true,
+                },
+              }],
+            },
+          },
+        });
+      }
+    });
+
+    if (volumeChart
+        && !Session.get('loadingTradeHistory')) {
       const quoteCurrency = Session.get('quoteCurrency');
       const baseCurrency = Session.get('baseCurrency');
       const days = [];
@@ -226,10 +224,9 @@ Template.chart.viewmodel({
         }
       });
 
-      const myChart = this.volumeChart();
-      myChart.data.labels = days.map((d) => d.format('ll'));
+      charts.volume.data.labels = days.map((d) => d.format('ll'));
 
-      myChart.data.datasets = [{
+      charts.volume.data.datasets = [{
         label: 'Volume',
         data: Object.keys(vol).map((key) => EthTools.formatBalance(vol[key].toNumber()).replace(',', '')),
         backgroundColor: 'rgba(140, 133, 200, 0.1)',
@@ -240,8 +237,7 @@ Template.chart.viewmodel({
         pointRadius: 3,
       }];
 
-      myChart.update();
-      this.volumeChart(myChart);
+      charts.volume.update();
     }
   },
 });
