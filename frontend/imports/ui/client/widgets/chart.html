@@ -17,20 +17,28 @@
       </div>
     </div>
     <div class={{showDepth}}>
-      {{#if outOfSync}}
-        <div class="loading-depth-chart">(out of sync, waiting for synchronization)</div>
+      {{#unless loadedCurrencies}}
+        <div class="loading-depth-chart">{{{loadingIcon}}} Loading token...</div>
       {{else}}
-        {{#if loading}}
-          <div class="loading-depth-chart">{{{loadingIcon}}} Loading offers {{loadingProgress}}%</div>
+        {{#if outOfSync}}
+          <div class="loading-depth-chart">(out of sync, waiting for synchronization)</div>
+        {{else}}
+          {{#if loading}}
+            <div class="loading-depth-chart">{{{loadingIcon}}} Loading offers {{loadingProgress}}%</div>
+          {{/if}}
         {{/if}}
-      {{/if}}
+      {{/unless}}
       <canvas id="market-chart-depth" class="market-chart" width="345" height="215"></canvas>
       {{fillDepthChart}}
     </div>
     <div class={{showVolume}}>
-      {{#if loadingTradeHistory}}
-        <div class="loading-volume-chart">{{{loadingIcon}}} Loading history...</div>
-      {{/if}}
+      {{#unless loadedCurrencies}}
+        <div class="loading-depth-chart">{{{loadingIcon}}} Loading token...</div>
+      {{else}}
+        {{#if loadingTradeHistory}}
+          <div class="loading-volume-chart">{{{loadingIcon}}} Loading history...</div>
+        {{/if}}
+      {{/unless}}
       <canvas id="market-chart-volume" class="market-chart" width="345" height="215"></canvas>
       {{fillVolumeChart}}
     </div>
