@@ -7,7 +7,7 @@
       {{#if loadingTradeHistory}}
         <div class="loading-volume-chart">{{{loadingIcon}}} Loading history...</div>
       {{/if}}
-      {{> orders orders=lastTrades type='lastTrades' priceLabel='PRICE' showCancel=true showType=true showDate=true}}
+      {{> orders orders=lastTrades type='lastTrades' priceLabel='PRICE' showCancel=true showType=true showDate=true canOpenTxLink=true}}
     </div>
   </div>
 </template>

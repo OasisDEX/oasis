@@ -11,6 +11,8 @@ import { moment } from 'meteor/momentjs:moment';
 import Tokens from '/imports/api/tokens';
 import { Offers, Trades } from '/imports/api/offers';
 
+import { txHref } from '/imports/utils/functions';
+
 Template.registerHelper('contractExists', () => {
   const network = Session.get('network');
   const isConnected = Session.get('isConnected');
@@ -39,15 +41,7 @@ Template.registerHelper('contractHref', () => {
   return contractHref;
 });
 
-Template.registerHelper('txHref', (tx) => {
-  let txHref = '';
-  if (Dapple['maker-otc'].objects) {
-    const network = Session.get('network');
-    const networkPrefix = (network === 'ropsten' ? 'testnet.' : '');
-    txHref = `https://${networkPrefix}etherscan.io/tx/${tx}`;
-  }
-  return txHref;
-});
+Template.registerHelper('txHref', (tx) => txHref(tx));
 
 Template.registerHelper('marketCloseTime', () => Session.get('close_time'));
 
@@ -174,6 +168,8 @@ Template.registerHelper('baseCurrency', () => Session.get('baseCurrency'));
 Template.registerHelper('equals', (a, b) => a === b);
 
 Template.registerHelper('not', (b) => !b);
+
+Template.registerHelper('or', (a, b) => a || b);
 
 Template.registerHelper('concat', (...args) => Array.prototype.slice.call(args, 0, -1).join(''));
 

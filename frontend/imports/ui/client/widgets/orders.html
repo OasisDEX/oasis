@@ -25,7 +25,7 @@
     </thead>
     <tbody>
       {{#each orders}}
-        {{> orderRow order=this type=priceClass canAccept=../canAccept showCancel=../showCancel showType=../showType showDate =../showDate}}
+        {{> orderRow order=this type=priceClass canAccept=../canAccept canOpenTxLink=../canOpenTxLink showCancel=../showCancel showType=../showType showDate =../showDate}}
       {{/each}}
     </tbody>
     <tfoot>

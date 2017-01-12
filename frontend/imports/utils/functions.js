@@ -21,7 +21,6 @@ export function doTabShow() {
   }
 }
 
-
 export function doHashChange() {
   // For now is the only currency on the left side
   localStorage.setItem('quoteCurrency', 'W-ETH');
@@ -45,4 +44,14 @@ export function doHashChange() {
 
   Session.set('quoteCurrency', quoteCurrency || localStorage.getItem('quoteCurrency') || 'W-ETH');
   Session.set('baseCurrency', baseCurrency || localStorage.getItem('baseCurrency') || 'MKR');
+}
+
+export function txHref(tx) {
+  let txLink = '';
+  if (Dapple['maker-otc'].objects) {
+    const network = Session.get('network');
+    const networkPrefix = (network === 'ropsten' ? 'testnet.' : '');
+    txLink = `https://${networkPrefix}etherscan.io/tx/${tx}`;
+  }
+  return txLink;
 }

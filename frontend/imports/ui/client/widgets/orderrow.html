@@ -1,5 +1,5 @@
 <template name="orderRow">
-  <tr class={{order.status}}{{#if canAccept}} clickable{{/if}} title={{timestampToString order.timestamp true true}}>
+  <tr class={{order.status}}{{#if or canAccept canOpenTxLink}} clickable{{/if}} title={{timestampToString order.timestamp true true}}>
     <td>
       {{#if order.canCancel}}
         {{#if showCancel}}
