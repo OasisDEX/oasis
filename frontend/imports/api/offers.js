@@ -24,10 +24,10 @@ const OFFER_GAS = 1000000;
 const BUY_GAS = 1000000;
 const CANCEL_GAS = 1000000;
 
-const TRADES_LIMIT = 7;
+const TRADES_LIMIT = 0;
 Session.set('lastTradesLimit', TRADES_LIMIT);
 
-const OFFER_LIMIT = 7;
+const OFFER_LIMIT = 0;
 Session.set('orderBookLimit', OFFER_LIMIT);
 
 const helpers = {
