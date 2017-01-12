@@ -27,13 +27,3 @@ Template.orders.helpers({
   },
   /* eslint-enable no-underscore-dangle */
 });
-
-Template.orders.events({
-  'click .more': function clickMore(event, templateInstance) {
-    if (templateInstance.data.type === 'lastTrades') {
-      Session.set('lastTradesLimit', 0);
-    } else {
-      Session.set('orderBookLimit', 0);
-    }
-  },
-});
