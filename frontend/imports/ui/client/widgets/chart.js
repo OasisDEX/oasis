@@ -5,9 +5,9 @@ import { Session } from 'meteor/session';
 import { BigNumber } from 'meteor/ethereum:web3';
 import { EthTools } from 'meteor/ethereum:tools';
 import { _ } from 'meteor/underscore';
-import { ReactiveVar } from 'meteor/reactive-var'
+import { ReactiveVar } from 'meteor/reactive-var';
 import { Offers, Trades } from '/imports/api/offers';
-import Chart from 'chart.js';
+import Chart from '/imports/utils/Chart.min';
 import './chart.html';
 
 const charts = [];
@@ -153,6 +153,7 @@ Template.chart.viewmodel({
           hoverBorderColor: '#1ABC9C',
           hoverBorderWidth: 5,
           steppedLine: true,
+          invertedStep: true,
         },
         {
           label: 'Sell',
