@@ -106,7 +106,7 @@ Template.chart.viewmodel({
         index = askPrices.indexOf(vals[i]);
         if (index !== -1) {
           // If there is a specific value for the price in asks, we add it
-          amount = EthTools.formatBalance(askAmounts[index].toNumber()).replace(',', '');
+          amount = EthTools.formatBalance(askAmounts[index].toNumber()).replace(/,/g, '');
         } else if (vals[i] < askPrices[0] || vals[i] > askPrices[askPrices.length - 1]) {
           // If the price is lower or higher than the asks range there is not value to print in the graph
           amount = null;
@@ -119,7 +119,7 @@ Template.chart.viewmodel({
         index = bidPrices.indexOf(vals[i]);
         if (index !== -1) {
           // If there is a specific value for the price in bids, we add it
-          amount = EthTools.formatBalance(bidAmounts[index].toNumber()).replace(',', '');
+          amount = EthTools.formatBalance(bidAmounts[index].toNumber()).replace(/,/g, '');
         } else if (vals[i] < bidPrices[0] || vals[i] > bidPrices[bidPrices.length - 1]) {
           // If the price is lower or higher than the bids range there is not value to print in the graph
           amount = null;
@@ -127,13 +127,14 @@ Template.chart.viewmodel({
           // If there is not a bid amount for this price, we need to add the next available amount
           for (let j = 0; j < askPrices.length; j++) {
             if (bidPrices[j] >= vals[i]) {
-              amount = EthTools.formatBalance(bidAmounts[j].toNumber()).replace(',', '');
+              amount = EthTools.formatBalance(bidAmounts[j].toNumber()).replace(/,/g, '');
               break;
             }
           }
         }
         bidAmountsGraph.push({ x: vals[i], y: amount });
       }
+
       charts.depth.data.labels = vals.map((v) => v.toFixed(5).replace(/0{0,3}$/, ''));
       charts.depth.data.datasets = [
         {
@@ -227,7 +228,7 @@ Template.chart.viewmodel({
 
       charts.volume.data.datasets = [{
         label: 'Volume',
-        data: Object.keys(vol).map((key) => EthTools.formatBalance(vol[key].toNumber()).replace(',', '')),
+        data: Object.keys(vol).map((key) => EthTools.formatBalance(vol[key].toNumber()).replace(/,/g, '')),
         backgroundColor: 'rgba(140, 133, 200, 0.1)',
         borderColor: '#8D86C9',
         borderWidth: 3,
