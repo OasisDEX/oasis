@@ -67,13 +67,13 @@ Template.chart.viewmodel({
 
           if (askAmounts.length > 0) {
             // If there is a lower price we need to sum the amount of the previous price (to make a cumulative graph)
-            askAmounts.push(askAmounts[askAmounts.length - 1].add(new BigNumber(ask.sellHowMuch)));
+            askAmounts.push(askAmounts[askAmounts.length - 1].add(new BigNumber(ask.buyHowMuch)));
           } else {
-            askAmounts.push(new BigNumber(ask.sellHowMuch));
+            askAmounts.push(new BigNumber(ask.buyHowMuch));
           }
         } else {
           // If there was already another offer for the same price we add the new amount
-          askAmounts[index] = askAmounts[index].add(new BigNumber(ask.sellHowMuch));
+          askAmounts[index] = askAmounts[index].add(new BigNumber(ask.buyHowMuch));
         }
       });
 
@@ -84,13 +84,13 @@ Template.chart.viewmodel({
 
           // Keep track of new price index and value
           bidPrices.push(bid.bid_price);
-          bidAmounts.push(new BigNumber(bid.buyHowMuch));
+          bidAmounts.push(new BigNumber(bid.sellHowMuch));
         } else {
-          bidAmounts[index] = bidAmounts[index].add(new BigNumber(bid.buyHowMuch));
+          bidAmounts[index] = bidAmounts[index].add(new BigNumber(bid.sellHowMuch));
         }
 
         // It is necessary to update all the previous prices adding the actual amount (to make a cumulative graph)
-        bidAmounts = bidAmounts.map((b, i) => ((i < bidAmounts.length - 1) ? b.add(bid.buyHowMuch) : b));
+        bidAmounts = bidAmounts.map((b, i) => ((i < bidAmounts.length - 1) ? b.add(bid.sellHowMuch) : b));
       });
 
       // All price values (bids & asks)
@@ -229,7 +229,7 @@ Template.chart.viewmodel({
       charts.volume.data.labels = days.map((d) => d.format('ll'));
 
       charts.volume.data.datasets = [{
-        label: `Volume (${volumeCurrency})`,
+        label: 'Volume',
         data: Object.keys(vol).map((key) => EthTools.formatBalance(vol[key].toNumber()).replace(/,/g, '')),
         backgroundColor: 'rgba(140, 133, 200, 0.1)',
         borderColor: '#8D86C9',

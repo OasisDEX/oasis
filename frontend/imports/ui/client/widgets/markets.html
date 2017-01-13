@@ -21,7 +21,7 @@
             <th></th>
             <th class="th-coin">COIN</th>
             <th class="th-price">PRICE</th>
-            <th class="th-volume"><a href="#" {{b "click: changeVolumeToken"}}>VOLUME (24hr)</a></th>                        
+            <th class="th-volume">VOLUME</th>
             <th></th>        
           </tr>
         </thead>
@@ -42,13 +42,6 @@
                 {{{loadingIcon}}}
               {{else}}
                 {{formatBalance (volume this)}} 
-                <span class="base-quote-currency">
-                  {{#if equals volumeSelector 'base'}}
-                    {{this}}
-                  {{else}}
-                    {{quoteCurrency}}
-                  {{/if}}
-                </span>
               {{/if}}
             </td>
             <td></td>
