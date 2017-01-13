@@ -112,6 +112,9 @@ Template.chart.viewmodel({
                   beginAtZero: true,
                 },
               }],
+              xAxes: [{
+                display: false,
+              }],
             },
           },
         });
@@ -282,6 +285,9 @@ Template.chart.viewmodel({
                 ticks: {
                   beginAtZero: true,
                 },
+              }],
+              xAxes: [{
+                display: false,
               }],
             },
           },
