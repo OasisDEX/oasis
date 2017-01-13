@@ -1643,10 +1643,14 @@ table {
           max-width: 70px!important;
         }
         &.th-price {
-          max-width: 150px!important;
+          max-width: 130px!important;
         }
         &.th-volume {
-          max-width: 150px!important;
+          max-width: 170px!important;
+          a {
+            text-decoration: none;
+            color: inherit;
+          }
         }
         &:last-child {
           width: 0px!important;
@@ -1665,10 +1669,19 @@ table {
           max-width: 70px!important;
         }
         &.td-price {
-          max-width: 150px!important;
+          max-width: 130px!important;
         }
         &.td-volume {
-          max-width: 150px!important;
+          max-width: 170px!important;
+          span.base-quote-currency {
+            font-weight: 700;
+            font-size: 10px;
+            color: #68686C;
+            letter-spacing: 1px;
+            display: inline-block;
+            text-align: left;
+            margin-left: 2px;
+          }
         }
         &:last-child {
           width: 0px!important;

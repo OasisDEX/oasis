@@ -42,11 +42,13 @@
                 {{{loadingIcon}}}
               {{else}}
                 {{formatBalance (volume this)}} 
-                {{#if equals volumeSelector 'base'}}
-                  {{this}}
-                {{else}}
-                  {{quoteCurrency}}
-                {{/if}}
+                <span class="base-quote-currency">
+                  {{#if equals volumeSelector 'base'}}
+                    {{this}}
+                  {{else}}
+                    {{quoteCurrency}}
+                  {{/if}}
+                </span>
               {{/if}}
             </td>
             <td></td>
