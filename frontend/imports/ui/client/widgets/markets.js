@@ -63,6 +63,12 @@ Template.markets.viewmodel({
 
     return vol.toNumber();
   },
+  changeVolumeToken(event) {
+    event.preventDefault();
+
+    const value = Session.get('volumeSelector') === 'quote' ? 'base' : 'quote';
+    Session.set('volumeSelector', value);
+  },
   selected(token) {
     return token === this.baseCurrency() ? 'selected' : '';
   },
