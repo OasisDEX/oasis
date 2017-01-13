@@ -510,7 +510,7 @@ table {
 
 .order-section {
   opacity: 0.89;
-  background: #FCFCFB;
+  background: #FEFEFE;
   border: 1px solid #D0D0D0;
   box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.13);
   border-radius: 4px;
@@ -637,6 +637,16 @@ table {
 }
 
 .buy-sell-section {
+  form#neworder {
+    tbody {
+      tr.row-input-line {      
+        td,
+        th {
+          padding-top: 0px;
+        }
+      }
+    }
+  }
   padding-right: 30px;
   padding-bottom: 10px;
   font-family: 'Montserrat', sans-serif;
@@ -689,15 +699,17 @@ table {
     tr.row-input-line {      
       td,
       th {
-        border-bottom: 1px #CFD8DC solid;
+        border-bottom: 1px #F7F8F9 solid;
         padding-top: 10px;      
         &.available {
           border: none;
+          transform: none;
           input {
           opacity: 0.68;
           font-family: 'Montserrat', sans-serif;
           font-size: 17px;
-          color: #222228;            
+          color: #222228; 
+          cursor: pointer;           
           }
         }          
       }
@@ -741,6 +753,15 @@ table {
     }
   }
 }
+
+
+
+
+
+
+
+
+
 
 .transfer-section {
   padding-right: 30px;
@@ -1921,11 +1942,10 @@ section.depositbalance {
     line-height: 50px;
     border-bottom: 1px rgba(207, 216, 220, 0.15) solid;
     span.base-currency {
-      line-height: 15px;
-      margin-top: 13px;      
+      transform: translate(0px,5px);     
     }
     span.quote-currency {
-      line-height: 15px;
+      transform: translate(0px,5px);
     }
   }
   input {
