@@ -24,6 +24,9 @@ Template.newallowance.viewmodel({
     // Initialize value
     this.value(web3.fromWei(this.templateInstance.data.token.allowance));
   },
+  setTotalAllowance() {
+    this.value(web3.fromWei(this.templateInstance.data.token.balance));
+  },
   canChange() {
     try {
       return this.pending().length === 0 && this.value() !== '' &&
