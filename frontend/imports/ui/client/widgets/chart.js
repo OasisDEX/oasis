@@ -22,6 +22,36 @@ Template.chart.viewmodel({
   showVolume() {
     return this.currentChart() === 'VOLUME' ? '' : 'hidden';
   },
+  getBodyTooltip(bodyItem) {
+    return bodyItem.lines;
+  },
+  prepareTooltip(tooltip, canvasId) {
+    let tooltipEl = document.getElementById('chartjs-tooltip');
+    if (!tooltipEl) {
+      tooltipEl = document.createElement('div');
+      tooltipEl.id = 'chartjs-tooltip';
+      document.body.appendChild(tooltipEl);
+    }
+    // Hide if no tooltip
+    if (tooltip.opacity === 0) {
+      tooltipEl.style.opacity = 0;
+      return false;
+    }
+    // Set caret Position
+    tooltipEl.classList.remove('above', 'below', 'no-transform');
+    if (tooltip.yAlign) {
+      tooltipEl.classList.add(tooltip.yAlign);
+    } else {
+      tooltipEl.classList.add('no-transform');
+    }
+
+    const position = document.getElementById(canvasId).getBoundingClientRect();
+    tooltipEl.style.left = `${position.left + tooltip.caretX}px`;
+    tooltipEl.style.top = `${position.top + tooltip.caretY}px`;
+    tooltipEl.style.padding = `${tooltip.yPadding}px${tooltip.xPadding}px`;
+
+    return tooltipEl;
+  },
   fillDepthChart() {
     Meteor.defer(() => {
       if (typeof charts.depth === 'undefined') {
@@ -31,12 +61,25 @@ Template.chart.viewmodel({
           data: {},
           options: {
             tooltips: {
-              backgroundColor: '#ffffff',
-              titleFontSize: 10,
-              titleFontColor: '#4A4A4A',
-              bodyFontColor:  '#4A4A4A',
-              titleFontFamily: 'Arial, sans-serif',
-              cornerRadius: 4,
+              enabled: false,
+              mode: 'index',
+              position: 'nearest',
+              custom: (tooltip) => {
+                const tooltipEl = this.prepareTooltip(tooltip, 'market-chart-depth');
+                if (tooltipEl && tooltip.body) {
+                  tooltipEl.innerHTML = '';
+                  tooltip.title.forEach((title) => {
+                    tooltipEl.innerHTML += `<div><span>Price: </span><span>${title}</span></div>`;
+                  });
+                  tooltip.body.map(this.getBodyTooltip).forEach((body) => {
+                    tooltipEl.innerHTML +=
+                      `<div><span>SUM(${Session.get('quoteCurrency')})</span><span>${body}</span></div>`;
+                    tooltipEl.innerHTML +=
+                      `<div><span>SUM(${Session.get('baseCurrency')})</span><span>${body}</span></div>`;
+                  });
+                  tooltipEl.style.opacity = 1;
+                }
+              },
             },
             legend: {
               display: false,
@@ -199,9 +242,9 @@ Template.chart.viewmodel({
               titleFontSize: 10,
               titleFontColor: '#4A4A4A',
               titleFontFamily: 'Arial, sans-serif',
-              bodyFontColor:  '#4A4A4A',
+              bodyFontColor: '#4A4A4A',
               cornerRadius: 4,
-            },            
+            },
             legend: {
               display: false,
             },
