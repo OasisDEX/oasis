@@ -14,6 +14,11 @@ const charts = [];
 const depthChart = new ReactiveVar(false, typeof charts.depth !== 'undefined');
 const volumeChart = new ReactiveVar(false, typeof charts.volume !== 'undefined');
 
+let askPrices = []; // Array of ask prices
+let bidPrices = []; // Array of bid prices
+let askAmounts = { base: [], quote: [] }; // Array of ask amounts
+let bidAmounts = { base: [], quote: [] }; // Array of bid amounts
+
 Template.chart.viewmodel({
   currentChart: 'DEPTH',
   showDepth() {
@@ -21,9 +26,6 @@ Template.chart.viewmodel({
   },
   showVolume() {
     return this.currentChart() === 'VOLUME' ? '' : 'hidden';
-  },
-  getBodyTooltip(bodyItem) {
-    return bodyItem.lines;
   },
   prepareTooltip(tooltip, canvasId) {
     let tooltipEl = document.getElementById('chartjs-tooltip');
@@ -67,16 +69,36 @@ Template.chart.viewmodel({
               custom: (tooltip) => {
                 const tooltipEl = this.prepareTooltip(tooltip, 'market-chart-depth');
                 if (tooltipEl && tooltip.body) {
-                  tooltipEl.innerHTML = '';
-                  tooltip.title.forEach((title) => {
-                    tooltipEl.innerHTML += `<div class="row-custom-tooltip"><span class="left">Price: </span><span class="right">${title}</span></div>`;
-                  });
-                  tooltip.body.map(this.getBodyTooltip).forEach((body) => {
-                    tooltipEl.innerHTML +=
-                      `<div class="row-custom-tooltip middle"><span class="left">SUM(${Session.get('quoteCurrency')})</span><span class="right">${body}</span></div>`;
-                    tooltipEl.innerHTML +=
-                      `<div class="row-custom-tooltip"><span class="left">SUM(${Session.get('baseCurrency')})</span><span class="right">${body}</span></div>`;
-                  });
+                  const price = tooltip.dataPoints[0].xLabel;
+                  let type = null;
+                  let quoteAmount = null;
+                  let baseAmount = null;
+                  [type, quoteAmount] = tooltip.body[0].lines[0].split(': ');
+
+                  if (type === 'Sell') {
+                    quoteAmount = askAmounts.quote[askPrices.indexOf(parseFloat(price))];
+                    baseAmount = askAmounts.base[askPrices.indexOf(parseFloat(price))];
+                  } else {
+                    quoteAmount = bidAmounts.quote[bidPrices.indexOf(parseFloat(price))];
+                    baseAmount = bidAmounts.base[bidPrices.indexOf(parseFloat(price))];
+                  }
+                  quoteAmount = EthTools.formatBalance(quoteAmount.toNumber());
+                  baseAmount = EthTools.formatBalance(baseAmount.toNumber());
+
+                  tooltipEl.innerHTML =
+                    `<div class="row-custom-tooltip">
+                      <span class="left">Price</span>
+                      <span class="right">${price}</span>
+                    </div>
+                    <div class="row-custom-tooltip middle">
+                      <span class="left">SUM(${Session.get('quoteCurrency')})</span>
+                      <span class="right">${quoteAmount}</span>
+                    </div>
+                    <div class="row-custom-tooltip">
+                      <span class="left">SUM(${Session.get('baseCurrency')})</span>
+                      <span class="right">${baseAmount}</span>
+                    </div>`;
+
                   tooltipEl.style.opacity = 1;
                 }
               },
@@ -99,13 +121,12 @@ Template.chart.viewmodel({
     if (depthChart
         && Session.get('isConnected') && !Session.get('outOfSync')
         && !Session.get('loading') && Session.get('loadingProgress') === 100) {
+      askPrices = [];
+      bidPrices = [];
+      askAmounts = { base: [], quote: [] };
+      bidAmounts = { base: [], quote: [] };
       const quoteCurrency = Session.get('quoteCurrency');
       const baseCurrency = Session.get('baseCurrency');
-      const askPrices = []; // Array of ask prices
-      const bidPrices = []; // Array of bid prices
-      const askAmounts = []; // Array of ask amounts
-      let bidAmounts = []; // Array of bid amounts
-
       const bids = Offers.find({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
                                 { sort: { bid_price: 1 } }).fetch();
       const asks = Offers.find({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
@@ -119,15 +140,18 @@ Template.chart.viewmodel({
           // Keep track of new price index
           askPrices.push(ask.ask_price);
 
-          if (askAmounts.length > 0) {
+          if (askAmounts.quote.length > 0) {
             // If there is a lower price we need to sum the amount of the previous price (to make a cumulative graph)
-            askAmounts.push(askAmounts[askAmounts.length - 1].add(new BigNumber(ask.buyHowMuch)));
+            askAmounts.quote.push(askAmounts.quote[askAmounts.quote.length - 1].add(new BigNumber(ask.buyHowMuch)));
+            askAmounts.base.push(askAmounts.base[askAmounts.base.length - 1].add(new BigNumber(ask.sellHowMuch)));
           } else {
-            askAmounts.push(new BigNumber(ask.buyHowMuch));
+            askAmounts.quote.push(new BigNumber(ask.buyHowMuch));
+            askAmounts.base.push(new BigNumber(ask.sellHowMuch));
           }
         } else {
           // If there was already another offer for the same price we add the new amount
-          askAmounts[index] = askAmounts[index].add(new BigNumber(ask.buyHowMuch));
+          askAmounts.quote[index] = askAmounts.quote[index].add(new BigNumber(ask.buyHowMuch));
+          askAmounts.base[index] = askAmounts.base[index].add(new BigNumber(ask.sellHowMuch));
         }
       });
 
@@ -138,13 +162,18 @@ Template.chart.viewmodel({
 
           // Keep track of new price index and value
           bidPrices.push(bid.bid_price);
-          bidAmounts.push(new BigNumber(bid.sellHowMuch));
+          bidAmounts.quote.push(new BigNumber(bid.sellHowMuch));
+          bidAmounts.base.push(new BigNumber(bid.buyHowMuch));
         } else {
-          bidAmounts[index] = bidAmounts[index].add(new BigNumber(bid.sellHowMuch));
+          bidAmounts.quote[index] = bidAmounts.quote[index].add(new BigNumber(bid.sellHowMuch));
+          bidAmounts.base[index] = bidAmounts.base[index].add(new BigNumber(bid.buyHowMuch));
         }
 
         // It is necessary to update all the previous prices adding the actual amount (to make a cumulative graph)
-        bidAmounts = bidAmounts.map((b, i) => ((i < bidAmounts.length - 1) ? b.add(bid.sellHowMuch) : b));
+        bidAmounts.quote = bidAmounts.quote.map((b, i) =>
+                            ((i < bidAmounts.quote.length - 1) ? b.add(bid.sellHowMuch) : b));
+        bidAmounts.base = bidAmounts.base.map((b, i) =>
+                            ((i < bidAmounts.base.length - 1) ? b.add(bid.buyHowMuch) : b));
       });
 
       // All price values (bids & asks)
@@ -160,7 +189,7 @@ Template.chart.viewmodel({
         index = askPrices.indexOf(vals[i]);
         if (index !== -1) {
           // If there is a specific value for the price in asks, we add it
-          amount = EthTools.formatBalance(askAmounts[index].toNumber()).replace(/,/g, '');
+          amount = EthTools.formatBalance(askAmounts.quote[index].toNumber()).replace(/,/g, '');
         } else if (vals[i] < askPrices[0] || vals[i] > askPrices[askPrices.length - 1]) {
           // If the price is lower or higher than the asks range there is not value to print in the graph
           amount = null;
@@ -173,7 +202,7 @@ Template.chart.viewmodel({
         index = bidPrices.indexOf(vals[i]);
         if (index !== -1) {
           // If there is a specific value for the price in bids, we add it
-          amount = EthTools.formatBalance(bidAmounts[index].toNumber()).replace(/,/g, '');
+          amount = EthTools.formatBalance(bidAmounts.quote[index].toNumber()).replace(/,/g, '');
         } else if (vals[i] < bidPrices[0] || vals[i] > bidPrices[bidPrices.length - 1]) {
           // If the price is lower or higher than the bids range there is not value to print in the graph
           amount = null;
@@ -181,7 +210,7 @@ Template.chart.viewmodel({
           // If there is not a bid amount for this price, we need to add the next available amount
           for (let j = 0; j < askPrices.length; j++) {
             if (bidPrices[j] >= vals[i]) {
-              amount = EthTools.formatBalance(bidAmounts[j].toNumber()).replace(/,/g, '');
+              amount = EthTools.formatBalance(bidAmounts.quote[j].toNumber()).replace(/,/g, '');
               break;
             }
           }
@@ -189,10 +218,10 @@ Template.chart.viewmodel({
         bidAmountsGraph.push({ x: vals[i], y: amount });
       }
 
-      charts.depth.data.labels = vals.map((v) => v.toFixed(5).replace(/0{0,3}$/, ''));
+      charts.depth.data.labels = vals;
       charts.depth.data.datasets = [
         {
-          label: '',
+          label: 'Buy',
           data: bidAmountsGraph,
           backgroundColor: 'rgba(38, 166, 154, 0.2)',
           borderColor: 'rgba(38, 166, 154, 1)',
@@ -210,7 +239,7 @@ Template.chart.viewmodel({
           invertedStep: true,
         },
         {
-          label: '',
+          label: 'Sell',
           data: askAmountsGraph,
           backgroundColor: 'rgba(239, 83, 80, 0.2)',
           borderColor: '#EF5350',
