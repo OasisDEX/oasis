@@ -34,6 +34,7 @@ Template.chart.viewmodel({
               backgroundColor: '#ffffff',
               titleFontSize: 10,
               titleFontColor: '#4A4A4A',
+              bodyFontColor:  '#4A4A4A',
               titleFontFamily: 'Arial, sans-serif',
               cornerRadius: 4,
             },
@@ -198,6 +199,7 @@ Template.chart.viewmodel({
               titleFontSize: 10,
               titleFontColor: '#4A4A4A',
               titleFontFamily: 'Arial, sans-serif',
+              bodyFontColor:  '#4A4A4A',
               cornerRadius: 4,
             },            
             legend: {
