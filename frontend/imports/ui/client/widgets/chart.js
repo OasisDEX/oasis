@@ -30,6 +30,16 @@ Template.chart.viewmodel({
           type: 'line',
           data: {},
           options: {
+            tooltips: {
+              backgroundColor: '#ffffff',
+              titleFontSize: 10,
+              titleFontColor: '#4A4A4A',
+              titleFontFamily: 'Arial, sans-serif',
+              cornerRadius: 4,
+            },
+            legend: {
+              display: false,
+            },
             scales: {
               yAxes: [{
                 ticks: {
@@ -138,7 +148,7 @@ Template.chart.viewmodel({
       charts.depth.data.labels = vals.map((v) => v.toFixed(5).replace(/0{0,3}$/, ''));
       charts.depth.data.datasets = [
         {
-          label: 'Buy',
+          label: '',
           data: bidAmountsGraph,
           backgroundColor: 'rgba(38, 166, 154, 0.2)',
           borderColor: 'rgba(38, 166, 154, 1)',
@@ -156,7 +166,7 @@ Template.chart.viewmodel({
           invertedStep: true,
         },
         {
-          label: 'Sell',
+          label: '',
           data: askAmountsGraph,
           backgroundColor: 'rgba(239, 83, 80, 0.2)',
           borderColor: '#EF5350',
@@ -183,6 +193,16 @@ Template.chart.viewmodel({
           type: 'line',
           data: {},
           options: {
+            tooltips: {
+              backgroundColor: '#ffffff',
+              titleFontSize: 10,
+              titleFontColor: '#4A4A4A',
+              titleFontFamily: 'Arial, sans-serif',
+              cornerRadius: 4,
+            },            
+            legend: {
+              display: false,
+            },
             scales: {
               yAxes: [{
                 ticks: {
