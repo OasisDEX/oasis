@@ -69,13 +69,13 @@ Template.chart.viewmodel({
                 if (tooltipEl && tooltip.body) {
                   tooltipEl.innerHTML = '';
                   tooltip.title.forEach((title) => {
-                    tooltipEl.innerHTML += `<div><span>Price: </span><span>${title}</span></div>`;
+                    tooltipEl.innerHTML += `<div class="row-custom-tooltip"><span class="left">Price: </span><span class="right">${title}</span></div>`;
                   });
                   tooltip.body.map(this.getBodyTooltip).forEach((body) => {
                     tooltipEl.innerHTML +=
-                      `<div><span>SUM(${Session.get('quoteCurrency')})</span><span>${body}</span></div>`;
+                      `<div class="row-custom-tooltip middle"><span class="left">SUM(${Session.get('quoteCurrency')})</span><span class="right">${body}</span></div>`;
                     tooltipEl.innerHTML +=
-                      `<div><span>SUM(${Session.get('baseCurrency')})</span><span>${body}</span></div>`;
+                      `<div class="row-custom-tooltip"><span class="left">SUM(${Session.get('baseCurrency')})</span><span class="right">${body}</span></div>`;
                   });
                   tooltipEl.style.opacity = 1;
                 }
