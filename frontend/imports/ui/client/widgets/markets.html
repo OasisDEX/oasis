@@ -41,7 +41,12 @@
               {{#if loadingTradeHistory}}
                 {{{loadingIcon}}}
               {{else}}
-                {{formatBalance (volume this)}}
+                {{formatBalance (volume this)}} 
+                {{#if equals volumeSelector 'base'}}
+                  {{this}}
+                {{else}}
+                  {{quoteCurrency}}
+                {{/if}}
               {{/if}}
             </td>
             <td></td>

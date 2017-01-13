@@ -295,3 +295,5 @@ Template.registerHelper('loadingIcon', (size) => {
   const image = (size === 'large') ? 'loadingLarge' : 'loading';
   return `<img src="${image}.svg" alt="Loading..." />`;
 });
+
+Template.registerHelper('volumeSelector', () => Session.get('volumeSelector'));

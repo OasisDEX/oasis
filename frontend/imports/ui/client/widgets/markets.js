@@ -43,6 +43,7 @@ Template.markets.viewmodel({
     return new BigNumber(trade.sellHowMuch).div(new BigNumber(trade.buyHowMuch)).toNumber();
   },
   volume(token) {
+    const volumeCurrency = Session.get(`${Session.get('volumeSelector')}Currency`);
     let vol = new BigNumber(0);
 
     const trades = Trades.find({ $or: [
@@ -53,10 +54,10 @@ Template.markets.viewmodel({
     });
 
     trades.forEach((trade) => {
-      if (trade.buyWhichToken === this.quoteCurrency()) {
-        vol = vol.add(new BigNumber(trade.sellHowMuch));
-      } else {
+      if (trade.buyWhichToken === volumeCurrency) {
         vol = vol.add(new BigNumber(trade.buyHowMuch));
+      } else {
+        vol = vol.add(new BigNumber(trade.sellHowMuch));
       }
     });
 

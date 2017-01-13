@@ -140,6 +140,9 @@ function initSession() {
   Session.set('GNTWithdrawProgressMessage', '');
   Session.set('GNTWithdrawErrorMessage', '');
   Session.set('loadingTradeHistory', true);
+  if (!Session.get('volumeSelector')) {
+    Session.set('volumeSelector', 'quote');
+  }
 }
 
 /**

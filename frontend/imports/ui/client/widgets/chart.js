@@ -199,6 +199,7 @@ Template.chart.viewmodel({
         && !Session.get('loadingTradeHistory')) {
       const quoteCurrency = Session.get('quoteCurrency');
       const baseCurrency = Session.get('baseCurrency');
+      const volumeCurrency = Session.get(`${Session.get('volumeSelector')}Currency`);
       const days = [];
       const vol = {};
       let day = null;
@@ -218,17 +219,17 @@ Template.chart.viewmodel({
 
       trades.forEach((trade) => {
         day = moment.unix(trade.timestamp).startOf('day').unix() * 1000;
-        if (trade.buyWhichToken === quoteCurrency) {
-          vol[day] = vol[day].add(new BigNumber(trade.sellHowMuch));
-        } else {
+        if (trade.buyWhichToken === volumeCurrency) {
           vol[day] = vol[day].add(new BigNumber(trade.buyHowMuch));
+        } else {
+          vol[day] = vol[day].add(new BigNumber(trade.sellHowMuch));
         }
       });
 
       charts.volume.data.labels = days.map((d) => d.format('ll'));
 
       charts.volume.data.datasets = [{
-        label: 'Volume',
+        label: `Volume (${volumeCurrency})`,
         data: Object.keys(vol).map((key) => EthTools.formatBalance(vol[key].toNumber()).replace(/,/g, '')),
         backgroundColor: 'rgba(140, 133, 200, 0.1)',
         borderColor: '#8D86C9',
