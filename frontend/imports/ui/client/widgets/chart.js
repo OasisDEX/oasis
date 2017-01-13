@@ -49,7 +49,7 @@ Template.chart.viewmodel({
 
     const position = document.getElementById(canvasId).getBoundingClientRect();
     tooltipEl.style.left = `${position.left + tooltip.caretX}px`;
-    tooltipEl.style.top = `${position.top + tooltip.caretY}px`;
+    tooltipEl.style.top = `${position.top + document.body.scrollTop + tooltip.caretY}px`;
     tooltipEl.style.padding = `${tooltip.yPadding}px${tooltip.xPadding}px`;
 
     return tooltipEl;
