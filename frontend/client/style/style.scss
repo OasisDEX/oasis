@@ -1334,7 +1334,7 @@ table {
             width: 100%;
             @for $i from 1 through $max {
               @include qq-equal(5) {
-                max-width: 125px;
+                max-width: 120px;
                 &:first-of-type {
                   width: 0px;
                 } 
@@ -1410,7 +1410,7 @@ table {
             width: 100%;
             @for $i from 1 through $max {
               @include qq-equal(5) {
-                max-width: 125px;
+                max-width: 120px;
                 &:first-of-type {
                   width: 0px;
                 } 
@@ -1631,7 +1631,7 @@ table {
           width: 20px!important;
         }
         &.th-coin {
-          max-width: 80px!important;
+          max-width: 70px!important;
         }
         &.th-price {
           max-width: 150px!important;
@@ -1640,20 +1640,20 @@ table {
           max-width: 150px!important;
         }
         &:last-child {
-          width: 30px!important;
+          width: 0px!important;
         }        
       }
     }
   } 
   tbody {
-    width: 100%;    
+    width: 95%;    
     tr {
       td {
         &:first-child {
           width: 20px!important;
         }
         &.td-coin {
-          max-width: 80px!important;
+          max-width: 70px!important;
         }
         &.td-price {
           max-width: 150px!important;
@@ -1662,7 +1662,7 @@ table {
           max-width: 150px!important;
         }
         &:last-child {
-          width: 30px!important;
+          width: 0px!important;
         }          
       }
     }
