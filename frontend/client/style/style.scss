@@ -194,13 +194,13 @@ table {
 .networkstatus-section {
   display: flex;
   align-items: center;
-
   p {
     font-family: 'Montserrat', sans-serif;
     font-size: 10px;
     font-weight: 500;
     color: #4F5362;
     margin: 0 0 5px;
+    clear: both;
   }
 
   img {
@@ -209,6 +209,12 @@ table {
 
   .div-connected {
     margin-bottom: 10px;
+    .network-type, .question-circle {
+      float: left;
+    }
+    .question-circle {
+      transform: translate(0px,2px);
+    }
   }
 
   .network-type {
@@ -1852,6 +1858,9 @@ section.depositbalance {
 .nplr {
     padding-left: 0px;
     padding-right: 0px;
+}
+.qcl {
+  fl
 }
 /* MODAL RESET */
 .modal-backdrop {
