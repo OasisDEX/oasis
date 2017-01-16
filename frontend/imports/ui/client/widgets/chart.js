@@ -18,6 +18,9 @@ let askPrices = []; // Array of ask prices
 let bidPrices = []; // Array of bid prices
 let askAmounts = { base: [], quote: [] }; // Array of ask amounts
 let bidAmounts = { base: [], quote: [] }; // Array of bid amounts
+const volumes = { base: {}, quote: {} };
+window.volumes = volumes;
+let days = [];
 
 Template.chart.viewmodel({
   currentChart: 'DEPTH',
@@ -270,12 +273,33 @@ Template.chart.viewmodel({
           data: {},
           options: {
             tooltips: {
-              backgroundColor: '#ffffff',
-              titleFontSize: 10,
-              titleFontColor: '#4A4A4A',
-              titleFontFamily: 'Arial, sans-serif',
-              bodyFontColor: '#4A4A4A',
-              cornerRadius: 4,
+              enabled: false,
+              mode: 'index',
+              position: 'nearest',
+              custom: (tooltip) => {
+                const tooltipEl = this.prepareTooltip(tooltip, 'market-chart-volume');
+                if (tooltipEl && tooltip.body) {
+                  const date = parseInt(tooltip.dataPoints[0].xLabel, 10);
+                  const quoteAmount = EthTools.formatBalance(volumes.quote[date].toNumber());
+                  const baseAmount = EthTools.formatBalance(volumes.base[date].toNumber());
+
+                  tooltipEl.innerHTML =
+                    `<div class="row-custom-tooltip">
+                      <span class="left">Date</span>
+                      <span class="right">${moment(date).format('ll')}</span>
+                    </div>
+                    <div class="row-custom-tooltip middle">
+                      <span class="left">SUM(${Session.get('quoteCurrency')})</span>
+                      <span class="right">${quoteAmount}</span>
+                    </div>
+                    <div class="row-custom-tooltip">
+                      <span class="left">SUM(${Session.get('baseCurrency')})</span>
+                      <span class="right">${baseAmount}</span>
+                    </div>`;
+
+                  tooltipEl.style.opacity = 1;
+                }
+              },
             },
             legend: {
               display: false,
@@ -299,15 +323,14 @@ Template.chart.viewmodel({
         && !Session.get('loadingTradeHistory')) {
       const quoteCurrency = Session.get('quoteCurrency');
       const baseCurrency = Session.get('baseCurrency');
-      const volumeCurrency = Session.get(`${Session.get('volumeSelector')}Currency`);
-      const days = [];
-      const vol = {};
       let day = null;
-
+      days = [];
+      volumes.base = volumes.quote = {};
       for (let i = 6; i >= 0; i--) {
         day = moment(Date.now()).startOf('day').subtract(i, 'days');
         days.push(day);
-        vol[day.unix() * 1000] = new BigNumber(0);
+        volumes.base[day.unix() * 1000] = new BigNumber(0);
+        volumes.quote[day.unix() * 1000] = new BigNumber(0);
       }
 
       const trades = Trades.find({ $or: [
@@ -319,18 +342,21 @@ Template.chart.viewmodel({
 
       trades.forEach((trade) => {
         day = moment.unix(trade.timestamp).startOf('day').unix() * 1000;
-        if (trade.buyWhichToken === volumeCurrency) {
-          vol[day] = vol[day].add(new BigNumber(trade.buyHowMuch));
+        if (trade.buyWhichToken === quoteCurrency) {
+          volumes.quote[day] = volumes.quote[day].add(new BigNumber(trade.buyHowMuch));
+          volumes.base[day] = volumes.base[day].add(new BigNumber(trade.sellHowMuch));
         } else {
-          vol[day] = vol[day].add(new BigNumber(trade.sellHowMuch));
+          volumes.quote[day] = volumes.quote[day].add(new BigNumber(trade.sellHowMuch));
+          volumes.base[day] = volumes.base[day].add(new BigNumber(trade.buyHowMuch));
         }
       });
 
-      charts.volume.data.labels = days.map((d) => d.format('ll'));
+      charts.volume.data.labels = days;
 
       charts.volume.data.datasets = [{
         label: 'Volume',
-        data: Object.keys(vol).map((key) => EthTools.formatBalance(vol[key].toNumber()).replace(/,/g, '')),
+        data: Object.keys(volumes.quote).map((key) =>
+                                              EthTools.formatBalance(volumes.quote[key].toNumber()).replace(/,/g, '')),
         backgroundColor: 'rgba(140, 133, 200, 0.1)',
         borderColor: '#8D86C9',
         borderWidth: 3,
