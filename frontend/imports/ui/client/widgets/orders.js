@@ -1,5 +1,4 @@
 import { Blaze } from 'meteor/blaze';
-import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
 
 import './orders.html';
