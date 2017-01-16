@@ -209,6 +209,31 @@ Template.neworder.viewmodel({
     this.bestOffer(undefined);
     return undefined;
   },
+  omg() {
+    const quoteCurrency = Session.get('quoteCurrency');
+    const baseCurrency = Session.get('baseCurrency');
+    let offer;
+    let price = 0;
+    let available = 0;
+    if (this.type() === 'buy') {
+      offer = Offers.findOne({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
+                              { sort: { ask_price: 1 } });
+      if (offer && Object.prototype.hasOwnProperty.call(offer, 'ask_price')) {
+        price = new BigNumber(offer.ask_price.toString());
+        available = web3.fromWei(this.quoteAvailable()).toString(10);
+      }
+    } else if (this.type() === 'sell') {
+      offer = Offers.findOne({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
+                              { sort: { ask_price: 1 } });
+      if (offer && Object.prototype.hasOwnProperty.call(offer, 'bid_price')) {
+        price = new BigNumber(offer.bid_price.toString());
+        available = web3.fromWei(this.baseAvailable()).toString(10);
+      }
+    }
+    this.price(price);
+    this.total(available);
+    this.calcAmount();
+  },
   openOfferModal() {
     Session.set('selectedOffer', this.bestOffer());
   },
