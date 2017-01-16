@@ -15,6 +15,14 @@
             <table>
               <tbody>
                 <tr class="row-input-line">
+                  <th>ALLOWANCE</th>
+                  {{#if equals offer.type 'bid'}}
+                    <td>{{formatBalance baseToken.allowance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
+                  {{else}}
+                    <td>{{formatBalance quoteToken.allowance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
+                  {{/if}}
+                </tr>
+                <tr class="row-input-line">
                   <th>AVAILABLE</th>
                   {{#if equals offer.type 'bid'}}
                     <td>{{formatBalance baseToken.balance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
@@ -153,6 +161,14 @@
         <div class="modal-body">
           <table>
             <tbody>
+              <tr class="row-input-line">
+                <th>ALLOWANCE</th>
+                {{#if equals offerType 'buy'}}
+                  <td>{{formatBalance quoteToken.allowance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
+                {{else}}
+                  <td>{{formatBalance baseToken.allowance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
+                {{/if}}
+              </tr>
               <tr class="row-input-line">
                 <th>AVAILABLE</th>
                 {{#if equals offerType 'buy'}}
