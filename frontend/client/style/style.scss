@@ -916,7 +916,9 @@ table {
       td.token {
         padding-bottom: 10px;
         padding-top: 20px;   
-        cursor: pointer;     
+        span.fill-amount {
+          cursor: pointer;
+        }     
       }
     }
     tr.tr-empty {
