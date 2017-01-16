@@ -22,7 +22,7 @@
       </td>
     {{/if}}
     {{#unless showType}}
-      {{#if equals (determineOrderType order) 'ask'}}
+      {{#if or (equals (determineOrderType order) 'ask') (equals (determineOrderType order) 'bid')}}
         <td class={{order.type}}>{{formatToken order.price}}</td>
       {{/if}}
     {{else}}
@@ -30,11 +30,6 @@
     {{/unless}}
     <td>{{formatToken (order.volume quoteCurrency)}}</td>
     <td>{{formatToken (order.volume baseCurrency)}}</td>
-    {{#unless showType}}
-      {{#if equals (determineOrderType order) 'bid'}}
-        <td class={{order.type}}>{{formatToken order.price}}</td>
-      {{/if}}
-    {{/unless}}
     <td></td>
   </tr>
   {{#if order.helper}}

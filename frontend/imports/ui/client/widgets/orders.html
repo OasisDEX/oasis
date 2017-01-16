@@ -10,16 +10,13 @@
           <th class="th-price">PRICE</th>
           {{/unless}}
         {{/unless}}
-        {{#if equals priceClass 'ask'}}
-          <th class="th-price-label" title={{concat quoteCurrency ' / ' baseCurrency}}>{{priceLabel}}</th>
+        {{#if or (equals priceClass 'ask') (equals priceClass 'bid')}}
+          <th class="th-price-label" title={{concat quoteCurrency ' / ' baseCurrency}}>PRICE</th>
         {{/if}}
 
         <th class="th-quote-currency">{{quoteCurrency}}</th>
         <th class="th-base-currency">{{baseCurrency}}</th>
 
-        {{#if equals priceClass 'bid'}}
-          <th class="th-price-label" title={{concat quoteCurrency ' / ' baseCurrency}}>{{priceLabel}}</th>
-        {{/if}}
         <th></th>        
       </tr>
     </thead>
