@@ -3,13 +3,13 @@
     <div class="col-md-3">
       <img alt="Maker" src="/logo-simple.svg">
     </div>
-    <div class="col-md-9 nplr">
+    <div class="col-md-9 nplr ns-aux">
       <div class="div-connected col-md-6">
         <p>
           <span class="network-type">{{network}}</span>
           {{> whatisthis section="network"}}
         </p>
-        <p>
+        <p class="nsp-aux">
         {{#unless isConnected}}
           (not connected)
         {{else}}
@@ -39,7 +39,7 @@
             <span class="network-type">CLOSING TIME</span>
             {{> whatisthis section="network"}}
           </p>
-          <p>
+          <p class="nsp-aux">
             <span class="clock-circle"><img class="clock-image" src="/clock.svg" alt="clock"></span>
             <span class="network-status">{{timestampToString marketCloseTime true true}}</span>
           </p>
@@ -48,7 +48,7 @@
             <span class="network-type">MARKET STATUS</span>
             {{> whatisthis section="network"}}
           </p>
-          <p>
+          <p class="nsp-aux">
             <span class="closed-circle"></span>
             <span class="network-status">CLOSED</span>
           </p>

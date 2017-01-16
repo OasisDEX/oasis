@@ -205,6 +205,7 @@ table {
 
   img {
     margin-right: 5px;
+    transform: translate(0px,10px);
   }
 
   .div-connected {
@@ -1880,6 +1881,13 @@ section.depositbalance {
     padding-left: 0px;
     padding-right: 0px;
 }
+.ns-aux {
+  transform: translate(0px,20px);
+}
+.nsp-aux {
+  padding-top: 5px;
+}
+
 /* CUSTOM TOOLTIP CHART.JS */
 #chartjs-tooltip {
     opacity: 0;
