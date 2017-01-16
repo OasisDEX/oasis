@@ -19,7 +19,6 @@ let bidPrices = []; // Array of bid prices
 let askAmounts = { base: [], quote: [] }; // Array of ask amounts
 let bidAmounts = { base: [], quote: [] }; // Array of bid amounts
 const volumes = { base: {}, quote: {} };
-window.volumes = volumes;
 let days = [];
 
 Template.chart.viewmodel({
@@ -280,8 +279,10 @@ Template.chart.viewmodel({
                 const tooltipEl = this.prepareTooltip(tooltip, 'market-chart-volume');
                 if (tooltipEl && tooltip.body) {
                   const date = parseInt(tooltip.dataPoints[0].xLabel, 10);
-                  const quoteAmount = EthTools.formatBalance(volumes.quote[date].toNumber());
-                  const baseAmount = EthTools.formatBalance(volumes.base[date].toNumber());
+                  let quoteAmount = null;
+                  let baseAmount = null;
+                  quoteAmount = EthTools.formatBalance(volumes.quote[date].toNumber());
+                  baseAmount = EthTools.formatBalance(volumes.base[date].toNumber());
 
                   tooltipEl.innerHTML =
                     `<div class="row-custom-tooltip">
@@ -325,7 +326,8 @@ Template.chart.viewmodel({
       const baseCurrency = Session.get('baseCurrency');
       let day = null;
       days = [];
-      volumes.base = volumes.quote = {};
+      volumes.base = {};
+      volumes.quote = {};
       for (let i = 6; i >= 0; i--) {
         day = moment(Date.now()).startOf('day').subtract(i, 'days');
         days.push(day);
