@@ -4,6 +4,7 @@ import { BigNumber } from 'meteor/ethereum:web3';
 
 import Tokens from '/imports/api/tokens';
 import { Trades } from '/imports/api/offers';
+import { $ } from 'meteor/jquery';
 
 import './markets.html';
 
@@ -123,6 +124,28 @@ Template.markets.viewmodel({
       } else {
         this.baseHelper('Token not found');
       }
+    });
+  },
+  sort() {
+    const rows = $('.t-markets tbody  tr').get();
+
+    rows.sort((a, b) => {
+      const A = $(a).children('td').eq(3).text()
+        .toUpperCase();
+      const B = $(b).children('td').eq(3).text()
+        .toUpperCase();
+
+      if (A < B) {
+        return 1;
+      }
+      if (A > B) {
+        return -1;
+      }
+      return 0;
+    });
+
+    $.each(rows, (index, row) => {
+      $('.t-markets').children('tbody').append(row);
     });
   },
 });

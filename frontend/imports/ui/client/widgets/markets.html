@@ -41,7 +41,8 @@
               {{#if loadingTradeHistory}}
                 {{{loadingIcon}}}
               {{else}}
-                {{formatBalance (volume this)}} 
+                {{formatBalance (volume this)}}
+                {{sort}}
               {{/if}}
             </td>
             <td></td>
