@@ -209,7 +209,7 @@ Template.neworder.viewmodel({
     this.bestOffer(undefined);
     return undefined;
   },
-  omg() {
+  autofill() {
     const quoteCurrency = Session.get('quoteCurrency');
     const baseCurrency = Session.get('baseCurrency');
     let offer;
@@ -221,6 +221,9 @@ Template.neworder.viewmodel({
       if (offer && Object.prototype.hasOwnProperty.call(offer, 'ask_price')) {
         price = new BigNumber(offer.ask_price.toString());
         available = web3.fromWei(this.quoteAvailable()).toString(10);
+        this.price(price);
+        this.total(available);
+        this.calcAmount();
       }
     } else if (this.type() === 'sell') {
       offer = Offers.findOne({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
@@ -228,11 +231,11 @@ Template.neworder.viewmodel({
       if (offer && Object.prototype.hasOwnProperty.call(offer, 'bid_price')) {
         price = new BigNumber(offer.bid_price.toString());
         available = web3.fromWei(this.baseAvailable()).toString(10);
+        this.price(price);
+        this.amount(available);
+        this.calcTotal();
       }
     }
-    this.price(price);
-    this.total(available);
-    this.calcAmount();
   },
   openOfferModal() {
     Session.set('selectedOffer', this.bestOffer());
