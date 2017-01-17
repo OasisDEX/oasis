@@ -1162,6 +1162,12 @@ table {
       td,
       th {
         padding-top: 10px;
+        &.th-owner {
+          width: 50px!important;
+        }
+        &.td-owner {
+          width: 370px!important;       
+        }
       }
       td:last-child {
         text-align: right;
