@@ -70,14 +70,6 @@
                 <span class="help-block">You don't have enough {{#if equals sellCurrency 'W-ETH'}}<a href="#ethtokens" {{b "click: showDepositTab"}}>{{sellCurrency}}</a>{{else}}{{sellCurrency}}{{/if}} tokens.</span>
               </td>
             </tr>
-          {{else}}
-            {{#unless hasAllowance sellCurrency}}
-              <tr>
-                <td colspan="2">
-                  <span class="help-block">You don't have enough {{sellCurrency}} <a href="#allowance" {{b "click: showAllowanceModal(sellCurrency)"}}>allowance</a>.</span>
-                </td>
-              </tr>
-            {{/unless}}
           {{/unless}}
           {{#let offer=betterOffer}}
             {{#if offer}}
