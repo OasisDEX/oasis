@@ -276,11 +276,10 @@ Template.offermodal.viewmodel({
 
 Template.offermodal.events({
   'click button.btn-allowance-modal': (event) => {
-    const offerType = $(event.target).data('offerType');
-    if (typeof offerType !== 'undefined') {
-      Session.set('returnToOffer', true);
-    }
+    const refer = $(event.target).data('refer');
+    console.log(refer);
     const token = $(event.target).data('link');
+    $(`#allowanceModal${token}`).data('refer', refer);
     $(`#allowanceModal${token}`).modal('show');
   },
 });

@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 import { BigNumber } from 'meteor/ethereum:web3';
 import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { $ } from 'meteor/jquery';
 
 import Transactions from '/imports/api/transactions';
 import { formatError } from '/imports/utils/functions';
@@ -53,7 +54,12 @@ Template.newallowance.viewmodel({
                 { value: this.value(), token: this.templateInstance.data.token._id });
               Transactions.observeRemoved('allowance_'.concat(this.templateInstance.data.token._id), () => {
                 $('#allowanceModal'.concat(this.templateInstance.data.token._id)).modal('hide');
-                $('#offerModal').modal('show');
+                console.log($(`#allowanceModal${token._id}`).data('refer'));
+                if ($(`#allowanceModal${token._id}`).data('refer') === 'newOrder') {
+                  $('#newOrderModal').modal('show');
+                } else if ($(`#allowanceModal${token._id}`).data('refer') === 'existingOrder') {
+                  $('#offerModal').modal('show');
+                }
               });
             } else {
               this.lastError(formatError(txError));
