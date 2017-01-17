@@ -277,7 +277,6 @@ Template.offermodal.viewmodel({
 Template.offermodal.events({
   'click button.btn-allowance-modal': (event) => {
     const refer = $(event.target).data('refer');
-    console.log(refer);
     const token = $(event.target).data('link');
     $(`#allowanceModal${token}`).data('refer', refer);
     $(`#allowanceModal${token}`).modal('show');

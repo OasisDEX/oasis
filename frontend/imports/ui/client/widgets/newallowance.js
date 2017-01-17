@@ -53,11 +53,11 @@ Template.newallowance.viewmodel({
               Transactions.add('allowance_'.concat(this.templateInstance.data.token._id), tx,
                 { value: this.value(), token: this.templateInstance.data.token._id });
               Transactions.observeRemoved('allowance_'.concat(this.templateInstance.data.token._id), () => {
-                $('#allowanceModal'.concat(this.templateInstance.data.token._id)).modal('hide');
-                console.log($(`#allowanceModal${token._id}`).data('refer'));
-                if ($(`#allowanceModal${token._id}`).data('refer') === 'newOrder') {
+                const refer = $(`#allowanceModal${this.templateInstance.data.token._id}`).data('refer');
+                $(`#allowanceModal${this.templateInstance.data.token._id}`).modal('hide');
+                if (refer === 'newOrder') {
                   $('#newOrderModal').modal('show');
-                } else if ($(`#allowanceModal${token._id}`).data('refer') === 'existingOrder') {
+                } else if (refer === 'existingOrder') {
                   $('#offerModal').modal('show');
                 }
               });
