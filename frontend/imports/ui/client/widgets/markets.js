@@ -131,9 +131,9 @@ Template.markets.viewmodel({
 
     rows.sort((a, b) => {
       const A = $(a).children('td').eq(3).text()
-        .toUpperCase();
+        .replace(/,/g, '');
       const B = $(b).children('td').eq(3).text()
-        .toUpperCase();
+        .replace(/,/g, '');
 
       if (A < B) {
         return 1;
