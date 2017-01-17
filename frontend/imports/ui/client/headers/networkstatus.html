@@ -1,10 +1,10 @@
 <template name="networkStatus">
   <div class="networkstatus-section">
-    <div class="col-md-3">
+    <div class="col-xs-3">
       <img alt="Maker" src="/logo-simple.svg">
     </div>
-    <div class="col-md-9 nplr ns-aux">
-      <div class="div-connected col-md-6">
+    <div class="col-xs-9 nplr ns-aux">
+      <div class="div-connected col-xs-6">
         <p>
           <span class="network-type">{{network}}</span>
           {{> whatisthis section="network"}}
@@ -33,7 +33,7 @@
         {{/unless}}
         </p>
       </div>
-      <div class="div-connected col-md-6 npr">
+      <div class="div-connected col-xs-6 npr">
         {{#if isMarketOpen}}
           <p>
             <span class="network-type">CLOSING TIME</span>
