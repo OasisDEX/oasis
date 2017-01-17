@@ -1844,6 +1844,9 @@ section.depositbalance {
 
 
 /* BOOTSTRAP RESETS */
+.btn-default {
+  background-color: transparent!important;
+}
 .alert {
   margin-top: 30px;
 }
@@ -1857,7 +1860,10 @@ section.depositbalance {
   text-align: right;
 }
 .text-danger {
-  color: rgba(0, 0, 0, 0.4);  
+  color: rgba(0, 0, 0, 0.4);
+  a {
+    color: inherit;
+  }  
 }
 .nb {
   border: none!important;
