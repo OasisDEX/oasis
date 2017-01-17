@@ -1830,12 +1830,17 @@ table {
   }
 }
 section.markets {
+  background: #FCFCFB;
   padding-left: 0px;
   h2 {
     padding-left: 30px;
   }
 }
+section.chart {
+  background: #FCFCFB;
+}
 section.depositbalance {
+  background: #FCFCFB;
   padding-left: 0px;
   h2 {
     padding-left: 30px;
@@ -1854,7 +1859,7 @@ section.depositbalance {
   @extend .select-market;
   max-height: 260px;
   table {
-    background: #FFFFFF;
+    background: #FCFCFB;
     min-height: 230px;
   } 
   tbody tr {
