@@ -211,7 +211,7 @@
             </div>
             <div class="col-md-11">
               <span class="text-clarifications">
-                {{#unless hasAllowance}}
+                {{#unless hasAllowanceNewOrder offerType}}
                   You are trying to create a {{offerType}} order above your <strong>defined allowance</strong>.
                 {{else}}
                   {{#if equals offerType 'buy'}}
@@ -226,7 +226,7 @@
           <hr>
         </div>
         <div class="modal-footer">
-          {{#unless hasAllowance}}
+          {{#unless hasAllowanceNewOrder offerType}}
             {{#if equals offerType 'buy'}}
               <button type="button" data-offerType={{offerType}} data-link={{sellCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order-allowance btn-placement-right" data-dismiss="modal">Change Allowance</button>
             {{else}}

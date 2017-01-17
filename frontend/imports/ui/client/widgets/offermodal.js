@@ -63,9 +63,19 @@ Template.offermodal.viewmodel({
     try {
       const token = Tokens.findOne(this.sellCurrency());
       const allowance = new BigNumber(token.allowance);
-      console.log(this.type(), this.sellCurrency(), allowance.toNumber());
-      //console.log(new BigNumber(this.type() === 'bid' ? this.volume() : this.total()));
       return token && allowance.gte(web3.toWei(new BigNumber(this.type() === 'bid' ? this.volume() : this.total())));
+    } catch (e) {
+      return false;
+    }
+  },
+  hasAllowanceNewOrder() {
+    try {
+      const token = Tokens.findOne(this.offerType() === 'buy'
+                                                      ? Session.get('quoteCurrency') : Session.get('baseCurrency'));
+      const allowance = new BigNumber(token.allowance);
+
+      return token && allowance.gte(web3.toWei(new BigNumber(this.offerType() === 'buy'
+                                                                       ? this.offerAmount() : this.offerTotal())));
     } catch (e) {
       return false;
     }
