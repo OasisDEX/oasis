@@ -55,10 +55,10 @@
             </table>
             <hr class="nmt">
             <div class="div-modal-text row">
-              <div class="col-md-1">
+              <div class="col-xs-1">
                 <img src="/order-warning.svg" class="order-warning">
               </div>
-              <div class="col-md-11">
+              <div class="col-xs-11">
                 {{#unless isMarketOpen}}
                   <span class="text-danger">
                     The market has closed.
@@ -126,10 +126,10 @@
           <h4 class="modal-title">Cancel Offer</h4>
         </div>
         <div class="modal-body row">
-          <div class="col-md-1">
+          <div class="col-xs-1">
             <img src="/order-warning.svg" class="order-warning">
           </div>
-          <div class="col-md-11">
+          <div class="col-xs-11">
             {{#if offer}}
               <span class="text-danger">
                 {{#if equals offer.type 'bid'}}
@@ -206,10 +206,10 @@
           </table>
           <hr class="nmt">
           <div class="row">
-            <div class="col-md-1">
+            <div class="col-xs-1">
               <img src="/order-warning.svg" class="order-warning">
             </div>
-            <div class="col-md-11">
+            <div class="col-xs-11">
               <span class="text-clarifications">
                 {{#unless hasAllowanceNewOrder offerType}}
                   You are trying to create a {{offerType}} order above your <strong>defined allowance</strong>.
