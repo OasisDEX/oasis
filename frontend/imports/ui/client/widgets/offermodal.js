@@ -260,8 +260,11 @@ Template.offermodal.viewmodel({
       }
     });
   },
-  showAllowanceModal() {
-    const token = $('#allowance-popup-link').data('link');
+});
+
+Template.offermodal.events({
+  'click button.btn-allowance-modal': (event) => {
+    const token = $(event.target).data('link');
     $(`#allowanceModal${token}`).modal('show');
   },
 });
