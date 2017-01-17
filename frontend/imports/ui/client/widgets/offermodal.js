@@ -63,6 +63,8 @@ Template.offermodal.viewmodel({
     try {
       const token = Tokens.findOne(this.sellCurrency());
       const allowance = new BigNumber(token.allowance);
+      console.log(this.type(), this.sellCurrency(), allowance.toNumber());
+      //console.log(new BigNumber(this.type() === 'bid' ? this.volume() : this.total()));
       return token && allowance.gte(web3.toWei(new BigNumber(this.type() === 'bid' ? this.volume() : this.total())));
     } catch (e) {
       return false;
@@ -264,6 +266,10 @@ Template.offermodal.viewmodel({
 
 Template.offermodal.events({
   'click button.btn-allowance-modal': (event) => {
+    const offerType = $(event.target).data('offerType');
+    if (typeof offerType !== 'undefined') {
+      Session.set('returnToOffer', true);
+    }
     const token = $(event.target).data('link');
     $(`#allowanceModal${token}`).modal('show');
   },

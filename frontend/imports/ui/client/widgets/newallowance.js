@@ -47,14 +47,18 @@ Template.newallowance.viewmodel({
     Dapple.getToken(this.templateInstance.data.token._id, (error, token) => {
       if (!error) {
         token.approve(contractAddress,
-              convertToTokenPrecision(this.value(), this.templateInstance.data.token._id), options, (txError, tx) => {
-                if (!txError) {
-                  Transactions.add('allowance_'.concat(this.templateInstance.data.token._id), tx,
-                    { value: this.value(), token: this.templateInstance.data.token._id });
-                } else {
-                  this.lastError(formatError(txError));
-                }
+          convertToTokenPrecision(this.value(), this.templateInstance.data.token._id), options, (txError, tx) => {
+            if (!txError) {
+              Transactions.add('allowance_'.concat(this.templateInstance.data.token._id), tx,
+                { value: this.value(), token: this.templateInstance.data.token._id });
+              Transactions.observeRemoved('allowance_'.concat(this.templateInstance.data.token._id), () => {
+                $('#allowanceModal'.concat(this.templateInstance.data.token._id)).modal('hide');
+                $('#offerModal').modal('show');
               });
+            } else {
+              this.lastError(formatError(txError));
+            }
+          });
       } else {
         this.lastError(error.toString());
       }
