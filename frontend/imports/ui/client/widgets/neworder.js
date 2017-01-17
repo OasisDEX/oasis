@@ -75,8 +75,9 @@ Template.neworder.viewmodel({
       const token = Tokens.findOne(Session.get('baseCurrency'));
       if (token) {
         const balance = new BigNumber(token.balance);
-        const allowance = new BigNumber(token.allowance);
-        maxAmount = web3.fromWei(BigNumber.min(balance, allowance).toString(10));
+        /* const allowance = new BigNumber(token.allowance);
+        maxAmount = web3.fromWei(BigNumber.min(balance, allowance).toString(10));*/
+        maxAmount = web3.fromWei(balance.toString(10));
       }
     } else {
       maxAmount = '9e999';
@@ -99,8 +100,9 @@ Template.neworder.viewmodel({
       const token = Tokens.findOne(Session.get('quoteCurrency'));
       if (token) {
         const balance = new BigNumber(token.balance);
-        const allowance = new BigNumber(token.allowance);
-        maxTotal = web3.fromWei(BigNumber.min(balance, allowance).toString(10));
+        /* const allowance = new BigNumber(token.allowance);
+        maxTotal = web3.fromWei(BigNumber.min(balance, allowance).toString(10));*/
+        maxTotal = web3.fromWei(balance.toString(10));
       }
     } else {
       maxTotal = '9e999';
