@@ -1833,6 +1833,9 @@ section.depositbalance {
 .text-right {
   text-align: right;
 }
+.text-danger {
+  color: rgba(0, 0, 0, 0.4);  
+}
 .npl {
     padding-left: 0px;
 }
@@ -1961,7 +1964,7 @@ span.right {
 }
 .modal-body {
    .order-warning {
-     margin-top: 8px;
+
    }
   .my-allowance-instructions {
     background: #FBFAF9;
