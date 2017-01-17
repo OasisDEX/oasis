@@ -171,6 +171,8 @@ Template.registerHelper('not', (b) => !b);
 
 Template.registerHelper('or', (a, b) => a || b);
 
+Template.registerHelper('and', (a, b) => a && b);
+
 Template.registerHelper('concat', (...args) => Array.prototype.slice.call(args, 0, -1).join(''));
 
 Template.registerHelper('timestampToString', (ts, inSeconds, short) => {
