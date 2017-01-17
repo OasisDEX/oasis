@@ -37,8 +37,8 @@
                     <th>
                       Available
                     </th>
-                    <td {{b "click: setTotalAllowance"}}>
-                      {{fromWei token.balance}} <span class="allowance-currency">{{token._id}}</span>
+                    <td>
+                      <span class="set-total-allowance" {{b "click: setTotalAllowance"}}>{{fromWei token.balance}}</span> <span class="allowance-currency">{{token._id}}</span>
                     </td>
                   </tr>
                   <tr>
@@ -71,8 +71,8 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default btn-submit-order btn-submit-order btn-placement-right btn-place-order" {{b "enable: canChange, click: change"}}>Change</button>
-          <button type="button" class="btn btn-default btn-submit-order btn-placement-right btn-cancel-order" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-allowance-modal btn-default btn-submit-order-allowance btn-placement-right" {{b "enable: canChange, click: change"}}>Change</button>
+          <button type="button" class="btn btn-default btn-placement-left btn-submit-order-cancel" data-dismiss="modal">Cancel</button>
         </div>
       </div>
     </div>

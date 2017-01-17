@@ -14,6 +14,8 @@ $color-base-currency: #8D86C9;
 $color-buy: #26A69A;
 $color-sell: #EF5350;
 $color-more: #4F5362;
+$color-allowance: #4F5362;
+$color-cancel: #A8ACB9;
 $border-more: #A8ACB9;
 $color-place-order: #4F5362;
 $color-cancel-order: #A8ACB9;
@@ -1091,11 +1093,26 @@ table {
    color: $color-more;
 }
 
+.btn-submit-order-allowance {
+   @extend .btn-submit-order;
+   border-color: $color-allowance;
+   color: $color-allowance;
+}
+
+.btn-submit-order-cancel {
+   @extend .btn-submit-order;
+   border-color: $color-cancel;
+   color: $color-cancel;
+}
+
+
 
 .btn-placement-right {
   float: right;
 }
-
+.btn-placement-left {
+  float: left;
+}
 .btn-place-order {
   color: $color-place-order;
   border-color: $color-place-order;
@@ -1138,7 +1155,7 @@ table {
   }
 
   td {
-    font-size: 18px;
+    font-size: 22px;
     font-weight: bold;
     text-align: right;
     font-family: 'Roboto';    
@@ -1161,7 +1178,7 @@ table {
   tr.row-input-line {
       td,
       th {
-        padding-top: 10px;
+        /* padding-top: 10px; */
         &.th-owner {
           width: 50px!important;
         }
@@ -1842,6 +1859,9 @@ section.depositbalance {
 .text-danger {
   color: rgba(0, 0, 0, 0.4);  
 }
+.nb {
+  border: none!important;
+}
 .npl {
     padding-left: 0px;
 }
@@ -1858,7 +1878,9 @@ section.depositbalance {
 .nsp-aux {
   padding-top: 5px;
 }
-
+hr.nmt {
+  margin-top: 0px!important;
+}
 /* CUSTOM TOOLTIP CHART.JS */
 #chartjs-tooltip {
     opacity: 0;
@@ -1902,6 +1924,9 @@ span.right {
 
 
 /* MODAL RESET */
+#offerModal {
+  padding: 0px!important;
+}
 .modal-backdrop {
   display: none!important;
 }
@@ -1955,7 +1980,7 @@ span.right {
     }
   }
   .owner-address {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
     color: #68686C;
     font-family: 'Roboto';
@@ -2016,6 +2041,9 @@ span.right {
   -webkit-appearance: none;
   margin: 0;
   }
+  span.set-total-allowance {
+    cursor: pointer;
+  }  
 }
 
 

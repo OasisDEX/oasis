@@ -42,7 +42,7 @@
                   <th>VOLUME</th>
                   <td><input type="number" class="input" step="any" min="0" max={{maxVolume}} {{b "value: volume, input: calcTotal"}}> <span class="span-offer-currency">{{baseCurrency}}</span></td>
                 </tr>
-                <tr class="row-input-line">
+                <tr class="row-input-line nb">
                   <th>TOTAL</th>
                   <td><input type="number" class="input" step="any" min="0" max={{maxTotal}} {{b "value: total, input: calcVolume"}}> <span class="span-offer-currency">{{quoteCurrency}}</span></td>
                 </tr>
@@ -53,7 +53,7 @@
                 {{/if}}
               </tbody>
             </table>
-            <hr>
+            <hr class="nmt">
             <div class="div-modal-text row">
               <div class="col-md-1">
                 <img src="/order-warning.svg" class="order-warning">
@@ -95,23 +95,24 @@
                 {{/unless}}
               </div>
             </div>
+            <hr>
           {{/if}}
         </div>
         <div class="modal-footer">
           {{#unless hasAllowance}}
             {{#if equals offerType 'buy'}}
-              <button type="button" data-link={{buyCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order btn-submit-order-{{offerType}} {{offerType}} btn-placement-right btn-place-order" data-dismiss="modal">Change Allowance</button>
+              <button type="button" data-link={{buyCurrency}} class="btn btn-default btn-submit-order-allowance btn-placement-right" data-dismiss="modal">Change Allowance</button>
             {{else}}
-              <button type="button" data-link={{sellCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order btn-submit-order-{{offerType}} {{offerType}} btn-placement-right btn-place-order" data-dismiss="modal">Change Allowance</button>
+              <button type="button" data-link={{sellCurrency}} class="btn btn-default btn-submit-order-allowance {{offerType}} btn-placement-right" data-dismiss="modal">Change Allowance</button>
             {{/if}}
           {{else}}
             {{#if offer}}
-              <button type="button" class="btn btn-default btn-submit-order-buy buy btn-placement-right btn-placement-right" data-dismiss="modal" {{b "enable: canBuy, click: buy"}}>
+              <button type="button" class="btn btn-default btn-submit-order btn-submit-order-{{offerType}} {{offerType}} btn-placement-right" data-dismiss="modal" {{b "enable: canBuy, click: buy"}}>
                 {{#if equals offer.type 'bid'}}SELL{{else}}BUY{{/if}} {{baseCurrency}}
               </button>
             {{/if}}
           {{/unless}}
-          <button type="button" class="btn btn-default btn-submit-order" data-dismiss="modal">CANCEL</button>          
+          <button type="button" class="btn btn-default btn-placement-left btn-submit-order-cancel" data-dismiss="modal">CANCEL</button>          
         </div>
       </div>
     </div>
@@ -143,9 +144,9 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default btn-submit-order btn-placement-right" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-default btn-submit-order btn-placement-left" data-dismiss="modal">Close</button>
           {{#if offer}}
-            <button type="button" class="btn btn-default btn-submit-order-sell sell" data-dismiss="modal" disabled={{not offer.canCancel}} {{b "click: cancel"}}>Cancel Offer</button>
+            <button type="button" class="btn btn-default btn-submit-order-sell sell btn-placement-right" data-dismiss="modal" disabled={{not offer.canCancel}} {{b "click: cancel"}}>Cancel Offer</button>
           {{/if}}
         </div>
       </div>
@@ -185,25 +186,25 @@
                   <td>{{formatBalance baseToken.balance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
                 {{/if}}
               </tr>
-              <tr>
+              <tr class="row-input-line">
                 <th>OWNER</th>
                 <td><span class="owner-address">{{address}}</span></td>
               </tr>
-              <tr>
+              <tr class="row-input-line">
                 <th>Price</th>
                 <td><span class="value price">{{formatBalance (toWei offerPrice)}}</span> <span class="quote-currency">{{quoteCurrency}}</span></td>
               </tr>
-              <tr>
+              <tr class="row-input-line">
                 <th>Volume</th>
                 <td><span class="value">{{formatBalance (toWei offerAmount)}}</span> <span class="base-currency">{{baseCurrency}}</span></td>
               </tr>
-              <tr>
+              <tr class="row-input-line nb">
                 <th>Total</th>
                 <td><span class="value">{{formatBalance (toWei offerTotal)}}</span> <span class="base-currency">{{baseCurrency}}</span></td>
               </tr>
             </tbody>
           </table>
-          <hr>
+          <hr class="nmt">
           <div class="row">
             <div class="col-md-1">
               <img src="/order-warning.svg" class="order-warning">
@@ -227,14 +228,14 @@
         <div class="modal-footer">
           {{#unless hasAllowance}}
             {{#if equals offerType 'buy'}}
-              <button type="button" data-link={{sellCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order btn-submit-order-{{offerType}} {{offerType}} btn-placement-right btn-place-order" data-dismiss="modal">Change Allowance</button>
+              <button type="button" data-link={{sellCurrency}} class="btn btn-default btn-submit-order-allowance btn-placement-right" data-dismiss="modal">Change Allowance</button>
             {{else}}
-              <button type="button" data-link={{buyCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order btn-submit-order-{{offerType}} {{offerType}} btn-placement-right btn-place-order" data-dismiss="modal">Change Allowance</button>
+              <button type="button" data-link={{buyCurrency}} class="btn btn-default btn-submit-order-allowance btn-placement-right" data-dismiss="modal">Change Allowance</button>
             {{/if}}
           {{else}}
-            <button type="button" class="btn btn-default btn-submit-order btn-submit-order-{{offerType}} {{offerType}} btn-placement-right btn-place-order" data-dismiss="modal" {{b "enable: canSubmit, click: confirmOffer"}}>{{offerType}} {{baseCurrency}}</button>
+            <button type="button" class="btn btn-default btn-submit-order-{{offerType}} {{offerType}} btn-placement-right" data-dismiss="modal" {{b "enable: canSubmit, click: confirmOffer"}}>{{offerType}} {{baseCurrency}}</button>
           {{/unless}}
-          <button type="button" class="btn btn-default btn-submit-order btn-placement-right btn-cancel-order" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-default btn-placement-left btn-submit-order-cancel" data-dismiss="modal">Cancel</button>
         </div>
       </div>
     </div>
