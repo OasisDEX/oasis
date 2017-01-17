@@ -11,11 +11,11 @@
             <th class="available">
               AVAILABLE
             </th>
-            <td class="available" {{b "click: autofill"}}>
+            <td class="available">
               {{#if equals type 'buy'}}
-              <input type="text" class="input" disabled value={{formatBalance quoteAvailable}}> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
+              <span class="fill-amount" {{b "click: autofill"}}>{{formatBalance quoteAvailable}}</span> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
               {{else}}
-              <input type="text" class="input" disabled value={{formatBalance baseAvailable}}> <span class="span-buy-sell-currency">{{baseCurrency}}</span>
+              <span class="fill-amount" {{b "click: autofill"}}>{{formatBalance baseAvailable}}</span> <span class="span-buy-sell-currency">{{baseCurrency}}</span>
               {{/if}}
             </td>
           </tr>
