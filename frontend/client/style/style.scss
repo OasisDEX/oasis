@@ -592,6 +592,7 @@ table {
       &:hover {
         border-bottom: 1px #DCDDE0 solid;
         border-top: 1px #DCDDE0 solid;
+        background: rgba(248,247,245,0.15);        
       }
     }
     &.helper-row {
@@ -627,14 +628,14 @@ table {
     font-weight: 500;
     color: #979797;
     opacity: 0.5;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 20px;    
   }
 
   td.order-type {
     font-family: 'Montserrat', 'sans-serif';
     font-weight: 700;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 20px;    
   }
 
@@ -1378,16 +1379,16 @@ table {
                   width: 0px;
                 }
                 &.th-date {
-                  max-width: 55px!important;
+                  max-width: 70px!important;
                 }
                 &.th-type {
                   max-width: 40px;
                 }
                 &.th-quote-currency {
-                  max-width: 100px;
+                  max-width: 94px;
                 }
                 &.th-base-currency {
-                  max-width: 100px;
+                  max-width: 94px;
                 }                
                 &:nth-child(4n) {
                   max-width: 65px;
@@ -1454,7 +1455,7 @@ table {
                   width: 0px;
                 }
                 &.timestamp {
-                  max-width: 55px!important;
+                  max-width: 70px!important;
                 }
                 &.order-type {
                   width: 40px;
@@ -1463,10 +1464,10 @@ table {
                   max-width: 65px;
                 }  
                 &:nth-child(5n) {
-                  max-width: 100px;
+                  max-width: 94px;
                 }                                
                 &:nth-child(6n) {
-                  max-width: 100px;
+                  max-width: 94px;
                 }                  
                 &:last-of-type {
                   width: 0px;
