@@ -200,7 +200,7 @@
               </tr>
               <tr class="row-input-line nb">
                 <th>Total</th>
-                <td><span class="value">{{formatBalance (toWei offerTotal)}}</span> <span class="base-currency">{{baseCurrency}}</span></td>
+                <td><span class="value">{{formatBalance (toWei offerTotal)}}</span> <span class="base-currency">{{quoteCurrency}}</span></td>
               </tr>
             </tbody>
           </table>
@@ -228,9 +228,9 @@
         <div class="modal-footer">
           {{#unless hasAllowance}}
             {{#if equals offerType 'buy'}}
-              <button type="button" data-link={{sellCurrency}} class="btn btn-default btn-submit-order-allowance btn-placement-right" data-dismiss="modal">Change Allowance</button>
+              <button type="button" data-offerType={{offerType}} data-link={{sellCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order-allowance btn-placement-right" data-dismiss="modal">Change Allowance</button>
             {{else}}
-              <button type="button" data-link={{buyCurrency}} class="btn btn-default btn-submit-order-allowance btn-placement-right" data-dismiss="modal">Change Allowance</button>
+              <button type="button" data-offerType={{offerType}} data-link={{buyCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order-allowance btn-placement-right" data-dismiss="modal">Change Allowance</button>
             {{/if}}
           {{else}}
             <button type="button" class="btn btn-default btn-submit-order-{{offerType}} {{offerType}} btn-placement-right" data-dismiss="modal" {{b "enable: canSubmit, click: confirmOffer"}}>{{offerType}} {{baseCurrency}}</button>
