@@ -64,6 +64,10 @@ Template.chart.viewmodel({
           type: 'line',
           data: {},
           options: {
+            maintainAspectRatio: true,
+            layout: {
+              padding: 5,
+            },
             tooltips: {
               enabled: false,
               mode: 'index',
@@ -271,6 +275,10 @@ Template.chart.viewmodel({
           type: 'line',
           data: {},
           options: {
+            maintainAspectRatio: true,
+            layout: {
+              padding: 5,
+            },
             tooltips: {
               enabled: false,
               mode: 'index',
