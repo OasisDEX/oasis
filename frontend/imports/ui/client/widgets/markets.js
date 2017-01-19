@@ -130,10 +130,10 @@ Template.markets.viewmodel({
     const rows = $('.t-markets tbody  tr').get();
 
     rows.sort((a, b) => {
-      const A = $(a).children('td').eq(3).text()
-        .replace(/,/g, '');
-      const B = $(b).children('td').eq(3).text()
-        .replace(/,/g, '');
+      const A = parseFloat($(a).children('td').eq(3).text()
+            .replace(/,/g, ''));
+      const B = parseFloat($(b).children('td').eq(3).text()
+            .replace(/,/g, ''));
 
       if (A < B) {
         return 1;
