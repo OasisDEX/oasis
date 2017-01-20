@@ -32,14 +32,18 @@
             <td class="td-coin">{{this}}</td>
             <td class="td-price">
               {{#if loadingTradeHistory}}
-                {{{loadingIcon}}}
+                <span class="loading-icon">
+                  {{{loadingIcon}}}
+                </span>
               {{else}}
                 {{price this}}
               {{/if}}
             </td>
             <td class="td-volume">
               {{#if loadingTradeHistory}}
-                {{{loadingIcon}}}
+                <span class="loading-icon">
+                  {{{loadingIcon}}}
+                </span>
               {{else}}
                 {{formatBalance (volume this)}}
                 {{sort}}

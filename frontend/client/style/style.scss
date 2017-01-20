@@ -1865,6 +1865,12 @@ table {
   }     
 }
 
+span.loading-icon {
+  img {
+    transform: translate(0px, -3px);
+  }
+}
+
 .hr-footer {
   max-width: 980px;
   margin: 50px auto 0px auto;
