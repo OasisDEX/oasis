@@ -550,6 +550,130 @@ table {
   margin-left: 17px;
 }
 
+#myorders-container {
+  h2 {
+    padding-right: 30px;
+  }
+  .t-scroll {
+    thead {
+      th {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 10px;
+        opacity: 0.68;
+        height: 30px;
+        text-align: right;
+        color: #222228;
+      }
+      th:first-child {
+        border-bottom-left-radius: 4px;
+        border-top-left-radius: 4px;
+      }
+      th.th-type {
+        width: 35px;
+      }
+      th.th-price {
+        max-width: 97px;
+      }
+      th.th-quote-currency {
+        max-width: 97px;        
+      }
+      th.th-base-currency {
+        max-width: 97px;        
+      }      
+      th:last-child {
+        border-bottom-right-radius: 4px;
+        border-top-right-radius: 4px;
+        width: 22px;
+      }
+      th:last-of-type {
+        width: 22px;
+      }
+      tr {
+        background: #F8F7F5;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+      }
+    }
+    tbody {
+      tr {
+        text-align: center;
+        height: 30px;
+
+        &.clickable {
+          cursor: pointer;
+          border-top: 1px transparent solid;
+          border-bottom: 1px transparent solid;      
+          &:hover {
+            border-bottom: 1px #DCDDE0 solid;
+            border-top: 1px #DCDDE0 solid;
+            background: rgba(248,247,245,0.15);        
+          }
+        }
+        &.helper-row {
+          td {
+            text-align: center;
+            width: 100%!important;
+          }
+        }
+        td:first-child {
+          font-weight: 900;
+        }
+        td {
+          font-family: 'Roboto', sans-serif;
+          font-weight: 500;
+          font-size: 14.5px;
+          color: #4A4A4A;
+          padding-top: 10px;
+          text-align: right;
+          max-width: 97px;
+        }
+        td:first-of-type {
+          width: 30px;
+        }
+        td.bid {
+          color: $color-buy;
+        }
+
+        td.ask {
+          color: $color-sell;
+        }
+
+        td.timestamp {
+          font-weight: 500;
+          color: #979797;
+          opacity: 0.5;
+          font-size: 12px;
+          line-height: 20px;    
+        }
+
+        td.order-type {
+          font-family: 'Montserrat', 'sans-serif';
+          font-weight: 700;
+          font-size: 12px;
+          line-height: 20px;
+          width: 35px;
+        }
+        td:last-of-type {
+          width: 22px;
+        }
+        .cancel {
+          border: none;
+          padding: 0px;
+          width: 29px;
+          height: 16px;
+          border-radius: 7px;    
+          &:hover {
+            
+          }
+          img {
+            transform: translate(0px,-3px);
+          }
+        }      
+      }
+    }
+  }
+}
 .order-section-content {
   h2 {
     padding-right: 30px;
@@ -569,7 +693,6 @@ table {
       border-bottom-left-radius: 4px;
       border-top-left-radius: 4px;
     }
-
     th:last-child {
       border-bottom-right-radius: 4px;
       border-top-right-radius: 4px;
@@ -638,7 +761,7 @@ table {
     font-family: 'Montserrat', 'sans-serif';
     font-weight: 700;
     font-size: 12px;
-    line-height: 20px;    
+    line-height: 20px;
   }
 
   .cancel {
@@ -655,6 +778,14 @@ table {
     }
   }
 }
+
+
+
+
+
+
+
+
 
 .buy-sell-section {
   form#neworder {
