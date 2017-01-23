@@ -20,24 +20,6 @@ class TokensCollection extends Mongo.Collection {
         }
       });
 
-      // FIXME: this will get called every time we sync, but we need to show W-GNT balance in deposit/withdraw window
-      // XXX EIP20
-      Dapple.getToken('W-GNT', (error, token) => {
-        if (!error) {
-          token.balanceOf(address, (callError, balance) => {
-            if (!error) {
-              super.upsert('W-GNT', { $set: { balance: balance.toString(10) } });
-              token.getBroker.call((e, broker) => {
-                if (!e) {
-                  super.upsert('W-GNT', { $set: { broker } });
-                  Session.set('GNTBroker', broker);
-                }
-              });
-            }
-          });
-        }
-      });
-
       // Get GNTBalance
       // XXX EIP20
       Dapple.getToken('GNT', (error, token) => {
@@ -46,6 +28,10 @@ class TokensCollection extends Mongo.Collection {
             const newGNTBalance = balance.toString(10);
             if (!error && !Session.equals('GNTBalance', newGNTBalance)) {
               Session.set('GNTBalance', newGNTBalance);
+              super.upsert(token, { $set: {
+                balance: convertTo18Precision(balance, token).toString(10),
+                realBalance: balance.toString(10),
+              } });
             }
           });
           if (Session.get('GNTBroker') === '0x0000000000000000000000000000000000000000') {
@@ -61,7 +47,8 @@ class TokensCollection extends Mongo.Collection {
         }
       });
 
-      const ALL_TOKENS = _.uniq([Session.get('quoteCurrency'), Session.get('baseCurrency')]);
+      // const ALL_TOKENS = _.uniq([Session.get('quoteCurrency'), Session.get('baseCurrency')]);
+      const ALL_TOKENS = Dapple.getTokens();
 
       if (network !== 'private') {
         // Sync token balances and allowances asynchronously
@@ -76,6 +63,14 @@ class TokensCollection extends Mongo.Collection {
                     realBalance: balance.toString(10),
                   } });
                   Session.set('balanceLoaded', true);
+                  if (tokenId === 'W-GNT') {
+                    token.getBroker.call((e, broker) => {
+                      if (!e) {
+                        super.upsert('W-GNT', { $set: { broker } });
+                        Session.set('GNTBroker', broker);
+                      }
+                    });
+                  }
                 }
               });
               const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
