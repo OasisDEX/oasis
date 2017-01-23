@@ -27,10 +27,6 @@ class TokensCollection extends Mongo.Collection {
             const newGNTBalance = balance.toString(10);
             if (!error && !Session.equals('GNTBalance', newGNTBalance)) {
               Session.set('GNTBalance', newGNTBalance);
-              super.upsert(token, { $set: {
-                balance: convertTo18Precision(balance, token).toString(10),
-                realBalance: balance.toString(10),
-              } });
             }
           });
           if (Session.get('GNTBroker') === '0x0000000000000000000000000000000000000000') {
