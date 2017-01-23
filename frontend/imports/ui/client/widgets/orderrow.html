@@ -13,11 +13,11 @@
       <td class="timestamp">{{timestampToString order.timestamp true true}}</td>
     {{/if}}
     {{#if showType}}
-      <td class="{{determineOrderType order}} order-type">
+      <td class="{{#if equals (determineOrderType order) 'bid'}}ask{{else}}bid{{/if}} order-type">
         {{#if equals (determineOrderType order) 'bid'}}
-          BUY
-        {{else}}
           SELL
+        {{else}}
+          BUY
         {{/if}}
       </td>
     {{/if}}
