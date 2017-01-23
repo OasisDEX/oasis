@@ -70,7 +70,7 @@ class TokenEventCollection extends Mongo.Collection {
   watchTokenEvents() {
     if (Session.get('startBlock') !== 0) {
       // console.log('filtering token events from ', Session.get('startBlock'));
-      const ALL_TOKENS = _.uniq([Session.get('quoteCurrency'), Session.get('baseCurrency')]);
+      const ALL_TOKENS = Dapple.getTokens();
       ALL_TOKENS.forEach((tokenId) => {
         Dapple.getToken(tokenId, (error, token) => {
           if (!error) {
