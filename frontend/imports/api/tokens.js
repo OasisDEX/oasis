@@ -1,7 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 import { Session } from 'meteor/session';
 import { Dapple, web3 } from 'meteor/makerotc:dapple';
-import { _ } from 'meteor/underscore';
 import { convertTo18Precision } from '/imports/utils/conversion';
 
 class TokensCollection extends Mongo.Collection {
