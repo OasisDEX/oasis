@@ -1912,6 +1912,17 @@ span.loading-icon {
   text-align: center;
   background: rgba(255, 255, 255, 0.5);
 }
+.loading-market-history {
+    width: calc(100% - 30px);
+    height: 175px;
+    line-height: 175px;
+    position: absolute;
+    top: 104px;
+    left: 30px;
+    z-index: 100000;
+    text-align: center;
+    background: rgba(255, 255, 255, 0);
+}
 .select-market {
   .select-market-container {
     border: 1px solid #D3D5DC;
