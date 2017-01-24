@@ -1823,7 +1823,7 @@ table {
           a {
             text-decoration: none;
             color: inherit;
-          }
+          }          
         }
         &:last-child {
           width: 0px!important;
@@ -1844,6 +1844,11 @@ table {
         }
         &.td-price {
           max-width: 150px!important;
+          span.loading-icon {
+            img {
+              transform: translate(-4px, -3px)!important;
+            }
+          }          
         }
         &.td-volume {
           max-width: 150px!important;
@@ -1856,6 +1861,11 @@ table {
             text-align: left;
             margin-left: 2px;
           }
+          span.loading-icon {
+            img {
+              transform: translate(-28px, -3px)!important;
+            }
+          }          
         }
         &:last-child {
           width: 0px!important;
