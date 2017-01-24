@@ -282,7 +282,10 @@ Template.registerHelper('formatToken', (value) => {
   return EthTools.formatNumber(displayValue.toString(10), '0.00000');
 });
 
-Template.registerHelper('formatNumber', (value) => EthTools.formatNumber(value.toString(10), '0.00000'));
+Template.registerHelper('formatNumber', (value, format) => {
+  const formatValue = format || '0.0000';
+  return EthTools.formatNumber(value.toString(10), formatValue);
+});
 
 Template.registerHelper('determineOrderType', (order, section) => {
   const baseCurrency = Session.get('baseCurrency');

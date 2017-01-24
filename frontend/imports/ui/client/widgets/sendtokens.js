@@ -21,6 +21,9 @@ Template.sendtokens.viewmodel({
   pending() {
     return Transactions.findType(TRANSACTION_TYPE);
   },
+  resetAmount() {
+    this.amount(0);
+  },
   amount: '0',
   maxAmount() {
     try {
@@ -39,6 +42,9 @@ Template.sendtokens.viewmodel({
     } catch (e) {
       return false;
     }
+  },
+  fillAmount() {
+    this.amount(this.maxAmount());
   },
   transfer(event) {
     event.preventDefault();

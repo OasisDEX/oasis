@@ -8,7 +8,7 @@
       </div>
       <div id="container-transfer" class="col-xs-6">
         <span class="select-market-container"> 
-            <select class="select-market-graph" {{b "options: currencies, value: currency"}}></select>
+            <select class="select-market-graph" {{b "options: currencies, value: currency, change: resetAmount"}}></select>
             <span class="glyphicon glyphicon-chevron-down select-glyph" aria-hidden="true"></span>
         </span>
       </div>
@@ -16,6 +16,15 @@
     <div>
       <table>
         <tbody>
+          <tr class="row-input-line">
+            <th>
+              WALLET
+            </th>
+            <td class="token">
+              <span class="fill-amount" {{b "click: fillAmount"}}>{{formatNumber maxAmount '0,0.00[000]'}}</span>
+              <span class="span-transfer-currency">{{currency}}</span>
+            </td>
+          </tr>
           <tr class="row-input-line">
             <th>
               RECIPIENT
