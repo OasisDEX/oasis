@@ -952,6 +952,20 @@ table {
 
   td {
     text-align: right;
+    &.token {
+        opacity: 0.68;
+        font-family: 'Roboto';
+        font-weight: 500;
+        font-size: 19px;
+        color: #222228; 
+        padding-top: 20px;   
+        span.fill-amount {
+          cursor: pointer;
+        }          
+    }
+    &.transfer-button {
+      padding: 0px;
+    }
   }
 
   th,
@@ -994,7 +1008,7 @@ table {
     letter-spacing: 1.57px;
     width: 131px;
     height: 36px;
-    margin-top: 35px;
+    margin-top: 25px;
   }
   .span-transfer-currency {
     font-family: 'Montserrat', sans-serif;
