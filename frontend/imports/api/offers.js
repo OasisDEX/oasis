@@ -128,13 +128,27 @@ Offers.sync = () => {
     }
   });
 
-  // Watch Trade events
+  function transformArgs(trade) {
+    const buyWhichToken = Dapple.getTokenByAddress(trade.args.buy_which_token);
+    const sellWhichToken = Dapple.getTokenByAddress(trade.args.sell_which_token);
+
+    // Transform arguments
+    const args = {
+      buyWhichToken_address: trade.args.buy_which_token,
+      buyWhichToken,
+      sellWhichToken_address: trade.args.sell_which_token,
+      sellWhichToken,
+      buyHowMuch: convertTo18Precision(trade.args.buy_how_much.toString(10), buyWhichToken),
+      sellHowMuch: convertTo18Precision(trade.args.sell_how_much.toString(10), sellWhichToken),
+    };
+    return args;
+  }
+
+
+  // Get all Trade events in one go so we can fill up prices, volume and history
   Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: Dapple.getFirstContractBlock() }).get((error, trades) => {
     if (!error) {
       let trade = null;
-      let buyWhichToken = null;
-      let sellWhichToken = null;
-      let args = {};
       const promises = [];
       let block = null;
 
@@ -146,18 +160,7 @@ Offers.sync = () => {
         Promise.all(promises).then((resultProm) => {
           for (let i = 0; i < trades.length; i++) {
             trade = trades[i];
-            buyWhichToken = Dapple.getTokenByAddress(trade.args.buy_which_token);
-            sellWhichToken = Dapple.getTokenByAddress(trade.args.sell_which_token);
-
-            // Transform arguments
-            args = {
-              buyWhichToken_address: trade.args.buy_which_token,
-              buyWhichToken,
-              sellWhichToken_address: trade.args.sell_which_token,
-              sellWhichToken,
-              buyHowMuch: convertTo18Precision(trade.args.buy_how_much.toString(10), buyWhichToken),
-              sellHowMuch: convertTo18Precision(trade.args.sell_how_much.toString(10), sellWhichToken),
-            };
+            const args = transformArgs(trade);
 
             block = resultProm[i];
 
@@ -168,6 +171,19 @@ Offers.sync = () => {
       } else {
         Session.set('loadingTradeHistory', false);
       }
+    }
+  });
+
+  // Watch Trade events in realtime
+  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: Session.get('startingBlock') }, (error, trade) => {
+    if (!error) {
+      const args = transformArgs(trade);
+      // Get block for timestamp
+      web3.eth.getBlock(trade.blockNumber, (blockError, block) => {
+        if (!error) {
+          Trades.upsert(trade.transactionHash, _.extend(block, trade, args));
+        }
+      });
     }
   });
 };
