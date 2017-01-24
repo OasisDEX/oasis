@@ -614,6 +614,7 @@ table {
           td {
             text-align: center;
             width: 100%!important;
+            max-width: none;
           }
         }
         td:first-child {
@@ -724,6 +725,7 @@ table {
       td {
         text-align: center;
         width: 100%!important;
+        max-width: none;        
       }
     }
   }
