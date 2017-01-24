@@ -52,6 +52,7 @@ const tokens = {
     'W-GNT': '0xa5d92f318247c3b43241436dbb55ec4be600dc42',
     REP: '0x0000000000000000000000000000000000000000',
     ICN: '0x0000000000000000000000000000000000000000',
+    '1ST': '0x0000000000000000000000000000000000000000',
   },
   morden: {
     'W-ETH': '0x52fe88b987c7829e5d5a61c98f67c9c14e6a7a90',
@@ -62,6 +63,7 @@ const tokens = {
     'W-GNT': '0x0000000000000000000000000000000000000000',
     REP: '0x0000000000000000000000000000000000000000',
     ICN: '0x0000000000000000000000000000000000000000',
+    '1ST': '0x0000000000000000000000000000000000000000',
   },
   live: {
     'W-ETH': '0xecf8f87f810ecf450940c9f60066b4a7a501d6a7',
@@ -72,6 +74,7 @@ const tokens = {
     'W-GNT': '0x01afc37f4f85babc47c0e2d0eababc7fb49793c8',
     REP: '0x48c80f1f4d53d5951e5d5438b54cba84f29f32a5',
     ICN: '0x888666ca69e0f178ded6d75b5726cee99a87d698',
+    '1ST': '0xaf30d2a7e90d7dc361c8c4585e9bb7d2f6f15bc7',
   },
 };
 
@@ -85,13 +88,14 @@ const tokenSpecs = {
   'W-GNT': { precision: 18, format: '0,0.00[0000000000000000]' },
   REP: { precision: 18, format: '0,0.00[0000000000000000]' },
   ICN: { precision: 18, format: '0,0.00[0000000000000000]' },
+  '1ST': { precision: 18, format: '0,0.00[0000000000000000]' },
 };
 
 Dapple.getQuoteTokens = () => ['W-ETH'];
 
-Dapple.getBaseTokens = () => ['MKR', /* 'DAI', */'DGD', 'W-GNT', 'REP', 'ICN'];
+Dapple.getBaseTokens = () => ['MKR', /* 'DAI', */'DGD', 'W-GNT', 'REP', 'ICN', '1ST'];
 
-Dapple.getTokens = () => ['W-ETH', 'MKR', /* 'DAI', */'DGD', 'GNT', 'W-GNT', 'REP', 'ICN'];
+Dapple.getTokens = () => ['W-ETH', 'MKR', /* 'DAI', */'DGD', 'GNT', 'W-GNT', 'REP', 'ICN', '1ST'];
 
 Dapple.getTokenSpecs = (symbol) => {
   if (typeof (tokenSpecs[symbol]) !== 'undefined') {
