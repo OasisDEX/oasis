@@ -284,10 +284,16 @@ Template.registerHelper('formatToken', (value) => {
 
 Template.registerHelper('formatNumber', (value) => EthTools.formatNumber(value.toString(10), '0.00[000]'));
 
-Template.registerHelper('determineOrderType', (order) => {
+Template.registerHelper('determineOrderType', (order, section) => {
   const baseCurrency = Session.get('baseCurrency');
   let type = '';
-  if (order.buyWhichToken === baseCurrency) {
+  if (section === 'lastTrades') {
+    if (order.buyWhichToken === baseCurrency) {
+      type = 'ask';
+    } else if (order.sellWhichToken === baseCurrency) {
+      type = 'bid';
+    }
+  } else if (order.buyWhichToken === baseCurrency) {
     type = 'bid';
   } else if (order.sellWhichToken === baseCurrency) {
     type = 'ask';
