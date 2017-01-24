@@ -281,7 +281,7 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
     });
 };
 
-Offers.buyOffer = (_id, _quantity, _token) => {
+Offers.buyOffer = (_id, type, _quantity, _token) => {
   const id = parseInt(_id, 10);
 
   const quantityAbsolute = convertToTokenPrecision(_quantity, _token);
@@ -291,7 +291,7 @@ Offers.buyOffer = (_id, _quantity, _token) => {
     if (!error) {
       Transactions.add('offer', tx, { id: _id, status: Status.BOUGHT });
       Offers.update(_id, { $set: {
-        tx, status: Status.BOUGHT, helper: 'Your buy / sell order is being processed...' } });
+        tx, status: Status.BOUGHT, helper: `Your ${type} order is being processed...` } });
     } else {
       Offers.update(_id, { $set: { helper: formatError(error) } });
     }

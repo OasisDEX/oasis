@@ -188,9 +188,9 @@ Template.offermodal.viewmodel({
     const offer = Offers.findOne(offerId);
 
     if (this.templateInstance.data.offer.type() === 'bid') {
-      Offers.buyOffer(offerId, new BigNumber(this.total()), offer.sellWhichToken);
+      Offers.buyOffer(offerId, 'sell', new BigNumber(this.total()), offer.sellWhichToken);
     } else {
-      Offers.buyOffer(offerId, new BigNumber(this.volume()), offer.sellWhichToken);
+      Offers.buyOffer(offerId, 'buy', new BigNumber(this.volume()), offer.sellWhichToken);
     }
   },
   maxNewOfferAmount() {
