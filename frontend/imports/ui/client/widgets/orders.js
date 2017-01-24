@@ -17,6 +17,9 @@ Template.orders.helpers({
     return (this.orders.count() < totalOffers);
   },
   */
+  ordersCount: function ordersCount() {
+    return Template.instance().data.orders.count();
+  },
   section: function section() {
     return Template.instance().data.type;
   },

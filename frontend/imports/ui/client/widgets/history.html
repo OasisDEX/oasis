@@ -19,7 +19,7 @@
           </tr>
         </thead>
         {{#if equals historyType 'depositHistory'}}
-          <tbody>
+          <tbody class="{{#if gt historyCount 5}}tbody-scrolling{{else}}tbody-not-scrolling{{/if}}">
             {{#each history}}
               <tr>
                 <td></td>
@@ -32,7 +32,7 @@
             {{/each}}
           </tbody>
         {{else}}
-          <tbody>
+          <tbody class="{{#if gt transferHistoryCount 5}}tbody-scrolling{{else}}tbody-not-scrolling{{/if}}">
             {{#each transferHistory}}
               <tr>
                 <td></td>

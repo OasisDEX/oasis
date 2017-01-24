@@ -28,7 +28,7 @@
         <th></th>        
       </tr>
     </thead>
-    <tbody>
+    <tbody class="{{#if gt ordersCount 5}}tbody-scrolling{{else}}tbody-not-scrolling{{/if}}">
       {{#each orders}}
         {{> orderRow order=this type=priceClass section=section canAccept=../canAccept canOpenTxLink=../canOpenTxLink showCancel=../showCancel showType=../showType showDate =../showDate}}
       {{/each}}
