@@ -75,6 +75,7 @@ $color-cancel-order: #A8ACB9;
     @content;
   }
 }
+
 $i: '';
 $max: 7;
 /* / MIXIN TABLE SCROLLING */
@@ -1559,7 +1560,7 @@ table {
             &.th-recipient {
               max-width: 90px!important;
             }
-            &th-amount {
+            &.th-amount {
               max-width: 110px!important;
             }
             &:last-of-type {
@@ -1567,18 +1568,21 @@ table {
             }                         
         }        
     }
-    tbody {
-        /* width: 100%; */
-        width: 95%;
+    tbody {        
         height: 155px;
         overflow-y: auto;
         overflow-x: hidden;
         display: block;
         margin-top: 10px;
-        tr {
-          height: 30px;
+        &.tbody-scrolling {
+          width: 95%;
+        }
+        &.tbody-not-scrolling {
           width: 100%;
-          display: block;
+        }                                  
+        tr {                   
+          height: 30px;        
+          display: block;        
           td {
             &:first-of-type {
               width: 30px;
@@ -1832,10 +1836,9 @@ table {
         }        
       }
     }
-  } 
-  tbody {
-    width: 95%;    
-    tr {
+  }
+  tbody {         
+    tr {              
       td {
         &:first-child {
           width: 20px!important;
