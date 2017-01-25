@@ -574,13 +574,13 @@ table {
         width: 35px;
       }
       th.th-price {
-        max-width: 97px;
+        max-width: 120px;
       }
       th.th-quote-currency {
-        max-width: 97px;        
+        max-width: 87px;        
       }
       th.th-base-currency {
-        max-width: 97px;        
+        max-width: 87px;        
       }      
       th:last-child {
         border-bottom-right-radius: 4px;
@@ -628,7 +628,7 @@ table {
           color: #4A4A4A;
           padding-top: 10px;
           text-align: right;
-          max-width: 97px;
+          max-width: 87px;
         }
         td:first-of-type {
           width: 30px;
@@ -655,6 +655,9 @@ table {
           font-size: 12px;
           line-height: 20px;
           width: 35px;
+        }
+        td:nth-child(3) {
+          max-width: 120px!important;
         }
         td:last-of-type {
           width: 22px;
