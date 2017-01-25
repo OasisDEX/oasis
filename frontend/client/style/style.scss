@@ -1550,16 +1550,19 @@ table {
                   width: 0px;
                 }
                 &.th-date {
-                  max-width: 70px!important;
+                  max-width: 80px!important;
                 }
                 &.th-type {
-                  max-width: 40px;
+                  max-width: 48px;
+                }
+                &.th-price {
+                  max-width: 75px!important;
                 }
                 &.th-quote-currency {
-                  max-width: 94px;
+                  max-width: 80px;
                 }
                 &.th-base-currency {
-                  max-width: 94px;
+                  max-width: 80px;
                 }                
                 &:nth-child(4n) {
                   max-width: 65px;
@@ -1629,19 +1632,19 @@ table {
                   width: 0px;
                 }
                 &.timestamp {
-                  max-width: 70px!important;
+                  max-width: 80px!important;
                 }
                 &.order-type {
-                  width: 40px;
+                  width: 48px;
                 }
                 &:nth-child(4n) {
-                  max-width: 65px;
+                  max-width: 75px;
                 }  
                 &:nth-child(5n) {
-                  max-width: 94px;
+                  max-width: 80px;
                 }                                
                 &:nth-child(6n) {
-                  max-width: 94px;
+                  max-width: 80px;
                 }                  
                 &:last-of-type {
                   width: 0px;
