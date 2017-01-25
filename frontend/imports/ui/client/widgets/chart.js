@@ -5,14 +5,14 @@ import { Session } from 'meteor/session';
 import { BigNumber } from 'meteor/ethereum:web3';
 import { EthTools } from 'meteor/ethereum:tools';
 import { _ } from 'meteor/underscore';
-import { ReactiveVar } from 'meteor/reactive-var';
 import { Offers, Trades } from '/imports/api/offers';
 import Chart from '/imports/utils/Chart.min';
 import './chart.html';
 
 const charts = [];
-const depthChart = new ReactiveVar(false, typeof charts.depth !== 'undefined');
-const volumeChart = new ReactiveVar(false, typeof charts.volume !== 'undefined');
+Session.set('depthChart', false);
+Session.set('volumeChart', false);
+Session.set('rendered', false);
 
 let askPrices = []; // Array of ask prices
 let bidPrices = []; // Array of bid prices
@@ -58,7 +58,7 @@ Template.chart.viewmodel({
   },
   fillDepthChart() {
     Meteor.defer(() => {
-      if (typeof charts.depth === 'undefined') {
+      if (Session.get('rendered') && typeof charts.depth === 'undefined') {
         const ctx = document.getElementById('market-chart-depth');
         charts.depth = new Chart(ctx, {
           type: 'line',
@@ -124,10 +124,11 @@ Template.chart.viewmodel({
             },
           },
         });
+        Session.set('depthChart', true);
       }
     });
 
-    if (depthChart
+    if (Session.get('depthChart')
         && Session.get('isConnected') && !Session.get('outOfSync')
         && !Session.get('loading') && Session.get('loadingProgress') === 100) {
       askPrices = [];
@@ -269,7 +270,7 @@ Template.chart.viewmodel({
   },
   fillVolumeChart() {
     Meteor.defer(() => {
-      if (typeof charts.volume === 'undefined') {
+      if (Session.get('rendered') && typeof charts.volume === 'undefined') {
         const ctx = document.getElementById('market-chart-volume');
         charts.volume = new Chart(ctx, {
           type: 'line',
@@ -325,10 +326,11 @@ Template.chart.viewmodel({
             },
           },
         });
+        Session.set('volumeChart', true);
       }
     });
 
-    if (volumeChart
+    if (Session.get('volumeChart')
         && !Session.get('loadingTradeHistory')) {
       const quoteCurrency = Session.get('quoteCurrency');
       const baseCurrency = Session.get('baseCurrency');
@@ -378,4 +380,8 @@ Template.chart.viewmodel({
       charts.volume.update();
     }
   },
+});
+
+Template.chart.onRendered(() => {
+  Session.set('rendered', true);
 });
