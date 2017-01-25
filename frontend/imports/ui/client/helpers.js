@@ -198,16 +198,6 @@ Template.registerHelper('fromWei', (s) => web3.fromWei(s));
 
 Template.registerHelper('toWei', (s) => web3.toWei(s));
 
-Template.registerHelper('formatBalance', (wei, format) => {
-  let formatValue = format;
-  if (formatValue instanceof Spacebars.kw) {
-    formatValue = null;
-  }
-  formatValue = formatValue || '0,0.00[000]';
-
-  return EthTools.formatBalance(wei, formatValue);
-});
-
 Template.registerHelper('friendlyAddress', (address) => {
   /* eslint-disable no-underscore-dangle */
   if (address === Blaze._globalHelpers.contractAddress()) {
@@ -217,29 +207,6 @@ Template.registerHelper('friendlyAddress', (address) => {
   }
   return `${address.substr(0, 16)}...`;
   /* eslint-enable no-underscore-dangle */
-});
-
-Template.registerHelper('formatPrice', (value, currency) => {
-  let displayValue = value;
-  const format = '0,0.00[0000]';
-  try {
-    if (!(displayValue instanceof BigNumber)) {
-      displayValue = new BigNumber(displayValue);
-    }
-
-    if (currency === 'W-ETH') {
-      const usd = EthTools.ticker.findOne('usd');
-      if (usd) {
-        const usdValue = displayValue.times(usd.price);
-        const usdBalance = EthTools.formatBalance(usdValue, format);
-        return `(~${usdBalance} USD)`;
-      }
-    }
-    // TODO: other exchange rates
-    return '';
-  } catch (e) {
-    return '';
-  }
 });
 
 Template.registerHelper('fromPrecision', (value, precision) => {
@@ -274,18 +241,49 @@ Template.registerHelper('validPrecision', (value, precision) => {
   }
 });
 
-Template.registerHelper('formatToken', (value) => {
+Template.registerHelper('formatPrice', (value, currency) => {
   let displayValue = value;
-  if (!(displayValue instanceof BigNumber)) {
-    /* eslint-disable no-underscore-dangle */
-    displayValue = Blaze._globalHelpers.fromPrecision(displayValue, 18);
-    /* eslint-enable no-underscore-dangle */
+  const format = '0,0.00[0000]';
+  try {
+    if (!(displayValue instanceof BigNumber)) {
+      displayValue = new BigNumber(displayValue);
+    }
+
+    if (currency === 'W-ETH') {
+      const usd = EthTools.ticker.findOne('usd');
+      if (usd) {
+        const usdValue = displayValue.times(usd.price);
+        const usdBalance = EthTools.formatBalance(usdValue, format);
+        return `(~${usdBalance} USD)`;
+      }
+    }
+    // TODO: other exchange rates
+    return '';
+  } catch (e) {
+    return '';
   }
-  return EthTools.formatNumber(displayValue.toString(10), '0.00000');
+});
+
+Template.registerHelper('formatBalance', (wei, format, currency) => {
+  let formatValue = format;
+  if (formatValue instanceof Spacebars.kw) {
+    formatValue = null;
+  }
+  formatValue = formatValue || '0,0.000';
+
+  let value = EthTools.formatBalance(wei, formatValue);
+  if (currency === 'W-GNT' || currency === 'GNT') {
+    value = value.substr(0, value.indexOf('.'));
+  }
+  return value;
 });
 
 Template.registerHelper('formatNumber', (value, format) => {
-  const formatValue = format || '0.0000';
+  let formatValue = format;
+  if (formatValue instanceof Spacebars.kw) {
+    formatValue = null;
+  }
+  formatValue = formatValue || '0,0.00000';
   return EthTools.formatNumber(value.toString(10), formatValue);
 });
 

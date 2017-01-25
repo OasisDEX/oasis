@@ -36,7 +36,7 @@
                 </tr>
                 <tr class="row-input-line">
                   <th>PRICE</th>
-                  <td>{{formatBalance (toWei offer.price)}} <span class="span-offer-currency">{{quoteCurrency}}</span></td>
+                  <td>{{formatNumber offer.price}} <span class="span-offer-currency">{{quoteCurrency}}</span></td>
                 </tr>
                 <tr class="row-input-line">
                   <th>VOLUME</th>
@@ -192,7 +192,7 @@
               </tr>
               <tr class="row-input-line">
                 <th>Price</th>
-                <td><span class="value price">{{formatBalance (toWei offerPrice)}}</span> <span class="quote-currency">{{quoteCurrency}}</span></td>
+                <td><span class="value price">{{formatNumber offerPrice}}</span> <span class="quote-currency">{{quoteCurrency}}</span></td>
               </tr>
               <tr class="row-input-line">
                 <th>Volume</th>
