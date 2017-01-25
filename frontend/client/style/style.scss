@@ -571,16 +571,16 @@ table {
         border-top-left-radius: 4px;
       }
       th.th-type {
-        width: 35px;
+        width: 55px;
       }
       th.th-price {
-        max-width: 120px;
+        max-width: 90px;
       }
       th.th-quote-currency {
-        max-width: 87px;        
+        max-width: 92px;        
       }
       th.th-base-currency {
-        max-width: 87px;        
+        max-width: 92px;        
       }      
       th:last-child {
         border-bottom-right-radius: 4px;
@@ -628,7 +628,7 @@ table {
           color: #4A4A4A;
           padding-top: 10px;
           text-align: right;
-          max-width: 87px;
+          max-width: 92px;
         }
         td:first-of-type {
           width: 30px;
@@ -654,10 +654,10 @@ table {
           font-weight: 700;
           font-size: 12px;
           line-height: 20px;
-          width: 35px;
+          width: 55px;
         }
         td:nth-child(3) {
-          max-width: 120px!important;
+          max-width: 90px!important;
         }
         td:last-of-type {
           width: 22px;
