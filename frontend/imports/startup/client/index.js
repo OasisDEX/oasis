@@ -31,6 +31,7 @@ import '../../ui/client/headers/volumes.html';
 import '../../ui/client/index.html';
 import '../../ui/client/footer.html';
 import '../../ui/client/noethereum.html';
+import '../../ui/client/noaccount.html';
 import '../../ui/client/whatisthis.html';
 
 import '../../ui/client/helpers.js';

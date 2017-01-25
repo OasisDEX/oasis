@@ -55,6 +55,8 @@ Template.registerHelper('ready', () =>
 
 Template.registerHelper('isConnected', () => Session.get('isConnected'));
 
+Template.registerHelper('hasAccount', () => Session.get('address'));
+
 Template.registerHelper('outOfSync', () => Session.get('outOfSync'));
 
 Template.registerHelper('syncing', () => Session.get('syncing'));

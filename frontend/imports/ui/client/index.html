@@ -1,6 +1,6 @@
 <body>
   <div class="container">
-    {{#if isConnected}}
+    {{#if and isConnected hasAccount}}
       <div class="row row-header">
         <section class="col-xs-6">
           {{> networkStatus }}
@@ -27,9 +27,13 @@
           </div>
         {{/if}}
       {{/if}}
-    {{/if}}  
+    {{/if}}
     {{#unless isConnected}}
       {{> noEthereum}}
+    {{else}}
+      {{#unless hasAccount}}
+        {{> noAccount}}
+      {{/unless}}
     {{/unless}}
   </div>
   {{> footer}}
