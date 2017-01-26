@@ -924,8 +924,7 @@ table {
   tr.row-input-line {
     td,
     th {
-      border-bottom: 1px solid #CFD8DC;
-      border-bottom: 1px solid rgba(207,216,220, 0.35);
+      border-bottom: 1px solid #F7F8F9;
     }
   }
 
@@ -1133,7 +1132,7 @@ table {
     padding-top: 10px;
   }
   tr.row-input-line {
-    border-bottom: 1px #CFD8DC solid;
+    border-bottom: 1px #F7F8F9 solid;
   }
   tr.row-input-line {
     &:last-of-type {
