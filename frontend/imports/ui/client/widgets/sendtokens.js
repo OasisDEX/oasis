@@ -18,6 +18,10 @@ Template.sendtokens.viewmodel({
   currencies: Dapple.getTokens(),
   recipient: '',
   lastError: '',
+  validAmount: true,
+  precision() {
+    return Dapple.getTokenSpecs(this.currency()).precision;
+  },
   pending() {
     return Transactions.findType(TRANSACTION_TYPE);
   },
@@ -34,6 +38,11 @@ Template.sendtokens.viewmodel({
     }
   },
   canTransfer() {
+    this.validAmount(true);
+    if (this.precision() === 0 && this.amount() % 1 !== 0) {
+      this.validAmount(false);
+      return false;
+    }
     try {
       const amount = new BigNumber(this.amount());
       const maxAmount = new BigNumber(this.maxAmount());
