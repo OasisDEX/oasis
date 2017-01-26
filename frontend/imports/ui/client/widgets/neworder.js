@@ -15,9 +15,13 @@ Template.neworder.viewmodel({
   share: 'newOffer',
   lastError: '',
   bestOffer: undefined,
+  validAmount: true,
   type() {
     const orderType = (this !== null && this !== undefined) ? this.orderType() : '';
     return orderType;
+  },
+  precision() {
+    return Dapple.getTokenSpecs(Session.get('baseCurrency')).precision;
   },
   sellCurrency() {
     if (this.type() === 'buy') {
@@ -36,6 +40,12 @@ Template.neworder.viewmodel({
   },
   amount: '0',
   calcTotal() {
+    this.validAmount(true);
+    if (this.precision() === 0 && this.amount() % 1 !== 0) {
+      this.validAmount(false);
+      this.total('0');
+      return;
+    }
     try {
       const price = new BigNumber(this.price());
       const amount = new BigNumber(this.amount());

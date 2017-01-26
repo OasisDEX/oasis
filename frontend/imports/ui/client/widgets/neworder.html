@@ -57,6 +57,13 @@
               </div>
             </td>
           </tr>
+          {{#unless validAmount}}
+            <tr>
+              <td colspan="2">
+                <span class="help-block">Amount is invalid because {{baseCurrency}} has no decimals.</span>
+              </td>
+            </tr>
+          {{/unless}}
           {{#unless isMarketOpen}}
             <tr>
               <td colspan="2">
