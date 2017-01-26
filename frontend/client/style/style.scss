@@ -785,14 +785,6 @@ table {
   }
 }
 
-
-
-
-
-
-
-
-
 .buy-sell-section {
   form#neworder {
     tbody {
@@ -924,14 +916,6 @@ table {
     }
   }
 }
-
-
-
-
-
-
-
-
 
 
 .transfer-section {
@@ -1077,7 +1061,7 @@ table {
     color: #222228;
   }
   tbody {
-    tr.row-input-line {
+    tr.row-input-line, tr.row-data-line {
       th {
         padding-top: 20px;
         padding-bottom: 7px;
@@ -1149,8 +1133,10 @@ table {
     padding-top: 10px;
   }
   tr.row-input-line {
+    border-bottom: 1px #CFD8DC solid;
+  }
+  tr.row-input-line {
     &:last-of-type {
-      border-bottom: 1px #CFD8DC solid;
       td {
         padding-bottom: 0px;
       }
