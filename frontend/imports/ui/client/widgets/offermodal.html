@@ -64,6 +64,11 @@
                     The market has closed.
                   </span>
                 {{/unless}}
+                {{#unless validAmount}}
+                  <span class="text-danger">
+                    Amount is invalid because {{baseCurrency}} has no decimals.
+                  </span>
+                {{/unless}}
                 {{#unless hasVolume}}
                   <span class="text-danger">
                     The order doesn't have a high enough {{buyCurrency}} volume.

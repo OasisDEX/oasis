@@ -32,6 +32,10 @@ Template.offermodal.viewmodel({
       }
     }
   },
+  precision() {
+    return Dapple.getTokenSpecs(Session.get('baseCurrency')).precision;
+  },
+  validAmount: true,
   type() {
     if (Template.currentData().offer) {
       return Template.currentData().offer.type();
@@ -133,6 +137,12 @@ Template.offermodal.viewmodel({
     return maxTotal;
   },
   calcVolume() {
+    this.validAmount(true);
+    if (this.precision() === 0 && this.total() % 1 !== 0) {
+      this.validAmount(false);
+      this.volume('0');
+      return;
+    }
     try {
       const baseCurrency = Session.get('baseCurrency');
       const total = new BigNumber(this.total());
@@ -148,6 +158,12 @@ Template.offermodal.viewmodel({
     }
   },
   calcTotal() {
+    this.validAmount(true);
+    if (this.precision() === 0 && this.volume() % 1 !== 0) {
+      this.validAmount(false);
+      this.total('0');
+      return;
+    }
     try {
       const baseCurrency = Session.get('baseCurrency');
       const volume = new BigNumber(this.volume());
