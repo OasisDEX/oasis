@@ -61,6 +61,12 @@ Template.neworder.viewmodel({
   },
   total: '0',
   calcAmount() {
+    this.validAmount(true);
+    if (this.precision() === 0 && this.total() % 1 !== 0) {
+      this.validAmount(false);
+      this.amount('0');
+      return;
+    }
     try {
       const price = new BigNumber(this.price());
       let amount = new BigNumber(this.amount());
