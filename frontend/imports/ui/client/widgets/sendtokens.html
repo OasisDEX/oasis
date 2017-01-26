@@ -21,7 +21,7 @@
               WALLET
             </th>
             <td class="token">
-              <span class="fill-amount" {{b "click: fillAmount"}}>{{formatNumber maxAmount '0,0.00[000]'}}</span>
+              <span class="fill-amount" {{b "click: fillAmount"}}>{{{formatNumber maxAmount 5 true}}}</span>
               <span class="span-transfer-currency">{{currency}}</span>
             </td>
           </tr>

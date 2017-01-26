@@ -11,7 +11,7 @@ import { moment } from 'meteor/momentjs:moment';
 import Tokens from '/imports/api/tokens';
 import { Offers, Trades } from '/imports/api/offers';
 
-import { txHref } from '/imports/utils/functions';
+import { txHref, thounsandSeparator, formatNumber } from '/imports/utils/functions';
 
 Template.registerHelper('contractExists', () => {
   const network = Session.get('network');
@@ -266,27 +266,50 @@ Template.registerHelper('formatPrice', (value, currency) => {
   }
 });
 
-Template.registerHelper('formatBalance', (wei, format, currency) => {
-  let formatValue = format;
-  if (formatValue instanceof Spacebars.kw) {
-    formatValue = null;
+Template.registerHelper('formatBalance', (wei, decimals, currency, sle) => {
+  let decimalsValue = decimals;
+  if (decimalsValue instanceof Spacebars.kw) {
+    decimalsValue = null;
   }
-  formatValue = formatValue || '0,0.000';
+  let showLabelExact = sle;
+  if (showLabelExact instanceof Spacebars.kw) {
+    showLabelExact = null;
+  }
+  decimalsValue = decimalsValue || 3;
+  let exactValue = web3.fromWei(wei);
+  let finalValue = formatNumber(exactValue, decimalsValue);
+  exactValue = thounsandSeparator(exactValue);
 
-  let value = EthTools.formatBalance(wei, formatValue);
   if (currency === 'W-GNT' || currency === 'GNT' || currency === 'SNGLS') {
-    value = value.substr(0, value.indexOf('.'));
+    finalValue = finalValue.substr(0, finalValue.indexOf('.'));
   }
-  return value;
+
+  if (showLabelExact) {
+    return `<span title=${exactValue}>${finalValue}</span>`;
+  }
+
+  return finalValue;
 });
 
-Template.registerHelper('formatNumber', (value, format) => {
-  let formatValue = format;
-  if (formatValue instanceof Spacebars.kw) {
-    formatValue = null;
+Template.registerHelper('formatNumber', (value, decimals, sle) => {
+  let decimalsValue = decimals;
+  if (decimalsValue instanceof Spacebars.kw) {
+    decimalsValue = null;
   }
-  formatValue = formatValue || '0,0.00000';
-  return EthTools.formatNumber(value.toString(10), formatValue);
+  let showLabelExact = sle;
+  if (showLabelExact instanceof Spacebars.kw) {
+    showLabelExact = null;
+  }
+  decimalsValue = decimalsValue || 5;
+
+  const exactValue = thounsandSeparator(value);
+  const finalValue = formatNumber(value, decimalsValue);
+
+  if (showLabelExact) {
+    return `<span title=${exactValue}>${finalValue}</span>`;
+  }
+
+  return finalValue;
 });
 
 Template.registerHelper('determineOrderType', (order, section) => {

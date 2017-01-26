@@ -13,7 +13,7 @@
               WALLET
             </th>
             <td class="token">
-              <span class="fill-amount" {{b "click: fillAmount"}}>{{formatBalance ETHBalance}}</span>
+              <span class="fill-amount" {{b "click: fillAmount"}}>{{{formatBalance ETHBalance 5 '' true}}}</span>
               <span class="span-buy-sell-currency">ETH</span>
             </td>
           </tr>
@@ -24,7 +24,7 @@
             </th>
             <td class="token">
               {{#let token=(findToken 'W-ETH')}}
-              <span class="fill-amount" {{b "click: fillAmount"}}>{{formatBalance token.balance}}</span>
+              <span class="fill-amount" {{b "click: fillAmount"}}>{{{formatBalance token.balance 5 '' true}}}</span>
               <span class="span-buy-sell-currency">W-ETH</span>
               {{/let}}
             </td>

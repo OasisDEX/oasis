@@ -36,7 +36,11 @@
                   {{{loadingIcon}}}
                 </span>
               {{else}}
-                {{formatNumber (price this) '0,0.00000'}}
+                {{#if equals (price this) 'N/A'}}
+                  N/A
+                {{else}}
+                  {{{formatNumber (price this) '' true}}}
+                {{/if}}             
               {{/if}}
             </td>
             <td class="td-volume">
@@ -45,7 +49,7 @@
                   {{{loadingIcon}}}
                 </span>
               {{else}}
-                {{formatBalance (volume this) '0,0.00'}}
+                {{{formatBalance (volume this) 2 '' true}}}
               {{/if}}
             </td>
             <td></td>

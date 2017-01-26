@@ -1,5 +1,5 @@
 <template name="orderRow">
-  <tr class={{order.status}}{{#if or canAccept canOpenTxLink}} clickable{{/if}} title={{timestampToString order.timestamp true true}}>
+  <tr class={{order.status}}{{#if or canAccept canOpenTxLink}} clickable{{/if}}>
     <td>
       {{#if order.canCancel}}
         {{#if showCancel}}
@@ -23,13 +23,13 @@
     {{/if}}
     {{#unless showType}}
       {{#if or (equals (determineOrderType order) 'ask') (equals (determineOrderType order) 'bid')}}
-        <td class={{order.type}}>{{formatNumber order.price}}</td>
+        <td class={{order.type}}>{{{formatNumber order.price '' true}}}</td>
       {{/if}}
     {{else}}
-      <td>{{formatNumber order.price}}</td>
+      <td>{{{formatNumber order.price '' true}}}</td>
     {{/unless}}
-    <td>{{formatBalance (order.volume quoteCurrency) '' quoteCurrency}}</td>
-    <td>{{formatBalance (order.volume baseCurrency) '' baseCurrency}}</td>
+    <td>{{{formatBalance (order.volume quoteCurrency) '' quoteCurrency true}}}</td>
+    <td>{{{formatBalance (order.volume baseCurrency) '' baseCurrency true}}}</td>
     <td></td>
   </tr>
   {{#if order.helper}}

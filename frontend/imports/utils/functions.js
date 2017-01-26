@@ -1,5 +1,6 @@
 import { Session } from 'meteor/session';
 import { $ } from 'meteor/jquery';
+import { BigNumber } from 'meteor/ethereum:web3';
 
 export function uppercaseFirstLetter(word) {
   return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
@@ -54,4 +55,19 @@ export function txHref(tx) {
     txLink = `https://${networkPrefix}etherscan.io/tx/${tx}`;
   }
   return txLink;
+}
+
+export function thounsandSeparator(number) {
+  const parts = number.toString().split('.');
+  return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',') + (parts[1] ? `.${parts[1]}` : '');
+}
+
+export function formatNumber(number, decimals) {
+  let n = number;
+  if (typeof number !== 'object') {
+    n = new BigNumber(number);
+  }
+  const d = Math.pow(10, decimals);
+  n = (parseInt(n.mul(d), 10) / d).toFixed(decimals);
+  return thounsandSeparator(n);
 }

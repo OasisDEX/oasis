@@ -22,15 +22,15 @@
           <tr id="eth-balance" class="clickable {{selected 'ETH'}}" {{b "click: baseChange"}}>
             <td></td>
             <td>ETH</td>
-            <td>{{formatBalance ETHBalance}} ETH</td>
-            <td>{{formatBalance wethBalance}} W-ETH</td>
+            <td>{{{formatBalance ETHBalance '' '' true}}} ETH</td>
+            <td>{{{formatBalance wethBalance '' '' true}}} W-ETH</td>
             <td></td>
           </tr>
           <tr id="gnt-balance" class="clickable {{selected 'GNT'}}" {{b "click: baseChange"}}>
             <td></td>
             <td>GNT</td>
-            <td>{{formatBalance GNTBalance}} GNT</td>
-            <td>{{formatBalance wgntBalance}} W-GNT</td>
+            <td>{{{formatBalance GNTBalance '' 'GNT' true}}} GNT</td>
+            <td>{{{formatBalance wgntBalance '' 'W-GNT' true}}} W-GNT</td>
             <td></td>
           </tr>
         </tbody>
