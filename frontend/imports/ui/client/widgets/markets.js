@@ -127,25 +127,27 @@ Template.markets.viewmodel({
     });
   },
   sort() {
-    const rows = $('.t-markets tbody  tr').get();
+    if (!Session.get('loadingTradeHistory')) {
+      const rows = $('.t-markets tbody  tr').get();
+      console.log('Sorting ', rows.length, ' rows');
+      rows.sort((a, b) => {
+        const A = parseFloat($(a).children('td').eq(3).text()
+              .replace(/,/g, ''));
+        const B = parseFloat($(b).children('td').eq(3).text()
+              .replace(/,/g, ''));
 
-    rows.sort((a, b) => {
-      const A = parseFloat($(a).children('td').eq(3).text()
-            .replace(/,/g, ''));
-      const B = parseFloat($(b).children('td').eq(3).text()
-            .replace(/,/g, ''));
+        if (A < B) {
+          return 1;
+        }
+        if (A > B) {
+          return -1;
+        }
+        return 0;
+      });
 
-      if (A < B) {
-        return 1;
-      }
-      if (A > B) {
-        return -1;
-      }
-      return 0;
-    });
-
-    $.each(rows, (index, row) => {
-      $('.t-markets').children('tbody').append(row);
-    });
+      $.each(rows, (index, row) => {
+        $('.t-markets').children('tbody').append(row);
+      });
+    }
   },
 });
