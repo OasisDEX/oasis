@@ -1911,12 +1911,12 @@ span.loading-icon {
   max-height: 195px!important;
 }
 .loading-depth-chart, .loading-volume-chart {
-  width: 340px;
-  height: 175px;
-  line-height: 175px;
+  width: 440px;
+  height: 235px;
+  line-height: 205px;
   position: absolute;
-  top: 85px;
-  left: 70px;
+  top: 65px;
+  left: 0px;
   z-index: 100000;
   text-align: center;
   background: rgba(255, 255, 255, 0.5);
