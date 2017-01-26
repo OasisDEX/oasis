@@ -61,7 +61,7 @@ Template.markets.viewmodel({
         vol = vol.add(new BigNumber(trade.sellHowMuch));
       }
     });
-
+    Session.set('lastVolumeUpdated', Date.now());
     return vol.toNumber();
   },
   changeVolumeToken(event) {
@@ -127,15 +127,13 @@ Template.markets.viewmodel({
     });
   },
   sort() {
-    if (!Session.get('loadingTradeHistory')) {
+    if (Session.get('lastVolumeUpdated')) {
       const rows = $('.t-markets tbody  tr').get();
-      console.log('Sorting ', rows.length, ' rows');
       rows.sort((a, b) => {
         const A = parseFloat($(a).children('td').eq(3).text()
               .replace(/,/g, ''));
         const B = parseFloat($(b).children('td').eq(3).text()
               .replace(/,/g, ''));
-
         if (A < B) {
           return 1;
         }

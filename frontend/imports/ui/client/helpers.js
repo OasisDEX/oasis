@@ -274,7 +274,7 @@ Template.registerHelper('formatBalance', (wei, format, currency) => {
   formatValue = formatValue || '0,0.000';
 
   let value = EthTools.formatBalance(wei, formatValue);
-  if (currency === 'W-GNT' || currency === 'GNT') {
+  if (currency === 'W-GNT' || currency === 'GNT' || currency === 'SNGLS') {
     value = value.substr(0, value.indexOf('.'));
   }
   return value;

@@ -165,8 +165,8 @@ Offers.sync = () => {
             block = resultProm[i];
 
             Trades.upsert(trade.transactionHash, _.extend(block, trade, args));
-            Session.set('loadingTradeHistory', false);
           }
+          Session.set('loadingTradeHistory', false);
         });
       } else {
         Session.set('loadingTradeHistory', false);
