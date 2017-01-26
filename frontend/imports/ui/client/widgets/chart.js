@@ -200,7 +200,7 @@ Template.chart.viewmodel({
         if (index !== -1) {
           // If there is a specific value for the price in asks, we add it
           amount = EthTools.formatBalance(askAmounts.quote[index].toNumber()).replace(/,/g, '');
-        } else if (vals[i] < askPrices[0] || vals[i] > askPrices[askPrices.length - 1]) {
+        } else if (askPrices.length === 0 || vals[i] < askPrices[0] || vals[i] > askPrices[askPrices.length - 1]) {
           // If the price is lower or higher than the asks range there is not value to print in the graph
           amount = null;
         } else {
@@ -213,7 +213,7 @@ Template.chart.viewmodel({
         if (index !== -1) {
           // If there is a specific value for the price in bids, we add it
           amount = EthTools.formatBalance(bidAmounts.quote[index].toNumber()).replace(/,/g, '');
-        } else if (vals[i] < bidPrices[0] || vals[i] > bidPrices[bidPrices.length - 1]) {
+        } else if (bidPrices.length === 0 || vals[i] < bidPrices[0] || vals[i] > bidPrices[bidPrices.length - 1]) {
           // If the price is lower or higher than the bids range there is not value to print in the graph
           amount = null;
         } else {
