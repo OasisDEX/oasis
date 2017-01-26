@@ -924,8 +924,7 @@ table {
   tr.row-input-line {
     td,
     th {
-      border-bottom: 1px solid #CFD8DC;
-      border-bottom: 1px solid rgba(207,216,220, 0.35);
+      border-bottom: 1px solid #F7F8F9;
     }
   }
 
@@ -1133,7 +1132,7 @@ table {
     padding-top: 10px;
   }
   tr.row-input-line {
-    border-bottom: 1px #CFD8DC solid;
+    border-bottom: 1px #F7F8F9 solid;
   }
   tr.row-input-line {
     &:last-of-type {
@@ -1344,6 +1343,7 @@ table {
   }
 
   .div-modal-text {
+    margin-top: 15px;
     font-weight: 700;
     font-size: 14px;
     color: #222228;
@@ -2170,9 +2170,6 @@ span.right {
   text-transform: uppercase;
 }
 .modal-body {
-   .order-warning {
-
-   }
   .my-allowance-instructions {
     background: #FBFAF9;
     border-radius: 8px;
@@ -2189,12 +2186,18 @@ span.right {
   tr {
     height: 50px;
     line-height: 50px;
-    border-bottom: 1px rgba(207, 216, 220, 0.15) solid;
     span.base-currency {
       transform: translate(0px,5px);     
     }
     span.quote-currency {
       transform: translate(0px,5px);
+    }
+    &.row-data-line.owner {
+      border-bottom: 1px solid #E0E6E8;
+      border-top: 1px solid #E0E6E8;
+    }
+    &.row-input-line {
+      border-bottom: 1px solid #F7F8F9;
     }
   }
   input {
