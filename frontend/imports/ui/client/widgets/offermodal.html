@@ -14,7 +14,7 @@
           {{#if offer}}
             <table>
               <tbody>
-                <tr class="row-input-line">
+                <tr class="row-data-line">
                   <th>ALLOWANCE</th>
                   {{#if equals offer.type 'bid'}}
                     <td>{{formatBalance baseToken.allowance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
@@ -22,7 +22,7 @@
                     <td>{{formatBalance quoteToken.allowance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
                   {{/if}}
                 </tr>
-                <tr class="row-input-line">
+                <tr class="row-data-line">
                   <th>AVAILABLE</th>
                   {{#if equals offer.type 'bid'}}
                     <td>{{formatBalance baseToken.balance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
@@ -30,11 +30,11 @@
                     <td>{{formatBalance quoteToken.balance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
                   {{/if}}
                 </tr>
-                <tr class="row-input-line">
+                <tr class="row-data-line owner">
                   <th class="th-owner">OWNER</th>
                   <td class="td-owner"><span class="span-owner">{{offer.owner}} {{#if equals offer.owner address}}(<span class="text-success">you</span>){{/if}}</span></td>
                 </tr>
-                <tr class="row-input-line">
+                <tr class="row-data-line">
                   <th>PRICE</th>
                   <td>{{formatNumber offer.price}} <span class="span-offer-currency">{{quoteCurrency}}</span></td>
                 </tr>
@@ -42,7 +42,7 @@
                   <th>VOLUME</th>
                   <td><input type="number" class="input" step="any" min="0" max={{maxVolume}} {{b "value: volume, input: calcTotal"}}> <span class="span-offer-currency">{{baseCurrency}}</span></td>
                 </tr>
-                <tr class="row-input-line nb">
+                <tr class="row-input-line">
                   <th>TOTAL</th>
                   <td><input type="number" class="input" step="any" min="0" max={{maxTotal}} {{b "value: total, input: calcVolume"}}> <span class="span-offer-currency">{{quoteCurrency}}</span></td>
                 </tr>
@@ -53,7 +53,6 @@
                 {{/if}}
               </tbody>
             </table>
-            <hr class="nmt">
             <div class="div-modal-text row">
               <div class="col-xs-1">
                 <img src="/order-warning.svg" class="order-warning">
@@ -95,7 +94,6 @@
                 {{/unless}}
               </div>
             </div>
-            <hr>
           {{/if}}
         </div>
         <div class="modal-footer">
@@ -170,7 +168,7 @@
         <div class="modal-body">
           <table>
             <tbody>
-              <tr class="row-input-line">
+              <tr class="row-data-line">
                 <th>ALLOWANCE</th>
                 {{#if equals offerType 'buy'}}
                   <td>{{formatBalance quoteToken.allowance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
@@ -178,7 +176,7 @@
                   <td>{{formatBalance baseToken.allowance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
                 {{/if}}
               </tr>
-              <tr class="row-input-line">
+              <tr class="row-data-line">
                 <th>AVAILABLE</th>
                 {{#if equals offerType 'buy'}}
                   <td>{{formatBalance quoteToken.balance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
@@ -186,26 +184,25 @@
                   <td>{{formatBalance baseToken.balance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
                 {{/if}}
               </tr>
-              <tr class="row-input-line">
+              <tr class="row-data-line owner">
                 <th>OWNER</th>
                 <td><span class="owner-address">{{address}}</span></td>
               </tr>
-              <tr class="row-input-line">
+              <tr class="row-data-line">
                 <th>Price</th>
                 <td><span class="value price">{{formatNumber offerPrice}}</span> <span class="quote-currency">{{quoteCurrency}}</span></td>
               </tr>
-              <tr class="row-input-line">
+              <tr class="row-data-line">
                 <th>Volume</th>
                 <td><span class="value">{{formatBalance (toWei offerAmount)}}</span> <span class="base-currency">{{baseCurrency}}</span></td>
               </tr>
-              <tr class="row-input-line nb">
+              <tr class="row-data-line">
                 <th>Total</th>
                 <td><span class="value">{{formatBalance (toWei offerTotal)}}</span> <span class="base-currency">{{quoteCurrency}}</span></td>
               </tr>
             </tbody>
           </table>
-          <hr class="nmt">
-          <div class="row">
+          <div class="div-modal-text row">
             <div class="col-xs-1">
               <img src="/order-warning.svg" class="order-warning">
             </div>
@@ -223,7 +220,6 @@
               </span>
             </div>
           </div>
-          <hr>
         </div>
         <div class="modal-footer">
           {{#unless hasAllowanceNewOrder offerType}}
