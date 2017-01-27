@@ -2,6 +2,7 @@ import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
 
 import TokenEvents from '/imports/api/tokenEvents';
+import { txHref } from '/imports/utils/functions';
 
 import './history.html';
 
@@ -28,5 +29,13 @@ Template.history.viewmodel({
   },
   transferHistoryCount() {
     return this.transferHistory().count();
+  },
+});
+
+Template.history.events({
+  'click tr': function offer(event) {
+    event.preventDefault();
+    
+    window.open(txHref(this.transactionHash), '_blank');
   },
 });

@@ -34,13 +34,13 @@
         {{else}}
           <tbody class="{{#if gt transferHistoryCount 5}}tbody-scrolling{{else}}tbody-not-scrolling{{/if}}">
             {{#each transferHistory}}
-              <tr>
+              <tr class="clickable">
                 <td></td>
                 <td class="timestamp">{{ timestampToString this.timestamp true true}}</td>
                 {{#if equals historyType 'depositHistory'}}
-                  <td class="transaction-hash"><a target="_blank" href="{{ txHref (this.transactionHash) }}">{{ friendlyAddress(this.to) }}</a></td>
+                  <td class="transaction-hash">{{ friendlyAddress(this.to) }}</td>
                 {{else}}
-                  <td class="transaction-hash-recipient"><a target="_blank" href="{{ txHref (this.transactionHash) }}">{{ friendlyAddress(this.to) }}</a></td>
+                  <td class="transaction-hash-recipient">{{ friendlyAddress(this.to) }}</td>
                 {{/if}}                
                 <td class="coin deposit">{{this.token}}</td>
                 <td class="{{ this.type }} {{ currencyClass this.token }}">{{{formatBalance this.amount '' this.token true}}}</td>

@@ -1747,18 +1747,18 @@ table {
           width: 10px!important;
         }
         &.th-date {
-          max-width: 80px!important;
+          max-width: 90px!important;
         }
         &.th-type {
-          max-width: 90px!important;                 
+          max-width: 105px!important;
         }
         &.th-recipient {
-          max-width: 110px!important;
+          max-width: 115px!important;
           padding-left: 10px;  
           text-align: center;                  
         }        
         &.th-coin {
-          max-width: 60px!important;
+          max-width: 65px!important;
           padding-left: 10px;
           &.transfer {
             max-width: 60px!important;
@@ -1768,7 +1768,7 @@ table {
           }           
         }        
         &.th-amount {
-          max-width: 100px!important;        
+          max-width: 80px!important;
         }
       }
     }
@@ -1782,25 +1782,26 @@ table {
           width: 10px!important;
         }
         &.timestamp {
-          max-width: 80px!important;
+          font-size: 14.5px;
+          max-width: 90px!important;
         }
         &.type,
         &.transaction-hash {
-          max-width: 90px!important;            
+          max-width: 105px!important;
         }
         &.transaction-hash-recipient {
-          max-width: 110px!important;
+          max-width: 115px!important;
           text-overflow: ellipsis;
           overflow: hidden;   
           padding-left: 10px;       
-          background: rgba(248, 247, 245, 0.3);
+          background: none;
           text-align: center;
           border-radius: 8px;         
         }            
         &.coin {
-          max-width: 60px!important;
+          max-width: 65px!important;
           &.deposit {
-            background: rgba(248, 247, 245, 0.3);
+            background: none;
             text-align: center;
             border-radius: 8px;   
             max-width: 60px!important;
@@ -1811,7 +1812,7 @@ table {
         &.deposit,
         &.withdraw,
         &.amount {
-          max-width: 100px!important;
+          max-width: 80px!important;
         }
       }
     }

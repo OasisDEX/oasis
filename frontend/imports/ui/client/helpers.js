@@ -207,7 +207,7 @@ Template.registerHelper('friendlyAddress', (address) => {
   } else if (address === Blaze._globalHelpers.address()) {
     return 'me';
   }
-  return `${address.substr(0, 16)}...`;
+  return `${address.substr(0, 9)}...`;
   /* eslint-enable no-underscore-dangle */
 });
 
