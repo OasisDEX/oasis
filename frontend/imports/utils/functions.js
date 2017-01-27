@@ -1,6 +1,7 @@
 import { Session } from 'meteor/session';
 import { $ } from 'meteor/jquery';
 import { BigNumber } from 'meteor/ethereum:web3';
+import { Spacebars } from 'meteor/spacebars';
 
 export function uppercaseFirstLetter(word) {
   return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
@@ -62,7 +63,11 @@ export function thousandSeparator(number) {
   return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',') + (parts[1] ? `.${parts[1]}` : '');
 }
 
-export function formatNumber(number, decimals) {
+export function formatNumber(number, dec) {
+  let decimals = dec;
+  if (decimals instanceof Spacebars.kw) {
+    decimals = 5;
+  }
   let n = number;
   if (typeof number !== 'object') {
     n = new BigNumber(number);

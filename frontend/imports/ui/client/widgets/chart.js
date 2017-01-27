@@ -3,10 +3,11 @@ import { Template } from 'meteor/templating';
 import { moment } from 'meteor/momentjs:moment';
 import { Session } from 'meteor/session';
 import { BigNumber } from 'meteor/ethereum:web3';
-import { EthTools } from 'meteor/ethereum:tools';
 import { _ } from 'meteor/underscore';
+import { web3 } from 'meteor/makerotc:dapple';
 import { Offers, Trades } from '/imports/api/offers';
 import Chart from '/imports/utils/Chart.min';
+import { formatNumber } from '/imports/utils/functions';
 import './chart.html';
 
 const charts = [];
@@ -82,19 +83,19 @@ Template.chart.viewmodel({
                   [type, quoteAmount] = tooltip.body[0].lines[0].split(': ');
 
                   if (type === 'Sell') {
-                    quoteAmount = askAmounts.quote[askPrices.indexOf(parseFloat(price))];
-                    baseAmount = askAmounts.base[askPrices.indexOf(parseFloat(price))];
+                    quoteAmount = askAmounts.quote[askPrices.indexOf(price)];
+                    baseAmount = askAmounts.base[askPrices.indexOf(price)];
                   } else {
-                    quoteAmount = bidAmounts.quote[bidPrices.indexOf(parseFloat(price))];
-                    baseAmount = bidAmounts.base[bidPrices.indexOf(parseFloat(price))];
+                    quoteAmount = bidAmounts.quote[bidPrices.indexOf(price)];
+                    baseAmount = bidAmounts.base[bidPrices.indexOf(price)];
                   }
-                  quoteAmount = EthTools.formatBalance(quoteAmount.toNumber());
-                  baseAmount = EthTools.formatBalance(baseAmount.toNumber());
+                  quoteAmount = formatNumber(web3.fromWei(quoteAmount), 5);
+                  baseAmount = formatNumber(web3.fromWei(baseAmount), 5);
 
                   tooltipEl.innerHTML =
                     `<div class="row-custom-tooltip">
                       <span class="left">Price</span>
-                      <span class="right">${price}</span>
+                      <span class="right">${formatNumber(price, 5)}</span>
                     </div>
                     <div class="row-custom-tooltip middle">
                       <span class="left">SUM(${Session.get('quoteCurrency')})</span>
@@ -199,7 +200,7 @@ Template.chart.viewmodel({
         index = askPrices.indexOf(vals[i]);
         if (index !== -1) {
           // If there is a specific value for the price in asks, we add it
-          amount = EthTools.formatBalance(askAmounts.quote[index].toNumber()).replace(/,/g, '');
+          amount = formatNumber(web3.fromWei(askAmounts.quote[index]), 3).replace(/,/g, '');
         } else if (askPrices.length === 0 || vals[i] < askPrices[0] || vals[i] > askPrices[askPrices.length - 1]) {
           // If the price is lower or higher than the asks range there is not value to print in the graph
           amount = null;
@@ -212,7 +213,7 @@ Template.chart.viewmodel({
         index = bidPrices.indexOf(vals[i]);
         if (index !== -1) {
           // If there is a specific value for the price in bids, we add it
-          amount = EthTools.formatBalance(bidAmounts.quote[index].toNumber()).replace(/,/g, '');
+          amount = formatNumber(web3.fromWei(bidAmounts.quote[index]), 3).replace(/,/g, '');
         } else if (bidPrices.length === 0 || vals[i] < bidPrices[0] || vals[i] > bidPrices[bidPrices.length - 1]) {
           // If the price is lower or higher than the bids range there is not value to print in the graph
           amount = null;
@@ -220,7 +221,7 @@ Template.chart.viewmodel({
           // If there is not a bid amount for this price, we need to add the next available amount
           for (let j = 0; j < askPrices.length; j++) {
             if (bidPrices[j] >= vals[i]) {
-              amount = EthTools.formatBalance(bidAmounts.quote[j].toNumber()).replace(/,/g, '');
+              amount = formatNumber(web3.fromWei(bidAmounts.quote[j]), 3).replace(/,/g, '');
               break;
             }
           }
@@ -290,8 +291,8 @@ Template.chart.viewmodel({
                   const date = parseInt(tooltip.dataPoints[0].xLabel, 10);
                   let quoteAmount = null;
                   let baseAmount = null;
-                  quoteAmount = EthTools.formatBalance(volumes.quote[date].toNumber());
-                  baseAmount = EthTools.formatBalance(volumes.base[date].toNumber());
+                  quoteAmount = formatNumber(web3.fromWei(volumes.quote[date]), 5);
+                  baseAmount = formatNumber(web3.fromWei(volumes.base[date]), 5);
 
                   tooltipEl.innerHTML =
                     `<div class="row-custom-tooltip">
@@ -368,7 +369,7 @@ Template.chart.viewmodel({
       charts.volume.data.datasets = [{
         label: 'Volume',
         data: Object.keys(volumes.quote).map((key) =>
-                                              EthTools.formatBalance(volumes.quote[key].toNumber()).replace(/,/g, '')),
+                                              formatNumber(web3.fromWei(volumes.quote[key]), 5).replace(/,/g, '')),
         backgroundColor: 'rgba(140, 133, 200, 0.1)',
         borderColor: '#8D86C9',
         borderWidth: 3,
