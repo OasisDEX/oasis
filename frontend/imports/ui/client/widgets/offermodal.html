@@ -17,17 +17,17 @@
                 <tr class="row-data-line">
                   <th>ALLOWANCE</th>
                   {{#if equals offer.type 'bid'}}
-                    <td>{{formatBalance baseToken.allowance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
+                    <td>{{{formatBalance baseToken.allowance '' '' true}}} <span class="allowance-currency">{{baseToken._id}}</span></td>
                   {{else}}
-                    <td>{{formatBalance quoteToken.allowance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
+                    <td>{{{formatBalance quoteToken.allowance '' '' true}}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
                   {{/if}}
                 </tr>
                 <tr class="row-data-line">
                   <th>AVAILABLE</th>
                   {{#if equals offer.type 'bid'}}
-                    <td>{{formatBalance baseToken.balance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
+                    <td>{{{formatBalance baseToken.balance '' '' true}}} <span class="allowance-currency">{{baseToken._id}}</span></td>
                   {{else}}
-                    <td>{{formatBalance quoteToken.balance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
+                    <td>{{{formatBalance quoteToken.balance '' '' true}}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
                   {{/if}}
                 </tr>
                 <tr class="row-data-line owner">
@@ -36,7 +36,7 @@
                 </tr>
                 <tr class="row-data-line">
                   <th>PRICE</th>
-                  <td>{{formatNumber offer.price}} <span class="span-offer-currency">{{quoteCurrency}}</span></td>
+                  <td>{{{formatNumber offer.price '' true}}} <span class="span-offer-currency">{{quoteCurrency}}</span></td>
                 </tr>
                 <tr class="row-input-line">
                   <th>VOLUME</th>
@@ -85,11 +85,11 @@
                     {{else}}
                       <span class="text-danger">
                         {{#if equals offer.type 'bid'}}
-                          This action will remove {{formatBalance (toWei volume)}} {{baseCurrency}} {{formatPrice (toWei volume) baseCurrency}} from your token balance and allowance,
-                          and add {{formatBalance (toWei total)}} {{quoteCurrency}} {{formatPrice (toWei total) quoteCurrency}} to your token balance.
+                          This action will remove {{{formatBalance (toWei volume) '' '' true}}} {{baseCurrency}} {{formatPrice (toWei volume) baseCurrency}} from your token balance and allowance,
+                          and add {{{formatBalance (toWei total) '' '' true}}} {{quoteCurrency}} {{formatPrice (toWei total) quoteCurrency}} to your token balance.
                         {{else}}
-                          This action will remove {{formatBalance (toWei total)}} {{quoteCurrency}} {{formatPrice (toWei total) quoteCurrency}} from your token balance and allowance,
-                          and add {{formatBalance (toWei volume)}} {{baseCurrency}} {{formatPrice (toWei volume) baseCurrency}} to your token balance.
+                          This action will remove {{{formatBalance (toWei total) '' '' true}}} {{quoteCurrency}} {{formatPrice (toWei total) quoteCurrency}} from your token balance and allowance,
+                          and add {{{formatBalance (toWei volume) '' '' true}}} {{baseCurrency}} {{formatPrice (toWei volume) baseCurrency}} to your token balance.
                         {{/if}}
                         <br>
                         If someone (partially) fills this order before you do, your offer may only be partially filled or even denied, in which case unused funds will be refunded to your balance and allowance.
@@ -136,9 +136,9 @@
             {{#if offer}}
               <span class="text-danger">
                 {{#if equals offer.type 'bid'}}
-                  This action will return {{formatBalance (offer.volume quoteCurrency)}} {{quoteCurrency}} {{formatPrice (offer.volume quoteCurrency) quoteCurrency}} to your token balance.
+                  This action will return {{{formatBalance (offer.volume quoteCurrency) '' '' true}}} {{quoteCurrency}} {{formatPrice (offer.volume quoteCurrency) quoteCurrency}} to your token balance.
                 {{else}}
-                  This action will return {{formatBalance (offer.volume baseCurrency)}} {{baseCurrency}} {{formatPrice (offer.volume baseCurrency) baseCurrency}} to your token balance.
+                  This action will return {{{formatBalance (offer.volume baseCurrency) '' '' true}}} {{baseCurrency}} {{formatPrice (offer.volume baseCurrency) baseCurrency}} to your token balance.
                 {{/if}}
                 <br>
                 If someone (partially) fills this order before you cancel it, your order may not or only be partially cancelled.
@@ -217,9 +217,9 @@
                   You are trying to create a {{offerType}} order above your <strong>defined allowance</strong>.
                 {{else}}
                   {{#if equals offerType 'buy'}}
-                    This action will remove {{formatBalance (toWei offerTotal)}} {{quoteCurrency}} {{formatPrice (toWei offerTotal) quoteCurrency}} from your token balance and allowance.
+                    This action will remove {{{formatBalance (toWei offerTotal) '' '' true}}} {{quoteCurrency}} {{formatPrice (toWei offerTotal) quoteCurrency}} from your token balance and allowance.
                   {{else}}
-                    This action will remove {{formatBalance (toWei offerAmount)}} {{baseCurrency}} {{formatPrice (toWei offerAmount) baseCurrency}} from your token balance and allowance.
+                    This action will remove {{{formatBalance (toWei offerAmount) '' '' true}}} {{baseCurrency}} {{formatPrice (toWei offerAmount) baseCurrency}} from your token balance and allowance.
                   {{/if}}
                 {{/unless}}
               </span>
