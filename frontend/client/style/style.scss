@@ -2214,6 +2214,12 @@ span.right {
     }
     &.row-input-line {
       border-bottom: 1px solid #F7F8F9;
+      &.set-allowance{
+        border-top: 1px solid #E0E6E8;
+        th, td {
+          padding-top: 10px;
+        }
+      }
     }
   }
   input {

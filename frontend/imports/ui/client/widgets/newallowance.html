@@ -30,7 +30,7 @@
                       Allowance
                     </th>
                     <td>
-                      {{fromWei token.allowance}} <span class="allowance-currency">{{token._id}}</span>
+                      {{{formatBalance token.allowance 5 '' true}}} <span class="allowance-currency">{{token._id}}</span>
                     </td>
                   </tr>
                   <tr>
@@ -38,10 +38,10 @@
                       Available
                     </th>
                     <td>
-                      <span class="set-total-allowance" {{b "click: setTotalAllowance"}}>{{fromWei token.balance}}</span> <span class="allowance-currency">{{token._id}}</span>
+                      <span class="set-total-allowance" {{b "click: setTotalAllowance"}}>{{{formatBalance token.balance 5 '' true}}}</span> <span class="allowance-currency">{{token._id}}</span>
                     </td>
                   </tr>
-                  <tr>
+                  <tr class="row-input-line set-allowance">
                     <th>
                       Set
                     </th>
