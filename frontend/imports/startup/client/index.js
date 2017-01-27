@@ -22,7 +22,7 @@ import '../../ui/client/headers/accountselector.js';
 import '../../ui/client/headers/balance.html';
 import '../../ui/client/headers/currencyselector.js';
 import '../../ui/client/headers/marketdetails.html';
-import '../../ui/client/headers/messages.html';
+import '../../ui/client/headers/messages.js';
 import '../../ui/client/headers/networkstatus.html';
 import '../../ui/client/headers/tabs.js';
 import '../../ui/client/headers/volumes.html';

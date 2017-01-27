@@ -1,12 +1,29 @@
 <template name="messages">
   <div class="messages">
-    <div class="div-message-update">
-      <p class="text-success">
-        <span class="update"> Welcome to Maker Market! </span>
-      </p>
-      <p>
-        Please excuse the user experience quirks - this is an experimental decentralized exchange that is still under heavy development. To get started, go to <strong>deposit/withdraw</strong> and deposit ETH to turn it into W-ETH (Ethereum Token Standard). After depositing ETH, go to <strong>Trade</strong> and set your allowance (999999 works). When ready you can place new orders or trade existing orders. <strong>Click on an open order on the order book to buy/sell into it</strong>.       
-      </p>
-    </div>
+    {{#if updateOpen}}
+      <div class="div-message-update {{#if warningOpen}}resized{{/if}}">
+        <p class="text-success">
+          <span class="update">Get Started!</span>
+          <span class="close" {{b "click: closeMessage('update')"}}>X</span>
+        </p>
+        <ul>
+          <li>Go to <strong>deposit/withdraw</strong> and deposit ETH to turn it into W-ETH.</li>
+          <li>Go to <strong>Trade</strong> and place new orders or trade existing orders by <strong>clicking on an open order on the order book to buy/sell into it</strong>.</li>
+          <li>The first time you make a transaction you will be prompted to <strong>set your allowance</strong>.</li>
+        </ul>
+      </div>
+    {{/if}}
+    {{#if warningOpen}}
+      <div class="div-message-warning {{#if updateOpen}}resized{{/if}}">
+        <p class="text-success">
+          <span class="warning">Warning!</span>
+          <span class="close" {{b "click: closeMessage('warning')"}}>X</span>
+        </p>
+        <ul>
+          <li>Maker Market is undergoing alpha testing: Any funds deposited on the exchange could be lost in the event of a security breach.</li>
+          <li>There is no automatic order matching between orders.</li>
+        </ul>
+      </div>
+    {{/if}}
   </div>
 </template>
