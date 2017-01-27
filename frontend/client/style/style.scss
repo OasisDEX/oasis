@@ -2002,15 +2002,15 @@ section.depositbalance {
     border-bottom: 1px transparent solid;    
   }
   tbody tr:hover {
-    background: rgba(248, 247, 245, 0.5);
-    border-top: 1px #DCDDE0 solid;
-    border-bottom: 1px #DCDDE0 solid;    
+    background: none;
+    border-top: 1px #F3F3F4 solid;
+    border-bottom: 1px #F3F3F4 solid;
     cursor: pointer;
   }
   tbody tr.selected {
     background: rgba(248, 247, 245, 0.5);
-    border-top: 1px #DCDDE0 solid;
-    border-bottom: 1px #DCDDE0 solid;    
+    border-top: 1px #E8E9EA solid;
+    border-bottom: 1px #E8E9EA solid;
     cursor: pointer;    
   }
 }
