@@ -39,9 +39,10 @@ Template.markets.viewmodel({
     }
 
     if (trade.buyWhichToken === this.quoteCurrency()) {
-      return new BigNumber(trade.buyHowMuch).div(new BigNumber(trade.sellHowMuch)).toNumber();
+      return new BigNumber(trade.buyHowMuch).div(new BigNumber(trade.sellHowMuch));
     }
-    return new BigNumber(trade.sellHowMuch).div(new BigNumber(trade.buyHowMuch)).toNumber();
+
+    return new BigNumber(trade.sellHowMuch).div(new BigNumber(trade.buyHowMuch));
   },
   volume(token) {
     const volumeCurrency = Session.get(`${Session.get('volumeSelector')}Currency`);
@@ -62,7 +63,7 @@ Template.markets.viewmodel({
       }
     });
     Session.set('lastVolumeUpdated', Date.now());
-    return vol.toNumber();
+    return vol;
   },
   changeVolumeToken(event) {
     event.preventDefault();

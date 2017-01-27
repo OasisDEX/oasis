@@ -11,7 +11,7 @@ import { moment } from 'meteor/momentjs:moment';
 import Tokens from '/imports/api/tokens';
 import { Offers, Trades } from '/imports/api/offers';
 
-import { txHref, thounsandSeparator, formatNumber } from '/imports/utils/functions';
+import { txHref, thousandSeparator, formatNumber } from '/imports/utils/functions';
 
 Template.registerHelper('contractExists', () => {
   const network = Session.get('network');
@@ -278,7 +278,7 @@ Template.registerHelper('formatBalance', (wei, decimals, currency, sle) => {
   decimalsValue = decimalsValue || 3;
   let exactValue = web3.fromWei(wei);
   let finalValue = formatNumber(exactValue, decimalsValue);
-  exactValue = thounsandSeparator(exactValue);
+  exactValue = thousandSeparator(exactValue);
 
   if (currency === 'W-GNT' || currency === 'GNT' || currency === 'SNGLS') {
     finalValue = finalValue.substr(0, finalValue.indexOf('.'));
@@ -302,7 +302,7 @@ Template.registerHelper('formatNumber', (value, decimals, sle) => {
   }
   decimalsValue = decimalsValue || 5;
 
-  const exactValue = thounsandSeparator(value);
+  const exactValue = thousandSeparator(value);
   const finalValue = formatNumber(value, decimalsValue);
 
   if (showLabelExact) {

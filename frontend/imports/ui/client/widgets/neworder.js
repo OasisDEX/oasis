@@ -205,7 +205,7 @@ Template.neworder.viewmodel({
         offer = Offers.findOne({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
                                { sort: { ask_price: 1 } });
         if (offer && Object.prototype.hasOwnProperty.call(offer, 'ask_price')
-            && price.gt(new BigNumber(offer.ask_price.toString()))) {
+            && price.gt(new BigNumber(offer.ask_price))) {
           this.bestOffer(offer._id);
           return offer;
         }
@@ -215,7 +215,7 @@ Template.neworder.viewmodel({
         offer = Offers.findOne({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
                                { sort: { ask_price: 1 } });
         if (offer && Object.prototype.hasOwnProperty.call(offer, 'bid_price')
-            && price.lt(new BigNumber(offer.bid_price.toString()))) {
+            && price.lt(new BigNumber(offer.bid_price))) {
           this.bestOffer(offer._id);
           return offer;
         }
@@ -237,7 +237,7 @@ Template.neworder.viewmodel({
       offer = Offers.findOne({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
                               { sort: { ask_price: 1 } });
       if (offer && Object.prototype.hasOwnProperty.call(offer, 'ask_price')) {
-        price = new BigNumber(offer.ask_price.toString());
+        price = new BigNumber(offer.ask_price);
         available = web3.fromWei(this.quoteAvailable()).toString(10);
         this.price(price);
         this.total(available);
@@ -247,7 +247,7 @@ Template.neworder.viewmodel({
       offer = Offers.findOne({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
                               { sort: { ask_price: 1 } });
       if (offer && Object.prototype.hasOwnProperty.call(offer, 'bid_price')) {
-        price = new BigNumber(offer.bid_price.toString());
+        price = new BigNumber(offer.bid_price);
         available = web3.fromWei(this.baseAvailable()).toString(10);
         this.price(price);
         this.amount(available);

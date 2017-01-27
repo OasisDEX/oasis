@@ -57,7 +57,7 @@ export function txHref(tx) {
   return txLink;
 }
 
-export function thounsandSeparator(number) {
+export function thousandSeparator(number) {
   const parts = number.toString().split('.');
   return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',') + (parts[1] ? `.${parts[1]}` : '');
 }
@@ -67,7 +67,7 @@ export function formatNumber(number, decimals) {
   if (typeof number !== 'object') {
     n = new BigNumber(number);
   }
-  const d = Math.pow(10, decimals);
-  n = (parseInt(n.mul(d), 10) / d).toFixed(decimals);
-  return thounsandSeparator(n);
+  const d = (new BigNumber(10)).pow(decimals);
+  n = n.mul(d).trunc().div(d).toFixed(decimals);
+  return thousandSeparator(n);
 }
