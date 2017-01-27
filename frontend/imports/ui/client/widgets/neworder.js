@@ -15,9 +15,13 @@ Template.neworder.viewmodel({
   share: 'newOffer',
   lastError: '',
   bestOffer: undefined,
+  validAmount: true,
   type() {
     const orderType = (this !== null && this !== undefined) ? this.orderType() : '';
     return orderType;
+  },
+  precision() {
+    return Dapple.getTokenSpecs(Session.get('baseCurrency')).precision;
   },
   sellCurrency() {
     if (this.type() === 'buy') {
@@ -36,6 +40,12 @@ Template.neworder.viewmodel({
   },
   amount: '0',
   calcTotal() {
+    this.validAmount(true);
+    if (this.precision() === 0 && this.amount() % 1 !== 0) {
+      this.validAmount(false);
+      this.total('0');
+      return;
+    }
     try {
       const price = new BigNumber(this.price());
       const amount = new BigNumber(this.amount());
@@ -51,6 +61,12 @@ Template.neworder.viewmodel({
   },
   total: '0',
   calcAmount() {
+    this.validAmount(true);
+    if (this.precision() === 0 && this.total() % 1 !== 0) {
+      this.validAmount(false);
+      this.amount('0');
+      return;
+    }
     try {
       const price = new BigNumber(this.price());
       let amount = new BigNumber(this.amount());
@@ -75,8 +91,9 @@ Template.neworder.viewmodel({
       const token = Tokens.findOne(Session.get('baseCurrency'));
       if (token) {
         const balance = new BigNumber(token.balance);
-        const allowance = new BigNumber(token.allowance);
-        maxAmount = web3.fromWei(BigNumber.min(balance, allowance).toString(10));
+        /* const allowance = new BigNumber(token.allowance);
+        maxAmount = web3.fromWei(BigNumber.min(balance, allowance).toString(10));*/
+        maxAmount = web3.fromWei(balance.toString(10));
       }
     } else {
       maxAmount = '9e999';
@@ -99,8 +116,9 @@ Template.neworder.viewmodel({
       const token = Tokens.findOne(Session.get('quoteCurrency'));
       if (token) {
         const balance = new BigNumber(token.balance);
-        const allowance = new BigNumber(token.allowance);
-        maxTotal = web3.fromWei(BigNumber.min(balance, allowance).toString(10));
+        /* const allowance = new BigNumber(token.allowance);
+        maxTotal = web3.fromWei(BigNumber.min(balance, allowance).toString(10));*/
+        maxTotal = web3.fromWei(balance.toString(10));
       }
     } else {
       maxTotal = '9e999';
@@ -115,6 +133,34 @@ Template.neworder.viewmodel({
     } catch (e) {
       return false;
     }
+  },
+  quoteAvailable() {
+    const token = Tokens.findOne(Session.get('quoteCurrency'));
+    if (token) {
+      return token.balance;
+    }
+    return 0;
+  },
+  baseAvailable() {
+    const token = Tokens.findOne(Session.get('baseCurrency'));
+    if (token) {
+      return token.balance;
+    }
+    return 0;
+  },
+  quoteAllowance() {
+    const token = Tokens.findOne(Session.get('quoteCurrency'));
+    if (token) {
+      return token.allowance;
+    }
+    return 0;
+  },
+  baseAllowance() {
+    const token = Tokens.findOne(Session.get('baseCurrency'));
+    if (token) {
+      return token.allowance;
+    }
+    return 0;
   },
   hasAllowance(currency) {
     try {
@@ -181,6 +227,34 @@ Template.neworder.viewmodel({
     this.bestOffer(undefined);
     return undefined;
   },
+  autofill() {
+    const quoteCurrency = Session.get('quoteCurrency');
+    const baseCurrency = Session.get('baseCurrency');
+    let offer;
+    let price = 0;
+    let available = 0;
+    if (this.type() === 'buy') {
+      offer = Offers.findOne({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
+                              { sort: { ask_price: 1 } });
+      if (offer && Object.prototype.hasOwnProperty.call(offer, 'ask_price')) {
+        price = new BigNumber(offer.ask_price.toString());
+        available = web3.fromWei(this.quoteAvailable()).toString(10);
+        this.price(price);
+        this.total(available);
+        this.calcAmount();
+      }
+    } else if (this.type() === 'sell') {
+      offer = Offers.findOne({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
+                              { sort: { ask_price: 1 } });
+      if (offer && Object.prototype.hasOwnProperty.call(offer, 'bid_price')) {
+        price = new BigNumber(offer.bid_price.toString());
+        available = web3.fromWei(this.baseAvailable()).toString(10);
+        this.price(price);
+        this.amount(available);
+        this.calcTotal();
+      }
+    }
+  },
   openOfferModal() {
     Session.set('selectedOffer', this.bestOffer());
   },
@@ -194,7 +268,7 @@ Template.neworder.viewmodel({
   showDepositTab() {
     $('#deposit').tab('show');
   },
-  showAllowanceModal() {
-    $('#allowanceModal').modal('show');
+  showAllowanceModal(token) {
+    $(`#allowanceModal${token}`).modal('show');
   },
 });

@@ -50,6 +50,10 @@ const tokens = {
     DGD: '0x1ab3bd2e2670d6e00ca406217e4d327f7f946d7e',
     GNT: '0x7fb3c4ff78bd0305a6ec436eda79303f981c5938',
     'W-GNT': '0xa5d92f318247c3b43241436dbb55ec4be600dc42',
+    REP: '0xf75caa57375a75dfc1a7ea917d6abb2c95511053',
+    ICN: '0x5b73d26807ea72287bafa1a27fccf8ece5deabc4',
+    '1ST': '0xa8c784efdfe7d48bc5df28f770b6454a037e2abe',
+    SNGLS: '0xf48cf5ad04afa369fe1ae599a8f3699c712b0352',
   },
   morden: {
     'W-ETH': '0x52fe88b987c7829e5d5a61c98f67c9c14e6a7a90',
@@ -58,6 +62,10 @@ const tokens = {
     DGD: '0x3c6f5633b30aa3817fa50b17e5bd30fb49bddd95',
     GNT: '0x0000000000000000000000000000000000000000',
     'W-GNT': '0x0000000000000000000000000000000000000000',
+    REP: '0x0000000000000000000000000000000000000000',
+    ICN: '0x0000000000000000000000000000000000000000',
+    '1ST': '0x0000000000000000000000000000000000000000',
+    SNGLS: '0x0000000000000000000000000000000000000000',
   },
   live: {
     'W-ETH': '0xecf8f87f810ecf450940c9f60066b4a7a501d6a7',
@@ -66,6 +74,10 @@ const tokens = {
     DGD: '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a',
     GNT: '0xa74476443119a942de498590fe1f2454d7d4ac0d',
     'W-GNT': '0x01afc37f4f85babc47c0e2d0eababc7fb49793c8',
+    REP: '0x48c80f1f4d53d5951e5d5438b54cba84f29f32a5',
+    ICN: '0x888666ca69e0f178ded6d75b5726cee99a87d698',
+    '1ST': '0xaf30d2a7e90d7dc361c8c4585e9bb7d2f6f15bc7',
+    SNGLS: '0xaec2e87e0a235266d9c5adc9deb4b2e29b54d009',
   },
 };
 
@@ -77,13 +89,17 @@ const tokenSpecs = {
   DGD: { precision: 9, format: '0,0.00[0000000]' },
   GNT: { precision: 18, format: '0,0.00[0000000000000000]' },
   'W-GNT': { precision: 18, format: '0,0.00[0000000000000000]' },
+  REP: { precision: 18, format: '0,0.00[0000000000000000]' },
+  ICN: { precision: 18, format: '0,0.00[0000000000000000]' },
+  '1ST': { precision: 18, format: '0,0.00[0000000000000000]' },
+  SNGLS: { precision: 0, format: '0,0' },
 };
 
 Dapple.getQuoteTokens = () => ['W-ETH'];
 
-Dapple.getBaseTokens = () => ['MKR', 'DAI', 'DGD', 'W-GNT'];
+Dapple.getBaseTokens = () => ['MKR', /* 'DAI', */'DGD', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS'];
 
-Dapple.getTokens = () => ['W-ETH', 'MKR', 'DAI', 'DGD', 'W-GNT'];
+Dapple.getTokens = () => ['W-ETH', 'MKR', /* 'DAI', */'DGD', 'GNT', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS'];
 
 Dapple.getTokenSpecs = (symbol) => {
   if (typeof (tokenSpecs[symbol]) !== 'undefined') {

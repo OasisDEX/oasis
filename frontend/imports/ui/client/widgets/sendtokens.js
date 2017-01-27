@@ -18,8 +18,15 @@ Template.sendtokens.viewmodel({
   currencies: Dapple.getTokens(),
   recipient: '',
   lastError: '',
+  validAmount: true,
+  precision() {
+    return Dapple.getTokenSpecs(this.currency()).precision;
+  },
   pending() {
     return Transactions.findType(TRANSACTION_TYPE);
+  },
+  resetAmount() {
+    this.amount(0);
   },
   amount: '0',
   maxAmount() {
@@ -31,6 +38,11 @@ Template.sendtokens.viewmodel({
     }
   },
   canTransfer() {
+    this.validAmount(true);
+    if (this.precision() === 0 && this.amount() % 1 !== 0) {
+      this.validAmount(false);
+      return false;
+    }
     try {
       const amount = new BigNumber(this.amount());
       const maxAmount = new BigNumber(this.maxAmount());
@@ -39,6 +51,9 @@ Template.sendtokens.viewmodel({
     } catch (e) {
       return false;
     }
+  },
+  fillAmount() {
+    this.amount(this.maxAmount());
   },
   transfer(event) {
     event.preventDefault();

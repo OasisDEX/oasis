@@ -116,10 +116,14 @@ $(window).on('hashchange', () => {
 function initSession() {
   Session.set('network', false);
   Session.set('loading', false);
+  Session.set('loadingProgress', 0);
   Session.set('outOfSync', false);
   Session.set('syncing', false);
   Session.set('isConnected', false);
   Session.set('latestBlock', 0);
+
+  Session.set('balanceLoaded', false);
+  Session.set('allowanceLoaded', false);
 
   doHashChange();
 
@@ -135,6 +139,10 @@ function initSession() {
   Session.set('GNTWithdrawProgress', 0);
   Session.set('GNTWithdrawProgressMessage', '');
   Session.set('GNTWithdrawErrorMessage', '');
+  Session.set('loadingTradeHistory', true);
+  if (!Session.get('volumeSelector')) {
+    Session.set('volumeSelector', 'quote');
+  }
 }
 
 /**

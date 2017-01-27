@@ -1,18 +1,28 @@
 <template name="sendtokens">
   <form id="sendtokens">
-    <h2>
-      TRANSFER
-    </h2>
+    <div class="row">
+      <div class="col-xs-6">
+        <h2>
+          TRANSFER
+        </h2>        
+      </div>
+      <div id="container-transfer" class="col-xs-6">
+        <span class="select-market-container"> 
+            <select class="select-market-graph" {{b "options: currencies, value: currency, change: resetAmount"}}></select>
+            <span class="glyphicon glyphicon-chevron-down select-glyph" aria-hidden="true"></span>
+        </span>
+      </div>
+    </div>
     <div>
       <table>
         <tbody>
-          <tr>
+          <tr class="row-data-line">
             <th>
-              TOKEN
+              WALLET
             </th>
-            <td>
-              <select class="select-box" {{b "options: currencies, value: currency"}}></select>
-              <span class="glyphicon glyphicon-chevron-down select-glyph" aria-hidden="true"></span>
+            <td class="token">
+              <span class="fill-amount" {{b "click: fillAmount"}}>{{formatNumber maxAmount '0,0.00[000]'}}</span>
+              <span class="span-transfer-currency">{{currency}}</span>
             </td>
           </tr>
           <tr class="row-input-line">
@@ -28,7 +38,7 @@
               AMOUNT
             </th>
             <td>
-              <input type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}>
+              <input type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}><span class="span-transfer-currency">{{currency}}</span>
             </td>
           </tr>
         </tbody>
@@ -36,10 +46,17 @@
           <tr>
             <th>
             </th>
-            <td>
+            <td class="transfer-button">
               <button class="btn btn-default" {{b "enable: canTransfer, click: transfer"}}>TRANSFER</button>
             </td>
           </tr>
+          {{#unless validAmount}}
+            <tr>
+              <td colspan="2">
+                Amount is invalid because {{currency}} has no decimals.
+              </td>
+            </tr>
+          {{/unless}}
           {{#unless equals lastError ''}}
             <tr>
               <td colspan="2">

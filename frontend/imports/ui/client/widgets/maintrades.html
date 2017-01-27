@@ -1,5 +1,5 @@
 <template name="maintrades">
-  <div class="row balance-row">
+  <!--<div class="row balance-row">
     <section class="col-md-4">
       {{> balance currency=quoteCurrency currencyType='quote-currency' }}
     </section>
@@ -9,7 +9,20 @@
     <section class="col-md-4">
       {{> balance currency=baseCurrency currencyType='base-currency' }}
     </section>
+  </div>-->
+  <div class="row">
+    <div class="order-center">
+      <section class="order-section col-md-6 markets">
+        {{> markets title='MARKETS'}}
+      </section>
+    </div>
+    <div class="order-center">
+      <section class="order-section col-md-6 chart">
+        {{> chart title='CHART'}}
+      </section>
+    </div>
   </div>
+  {{#if loadedCurrencies}}
   <div class="row">
     <div class="order-center">
       <section class="order-section col-md-6">
@@ -41,4 +54,11 @@
     </div>
   </div>
   {{> offermodal offer=(findOffer selectedOffer)}}
+  {{else}}
+  <div class="row">
+    <div class="col-md-12 text-center">
+      {{{loadingIcon 'large'}}}
+    </div>
+  </div>
+  {{/if}}
 </template>

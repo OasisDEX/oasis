@@ -14,13 +14,29 @@
           {{#if offer}}
             <table>
               <tbody>
-                <tr class="row-input-line">
-                  <th>OWNER</th>
-                  <td><span class="span-owner">{{offer.owner}} {{#if equals offer.owner address}}(<span class="text-success">you</span>){{/if}}</span></td>
+                <tr class="row-data-line">
+                  <th>ALLOWANCE</th>
+                  {{#if equals offer.type 'bid'}}
+                    <td>{{formatBalance baseToken.allowance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
+                  {{else}}
+                    <td>{{formatBalance quoteToken.allowance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
+                  {{/if}}
                 </tr>
-                <tr class="row-input-line">
+                <tr class="row-data-line">
+                  <th>AVAILABLE</th>
+                  {{#if equals offer.type 'bid'}}
+                    <td>{{formatBalance baseToken.balance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
+                  {{else}}
+                    <td>{{formatBalance quoteToken.balance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
+                  {{/if}}
+                </tr>
+                <tr class="row-data-line owner">
+                  <th class="th-owner">OWNER</th>
+                  <td class="td-owner"><span class="span-owner">{{offer.owner}} {{#if equals offer.owner address}}(<span class="text-success">you</span>){{/if}}</span></td>
+                </tr>
+                <tr class="row-data-line">
                   <th>PRICE</th>
-                  <td>{{formatBalance (toWei offer.price)}} <span class="span-offer-currency">{{quoteCurrency}} / {{baseCurrency}}</span></td>
+                  <td>{{formatNumber offer.price}} <span class="span-offer-currency">{{quoteCurrency}}</span></td>
                 </tr>
                 <tr class="row-input-line">
                   <th>VOLUME</th>
@@ -37,53 +53,69 @@
                 {{/if}}
               </tbody>
             </table>
-            <hr>
-            <div class="div-modal-text">
-            {{#unless isMarketOpen}}
-              <span class="text-danger">
-                The market has closed.
-              </span>
-            {{/unless}}
-            {{#unless hasVolume}}
-              <span class="text-danger">
-                The order doesn't have a high enough {{buyCurrency}} volume.
-              </span>
-            {{else}}
-              {{#unless hasBalance}}
-                <span class="text-danger">
-                  You don't have enough {{#if equals sellCurrency 'W-ETH'}}<a href="#ethtokens" {{b "click: dismiss"}}>{{sellCurrency}}</a>{{else}}{{sellCurrency}}{{/if}} tokens.
-                </span>
-              {{else}}
-                {{#unless hasAllowance}}
+            <div class="div-modal-text row">
+              <div class="col-xs-1">
+                <img src="/order-warning.svg" class="order-warning">
+              </div>
+              <div class="col-xs-11">
+                {{#unless isMarketOpen}}
                   <span class="text-danger">
-                    You don't have enough {{sellCurrency}} <a href="#allowance" {{b "click: showAllowanceModal"}}>allowance</a>.
-                  </span>
-                {{else}}
-                  <span class="text-danger">
-                    <b>Warning!</b>
-                    {{#if equals offer.type 'bid'}}
-                      This action will <b>remove {{formatBalance (toWei volume)}} {{baseCurrency}}</b> {{formatPrice (toWei volume) baseCurrency}} from your token balance and allowance,
-                      and <b>add {{formatBalance (toWei total)}} {{quoteCurrency}}</b> {{formatPrice (toWei total) quoteCurrency}} to your token balance.
-                    {{else}}
-                      This action will <b>remove {{formatBalance (toWei total)}} {{quoteCurrency}}</b> {{formatPrice (toWei total) quoteCurrency}} from your token balance and allowance,
-                      and <b>add {{formatBalance (toWei volume)}} {{baseCurrency}}</b> {{formatPrice (toWei volume) baseCurrency}} to your token balance.
-                    {{/if}}
-                    <br>
-                    If someone (partially) fills this order before you do, your offer may only be partially filled or even denied, in which case unused funds will be refunded to your balance and allowance.
+                    The market has closed.
                   </span>
                 {{/unless}}
-              {{/unless}}
-            {{/unless}}
+                {{#unless validAmount}}
+                  <span class="text-danger">
+                    Amount is invalid because {{baseCurrency}} has no decimals.
+                  </span>
+                {{/unless}}
+                {{#unless hasVolume}}
+                  <span class="text-danger">
+                    The order doesn't have a high enough {{buyCurrency}} volume.
+                  </span>
+                {{else}}
+                  {{#unless hasBalance}}
+                    <span class="text-danger">
+                      You don't have enough {{#if equals sellCurrency 'W-ETH'}}<a href="#ethtokens" {{b "click: dismiss"}}>{{sellCurrency}}</a>{{else}}{{sellCurrency}}{{/if}} tokens.
+                    </span>
+                  {{else}}
+                    {{#unless hasAllowance}}
+                      <span class="text-danger">
+                        You are trying to complete a {{offerType}} order above your <strong>defined allowance</strong>.
+                      </span>
+                    {{else}}
+                      <span class="text-danger">
+                        {{#if equals offer.type 'bid'}}
+                          This action will remove {{formatBalance (toWei volume)}} {{baseCurrency}} {{formatPrice (toWei volume) baseCurrency}} from your token balance and allowance,
+                          and add {{formatBalance (toWei total)}} {{quoteCurrency}} {{formatPrice (toWei total) quoteCurrency}} to your token balance.
+                        {{else}}
+                          This action will remove {{formatBalance (toWei total)}} {{quoteCurrency}} {{formatPrice (toWei total) quoteCurrency}} from your token balance and allowance,
+                          and add {{formatBalance (toWei volume)}} {{baseCurrency}} {{formatPrice (toWei volume) baseCurrency}} to your token balance.
+                        {{/if}}
+                        <br>
+                        If someone (partially) fills this order before you do, your offer may only be partially filled or even denied, in which case unused funds will be refunded to your balance and allowance.
+                      </span>
+                    {{/unless}}
+                  {{/unless}}
+                {{/unless}}
+              </div>
             </div>
           {{/if}}
         </div>
         <div class="modal-footer">
-          {{#if offer}}
-            <button type="button" class="btn btn-default btn-submit-order-buy buy btn-placement-right btn-placement-right" data-dismiss="modal" {{b "enable: canBuy, click: buy"}}>
-              {{#if equals offer.type 'bid'}}SELL{{else}}BUY{{/if}} {{baseCurrency}}
-            </button>
+          {{#if or (and hasBalance hasAllowance) (not hasBalance)}}
+            {{#if offer}}
+              <button type="button" class="btn btn-default btn-submit-order btn-submit-order-{{offerType}} {{offerType}} btn-placement-right" data-dismiss="modal" {{b "enable: canBuy, click: buy"}}>
+                {{#if equals offer.type 'bid'}}SELL{{else}}BUY{{/if}} {{baseCurrency}}
+              </button>
+            {{/if}}
+          {{else}}
+            {{#if equals offer.type 'bid'}}
+              <button type="button" data-refer="existingOrder" data-link={{baseCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order-allowance btn-placement-right" data-dismiss="modal">Change Allowance</button>
+            {{else}}
+              <button type="button" data-refer="existingOrder" data-link={{quoteCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order-allowance {{offerType}} btn-placement-right" data-dismiss="modal">Change Allowance</button>
+            {{/if}}
           {{/if}}
-          <button type="button" class="btn btn-default btn-submit-order" data-dismiss="modal">CANCEL</button>          
+          <button type="button" class="btn btn-default btn-placement-left btn-submit-order-cancel" data-dismiss="modal">CANCEL</button>          
         </div>
       </div>
     </div>
@@ -96,95 +128,115 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title">Cancel Offer</h4>
         </div>
-        <div class="modal-body">
-          {{#if offer}}
-            <span class="text-danger">
-              <b>Warning!</b>
-              {{#if equals offer.type 'bid'}}
-                This action will <b>return {{formatBalance (offer.volume quoteCurrency)}} {{quoteCurrency}}</b> {{formatPrice (offer.volume quoteCurrency) quoteCurrency}} to your token balance.
-              {{else}}
-                This action will <b>return {{formatBalance (offer.volume baseCurrency)}} {{baseCurrency}}</b> {{formatPrice (offer.volume baseCurrency) baseCurrency}} to your token balance.
-              {{/if}}
-              <br>
-              If someone (partially) fills this order before you cancel it, your order may not or only be partially cancelled.
-            </span>
-          {{/if}}
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default btn-submit-order btn-placement-right" data-dismiss="modal">Close</button>
-          {{#if offer}}
-            <button type="button" class="btn btn-default btn-submit-order-sell sell" data-dismiss="modal" disabled={{not offer.canCancel}} {{b "click: cancel"}}>Cancel Offer</button>
-          {{/if}}
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="allowanceModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content modal-order">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">
-            Allowance
-            {{> whatisthis section="allowance"}}
-          </h4>
-        </div>
-        <div class="modal-body">
-          {{#each token in allTokens}}
-            {{#if token}}
-              {{> newallowance token=token}}
+        <div class="modal-body row">
+          <div class="col-xs-1">
+            <img src="/order-warning.svg" class="order-warning">
+          </div>
+          <div class="col-xs-11">
+            {{#if offer}}
+              <span class="text-danger">
+                {{#if equals offer.type 'bid'}}
+                  This action will return {{formatBalance (offer.volume quoteCurrency)}} {{quoteCurrency}} {{formatPrice (offer.volume quoteCurrency) quoteCurrency}} to your token balance.
+                {{else}}
+                  This action will return {{formatBalance (offer.volume baseCurrency)}} {{baseCurrency}} {{formatPrice (offer.volume baseCurrency) baseCurrency}} to your token balance.
+                {{/if}}
+                <br>
+                If someone (partially) fills this order before you cancel it, your order may not or only be partially cancelled.
+              </span>
             {{/if}}
-          {{/each}}
+          </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default btn-submit-order btn-placement-right" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-default btn-submit-order btn-placement-left" data-dismiss="modal">Close</button>
+          {{#if offer}}
+            <button type="button" class="btn btn-default btn-submit-order-sell sell btn-placement-right" data-dismiss="modal" disabled={{not offer.canCancel}} {{b "click: cancel"}}>Cancel Offer</button>
+          {{/if}}
         </div>
       </div>
     </div>
   </div>
+  
+  {{#if quoteToken}}
+    {{> newallowance token=quoteToken}}
+  {{/if}}
+  {{#if baseToken}}
+    {{> newallowance token=baseToken}}
+  {{/if}}
 
    <div class="modal fade" id="newOrderModal" tabindex="-1" role="dialog" data-backdrop="false">
     <div class="modal-dialog">
       <div class="modal-content modal-order">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Confirmation</h4>
+            <h4 class="modal-title">{{offerType}} OFFER</h4>
         </div>
         <div class="modal-body">
           <table>
             <tbody>
-              <tr>
-                <th>Type</th>
-                <td>{{offerType}}</td>
+              <tr class="row-data-line">
+                <th>ALLOWANCE</th>
+                {{#if equals offerType 'buy'}}
+                  <td>{{formatBalance quoteToken.allowance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
+                {{else}}
+                  <td>{{formatBalance baseToken.allowance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
+                {{/if}}
               </tr>
-              <tr>
+              <tr class="row-data-line">
+                <th>AVAILABLE</th>
+                {{#if equals offerType 'buy'}}
+                  <td>{{formatBalance quoteToken.balance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
+                {{else}}
+                  <td>{{formatBalance baseToken.balance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
+                {{/if}}
+              </tr>
+              <tr class="row-data-line owner">
+                <th>OWNER</th>
+                <td><span class="owner-address">{{address}}</span></td>
+              </tr>
+              <tr class="row-data-line">
                 <th>Price</th>
-                <td>{{formatBalance (toWei offerPrice)}} {{quoteCurrency}}/{{baseCurrency}}</td>
+                <td><span class="value price">{{formatNumber offerPrice}}</span> <span class="quote-currency">{{quoteCurrency}}</span></td>
               </tr>
-              <tr>
+              <tr class="row-data-line">
                 <th>Volume</th>
-                <td>{{formatBalance (toWei offerAmount)}} {{baseCurrency}}</td>
+                <td><span class="value">{{formatBalance (toWei offerAmount)}}</span> <span class="base-currency">{{baseCurrency}}</span></td>
               </tr>
-              <tr>
+              <tr class="row-data-line">
                 <th>Total</th>
-                <td>{{formatBalance (toWei offerTotal)}} {{quoteCurrency}}</td>
+                <td><span class="value">{{formatBalance (toWei offerTotal)}}</span> <span class="base-currency">{{quoteCurrency}}</span></td>
               </tr>
             </tbody>
           </table>
-          <hr>
-          <span class="text-danger">
-            <b>Warning!</b>
-            {{#if equals offerType 'buy'}}
-              This action will <b>remove {{formatBalance (toWei offerTotal)}} {{quoteCurrency}}</b> {{formatPrice (toWei offerTotal) quoteCurrency}} from your token balance and allowance.
-            {{else}}
-              This action will <b>remove {{formatBalance (toWei offerAmount)}} {{baseCurrency}}</b> {{formatPrice (toWei offerAmount) baseCurrency}} from your token balance and allowance.
-            {{/if}}
-          </span>
+          <div class="div-modal-text row">
+            <div class="col-xs-1">
+              <img src="/order-warning.svg" class="order-warning">
+            </div>
+            <div class="col-xs-11">
+              <span class="text-clarifications">
+                {{#unless hasAllowanceNewOrder offerType}}
+                  You are trying to create a {{offerType}} order above your <strong>defined allowance</strong>.
+                {{else}}
+                  {{#if equals offerType 'buy'}}
+                    This action will remove {{formatBalance (toWei offerTotal)}} {{quoteCurrency}} {{formatPrice (toWei offerTotal) quoteCurrency}} from your token balance and allowance.
+                  {{else}}
+                    This action will remove {{formatBalance (toWei offerAmount)}} {{baseCurrency}} {{formatPrice (toWei offerAmount) baseCurrency}} from your token balance and allowance.
+                  {{/if}}
+                {{/unless}}
+              </span>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default btn-submit-order btn-placement-right" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-default btn-submit-order-{{offerType}} {{offerType}} btn-placement-right" data-dismiss="modal" {{b "enable: canSubmit, click: confirmOffer"}}>Place order</button>
+          {{#unless hasAllowanceNewOrder offerType}}
+            {{#if equals offerType 'buy'}}
+              <button type="button" data-refer="newOrder" data-link={{quoteCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order-allowance btn-placement-right" data-dismiss="modal">Change Allowance</button>
+            {{else}}
+              <button type="button" data-refer="newOrder" data-link={{baseCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order-allowance btn-placement-right" data-dismiss="modal">Change Allowance</button>
+            {{/if}}
+          {{else}}
+            <button type="button" class="btn btn-default btn-submit-order-{{offerType}} {{offerType}} btn-placement-right" data-dismiss="modal" {{b "enable: canSubmit, click: confirmOffer"}}>{{offerType}} {{baseCurrency}}</button>
+          {{/unless}}
+          <button type="button" class="btn btn-default btn-placement-left btn-submit-order-cancel" data-dismiss="modal">Cancel</button>
         </div>
       </div>
     </div>

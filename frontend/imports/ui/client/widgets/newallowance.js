@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 import { BigNumber } from 'meteor/ethereum:web3';
 import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { $ } from 'meteor/jquery';
 
 import Transactions from '/imports/api/transactions';
 import { formatError } from '/imports/utils/functions';
@@ -24,6 +25,9 @@ Template.newallowance.viewmodel({
     // Initialize value
     this.value(web3.fromWei(this.templateInstance.data.token.allowance));
   },
+  setTotalAllowance() {
+    this.value(web3.fromWei(this.templateInstance.data.token.balance));
+  },
   canChange() {
     try {
       return this.pending().length === 0 && this.value() !== '' &&
@@ -44,14 +48,23 @@ Template.newallowance.viewmodel({
     Dapple.getToken(this.templateInstance.data.token._id, (error, token) => {
       if (!error) {
         token.approve(contractAddress,
-              convertToTokenPrecision(this.value(), this.templateInstance.data.token._id), options, (txError, tx) => {
-                if (!txError) {
-                  Transactions.add('allowance_'.concat(this.templateInstance.data.token._id), tx,
-                    { value: this.value(), token: this.templateInstance.data.token._id });
-                } else {
-                  this.lastError(formatError(txError));
+          convertToTokenPrecision(this.value(), this.templateInstance.data.token._id), options, (txError, tx) => {
+            if (!txError) {
+              Transactions.add('allowance_'.concat(this.templateInstance.data.token._id), tx,
+                { value: this.value(), token: this.templateInstance.data.token._id });
+              Transactions.observeRemoved('allowance_'.concat(this.templateInstance.data.token._id), () => {
+                const refer = $(`#allowanceModal${this.templateInstance.data.token._id}`).data('refer');
+                $(`#allowanceModal${this.templateInstance.data.token._id}`).modal('hide');
+                if (refer === 'newOrder') {
+                  $('#newOrderModal').modal('show');
+                } else if (refer === 'existingOrder') {
+                  $('#offerModal').modal('show');
                 }
               });
+            } else {
+              this.lastError(formatError(txError));
+            }
+          });
       } else {
         this.lastError(error.toString());
       }

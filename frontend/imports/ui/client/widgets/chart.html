@@ -1,0 +1,46 @@
+<template name="chart">
+  <div id="container-chart" class="order-section-content">
+    <div class="row">
+      <div class="col-xs-6">
+        <h2>
+          CHART
+        </h2>
+      </div>
+      <div class="col-xs-6">
+        <span class="select-market-container"> 
+            <select class="select-market-graph" {{b "value: currentChart, change: chartChange"}}>
+                <option value="DEPTH" selected>DEPTH</option>
+                <option value="VOLUME">VOLUME</option>
+            </select>
+            <span class="glyphicon glyphicon-chevron-down select-glyph" aria-hidden="true"></span>
+        </span>
+      </div>
+    </div>
+    <div class={{showDepth}}>
+      {{#unless loadedCurrencies}}
+        <div class="loading-depth-chart">{{{loadingIcon}}} Loading token...</div>
+      {{else}}
+        {{#if outOfSync}}
+          <div class="loading-depth-chart">(out of sync, waiting for synchronization)</div>
+        {{else}}
+          {{#if loading}}
+            <div class="loading-depth-chart">{{{loadingIcon}}} Loading offers {{loadingProgress}}%</div>
+          {{/if}}
+        {{/if}}
+      {{/unless}}
+      <canvas id="market-chart-depth" class="market-chart" width="345" height="215"></canvas>
+      {{fillDepthChart}}
+    </div>
+    <div class={{showVolume}}>
+      {{#unless loadedCurrencies}}
+        <div class="loading-depth-chart">{{{loadingIcon}}} Loading token...</div>
+      {{else}}
+        {{#if loadingTradeHistory}}
+          <div class="loading-volume-chart">{{{loadingIcon}}} Loading history...</div>
+        {{/if}}
+      {{/unless}}
+      <canvas id="market-chart-volume" class="market-chart" width="345" height="215"></canvas>
+      {{fillVolumeChart}}
+    </div>
+  </div>
+</template>

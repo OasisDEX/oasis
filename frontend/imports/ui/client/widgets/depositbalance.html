@@ -1,0 +1,42 @@
+<template name="depositbalance">
+  <div id="container-market"  class="order-section-content">
+    <div class="row">
+      <div class="col-md-12">
+        <h2>
+          BALANCES
+        </h2>
+      </div>
+    </div>
+    <div>
+      <table class="t-scroll t-balance">
+        <thead>
+          <tr>
+            <th></th>
+            <th>COIN</th>
+            <th>WALLET</th>
+            <th>DEPOSITED</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="eth-balance" class="clickable {{selected 'ETH'}}" {{b "click: baseChange"}}>
+            <td></td>
+            <td>ETH</td>
+            <td>{{formatBalance ETHBalance}} ETH</td>
+            <td>{{formatBalance wethBalance}} W-ETH</td>
+            <td></td>
+          </tr>
+          <tr id="gnt-balance" class="clickable {{selected 'GNT'}}" {{b "click: baseChange"}}>
+            <td></td>
+            <td>GNT</td>
+            <td>{{formatBalance GNTBalance}} GNT</td>
+            <td>{{formatBalance wgntBalance}} W-GNT</td>
+            <td></td>
+          </tr>
+        </tbody>
+        <tfoot>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</template>

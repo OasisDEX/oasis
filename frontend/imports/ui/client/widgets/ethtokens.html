@@ -8,22 +8,24 @@
       <table>
         <tbody>
           {{#if equals type 'deposit'}}
-          <tr class="row-input-line">
+          <tr class="row-data-line">
             <th>
-              ETH
+              WALLET
             </th>
             <td class="token">
-              {{formatBalance ETHBalance}}
+              <span class="fill-amount" {{b "click: fillAmount"}}>{{formatBalance ETHBalance}}</span>
+              <span class="span-buy-sell-currency">ETH</span>
             </td>
           </tr>
           {{else}}
-          <tr class="row-input-line">
+          <tr class="row-data-line">
             <th>
-              W-ETH
+              DEPOSITED
             </th>
             <td class="token">
               {{#let token=(findToken 'W-ETH')}}
-                {{formatBalance token.balance}}
+              <span class="fill-amount" {{b "click: fillAmount"}}>{{formatBalance token.balance}}</span>
+              <span class="span-buy-sell-currency">W-ETH</span>
               {{/let}}
             </td>
           </tr>
@@ -33,7 +35,11 @@
               AMOUNT
             </th>
             <td>
-              <input type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}>
+              {{#if equals type 'deposit'}}
+                <input type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}> <span class="span-deposit-withdraw-currency">ETH</span> 
+              {{else}}
+                <input type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}> <span class="span-deposit-withdraw-currency">W-ETH</span> 
+              {{/if}}
             </td>
           </tr>
         </tbody>

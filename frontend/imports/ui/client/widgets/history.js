@@ -9,6 +9,9 @@ Template.history.viewmodel({
   currencyClass(token) {
     return token === Session.get('quoteCurrency') ? 'quote-currency' : 'base-currency';
   },
+  historyCount() {
+    return this.history().count();
+  },
   history() {
     const address = Session.get('address');
     return TokenEvents.find({
@@ -22,5 +25,8 @@ Template.history.viewmodel({
       type: { $in: ['transfer'] },
        /* $or: [{ to: address }, { from: address }], */
     }, { sort: { blockNumber: -1 } });
+  },
+  transferHistoryCount() {
+    return this.transferHistory().count();
   },
 });

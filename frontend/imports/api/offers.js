@@ -24,10 +24,10 @@ const OFFER_GAS = 1000000;
 const BUY_GAS = 1000000;
 const CANCEL_GAS = 1000000;
 
-const TRADES_LIMIT = 7;
+const TRADES_LIMIT = 0;
 Session.set('lastTradesLimit', TRADES_LIMIT);
 
-const OFFER_LIMIT = 7;
+const OFFER_LIMIT = 0;
 Session.set('orderBookLimit', OFFER_LIMIT);
 
 const helpers = {
@@ -128,21 +128,56 @@ Offers.sync = () => {
     }
   });
 
-  // Watch Trade events
-  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: Dapple.getFirstContractBlock() }, (error, trade) => {
-    if (!error) {
-      const buyWhichToken = Dapple.getTokenByAddress(trade.args.buy_which_token);
-      const sellWhichToken = Dapple.getTokenByAddress(trade.args.sell_which_token);
+  function transformArgs(trade) {
+    const buyWhichToken = Dapple.getTokenByAddress(trade.args.buy_which_token);
+    const sellWhichToken = Dapple.getTokenByAddress(trade.args.sell_which_token);
 
-      // Transform arguments
-      const args = {
-        buyWhichToken_address: trade.args.buy_which_token,
-        buyWhichToken,
-        sellWhichToken_address: trade.args.sell_which_token,
-        sellWhichToken,
-        buyHowMuch: convertTo18Precision(trade.args.buy_how_much.toString(10), buyWhichToken),
-        sellHowMuch: convertTo18Precision(trade.args.sell_how_much.toString(10), sellWhichToken),
-      };
+    // Transform arguments
+    const args = {
+      buyWhichToken_address: trade.args.buy_which_token,
+      buyWhichToken,
+      sellWhichToken_address: trade.args.sell_which_token,
+      sellWhichToken,
+      buyHowMuch: convertTo18Precision(trade.args.buy_how_much.toString(10), buyWhichToken),
+      sellHowMuch: convertTo18Precision(trade.args.sell_how_much.toString(10), sellWhichToken),
+    };
+    return args;
+  }
+
+
+  // Get all Trade events in one go so we can fill up prices, volume and history
+  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: Dapple.getFirstContractBlock() }).get((error, trades) => {
+    if (!error) {
+      let trade = null;
+      const promises = [];
+      let block = null;
+
+      if (trades.length > 0) {
+        for (let i = 0; i < trades.length; i++) {
+          promises.push(Offers.getBlock(trades[i].blockNumber));
+        }
+
+        Promise.all(promises).then((resultProm) => {
+          for (let i = 0; i < trades.length; i++) {
+            trade = trades[i];
+            const args = transformArgs(trade);
+
+            block = resultProm[i];
+
+            Trades.upsert(trade.transactionHash, _.extend(block, trade, args));
+          }
+          Session.set('loadingTradeHistory', false);
+        });
+      } else {
+        Session.set('loadingTradeHistory', false);
+      }
+    }
+  });
+
+  // Watch Trade events in realtime
+  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: Session.get('startingBlock') }, (error, trade) => {
+    if (!error) {
+      const args = transformArgs(trade);
       // Get block for timestamp
       web3.eth.getBlock(trade.blockNumber, (blockError, block) => {
         if (!error) {
@@ -152,6 +187,20 @@ Offers.sync = () => {
     }
   });
 };
+
+Offers.getBlock = function getBlock(blockNumber) {
+  const p = new Promise((resolve, reject) => {
+    web3.eth.getBlock(blockNumber, (blockError, block) => {
+      if (!blockError) {
+        resolve(block);
+      } else {
+        reject(blockError);
+      }
+    });
+  });
+  return p;
+};
+
 
 /**
  * Syncs up a single offer
@@ -232,7 +281,7 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
     });
 };
 
-Offers.buyOffer = (_id, _quantity, _token) => {
+Offers.buyOffer = (_id, type, _quantity, _token) => {
   const id = parseInt(_id, 10);
 
   const quantityAbsolute = convertToTokenPrecision(_quantity, _token);
@@ -242,7 +291,7 @@ Offers.buyOffer = (_id, _quantity, _token) => {
     if (!error) {
       Transactions.add('offer', tx, { id: _id, status: Status.BOUGHT });
       Offers.update(_id, { $set: {
-        tx, status: Status.BOUGHT, helper: 'Your buy / sell order is being processed...' } });
+        tx, status: Status.BOUGHT, helper: `Your ${type} order is being processed...` } });
     } else {
       Offers.update(_id, { $set: { helper: formatError(error) } });
     }

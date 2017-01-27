@@ -1,15 +1,15 @@
 <template name="networkStatus">
   <div class="networkstatus-section">
-    <div class="col-md-6">
-      <img alt="Maker" src="/logo-simple.svg">
+    <div class="col-xs-3">
+      <img alt="Maker" src="/logo-simple.png">
     </div>
-    <div class="col-md-6">
-      <div class="div-connected">
+    <div class="col-xs-9 nplr ns-aux">
+      <div class="div-connected col-xs-6">
         <p>
           <span class="network-type">{{network}}</span>
           {{> whatisthis section="network"}}
         </p>
-        <p>
+        <p class="nsp-aux">
         {{#unless isConnected}}
           (not connected)
         {{else}}
@@ -33,13 +33,13 @@
         {{/unless}}
         </p>
       </div>
-      <div>
+      <div class="div-connected col-xs-6 npr">
         {{#if isMarketOpen}}
           <p>
             <span class="network-type">CLOSING TIME</span>
             {{> whatisthis section="network"}}
           </p>
-          <p>
+          <p class="nsp-aux">
             <span class="clock-circle"><img class="clock-image" src="/clock.svg" alt="clock"></span>
             <span class="network-status">{{timestampToString marketCloseTime true true}}</span>
           </p>
@@ -48,7 +48,7 @@
             <span class="network-type">MARKET STATUS</span>
             {{> whatisthis section="network"}}
           </p>
-          <p>
+          <p class="nsp-aux">
             <span class="closed-circle"></span>
             <span class="network-status">CLOSED</span>
           </p>

@@ -1,31 +1,5 @@
 <template name="orderRow">
-  <tr class={{order.status}}{{#if canAccept}} clickable{{/if}} title={{timestampToString order.timestamp true true}}>
-    {{#if showDate}}
-      <td class="timestamp">{{timestampToString order.timestamp true true}}</td>
-    {{/if}}
-    {{#if showType}}
-      <td class="{{determineOrderType order}} order-type">
-        {{#if equals (determineOrderType order) 'bid'}}
-          BUY
-        {{else}}
-          SELL
-        {{/if}}
-      </td>
-    {{/if}}
-    {{#unless showType}}
-      {{#if equals (determineOrderType order) 'ask'}}
-        <td class={{order.type}}>{{formatToken order.price}}</td>
-      {{/if}}
-    {{else}}
-      <td>{{formatToken order.price}}</td>
-    {{/unless}}
-    <td>{{formatToken (order.volume quoteCurrency)}}</td>
-    <td>{{formatToken (order.volume baseCurrency)}}</td>
-    {{#unless showType}}
-      {{#if equals (determineOrderType order) 'bid'}}
-        <td class={{order.type}}>{{formatToken order.price}}</td>
-      {{/if}}
-    {{/unless}}
+  <tr class={{order.status}}{{#if or canAccept canOpenTxLink}} clickable{{/if}} title={{timestampToString order.timestamp true true}}>
     <td>
       {{#if order.canCancel}}
         {{#if showCancel}}
@@ -34,11 +8,33 @@
           </button>
         {{/if}}
       {{/if}}
-    </td>
+    </td>    
+    {{#if showDate}}
+      <td class="timestamp">{{timestampToString order.timestamp true true}}</td>
+    {{/if}}
+    {{#if showType}}
+      <td class="{{determineOrderType order section}} order-type">
+        {{#if equals (determineOrderType order section) 'bid'}}
+          BUY
+        {{else}}
+          SELL
+        {{/if}}
+      </td>
+    {{/if}}
+    {{#unless showType}}
+      {{#if or (equals (determineOrderType order) 'ask') (equals (determineOrderType order) 'bid')}}
+        <td class={{order.type}}>{{formatNumber order.price}}</td>
+      {{/if}}
+    {{else}}
+      <td>{{formatNumber order.price}}</td>
+    {{/unless}}
+    <td>{{formatBalance (order.volume quoteCurrency) '' quoteCurrency}}</td>
+    <td>{{formatBalance (order.volume baseCurrency) '' baseCurrency}}</td>
+    <td></td>
   </tr>
   {{#if order.helper}}
     <tr class="helper-row">
-      <td colspan="4">{{order.helper}}</td>
+      <td>{{order.helper}}</td>
     </tr>
   {{/if}}
 </template>

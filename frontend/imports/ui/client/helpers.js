@@ -11,6 +11,8 @@ import { moment } from 'meteor/momentjs:moment';
 import Tokens from '/imports/api/tokens';
 import { Offers, Trades } from '/imports/api/offers';
 
+import { txHref } from '/imports/utils/functions';
+
 Template.registerHelper('contractExists', () => {
   const network = Session.get('network');
   const isConnected = Session.get('isConnected');
@@ -39,15 +41,7 @@ Template.registerHelper('contractHref', () => {
   return contractHref;
 });
 
-Template.registerHelper('txHref', (tx) => {
-  let txHref = '';
-  if (Dapple['maker-otc'].objects) {
-    const network = Session.get('network');
-    const networkPrefix = (network === 'ropsten' ? 'testnet.' : '');
-    txHref = `https://${networkPrefix}etherscan.io/tx/${tx}`;
-  }
-  return txHref;
-});
+Template.registerHelper('txHref', (tx) => txHref(tx));
 
 Template.registerHelper('marketCloseTime', () => Session.get('close_time'));
 
@@ -60,6 +54,8 @@ Template.registerHelper('ready', () =>
 );
 
 Template.registerHelper('isConnected', () => Session.get('isConnected'));
+
+Template.registerHelper('hasAccount', () => Session.get('address'));
 
 Template.registerHelper('outOfSync', () => Session.get('outOfSync'));
 
@@ -75,6 +71,11 @@ Template.registerHelper('syncingPercentage', () => {
 Template.registerHelper('loading', () => Session.get('loading'));
 
 Template.registerHelper('loadingProgress', () => Session.get('loadingProgress'));
+
+Template.registerHelper('loadingTradeHistory', () => Session.get('loadingTradeHistory'));
+
+Template.registerHelper('loadedCurrencies', () => Session.get('balanceLoaded') === true
+  && Session.get('allowanceLoaded') === true);
 
 Template.registerHelper('address', () => Session.get('address'));
 
@@ -170,6 +171,12 @@ Template.registerHelper('equals', (a, b) => a === b);
 
 Template.registerHelper('not', (b) => !b);
 
+Template.registerHelper('or', (a, b) => a || b);
+
+Template.registerHelper('and', (a, b) => a && b);
+
+Template.registerHelper('gt', (a, b) => a > b);
+
 Template.registerHelper('concat', (...args) => Array.prototype.slice.call(args, 0, -1).join(''));
 
 Template.registerHelper('timestampToString', (ts, inSeconds, short) => {
@@ -177,7 +184,7 @@ Template.registerHelper('timestampToString', (ts, inSeconds, short) => {
   if (ts) {
     const momentFromTimestamp = (inSeconds === true) ? moment.unix(ts) : moment.unix(ts / 1000);
     if (short === true) {
-      timestampStr = momentFromTimestamp.format('DD.MM-HH:mm:ss');
+      timestampStr = momentFromTimestamp.format('DD.MM-HH:mm');
     } else {
       timestampStr = momentFromTimestamp.format();
     }
@@ -193,16 +200,6 @@ Template.registerHelper('fromWei', (s) => web3.fromWei(s));
 
 Template.registerHelper('toWei', (s) => web3.toWei(s));
 
-Template.registerHelper('formatBalance', (wei, format) => {
-  let formatValue = format;
-  if (formatValue instanceof Spacebars.kw) {
-    formatValue = null;
-  }
-  formatValue = formatValue || '0,0.00[0000]';
-
-  return EthTools.formatBalance(wei, formatValue);
-});
-
 Template.registerHelper('friendlyAddress', (address) => {
   /* eslint-disable no-underscore-dangle */
   if (address === Blaze._globalHelpers.contractAddress()) {
@@ -212,29 +209,6 @@ Template.registerHelper('friendlyAddress', (address) => {
   }
   return `${address.substr(0, 16)}...`;
   /* eslint-enable no-underscore-dangle */
-});
-
-Template.registerHelper('formatPrice', (value, currency) => {
-  let displayValue = value;
-  const format = '0,0.00[0000]';
-  try {
-    if (!(displayValue instanceof BigNumber)) {
-      displayValue = new BigNumber(displayValue);
-    }
-
-    if (currency === 'W-ETH') {
-      const usd = EthTools.ticker.findOne('usd');
-      if (usd) {
-        const usdValue = displayValue.times(usd.price);
-        const usdBalance = EthTools.formatBalance(usdValue, format);
-        return `(~${usdBalance} USD)`;
-      }
-    }
-    // TODO: other exchange rates
-    return '';
-  } catch (e) {
-    return '';
-  }
 });
 
 Template.registerHelper('fromPrecision', (value, precision) => {
@@ -269,23 +243,72 @@ Template.registerHelper('validPrecision', (value, precision) => {
   }
 });
 
-Template.registerHelper('formatToken', (value) => {
+Template.registerHelper('formatPrice', (value, currency) => {
   let displayValue = value;
-  if (!(displayValue instanceof BigNumber)) {
-    /* eslint-disable no-underscore-dangle */
-    displayValue = Blaze._globalHelpers.fromPrecision(displayValue, 18);
-    /* eslint-enable no-underscore-dangle */
+  const format = '0,0.00[0000]';
+  try {
+    if (!(displayValue instanceof BigNumber)) {
+      displayValue = new BigNumber(displayValue);
+    }
+
+    if (currency === 'W-ETH') {
+      const usd = EthTools.ticker.findOne('usd');
+      if (usd) {
+        const usdValue = displayValue.times(usd.price);
+        const usdBalance = EthTools.formatBalance(usdValue, format);
+        return `(~${usdBalance} USD)`;
+      }
+    }
+    // TODO: other exchange rates
+    return '';
+  } catch (e) {
+    return '';
   }
-  return EthTools.formatNumber(displayValue.toString(10), '0.00000');
 });
 
-Template.registerHelper('determineOrderType', (order) => {
+Template.registerHelper('formatBalance', (wei, format, currency) => {
+  let formatValue = format;
+  if (formatValue instanceof Spacebars.kw) {
+    formatValue = null;
+  }
+  formatValue = formatValue || '0,0.000';
+
+  let value = EthTools.formatBalance(wei, formatValue);
+  if (currency === 'W-GNT' || currency === 'GNT' || currency === 'SNGLS') {
+    value = value.substr(0, value.indexOf('.'));
+  }
+  return value;
+});
+
+Template.registerHelper('formatNumber', (value, format) => {
+  let formatValue = format;
+  if (formatValue instanceof Spacebars.kw) {
+    formatValue = null;
+  }
+  formatValue = formatValue || '0,0.00000';
+  return EthTools.formatNumber(value.toString(10), formatValue);
+});
+
+Template.registerHelper('determineOrderType', (order, section) => {
   const baseCurrency = Session.get('baseCurrency');
   let type = '';
-  if (order.buyWhichToken === baseCurrency) {
+  if (section === 'lastTrades') {
+    if (order.buyWhichToken === baseCurrency) {
+      type = 'ask';
+    } else if (order.sellWhichToken === baseCurrency) {
+      type = 'bid';
+    }
+  } else if (order.buyWhichToken === baseCurrency) {
     type = 'bid';
   } else if (order.sellWhichToken === baseCurrency) {
     type = 'ask';
   }
   return type;
 });
+
+Template.registerHelper('loadingIcon', (size) => {
+  const image = (size === 'large') ? 'loadingLarge' : 'loading';
+  return `<img src="${image}.svg" alt="Loading..." />`;
+});
+
+Template.registerHelper('volumeSelector', () => Session.get('volumeSelector'));

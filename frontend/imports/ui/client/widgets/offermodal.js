@@ -32,6 +32,10 @@ Template.offermodal.viewmodel({
       }
     }
   },
+  precision() {
+    return Dapple.getTokenSpecs(Session.get('baseCurrency')).precision;
+  },
+  validAmount: true,
   type() {
     if (Template.currentData().offer) {
       return Template.currentData().offer.type();
@@ -43,6 +47,12 @@ Template.offermodal.viewmodel({
   },
   sellCurrency() {
     return this.type() === 'bid' ? Session.get('baseCurrency') : Session.get('quoteCurrency');
+  },
+  quoteToken() {
+    return Tokens.findOne(Session.get('quoteCurrency'));
+  },
+  baseToken() {
+    return Tokens.findOne(Session.get('baseCurrency'));
   },
   hasBalance() {
     try {
@@ -58,6 +68,18 @@ Template.offermodal.viewmodel({
       const token = Tokens.findOne(this.sellCurrency());
       const allowance = new BigNumber(token.allowance);
       return token && allowance.gte(web3.toWei(new BigNumber(this.type() === 'bid' ? this.volume() : this.total())));
+    } catch (e) {
+      return false;
+    }
+  },
+  hasAllowanceNewOrder() {
+    try {
+      const token = Tokens.findOne(this.offerType() === 'buy'
+                                                      ? Session.get('quoteCurrency') : Session.get('baseCurrency'));
+      const allowance = new BigNumber(token.allowance);
+
+      return token && allowance.gte(web3.toWei(new BigNumber(this.offerType() === 'buy'
+                                                                       ? this.offerAmount() : this.offerTotal())));
     } catch (e) {
       return false;
     }
@@ -115,6 +137,12 @@ Template.offermodal.viewmodel({
     return maxTotal;
   },
   calcVolume() {
+    this.validAmount(true);
+    if (this.precision() === 0 && this.total() % 1 !== 0) {
+      this.validAmount(false);
+      this.volume('0');
+      return;
+    }
     try {
       const baseCurrency = Session.get('baseCurrency');
       const total = new BigNumber(this.total());
@@ -130,6 +158,12 @@ Template.offermodal.viewmodel({
     }
   },
   calcTotal() {
+    this.validAmount(true);
+    if (this.precision() === 0 && this.volume() % 1 !== 0) {
+      this.validAmount(false);
+      this.total('0');
+      return;
+    }
     try {
       const baseCurrency = Session.get('baseCurrency');
       const volume = new BigNumber(this.volume());
@@ -170,9 +204,9 @@ Template.offermodal.viewmodel({
     const offer = Offers.findOne(offerId);
 
     if (this.templateInstance.data.offer.type() === 'bid') {
-      Offers.buyOffer(offerId, new BigNumber(this.total()), offer.sellWhichToken);
+      Offers.buyOffer(offerId, 'sell', new BigNumber(this.total()), offer.sellWhichToken);
     } else {
-      Offers.buyOffer(offerId, new BigNumber(this.volume()), offer.sellWhichToken);
+      Offers.buyOffer(offerId, 'buy', new BigNumber(this.volume()), offer.sellWhichToken);
     }
   },
   maxNewOfferAmount() {
@@ -254,7 +288,13 @@ Template.offermodal.viewmodel({
       }
     });
   },
-  showAllowanceModal() {
-    $('#allowanceModal').modal('show');
+});
+
+Template.offermodal.events({
+  'click button.btn-allowance-modal': (event) => {
+    const refer = $(event.target).data('refer');
+    const token = $(event.target).data('link');
+    $(`#allowanceModal${token}`).data('refer', refer);
+    $(`#allowanceModal${token}`).modal('show');
   },
 });

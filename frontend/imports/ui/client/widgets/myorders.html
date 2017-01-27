@@ -3,7 +3,7 @@
     <h2>
       MY ORDERS
     </h2>
-    <div>
+    <div id="myorders-container">
       {{#if address}}
         {{> orders orders=(findOffers 'mine') type='myOrders' priceLabel='PRICE' showCancel=true showType=true}}
       {{else}}
