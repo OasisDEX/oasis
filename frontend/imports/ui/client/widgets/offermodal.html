@@ -176,17 +176,17 @@
               <tr class="row-data-line">
                 <th>ALLOWANCE</th>
                 {{#if equals offerType 'buy'}}
-                  <td>{{formatBalance quoteToken.allowance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
+                  <td>{{{formatBalance quoteToken.allowance '' '' true}}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
                 {{else}}
-                  <td>{{formatBalance baseToken.allowance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
+                  <td>{{{formatBalance baseToken.allowance '' '' true}}} <span class="allowance-currency">{{baseToken._id}}</span></td>
                 {{/if}}
               </tr>
               <tr class="row-data-line">
                 <th>AVAILABLE</th>
                 {{#if equals offerType 'buy'}}
-                  <td>{{formatBalance quoteToken.balance}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
+                  <td>{{{formatBalance quoteToken.balance '' '' true}}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
                 {{else}}
-                  <td>{{formatBalance baseToken.balance}} <span class="allowance-currency">{{baseToken._id}}</span></td>
+                  <td>{{{formatBalance baseToken.balance '' '' true}}} <span class="allowance-currency">{{baseToken._id}}</span></td>
                 {{/if}}
               </tr>
               <tr class="row-data-line owner">
@@ -195,15 +195,15 @@
               </tr>
               <tr class="row-data-line">
                 <th>Price</th>
-                <td><span class="value price">{{formatNumber offerPrice}}</span> <span class="quote-currency">{{quoteCurrency}}</span></td>
+                <td>{{{formatNumber offerPrice '' true}}} <span class="quote-currency">{{quoteCurrency}}</span></td>
               </tr>
               <tr class="row-data-line">
                 <th>Volume</th>
-                <td><span class="value">{{formatBalance (toWei offerAmount)}}</span> <span class="base-currency">{{baseCurrency}}</span></td>
+                <td>{{{formatBalance (toWei offerAmount) '' '' true}}} <span class="base-currency">{{baseCurrency}}</span></td>
               </tr>
               <tr class="row-data-line">
                 <th>Total</th>
-                <td><span class="value">{{formatBalance (toWei offerTotal)}}</span> <span class="base-currency">{{quoteCurrency}}</span></td>
+                <td>{{{formatBalance (toWei offerTotal) '' '' true}}} <span class="base-currency">{{quoteCurrency}}</span></td>
               </tr>
             </tbody>
           </table>

@@ -2137,16 +2137,10 @@ span.right {
     text-align: left;    
     opacity: 0.6;
   }
-  .allowance-currency {
+  .allowance-currency, .base-currency, .quote-currency {
     @extend .currency;
     float: right;
     transform: translateY(5px);
-  }
-  .base-currency {
-    @extend .currency;
-  }
-  .quote-currency {
-    @extend .currency;
   }
   .text-clarifications {
     font-size: 14px;

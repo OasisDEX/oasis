@@ -13,9 +13,9 @@
             </th>
             <td class="available">
               {{#if equals type 'buy'}}
-              <span class="fill-amount" {{b "click: autofill"}}>{{formatBalance quoteAvailable}}</span> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
+              <span class="fill-amount" {{b "click: autofill"}}>{{{formatBalance quoteAvailable '' '' true}}}</span> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
               {{else}}
-              <span class="fill-amount" {{b "click: autofill"}}>{{formatBalance baseAvailable}}</span> <span class="span-buy-sell-currency">{{baseCurrency}}</span>
+              <span class="fill-amount" {{b "click: autofill"}}>{{{formatBalance baseAvailable '' '' true}}}</span> <span class="span-buy-sell-currency">{{baseCurrency}}</span>
               {{/if}}
             </td>
           </tr>
