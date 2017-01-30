@@ -178,51 +178,6 @@ Template.offermodal.viewmodel({
       this.total('0');
     }
   },
-  calcNewOfferTotal() {
-    this.validAmount(true);
-    if (this.precision() === 0 && this.offerAmount() % 1 !== 0) {
-      this.validAmount(false);
-      this.offerTotal('0');
-      return;
-    }
-    try {
-      const price = new BigNumber(this.offerPrice());
-      const amount = new BigNumber(this.offerAmount());
-      const total = price.times(amount);
-      if (total.isNaN()) {
-        this.offerTotal('0');
-      } else {
-        this.offerTotal(total.toString(10));
-      }
-    } catch (e) {
-      this.offerTotal('0');
-    }
-  },
-  calcNewOfferAmount() {
-    this.validAmount(true);
-    if (this.precision() === 0 && this.offerTotal() % 1 !== 0) {
-      this.validAmount(false);
-      this.offerAmount('0');
-      return;
-    }
-    try {
-      const price = new BigNumber(this.offerPrice());
-      let amount = new BigNumber(this.offerAmount());
-      const total = new BigNumber(this.offerTotal());
-      if (total.isZero() && price.isZero() && (amount.isNaN() || amount.isNegative())) {
-        this.offerAmount('0');
-      } else if (!total.isZero() || !price.isZero()) {
-        amount = total.div(price);
-        if (amount.isNaN()) {
-          this.offerAmount('0');
-        } else {
-          this.offerAmount(amount.toString(10));
-        }
-      }
-    } catch (e) {
-      this.offerAmount('0');
-    }
-  },
   dismiss(event) {
     $(event.target).closest('.modal').modal('hide');
   },
