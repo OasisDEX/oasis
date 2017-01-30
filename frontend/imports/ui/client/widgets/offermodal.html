@@ -221,14 +221,18 @@
             </div>
             <div class="col-xs-11">
               <span class="text-clarifications">
-                {{#unless hasAllowanceNewOrder offerType}}
-                  You are trying to create a {{offerType}} order above your <strong>defined allowance</strong>.
+                {{#unless validNewOrderAmount}}
+                  Amount is invalid because {{baseCurrency}} has no decimals.
                 {{else}}
-                  {{#if equals offerType 'buy'}}
-                    This action will remove {{{formatBalance (toWei offerTotal) '' '' true}}} {{quoteCurrency}} {{formatPrice (toWei offerTotal) quoteCurrency}} from your token balance and allowance.
+                  {{#unless hasAllowanceNewOrder offerType}}
+                    You are trying to create a {{offerType}} order above your <strong>defined allowance</strong>.
                   {{else}}
-                    This action will remove {{{formatBalance (toWei offerAmount) '' '' true}}} {{baseCurrency}} {{formatPrice (toWei offerAmount) baseCurrency}} from your token balance and allowance.
-                  {{/if}}
+                    {{#if equals offerType 'buy'}}
+                      This action will remove {{{formatBalance (toWei offerTotal) '' '' true}}} {{quoteCurrency}} {{formatPrice (toWei offerTotal) quoteCurrency}} from your token balance and allowance.
+                    {{else}}
+                      This action will remove {{{formatBalance (toWei offerAmount) '' '' true}}} {{baseCurrency}} {{formatPrice (toWei offerAmount) baseCurrency}} from your token balance and allowance.
+                    {{/if}}
+                  {{/unless}}
                 {{/unless}}
               </span>
             </div>

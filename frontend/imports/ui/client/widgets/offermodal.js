@@ -36,6 +36,7 @@ Template.offermodal.viewmodel({
     return Dapple.getTokenSpecs(Session.get('baseCurrency')).precision;
   },
   validAmount: true,
+  validNewOrderAmount: true,
   type() {
     if (Template.currentData().offer) {
       return Template.currentData().offer.type();
@@ -179,9 +180,9 @@ Template.offermodal.viewmodel({
     }
   },
   calcNewOfferTotal() {
-    this.validAmount(true);
+    this.validNewOrderAmount(true);
     if (this.precision() === 0 && this.offerAmount() % 1 !== 0) {
-      this.validAmount(false);
+      this.validNewOrderAmount(false);
       this.offerTotal('0');
       return;
     }
@@ -199,9 +200,9 @@ Template.offermodal.viewmodel({
     }
   },
   calcNewOfferAmount() {
-    this.validAmount(true);
+    this.validNewOrderAmount(true);
     if (this.precision() === 0 && this.offerTotal() % 1 !== 0) {
-      this.validAmount(false);
+      this.validNewOrderAmount(false);
       this.offerAmount('0');
       return;
     }
