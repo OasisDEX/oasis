@@ -367,6 +367,14 @@ table {
   width: 95%;
   padding: 8px 24px;
 
+  .close {
+    opacity: 1;
+  }
+
+  .close:hover {
+    opacity: 0.5;
+  }
+
   ul {
     padding-left: 0px;
     li {
@@ -380,6 +388,9 @@ table {
       margin-left: 10px;
       padding-left: 0px;
       line-height: 18px;
+      list-style-type: none;
+      margin-left: 0px;
+      padding: 0px 0px 0px 25px;
     }
   }
 
@@ -423,20 +434,54 @@ table {
 .div-message-update {
   @extend .div-message;
 
+  ul li {
+    &:first-child {
+      background: url(counter_1.svg) no-repeat left 1px;
+    }
+    &:nth-child(2) {
+      background: url(counter_2.svg) no-repeat left 1px;
+    }
+    &:nth-child(3) {
+      background: url(counter_3.svg) no-repeat left 1px;
+    }
+  }
+
   &.resized {
     float: left;
     margin-right: 15px;
-    width: 600px;
+    width: 550px;
+
+    ul li {
+      &:nth-child(2) {
+        background-position-y: 10px;
+      }
+      &:nth-child(3) {
+        background-position-y: 10px;
+      }
+    }
   }
 }
 
 .div-message-warning {
   @extend .div-message;
 
+  ul li {
+    background: url(dot_red.svg) no-repeat left 1px;
+  }
+
   &.resized {
     float: right;
     margin-left: 15px;
-    width: 350px;
+    width: 400px;
+
+    ul li {
+      &:first-child {
+        background-position-y: 20px;
+      }
+      &:last-child {
+        background-position-y: 10px;
+      }
+  }
   }
 }
 

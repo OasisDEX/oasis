@@ -4,7 +4,7 @@
       <div class="div-message-update {{#if warningOpen}}resized{{/if}}">
         <p class="text-success">
           <span class="update">Get Started!</span>
-          <span class="close" {{b "click: closeMessage('update')"}}>X</span>
+          <img class="close" {{b "click: closeMessage('update')"}} src="close_x.svg" />
         </p>
         <ul>
           <li>Go to <strong>deposit/withdraw</strong> and deposit ETH to turn it into W-ETH.</li>
@@ -17,7 +17,7 @@
       <div class="div-message-warning {{#if updateOpen}}resized{{/if}}">
         <p class="text-success">
           <span class="warning">Warning!</span>
-          <span class="close" {{b "click: closeMessage('warning')"}}>X</span>
+          <img class="close" {{b "click: closeMessage('warning')"}} src="close_x.svg" />
         </p>
         <ul>
           <li>Maker Market is undergoing alpha testing: Any funds deposited on the exchange could be lost in the event of a security breach.</li>
