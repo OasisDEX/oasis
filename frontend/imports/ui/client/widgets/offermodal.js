@@ -79,7 +79,7 @@ Template.offermodal.viewmodel({
       const allowance = new BigNumber(token.allowance);
 
       return token && allowance.gte(web3.toWei(new BigNumber(this.offerType() === 'buy'
-                                                                       ? this.offerAmount() : this.offerTotal())));
+                                                                       ? this.offerTotal() : this.offerAmount())));
     } catch (e) {
       return false;
     }
