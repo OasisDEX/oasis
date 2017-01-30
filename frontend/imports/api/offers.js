@@ -132,16 +132,19 @@ Offers.sync = () => {
     const buyWhichToken = Dapple.getTokenByAddress(trade.args.buy_which_token);
     const sellWhichToken = Dapple.getTokenByAddress(trade.args.sell_which_token);
 
-    // Transform arguments
-    const args = {
-      buyWhichToken_address: trade.args.buy_which_token,
-      buyWhichToken,
-      sellWhichToken_address: trade.args.sell_which_token,
-      sellWhichToken,
-      buyHowMuch: convertTo18Precision(trade.args.buy_how_much.toString(10), buyWhichToken),
-      sellHowMuch: convertTo18Precision(trade.args.sell_how_much.toString(10), sellWhichToken),
-    };
-    return args;
+    if (buyWhichToken && sellWhichToken) {
+      // Transform arguments
+      const args = {
+        buyWhichToken_address: trade.args.buy_which_token,
+        buyWhichToken,
+        sellWhichToken_address: trade.args.sell_which_token,
+        sellWhichToken,
+        buyHowMuch: convertTo18Precision(trade.args.buy_how_much.toString(10), buyWhichToken),
+        sellHowMuch: convertTo18Precision(trade.args.sell_how_much.toString(10), sellWhichToken),
+      };
+      return args;
+    }
+    return false;
   }
 
 
@@ -150,7 +153,6 @@ Offers.sync = () => {
     if (!error) {
       let trade = null;
       const promises = [];
-      let block = null;
 
       if (trades.length > 0) {
         for (let i = 0; i < trades.length; i++) {
@@ -162,9 +164,9 @@ Offers.sync = () => {
             trade = trades[i];
             const args = transformArgs(trade);
 
-            block = resultProm[i];
-
-            Trades.upsert(trade.transactionHash, _.extend(block, trade, args));
+            if (args) {
+              Trades.upsert(trade.transactionHash, _.extend(resultProm[i], trade, args));
+            }
           }
           Session.set('loadingTradeHistory', false);
         });
@@ -178,12 +180,14 @@ Offers.sync = () => {
   Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: Session.get('startingBlock') }, (error, trade) => {
     if (!error) {
       const args = transformArgs(trade);
-      // Get block for timestamp
-      web3.eth.getBlock(trade.blockNumber, (blockError, block) => {
-        if (!error) {
-          Trades.upsert(trade.transactionHash, _.extend(block, trade, args));
-        }
-      });
+      if (args) {
+        // Get block for timestamp
+        web3.eth.getBlock(trade.blockNumber, (blockError, block) => {
+          if (!error) {
+            Trades.upsert(trade.transactionHash, _.extend(block, trade, args));
+          }
+        });
+      }
     }
   });
 };
@@ -236,30 +240,32 @@ Offers.updateOffer = (idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWh
   const sellToken = Dapple.getTokenByAddress(sellWhichTokenAddress);
   const buyToken = Dapple.getTokenByAddress(buyWhichTokenAddress);
 
-  let sellHowMuchValue = convertTo18Precision(sellHowMuch, sellToken);
-  let buyHowMuchValue = convertTo18Precision(buyHowMuch, buyToken);
-  if (!(sellHowMuchValue instanceof BigNumber)) {
-    sellHowMuchValue = new BigNumber(sellHowMuchValue);
-  }
-  if (!(buyHowMuchValue instanceof BigNumber)) {
-    buyHowMuchValue = new BigNumber(buyHowMuchValue);
-  }
+  if (sellToken && buyToken) {
+    let sellHowMuchValue = convertTo18Precision(sellHowMuch, sellToken);
+    let buyHowMuchValue = convertTo18Precision(buyHowMuch, buyToken);
+    if (!(sellHowMuchValue instanceof BigNumber)) {
+      sellHowMuchValue = new BigNumber(sellHowMuchValue);
+    }
+    if (!(buyHowMuchValue instanceof BigNumber)) {
+      buyHowMuchValue = new BigNumber(buyHowMuchValue);
+    }
 
-  const offer = {
-    owner,
-    status,
-    helper: status === Status.PENDING ? 'Your new order is being placed...' : '',
-    buyWhichTokenAddress,
-    buyWhichToken: buyToken,
-    sellWhichTokenAddress,
-    sellWhichToken: sellToken,
-    buyHowMuch: buyHowMuchValue.valueOf(),
-    sellHowMuch: sellHowMuchValue.valueOf(),
-    ask_price: buyHowMuchValue.div(sellHowMuchValue).valueOf(),
-    bid_price: sellHowMuchValue.div(buyHowMuchValue).valueOf(),
-  };
+    const offer = {
+      owner,
+      status,
+      helper: status === Status.PENDING ? 'Your new order is being placed...' : '',
+      buyWhichTokenAddress,
+      buyWhichToken: buyToken,
+      sellWhichTokenAddress,
+      sellWhichToken: sellToken,
+      buyHowMuch: buyHowMuchValue.valueOf(),
+      sellHowMuch: sellHowMuchValue.valueOf(),
+      ask_price: buyHowMuchValue.div(sellHowMuchValue).valueOf(),
+      bid_price: sellHowMuchValue.div(buyHowMuchValue).valueOf(),
+    };
 
-  Offers.upsert(idx, { $set: offer });
+    Offers.upsert(idx, { $set: offer });
+  }
 };
 
 Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callback) => {
