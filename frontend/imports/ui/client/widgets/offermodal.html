@@ -205,6 +205,14 @@
                 <th>Total</th>
                 <td>{{{formatBalance (toWei offerTotal) '' '' true}}} <span class="base-currency">{{quoteCurrency}}</span></td>
               </tr>
+              <tr class="row-input-line">
+                <th>VOLUME</th>
+                <td><input type="number" class="input" step="any" min="0" max={{maxNewOfferAmount}} {{b "value: offerAmount, input: calcNewOfferTotal"}}> <span class="span-offer-currency">{{baseCurrency}}</span></td>
+              </tr>
+              <tr class="row-input-line">
+                <th>TOTAL</th>
+                <td><input type="number" class="input" step="any" min="0" max={{maxNewOfferTotal}} {{b "value: offerTotal, input: calcNewOfferAmount"}}> <span class="span-offer-currency">{{quoteCurrency}}</span></td>
+              </tr>
             </tbody>
           </table>
           <div class="div-modal-text row">
