@@ -193,9 +193,9 @@
                 <th>OWNER</th>
                 <td><span class="owner-address">{{address}}</span></td>
               </tr>
-              <tr class="row-data-line">
-                <th>Price</th>
-                <td>{{{formatNumber offerPrice '' true}}} <span class="quote-currency">{{quoteCurrency}}</span></td>
+              <tr class="row-input-line">
+                <th>PRICE</th>
+                <td><input type="number" class="input" step="any" min="0" {{b "value: offerPrice, input: calcNewOfferTotal"}}> <span class="span-offer-currency">{{quoteCurrency}}</span></td>
               </tr>
               <tr class="row-input-line">
                 <th>VOLUME</th>
