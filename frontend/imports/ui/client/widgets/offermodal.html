@@ -197,14 +197,6 @@
                 <th>Price</th>
                 <td>{{{formatNumber offerPrice '' true}}} <span class="quote-currency">{{quoteCurrency}}</span></td>
               </tr>
-              <tr class="row-data-line">
-                <th>Volume</th>
-                <td>{{{formatBalance (toWei offerAmount) '' '' true}}} <span class="base-currency">{{baseCurrency}}</span></td>
-              </tr>
-              <tr class="row-data-line">
-                <th>Total</th>
-                <td>{{{formatBalance (toWei offerTotal) '' '' true}}} <span class="base-currency">{{quoteCurrency}}</span></td>
-              </tr>
               <tr class="row-input-line">
                 <th>VOLUME</th>
                 <td><input type="number" class="input" step="any" min="0" max={{maxNewOfferAmount}} {{b "value: offerAmount, input: calcNewOfferTotal"}}> <span class="span-offer-currency">{{baseCurrency}}</span></td>
