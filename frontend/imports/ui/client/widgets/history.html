@@ -21,7 +21,7 @@
         {{#if equals historyType 'depositHistory'}}
           <tbody class="{{#if gt historyCount 5}}tbody-scrolling{{else}}tbody-not-scrolling{{/if}}">
             {{#each history}}
-              <tr>
+              <tr class="clickable">
                 <td></td>
                 <td class="timestamp">{{timestampToString this.timestamp true true}}</td>
                 <td class="type">{{ this.type }}</td>
