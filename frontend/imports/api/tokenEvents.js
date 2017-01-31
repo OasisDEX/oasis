@@ -45,7 +45,7 @@ class TokenEventCollection extends Mongo.Collection {
     if (typeof (row.amount) !== 'undefined') {
       row.amount = row.amount.toString(10);
     }
-    super.upsert({ transactionHash: event.transactionHash }, row, { upsert: true });
+    super.upsert({ transactionHash: event.transactionHash, from: row.from, to: row.to }, row, { upsert: true });
   }
 
   syncTimestamps() {
