@@ -33,9 +33,10 @@ Template.history.viewmodel({
 });
 
 Template.history.events({
-  'click tr': function offer(event) {
+  'click tr.clickable': function offer(event) {
     event.preventDefault();
-    
-    window.open(txHref(this.transactionHash), '_blank');
+    if (this.transactionHash) {
+      window.open(txHref(this.transactionHash), '_blank');
+    }
   },
 });
