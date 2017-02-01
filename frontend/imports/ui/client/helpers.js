@@ -123,7 +123,7 @@ Template.registerHelper('countOffers', (type) => {
   const quoteCurrency = Session.get('quoteCurrency');
   const baseCurrency = Session.get('baseCurrency');
   const options = {};
-  options.sort = { ask_price: 1 };
+  options.sort = { ask_price_sort: 1 };
 
   if (type === 'ask') {
     return Offers.find({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency }, options).count();
@@ -139,7 +139,7 @@ Template.registerHelper('findOffers', (type) => {
   const limit = Session.get('orderBookLimit');
 
   const options = {};
-  options.sort = { ask_price: 1 };
+  options.sort = { ask_price_sort: 1 };
   if (limit) {
     options.limit = limit;
   }

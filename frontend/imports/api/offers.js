@@ -262,6 +262,7 @@ Offers.updateOffer = (idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWh
       sellHowMuch: sellHowMuchValue.valueOf(),
       ask_price: buyHowMuchValue.div(sellHowMuchValue).valueOf(),
       bid_price: sellHowMuchValue.div(buyHowMuchValue).valueOf(),
+      ask_price_sort: buyHowMuchValue.div(sellHowMuchValue).toNumber(),
     };
 
     Offers.upsert(idx, { $set: offer });
