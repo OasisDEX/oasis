@@ -1054,13 +1054,13 @@ table {
   td {
     text-align: right;
     &.token {
-        opacity: 0.68;
         font-family: 'Roboto';
         font-weight: 500;
         font-size: 19px;
         color: #222228; 
         padding-top: 20px;   
         span.fill-amount {
+          opacity: 0.68;
           cursor: pointer;
         }          
     }
