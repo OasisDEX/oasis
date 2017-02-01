@@ -141,15 +141,15 @@ Template.chart.viewmodel({
       const bids = Offers.find({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
                                 { sort: { bid_price: 1 } }).fetch();
       const asks = Offers.find({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
-                                { sort: { ask_price: 1 } }).fetch();
+                                { sort: { ask_price_sort: 1 } }).fetch();
 
       asks.forEach(ask => {
-        const index = askPrices.indexOf(ask.ask_price);
+        const index = askPrices.indexOf(ask.ask_price_sort);
         if (index === -1) {
           // If it is the first order for this price
 
           // Keep track of new price index
-          askPrices.push(ask.ask_price);
+          askPrices.push(ask.ask_price_sort);
 
           if (askAmounts.quote.length > 0) {
             // If there is a lower price we need to sum the amount of the previous price (to make a cumulative graph)

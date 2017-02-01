@@ -203,7 +203,7 @@ Template.neworder.viewmodel({
       let offer;
       if (this.type() === 'buy') {
         offer = Offers.findOne({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
-                               { sort: { ask_price: 1 } });
+                               { sort: { ask_price_sort: 1 } });
         if (offer && Object.prototype.hasOwnProperty.call(offer, 'ask_price')
             && price.gt(new BigNumber(offer.ask_price))) {
           this.bestOffer(offer._id);
@@ -213,7 +213,7 @@ Template.neworder.viewmodel({
         return undefined;
       } else if (this.type() === 'sell') {
         offer = Offers.findOne({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
-                               { sort: { ask_price: 1 } });
+                               { sort: { ask_price_sort: 1 } });
         if (offer && Object.prototype.hasOwnProperty.call(offer, 'bid_price')
             && price.lt(new BigNumber(offer.bid_price))) {
           this.bestOffer(offer._id);
@@ -235,7 +235,7 @@ Template.neworder.viewmodel({
     let available = 0;
     if (this.type() === 'buy') {
       offer = Offers.findOne({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
-                              { sort: { ask_price: 1 } });
+                              { sort: { ask_price_sort: 1 } });
       if (offer && Object.prototype.hasOwnProperty.call(offer, 'ask_price')) {
         price = new BigNumber(offer.ask_price);
         available = web3.fromWei(this.quoteAvailable()).toString(10);
@@ -245,7 +245,7 @@ Template.neworder.viewmodel({
       }
     } else if (this.type() === 'sell') {
       offer = Offers.findOne({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
-                              { sort: { ask_price: 1 } });
+                              { sort: { ask_price_sort: 1 } });
       if (offer && Object.prototype.hasOwnProperty.call(offer, 'bid_price')) {
         price = new BigNumber(offer.bid_price);
         available = web3.fromWei(this.baseAvailable()).toString(10);
