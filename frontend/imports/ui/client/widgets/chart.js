@@ -139,7 +139,7 @@ Template.chart.viewmodel({
       const quoteCurrency = Session.get('quoteCurrency');
       const baseCurrency = Session.get('baseCurrency');
       const bids = Offers.find({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
-                                { sort: { bid_price: 1 } }).fetch();
+                                { sort: { bid_price_sort: 1 } }).fetch();
       const asks = Offers.find({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
                                 { sort: { ask_price_sort: 1 } }).fetch();
 
@@ -167,12 +167,12 @@ Template.chart.viewmodel({
       });
 
       bids.forEach(bid => {
-        const index = bidPrices.indexOf(bid.bid_price);
+        const index = bidPrices.indexOf(bid.bid_price_sort);
         if (index === -1) {
           // If it is the first order for this price
 
           // Keep track of new price index and value
-          bidPrices.push(bid.bid_price);
+          bidPrices.push(bid.bid_price_sort);
           bidAmounts.quote.push(new BigNumber(bid.sellHowMuch));
           bidAmounts.base.push(new BigNumber(bid.buyHowMuch));
         } else {
