@@ -358,21 +358,26 @@ table {
 .messages {
   display: flex;
   justify-content: center;
+  width: 920px;
+  margin: auto;
 }
 
 .div-message {
   background: rgba(215,215,215,0.05);
   box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.15);
   border-radius: 3px;
-  width: 95%;
-  padding: 8px 24px;
+  padding: 8px 20px;
+  width: 100%;
 
   .close {
+    background: url(cross_normal.svg) no-repeat;
     opacity: 1;
+    width: 10px;
+    height: 10px;
   }
 
   .close:hover {
-    opacity: 0.5;
+    background: url(cross_pressed.svg) no-repeat;
   }
 
   ul {
@@ -390,7 +395,7 @@ table {
       line-height: 18px;
       list-style-type: none;
       margin-left: 0px;
-      padding: 0px 0px 0px 25px;
+      padding: 0px 0px 0px 36px;
     }
   }
 
@@ -435,6 +440,7 @@ table {
   @extend .div-message;
 
   ul li {
+    opacity: 1;
     &:first-child {
       background: url(counter_1.svg) no-repeat left 1px;
     }
@@ -443,6 +449,10 @@ table {
     }
     &:nth-child(3) {
       background: url(counter_3.svg) no-repeat left 1px;
+    }
+
+    span {
+      opacity: 0.69;
     }
   }
 
@@ -467,6 +477,18 @@ table {
 
   ul li {
     background: url(dot_red.svg) no-repeat left 1px;
+    opacity: 1;
+
+    &:first-child {
+      background-position-y: 10px;
+    }
+    &:last-child {
+      background-position-y: 1px;
+    }
+
+    span {
+      opacity: 0.69;
+    }
   }
 
   &.resized {
