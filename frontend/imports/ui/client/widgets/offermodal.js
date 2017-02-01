@@ -332,6 +332,8 @@ Template.offermodal.viewmodel({
       if (error != null) {
         this.offerError(formatError(error));
       }
+      // Cleaning inputs
+      $('.row-input-line input[type=number]').val(0);
     });
   },
 });
