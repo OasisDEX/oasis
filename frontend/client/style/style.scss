@@ -1036,6 +1036,15 @@ table {
 .transfer-section {
   padding-right: 30px;
 
+  tr.row-input-line, tr.row-data-line {
+    th {
+      padding-left: 13px;
+    }
+    td {
+      padding-right: 13px;
+    }
+  }
+
   tr.row-input-line {
     td,
     th {
@@ -1179,14 +1188,18 @@ table {
       th {
         padding-top: 20px;
         padding-bottom: 7px;
-        padding-left: 7px;
+        padding-left: 13px;
       }
-      td.token {
-        padding-bottom: 10px;
-        padding-top: 20px;   
-        span.fill-amount {
-          cursor: pointer;
-        }     
+      td {
+        padding-right: 13px;
+
+        &.token {
+          padding-bottom: 10px;
+          padding-top: 20px;
+          span.fill-amount {
+            cursor: pointer;
+          }
+        }
       }
     }
     tr.tr-empty {
