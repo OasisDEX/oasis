@@ -963,7 +963,7 @@ table {
     tr.row-input-line {      
       td,
       th {
-        border-bottom: 1px #F7F8F9 solid;
+        border-bottom: 1px #F0F2F3 solid;
         padding-top: 10px;      
         &.available {
           border: none;
@@ -1039,7 +1039,7 @@ table {
   tr.row-input-line {
     td,
     th {
-      border-bottom: 1px solid #F7F8F9;
+      border-bottom: 1px solid #F0F2F3;
     }
   }
 
@@ -1247,7 +1247,7 @@ table {
     padding-top: 10px;
   }
   tr.row-input-line {
-    border-bottom: 1px #F7F8F9 solid;
+    border-bottom: 1px #F0F2F3 solid;
   }
   tr.row-input-line {
     &:last-of-type {
@@ -2307,7 +2307,7 @@ span.right {
       border-top: 1px solid #E0E6E8;
     }
     &.row-input-line {
-      border-bottom: 1px solid #F7F8F9;
+      border-bottom: 1px solid #F0F2F3;
       &.set-allowance{
         border-top: 1px solid #E5E9EB;
         th, td {
