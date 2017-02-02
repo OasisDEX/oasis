@@ -81,7 +81,6 @@ Template.chart.viewmodel({
                   let quoteAmount = null;
                   let baseAmount = null;
                   [type, quoteAmount] = tooltip.body[0].lines[0].split(': ');
-
                   if (type === 'Sell') {
                     quoteAmount = askAmounts.quote[askPrices.indexOf(price)];
                     baseAmount = askAmounts.base[askPrices.indexOf(price)];
@@ -147,12 +146,12 @@ Template.chart.viewmodel({
       asks = removeOutliersFromArray(asks, 'ask_price_sort', 3);
 
       asks.forEach(ask => {
-        const index = askPrices.indexOf(ask.ask_price_sort);
+        const index = askPrices.indexOf(ask.ask_price);
         if (index === -1) {
           // If it is the first order for this price
 
           // Keep track of new price index
-          askPrices.push(ask.ask_price_sort);
+          askPrices.push(ask.ask_price);
 
           if (askAmounts.quote.length > 0) {
             // If there is a lower price we need to sum the amount of the previous price (to make a cumulative graph)
@@ -170,12 +169,12 @@ Template.chart.viewmodel({
       });
 
       bids.forEach(bid => {
-        const index = bidPrices.indexOf(bid.bid_price_sort);
+        const index = bidPrices.indexOf(bid.bid_price);
         if (index === -1) {
           // If it is the first order for this price
 
           // Keep track of new price index and value
-          bidPrices.push(bid.bid_price_sort);
+          bidPrices.push(bid.bid_price);
           bidAmounts.quote.push(new BigNumber(bid.sellHowMuch));
           bidAmounts.base.push(new BigNumber(bid.buyHowMuch));
         } else {
