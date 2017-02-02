@@ -190,7 +190,14 @@ Template.chart.viewmodel({
       });
 
       // All price values (bids & asks)
-      const vals = _.uniq(bidPrices.concat(askPrices).sort((a, b) => (a < b ? -1 : 1)));
+      const vals = _.uniq(bidPrices.concat(askPrices).sort((a, b) => {
+        const val1 = new BigNumber(a);
+        const val2 = new BigNumber(b);
+        if (val1.lt(val2)) {
+          return -1;
+        }
+        return 1;
+      }));
 
       // Preparing arrays for graph
       const askAmountsGraph = [];
@@ -203,7 +210,9 @@ Template.chart.viewmodel({
         if (index !== -1) {
           // If there is a specific value for the price in asks, we add it
           amount = formatNumber(web3.fromWei(askAmounts.quote[index]), 3).replace(/,/g, '');
-        } else if (askPrices.length === 0 || vals[i] < askPrices[0] || vals[i] > askPrices[askPrices.length - 1]) {
+        } else if (askPrices.length === 0 ||
+                  (new BigNumber(vals[i])).lt((new BigNumber(askPrices[0]))) ||
+                  (new BigNumber(vals[i])).gt((new BigNumber(askPrices[askPrices.length - 1])))) {
           // If the price is lower or higher than the asks range there is not value to print in the graph
           amount = null;
         } else {
@@ -216,7 +225,9 @@ Template.chart.viewmodel({
         if (index !== -1) {
           // If there is a specific value for the price in bids, we add it
           amount = formatNumber(web3.fromWei(bidAmounts.quote[index]), 3).replace(/,/g, '');
-        } else if (bidPrices.length === 0 || vals[i] < bidPrices[0] || vals[i] > bidPrices[bidPrices.length - 1]) {
+        } else if (bidPrices.length === 0 ||
+                  (new BigNumber(vals[i])).lt((new BigNumber(bidPrices[0]))) ||
+                  (new BigNumber(vals[i])).gt((new BigNumber(bidPrices[bidPrices.length - 1])))) {
           // If the price is lower or higher than the bids range there is not value to print in the graph
           amount = null;
         } else {
