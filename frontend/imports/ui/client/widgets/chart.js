@@ -7,7 +7,7 @@ import { _ } from 'meteor/underscore';
 import { web3 } from 'meteor/makerotc:dapple';
 import { Offers, Trades } from '/imports/api/offers';
 import Chart from '/imports/utils/Chart.min';
-import { formatNumber } from '/imports/utils/functions';
+import { formatNumber, removeOutliersFromArray } from '/imports/utils/functions';
 import './chart.html';
 
 const charts = [];
@@ -138,10 +138,13 @@ Template.chart.viewmodel({
       bidAmounts = { base: [], quote: [] };
       const quoteCurrency = Session.get('quoteCurrency');
       const baseCurrency = Session.get('baseCurrency');
-      const bids = Offers.find({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
+      let bids = Offers.find({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
                                 { sort: { bid_price_sort: 1 } }).fetch();
-      const asks = Offers.find({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
+      let asks = Offers.find({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
                                 { sort: { ask_price_sort: 1 } }).fetch();
+
+      bids = removeOutliersFromArray(bids, 'bid_price_sort', 3);
+      asks = removeOutliersFromArray(asks, 'ask_price_sort', 3);
 
       asks.forEach(ask => {
         const index = askPrices.indexOf(ask.ask_price_sort);

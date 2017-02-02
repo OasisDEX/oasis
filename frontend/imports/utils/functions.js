@@ -76,3 +76,26 @@ export function formatNumber(number, dec) {
   n = n.mul(d).trunc().div(d).toFixed(decimals);
   return thousandSeparator(n);
 }
+
+export function removeOutliersFromArray(data, fieldName, deviation) {
+  const l = data.length;
+  if (data.length <= 2) {
+    return data;
+  }
+  let sum = 0;     // stores sum of elements
+  let sumsq = 0; // stores sum of squares
+  for (let i = 0; i < l; ++i) {
+    sum += data[i][fieldName];
+    sumsq += data[i][fieldName] * data[i][fieldName];
+  }
+  const mean = sum / l;
+  const varience = (sumsq / l) - (mean * mean);
+  const sd = Math.sqrt(varience);
+  const newData = []; // uses for data which is 3 standard deviations from the mean
+  for (let i = 0; i < l; ++i) {
+    if (data[i][fieldName] > mean - (deviation * sd) && data[i][fieldName] < mean + (deviation * sd)) {
+      newData.push(data[i]);
+    }
+  }
+  return newData;
+}
