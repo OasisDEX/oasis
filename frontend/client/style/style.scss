@@ -1101,6 +1101,11 @@ table {
 
   input.recipient {
     @extend .montserrat-semibold;
+
+    &::-webkit-input-placeholder {
+      color: #D0D0D0;
+    }
+
     font-size: 22px;
     min-width: 280px;
     opacity: 0.7;
