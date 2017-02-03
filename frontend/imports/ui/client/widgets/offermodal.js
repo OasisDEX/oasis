@@ -224,6 +224,25 @@ Template.offermodal.viewmodel({
       this.offerAmount('0');
     }
   },
+  alertBetterOffer() {
+    let bestOffer = null;
+    if (this.type() === 'bid') {
+      bestOffer = Offers.findOne({
+        buyWhichToken: Session.get('baseCurrency'),
+        sellWhichToken: Session.get('quoteCurrency') },
+        { sort: { ask_price_sort: 1 },
+        });
+      return (new BigNumber(bestOffer.bid_price)).gt(new BigNumber(this.templateInstance.data.offer.bid_price));
+    } else if (this.type() === 'ask') {
+      bestOffer = Offers.findOne({
+        buyWhichToken: Session.get('quoteCurrency'),
+        sellWhichToken: Session.get('baseCurrency') },
+        { sort: { ask_price_sort: 1 },
+        });
+      return (new BigNumber(bestOffer.ask_price)).lt(new BigNumber(this.templateInstance.data.offer.ask_price));
+    }
+    return false;
+  },
   dismiss(event) {
     $(event.target).closest('.modal').modal('hide');
   },

@@ -102,6 +102,9 @@
           {{/if}}
         </div>
         <div class="modal-footer">
+          {{#if alertBetterOffer}}
+            WARNING: You have not chosen the best price available. Review the order book to find a better trade.
+          {{/if}}
           {{#if or (and hasBalance hasAllowance) (not hasBalance)}}
             {{#if offer}}
               <button type="button" class="btn btn-default btn-submit-order btn-submit-order-{{offerType}} {{offerType}} btn-placement-right" data-dismiss="modal" {{b "enable: canBuy, click: buy"}}>
