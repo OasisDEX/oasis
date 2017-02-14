@@ -1512,7 +1512,8 @@ Dapple['dappsys'] = (function builder () {
                 'type': 'bool'
               }
             ],
-            'type': 'function'
+            'type': 'function',
+            'payable': true
           },
           {
             'constant': true,

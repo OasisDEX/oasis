@@ -184,7 +184,7 @@ Template.registerHelper('timestampToString', (ts, inSeconds, short) => {
   if (ts) {
     const momentFromTimestamp = (inSeconds === true) ? moment.unix(ts) : moment.unix(ts / 1000);
     if (short === true) {
-      timestampStr = momentFromTimestamp.format('DD.MM-HH:mm');
+      timestampStr = momentFromTimestamp.format('YYYY-MM-DDTHH:mm:ss') + 'Z';
     } else {
       timestampStr = momentFromTimestamp.format();
     }
