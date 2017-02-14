@@ -99,12 +99,21 @@
                 {{/unless}}
               </div>
             </div>
+            {{#if alertBetterOffer}}
+              <div class="div-modal-text row highlighted">
+                <div class="col-xs-1">
+                  <img src="order-warning-red.svg" fill="red" class="order-warning">
+                </div>
+                <div class="col-xs-11">
+                  <span class="text-danger">
+                    WARNING: You have not chosen the best price available. Review the order book to find a better trade.
+                  </span>
+                </div>
+              </div>
+            {{/if}}
           {{/if}}
         </div>
         <div class="modal-footer">
-          {{#if alertBetterOffer}}
-            WARNING: You have not chosen the best price available. Review the order book to find a better trade.
-          {{/if}}
           {{#if or (and hasBalance hasAllowance) (not hasBalance)}}
             {{#if offer}}
               <button type="button" class="btn btn-default btn-submit-order btn-submit-order-{{offerType}} {{offerType}} btn-placement-right" data-dismiss="modal" {{b "enable: canBuy, click: buy"}}>
