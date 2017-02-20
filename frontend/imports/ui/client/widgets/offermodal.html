@@ -148,12 +148,20 @@
             {{#if offer}}
               <span class="text-danger">
                 {{#if equals offer.type 'bid'}}
-                  This action will return {{{formatBalance (offer.volume quoteCurrency) '' '' true}}} {{quoteCurrency}} {{formatPrice (offer.volume quoteCurrency) quoteCurrency}} to your token balance.
+                  This action will return {{{formatBalance (offer.volume quoteCurrency) '' '' true}}} {{quoteCurrency}} {{formatPrice (offer.volume quoteCurrency) quoteCurrency}}
                 {{else}}
-                  This action will return {{{formatBalance (offer.volume baseCurrency) '' '' true}}} {{baseCurrency}} {{formatPrice (offer.volume baseCurrency) baseCurrency}} to your token balance.
+                  This action will return {{{formatBalance (offer.volume baseCurrency) '' '' true}}} {{baseCurrency}} {{formatPrice (offer.volume baseCurrency) baseCurrency}}
                 {{/if}}
-                <br>
-                If someone (partially) fills this order before you cancel it, your order may not or only be partially cancelled.
+                to
+                {{#if offer.isOurs}}
+                  your token balance.
+                {{else}}
+                  the token balance of its owner.
+                {{/if}}
+                {{#if isMarketOpen}}
+                  <br>
+                  If someone (partially) fills this order before you cancel it, your order may not or only be partially cancelled.
+                {{/if}}
               </span>
             {{/if}}
           </div>
