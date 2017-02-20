@@ -48,26 +48,28 @@
       <table class="footer">
         <tr>
           <td class="first-row">
-            {{#unless priceDefined}}
-              <span class="help-block">Enter a price to unlock amount and total.</span>
-            {{/unless}}
-            {{#unless validAmount}}
-              <span class="help-block">Amount is invalid because {{baseCurrency}} has no decimals.</span>
-            {{/unless}}
+            {{#if isMarketOpen}}
+              {{#unless priceDefined}}
+                <span class="help-block">Enter a price to unlock amount and total.</span>
+              {{/unless}}
+              {{#unless validAmount}}
+                <span class="help-block">Amount is invalid because {{baseCurrency}} has no decimals.</span>
+              {{/unless}}
+              {{#unless hasBalance sellCurrency}}
+                <span class="help-block">You don't have enough {{#if equals sellCurrency 'W-ETH'}}<a href="#ethtokens" {{b "click: showDepositTab"}}>{{sellCurrency}}</a>{{else}}{{sellCurrency}}{{/if}} tokens.</span>
+              {{else}}
+                {{#let offer=betterOffer}}
+                  {{#if offer}}
+                    <span class="help-block">There is a better <a href="#offerModal" data-toggle="modal" data-target="#offerModal" {{b "click: openOfferModal"}}>offer</a>.</span>
+                  {{/if}}
+                {{/let}}
+              {{/unless}}
+              {{#unless equals offerError ''}}
+                <span class="help-block">{{offerError}}</span>
+              {{/unless}}
+            {{/if}}
             {{#unless isMarketOpen}}
               <span class="help-block">The market has closed.</span>
-            {{/unless}}
-            {{#unless hasBalance sellCurrency}}
-              <span class="help-block">You don't have enough {{#if equals sellCurrency 'W-ETH'}}<a href="#ethtokens" {{b "click: showDepositTab"}}>{{sellCurrency}}</a>{{else}}{{sellCurrency}}{{/if}} tokens.</span>
-            {{else}}
-              {{#let offer=betterOffer}}
-                {{#if offer}}
-                  <span class="help-block">There is a better <a href="#offerModal" data-toggle="modal" data-target="#offerModal" {{b "click: openOfferModal"}}>offer</a>.</span>
-                {{/if}}
-              {{/let}}
-            {{/unless}}
-            {{#unless equals offerError ''}}
-              <span class="help-block">{{offerError}}</span>
             {{/unless}}
           </td>
           <td class="first-row">
