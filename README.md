@@ -1,12 +1,12 @@
-[![Oasis Header](https://cloud.githubusercontent.com/assets/5337809/23129676/e2dcdc28-f783-11e6-835e-457cc65d689e.png)]()
+[![Oasis Header](https://cloud.githubusercontent.com/assets/5337809/23130981/a3ef51b2-f788-11e6-9c8a-326368c3cf2e.png)]()
 ---
 [![Stories in Ready](https://badge.waffle.io/MakerDAO/maker-market.png?label=ready&title=Ready)](https://waffle.io/MakerDAO/maker-market)
 [![Build Status](https://api.travis-ci.org/makerdao/maker-market.svg?branch=master)](https://travis-ci.org/makerdao/maker-market)
 
 
-This is a simple on-chain OTC market for MKR. You can either pick an order from the order book (in which case delivery will happen instantly), or submit a new order yourself.
+This is a simple on-chain OTC market for ERC20 Standard Tokens on the Ethereum Blockchain. You can either pick an order from the order book (in which case delivery will happen instantly), or submit a new order yourself.
 
-**Maker Market is undergoing alpha testing: Proceed at your own risk, and use only small amounts of ETH and MKR.**
+**Oasis PRO is undergoing alpha testing: Proceed at your own risk, and use only small amounts of ETH and MKR.**
 
 ## Overview
 
@@ -28,8 +28,8 @@ Requirements:
 Clone and install:
 
 ```bash
-git clone https://github.com/MakerDAO/maker-market
-cd maker-market
+git clone https://github.com/OasisDEX/oasis-plus.git
+cd oasis-plus
 git submodule update --init --recursive
 npm install
 npm run build
@@ -46,7 +46,9 @@ npm run build
 To run the frontend, start meteor:
 
 ```bash
-cd frontend && meteor
+cd frontend 
+npm install
+meteor
 ```
 
 If you got the error message `File not found: build/maker-otc.js` or `File not found: build/token-wrapper.js`, then you forgot to run the build step from above.
