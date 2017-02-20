@@ -28,8 +28,8 @@ Requirements:
 Clone and install:
 
 ```bash
-git clone https://github.com/OasisDEX/oasis-plus.git
-cd oasis-plus
+git clone https://github.com/OasisDEX/oasis-pro.git
+cd oasis-pro
 git submodule update --init --recursive
 npm install
 npm run build
