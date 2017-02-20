@@ -2401,3 +2401,7 @@ a.logo {
 a.logo:hover {
   background-image: url(logo-oasis-hover.svg);
 }
+
+.btn.disabled, .btn[disabled], fieldset[disabled] .btn {
+  opacity: 1;
+}
