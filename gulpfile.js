@@ -65,7 +65,7 @@ gulp.task('build-meteor', function (cb) {
 
 // gh-pages
 gulp.task('deploy-gh-pages', function () {
-  require('fs').writeFileSync('./dist/CNAME', 'mkr.market');
+  require('fs').writeFileSync('./dist/CNAME', 'plus.oasisdex.com');
   return gulp.src('./dist/**/*')
     .pipe(ghPages())
 })
@@ -73,7 +73,7 @@ gulp.task('deploy-gh-pages', function () {
 gulp.task('deploy-surge', [], function () {
   return surge({
     project: './dist',          // Path to your static build directory
-    domain: 'maker-market.surge.sh'  // Your domain or Surge subdomain
+    domain: 'oasis-plus.surge.sh'  // Your domain or Surge subdomain
   })
 })
 
