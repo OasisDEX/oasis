@@ -224,7 +224,7 @@ table {
   .network-type {
     @extend .montserrat-semibold;
     margin-right: 8px;    
-    font-size: 13px;
+    font-size: 12px;
     color: #4F5362;
     letter-spacing: 1.3px;
     text-transform: uppercase;
@@ -2183,7 +2183,7 @@ section.depositbalance {
     padding-right: 0px;
 }
 .ns-aux {
-  transform: translate(35px,20px);
+  transform: translate(15px,25px);
 }
 .nsp-aux {
   padding-top: 5px;
@@ -2384,4 +2384,20 @@ span.right {
   .text-danger {
     color: red;
   }
+}
+
+.logo {
+  transform: translate(0px,15px);
+}
+
+a.logo {
+  display: block;
+  width: 155px;
+  height: 33px;
+  background: url(logo-oasis.svg);
+  background-repeat:no-repeat;
+}
+
+a.logo:hover {
+  background-image: url(logo-oasis-hover.svg);
 }
