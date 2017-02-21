@@ -897,7 +897,6 @@ table {
         td {
           &.available {
             span.fill-amount {
-              cursor: pointer;
               opacity: 0.68;
               font-family: 'Roboto';
               font-weight: 500;
@@ -905,6 +904,9 @@ table {
               color: #222228;
               text-align: right;
               padding-right: 10px;
+              &.clickable {
+                cursor: pointer;
+              }
             }            
           }
         }
