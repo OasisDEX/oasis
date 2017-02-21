@@ -30,6 +30,9 @@ Session.set('lastTradesLimit', TRADES_LIMIT);
 const OFFER_LIMIT = 0;
 Session.set('orderBookLimit', OFFER_LIMIT);
 
+const DUST_LIMIT = {"W-ETH": 1000000000000000};
+Session.set('orderBookDustLimit', DUST_LIMIT);
+
 const helpers = {
   volume(currency) {
     let volume = '0';
@@ -260,6 +263,8 @@ Offers.updateOffer = (idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWh
       sellWhichToken: sellToken,
       buyHowMuch: buyHowMuchValue.valueOf(),
       sellHowMuch: sellHowMuchValue.valueOf(),
+      buyHowMuch_filter: buyHowMuchValue.toNumber(),
+      sellHowMuch_filter: sellHowMuchValue.toNumber(),
       ask_price: buyHowMuchValue.div(sellHowMuchValue).valueOf(),
       bid_price: sellHowMuchValue.div(buyHowMuchValue).valueOf(),
       ask_price_sort: buyHowMuchValue.div(sellHowMuchValue).toNumber(),
