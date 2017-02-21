@@ -37,7 +37,7 @@
     ],
     "ignore": [
       "dapple_packages/**",
-      "frontent/.meteor/**",
+      "frontend/.meteor/**",
       "frontend/packages/**",
       "scripts/**"
     ]
