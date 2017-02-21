@@ -1879,24 +1879,18 @@ table {
         &.th-date {
           max-width: 90px!important;
         }
-        &.th-type {
-          max-width: 105px!important;
-        }
+        &.th-type,
         &.th-recipient {
           max-width: 115px!important;
           padding-left: 10px;  
           text-align: center;                  
         }        
-        &.th-coin {
-          max-width: 65px!important;
-          padding-left: 10px;
-          &.transfer {
+        &.th-coin,
+        &.transfer {
             max-width: 60px!important;
             text-align: center!important;
             margin-left: 10px!important;
-            padding-left: 0px;
-          }           
-        }        
+          }
         &.th-amount {
           max-width: 80px!important;
         }
@@ -1916,27 +1910,21 @@ table {
           max-width: 90px!important;
         }
         &.type,
-        &.transaction-hash {
-          max-width: 105px!important;
-        }
+        &.transaction-hash,
         &.transaction-hash-recipient {
           max-width: 115px!important;
-          text-overflow: ellipsis;
-          overflow: hidden;   
-          padding-left: 10px;       
-          background: none;
+          padding-left: 10px;
           text-align: center;
-          border-radius: 8px;         
-        }            
+        }
         &.coin {
-          max-width: 65px!important;
+          text-align: center;
+          max-width: 60px!important;
+          margin-left: 10px;
           &.deposit {
-            background: none;
             text-align: center;
-            border-radius: 8px;   
             max-width: 60px!important;
             margin-left: 10px;
-          }       
+          }
         }
         &.transfer,    
         &.deposit,
