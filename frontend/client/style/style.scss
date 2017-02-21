@@ -2382,12 +2382,13 @@ a.logo {
   display: block;
   width: 155px;
   height: 33px;
-  background: url(logo-oasis.svg);
-  background-repeat:no-repeat;
+  background: url(logo-oasis-pro.png);
+  background-size: 150px 31px;
+  background-repeat: no-repeat;
 }
 
 a.logo:hover {
-  background-image: url(logo-oasis-hover.svg);
+  background-image: url(logo-oasis-pro-hover.png);
 }
 
 .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
