@@ -80,7 +80,13 @@ Template.chart.viewmodel({
                   let type = null;
                   let quoteAmount = null;
                   let baseAmount = null;
-                  [type, quoteAmount] = tooltip.body[0].lines[0].split(': ');
+                  let typeIndex = 0;
+                  tooltip.dataPoints.forEach((object, key) => {
+                    if (object.y === tooltip.caretY) {
+                      typeIndex = key;
+                    }
+                  });
+                  [type, quoteAmount] = tooltip.body[typeIndex].lines[0].split(': ');
                   if (type === 'Sell') {
                     quoteAmount = askAmounts.quote[askPrices.indexOf(price)];
                     baseAmount = askAmounts.base[askPrices.indexOf(price)];
@@ -232,7 +238,7 @@ Template.chart.viewmodel({
           amount = null;
         } else {
           // If there is not a bid amount for this price, we need to add the next available amount
-          for (let j = 0; j < askPrices.length; j++) {
+          for (let j = 0; j < bidPrices.length; j++) {
             if (bidPrices[j] >= vals[i]) {
               amount = formatNumber(web3.fromWei(bidAmounts.quote[j]), 3).replace(/,/g, '');
               break;
