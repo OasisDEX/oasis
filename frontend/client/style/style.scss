@@ -2167,7 +2167,7 @@ section.depositbalance {
     padding-right: 0px;
 }
 .ns-aux {
-  transform: translate(15px,25px);
+  transform: translate(30px,25px);
 }
 .nsp-aux {
   padding-top: 5px;
@@ -2376,15 +2376,14 @@ span.right {
 
 a.logo {
   display: block;
-  width: 155px;
-  height: 33px;
-  background: url(logo-oasis-pro.svg);
+  width: 150px;
+  height: 31px;
+  background: url(logo-oasis-pro.png);
   background-size: 150px 31px;
-  background-repeat: no-repeat;
 }
 
 a.logo:hover {
-  background-image: url(logo-oasis-pro-hover.svg);
+  background-image: url(logo-oasis-pro-hover.png);
 }
 
 .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
