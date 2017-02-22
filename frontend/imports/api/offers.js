@@ -30,9 +30,6 @@ Session.set('lastTradesLimit', TRADES_LIMIT);
 const OFFER_LIMIT = 0;
 Session.set('orderBookLimit', OFFER_LIMIT);
 
-const DUST_LIMIT = {"W-ETH": 1000000000000000};
-Session.set('orderBookDustLimit', DUST_LIMIT);
-
 const helpers = {
   volume(currency) {
     let volume = '0';
