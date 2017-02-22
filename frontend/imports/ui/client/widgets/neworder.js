@@ -30,7 +30,15 @@ Template.neworder.viewmodel({
     return Session.get('baseCurrency');
   },
   price: '0',
-  priceDefined() {
+  canAutofill() {
+    return Session.get('market_open');
+  },
+  canChangePrice() {
+    return Session.get('market_open');
+  },
+  canChangeAmountAndTotal() {
+    const marketOpen = Session.get('market_open');
+    if (!marketOpen) return false;
     try {
       const price = new BigNumber(this.price());
       return !price.isNaN() && price.gt(0);
@@ -228,11 +236,13 @@ Template.neworder.viewmodel({
     return undefined;
   },
   autofill() {
+    const marketOpen = Session.get('market_open');
     const quoteCurrency = Session.get('quoteCurrency');
     const baseCurrency = Session.get('baseCurrency');
     let offer;
     let price = 0;
     let available = 0;
+    if (!marketOpen) return false;
     if (this.type() === 'buy') {
       offer = Offers.findOne({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
                               { sort: { ask_price_sort: 1 } });

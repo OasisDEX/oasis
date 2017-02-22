@@ -13,9 +13,9 @@
             </th>
             <td class="available">
               {{#if equals type 'buy'}}
-              <span class="fill-amount" {{b "click: autofill"}}>{{{formatBalance quoteAvailable '' '' true}}}</span> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
+              <span class="fill-amount {{#if canAutofill}}clickable{{/if}}" {{b "click: autofill"}}>{{{formatBalance quoteAvailable '' '' true}}}</span> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
               {{else}}
-              <span class="fill-amount" {{b "click: autofill"}}>{{{formatBalance baseAvailable '' '' true}}}</span> <span class="span-buy-sell-currency">{{baseCurrency}}</span>
+              <span class="fill-amount {{#if canAutofill}}clickable{{/if}}" {{b "click: autofill"}}>{{{formatBalance baseAvailable '' '' true}}}</span> <span class="span-buy-sell-currency">{{baseCurrency}}</span>
               {{/if}}
             </td>
           </tr>
@@ -24,7 +24,7 @@
               PRICE
             </th>
             <td>
-              <input type="number" class="input" step="any" min="0" {{b "value: price, input: calcTotal"}}> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
+              <input type="number" class="input" step="any" min="0" {{b "value: price, input: calcTotal, enable: canChangePrice"}}> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
             </td>
           </tr>
           <tr class="row-input-line">
@@ -32,7 +32,7 @@
               AMOUNT
             </th>
             <td>
-              <input type="number" class="input" step="any" min="0" {{b "value: amount, input: calcTotal, enable: priceDefined, attr: { max: maxAmount }"}}> <span class="span-buy-sell-currency">{{baseCurrency}}</span>
+              <input type="number" class="input" step="any" min="0" {{b "value: amount, input: calcTotal, enable: canChangeAmountAndTotal, attr: { max: maxAmount }"}}> <span class="span-buy-sell-currency">{{baseCurrency}}</span>
             </td>
           </tr>
           <tr class="row-input-line">
@@ -40,7 +40,7 @@
               TOTAL
             </th>
             <td>
-              <input type="number" class="input" step="any" min="0" {{b "value: total, input: calcAmount, enable: priceDefined, attr: { max: maxTotal }"}}> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
+              <input type="number" class="input" step="any" min="0" {{b "value: total, input: calcAmount, enable: canChangeAmountAndTotal, attr: { max: maxTotal }"}}> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
             </td>
           </tr>
         </tbody>
@@ -49,7 +49,7 @@
         <tr>
           <td class="first-row">
             {{#if isMarketOpen}}
-              {{#unless priceDefined}}
+              {{#unless canChangeAmountAndTotal}}
                 <span class="help-block">Enter a price to unlock amount and total.</span>
               {{/unless}}
               {{#unless validAmount}}
