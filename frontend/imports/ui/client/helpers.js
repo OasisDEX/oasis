@@ -122,13 +122,13 @@ Template.registerHelper('lastTrades', () => {
 Template.registerHelper('countOffers', (type) => {
   const quoteCurrency = Session.get('quoteCurrency');
   const baseCurrency = Session.get('baseCurrency');
-  const options = {};
-  options.sort = { ask_price_sort: 1 };
+  const dustLimitMap = Session.get('orderBookDustLimit');
+  const dustLimit = dustLimitMap[quoteCurrency] ? dustLimitMap[quoteCurrency] : 0;
 
   if (type === 'ask') {
-    return Offers.find({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency }, options).count();
+    return Offers.find({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency, buyHowMuch_filter: {$gte: dustLimit} }).count();
   } else if (type === 'bid') {
-    return Offers.find({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency }, options).count();
+    return Offers.find({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency, sellHowMuch_filter: {$gte: dustLimit} }).count();
   }
   return 0;
 });
@@ -137,6 +137,8 @@ Template.registerHelper('findOffers', (type) => {
   const quoteCurrency = Session.get('quoteCurrency');
   const baseCurrency = Session.get('baseCurrency');
   const limit = Session.get('orderBookLimit');
+  const dustLimitMap = Session.get('orderBookDustLimit');
+  const dustLimit = dustLimitMap[quoteCurrency] ? dustLimitMap[quoteCurrency] : 0;
 
   const options = {};
   options.sort = { ask_price_sort: 1 };
@@ -145,9 +147,9 @@ Template.registerHelper('findOffers', (type) => {
   }
 
   if (type === 'ask') {
-    return Offers.find({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency }, options);
+    return Offers.find({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency, buyHowMuch_filter: {$gte: dustLimit} }, options);
   } else if (type === 'bid') {
-    return Offers.find({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency }, options);
+    return Offers.find({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency, sellHowMuch_filter: {$gte: dustLimit} }, options);
   } else if (type === 'mine') {
     const or = [
       { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },

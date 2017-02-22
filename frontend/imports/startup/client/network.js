@@ -143,6 +143,8 @@ function initSession() {
   if (!Session.get('volumeSelector')) {
     Session.set('volumeSelector', 'quote');
   }
+
+  Session.set('orderBookDustLimit', {"W-ETH": 1000000000000000});
 }
 
 /**
