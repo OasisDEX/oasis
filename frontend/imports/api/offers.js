@@ -71,6 +71,10 @@ Offers.helpers(_.extend(helpers, {
     const address = Session.get('address');
     return this.status === Status.CONFIRMED && (!marketOpen || address === this.owner);
   },
+  isOurs() {
+    const address = Session.get('address');
+    return (address === this.owner);
+  },
 }));
 
 Trades.helpers(helpers);

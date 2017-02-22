@@ -1656,13 +1656,7 @@ table {
             width: 100%;
             @for $i from 1 through $max {
               @include qq-equal(5) {
-                max-width: 120px;
-                &:first-of-type {
-                  width: 0px;
-                } 
-                &:last-of-type {
-                  width: 0px;
-                }                                
+                max-width: 110px;
               }
               @include qq-equal(6) {
                 max-width: 75px;
@@ -1738,13 +1732,7 @@ table {
             width: 100%;
             @for $i from 1 through $max {
               @include qq-equal(5) {
-                max-width: 120px;
-                &:first-of-type {
-                  width: 0px;
-                } 
-                &:last-of-type {
-                  width: 0px;
-                }                                
+                max-width: 110px;
               }
               @include qq-equal(6) {
                 max-width: 75px;
