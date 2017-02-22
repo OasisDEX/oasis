@@ -316,7 +316,7 @@ Offers.cancelOffer = (idx) => {
   Dapple['maker-otc'].objects.otc.cancel(id, { gas: CANCEL_GAS }, (error, tx) => {
     if (!error) {
       Transactions.add('offer', tx, { id: idx, status: Status.CANCELLED });
-      Offers.update(idx, { $set: { tx, status: Status.CANCELLED, helper: 'Your order is being cancelled...' } });
+      Offers.update(idx, { $set: { tx, status: Status.CANCELLED, helper: 'The order is being cancelled...' } });
     } else {
       Offers.update(idx, { $set: { helper: formatError(error) } });
     }
