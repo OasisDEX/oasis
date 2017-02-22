@@ -1657,6 +1657,9 @@ table {
             @for $i from 1 through $max {
               @include qq-equal(5) {
                 max-width: 110px;
+                &:last-of-type {
+                  width: 0px;
+                }
               }
               @include qq-equal(6) {
                 max-width: 75px;
@@ -1733,6 +1736,9 @@ table {
             @for $i from 1 through $max {
               @include qq-equal(5) {
                 max-width: 110px;
+                &:last-of-type {
+                  width: 0px;
+                }
               }
               @include qq-equal(6) {
                 max-width: 75px;
