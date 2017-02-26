@@ -56,6 +56,7 @@ const tokens = {
     SNGLS: '0xf48cf5ad04afa369fe1ae599a8f3699c712b0352',
     VSL: '0x5017f42cf680fcbcab1093263468745c9af63e35',
     PLU: '0xcfe185ce294b443c16dd89f00527d8b25c45bf9d',
+    MLN: '0xd4a8f8293d639752e263be3869057eaf7536e005',
   },
   morden: {
     'W-ETH': '0x52fe88b987c7829e5d5a61c98f67c9c14e6a7a90',
@@ -70,6 +71,7 @@ const tokens = {
     SNGLS: '0x0000000000000000000000000000000000000000',
     VSL: '0x0000000000000000000000000000000000000000',
     PLU: '0x0000000000000000000000000000000000000000',
+    MLN: '0x0000000000000000000000000000000000000000',
   },
   live: {
     'W-ETH': '0xecf8f87f810ecf450940c9f60066b4a7a501d6a7',
@@ -84,6 +86,7 @@ const tokens = {
     SNGLS: '0xaec2e87e0a235266d9c5adc9deb4b2e29b54d009',
     VSL: '0x5c543e7ae0a1104f78406c340e9c64fd9fce5170',
     PLU: '0xd8912c10681d8b21fd3742244f44658dba12264e',
+    MLN: '0xbeb9ef514a379b997e0798fdcc901ee474b6d9a1',
   },
 };
 
@@ -101,13 +104,14 @@ const tokenSpecs = {
   SNGLS: { precision: 0, format: '0,0' },
   VSL: { precision: 18, format: '0,0.00[0000000000000000]' },
   PLU: { precision: 18, format: '0,0.00[0000000000000000]' },
+  MLN: { precision: 18, format: '0,0.00[0000000000000000]' },
 };
 
 Dapple.getQuoteTokens = () => ['W-ETH'];
 
-Dapple.getBaseTokens = () => ['MKR', 'DGD', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU'];
+Dapple.getBaseTokens = () => ['MKR', 'DGD', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN'];
 
-Dapple.getTokens = () => ['W-ETH', 'MKR', 'DGD', 'GNT', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU'];
+Dapple.getTokens = () => ['W-ETH', 'MKR', 'DGD', 'GNT', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN'];
 
 Dapple.getTokenSpecs = (symbol) => {
   if (typeof (tokenSpecs[symbol]) !== 'undefined') {
