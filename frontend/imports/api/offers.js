@@ -110,7 +110,7 @@ Offers.getHistoricalTradesRange = (numberOfPreviousDays) => {
         return block.number;
       }
       else {
-        return getBlockNumberOfSomeBlockEarlierThan(startingFrom-STEP_NUMBER_OF_BLOCKS_BACKWARDS, timestamp);
+        return getBlockNumberOfSomeBlockEarlierThan(timestamp, startingFrom-STEP_NUMBER_OF_BLOCKS_BACKWARDS);
       }
     });
   }
