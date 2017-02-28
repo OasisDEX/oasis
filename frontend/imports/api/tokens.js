@@ -29,10 +29,11 @@ class TokensCollection extends Mongo.Collection {
               Session.set('GNTBalance', newGNTBalance);
             }
           });
-          if (Session.get('GNTBroker') === '0x0000000000000000000000000000000000000000') {
+          const broker = Session.get('GNTBroker');
+          if (typeof broker === 'undefined' || broker === '0x0000000000000000000000000000000000000000') {
             Session.set('GNTBrokerBalance', 0);
           } else {
-            token.balanceOf(Session.get('GNTBroker'), (callError, balance) => {
+            token.balanceOf(broker, (callError, balance) => {
               if (!callError) {
                 const newGNTBrokerBalance = balance.toString(10);
                 Session.set('GNTBrokerBalance', newGNTBrokerBalance);
