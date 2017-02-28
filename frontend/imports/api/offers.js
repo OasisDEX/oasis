@@ -197,7 +197,7 @@ Offers.sync = () => {
 };
 
 Offers.getBlock = function getBlock(blockNumber) {
-  const p = new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     web3.eth.getBlock(blockNumber, (blockError, block) => {
       if (!blockError) {
         resolve(block);
@@ -206,7 +206,6 @@ Offers.getBlock = function getBlock(blockNumber) {
       }
     });
   });
-  return p;
 };
 
 
