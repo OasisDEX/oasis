@@ -9,6 +9,7 @@ import './orderrow.html';
 Template.orderRow.events({
   'click .cancel': function cancel(event, templateInstance) {
     event.preventDefault();
+
     event.stopPropagation();
     const orderId = templateInstance.data.order._id;
     Session.set('selectedOffer', orderId);
@@ -16,11 +17,6 @@ Template.orderRow.events({
   },
   'click tr': function offer(event, templateInstance) {
     event.preventDefault();
-    if (templateInstance.data.canAccept) {
-      const orderId = templateInstance.data.order._id;
-      Session.set('selectedOffer', orderId);
-      $('#offerModal').modal('show');
-    }
     if (templateInstance.data.canOpenTxLink) {
       window.open(txHref(templateInstance.data.order.transactionHash), '_blank');
     }

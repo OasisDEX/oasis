@@ -17,11 +17,9 @@ const Status = {
   PENDING: 'pending',
   CONFIRMED: 'confirmed',
   CANCELLED: 'cancelled',
-  BOUGHT: 'bought',
 };
 
 const OFFER_GAS = 1000000;
-const BUY_GAS = 1000000;
 const CANCEL_GAS = 1000000;
 
 const TRADES_LIMIT = 0;
@@ -106,9 +104,6 @@ Offers.sync = () => {
       const id = result.args.id.toNumber();
       Offers.syncOffer(id);
       Offers.remove(result.transactionHash);
-      if (Session.equals('selectedOffer', result.transactionHash)) {
-        Session.set('selectedOffer', id.toString());
-      }
     }
   });
 
@@ -223,9 +218,6 @@ Offers.syncOffer = (id, max = 0) => {
                            owner, Status.CONFIRMED);
       } else {
         Offers.remove(idx);
-        if (Session.equals('selectedOffer', idx)) {
-          $('#offerModal').modal('hide');
-        }
       }
       Offers.syncedOffers.push(id);
 
@@ -292,23 +284,6 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
         Transactions.add('offer', tx, { id: tx, status: Status.PENDING });
       }
     });
-};
-
-Offers.buyOffer = (_id, type, _quantity, _token) => {
-  const id = parseInt(_id, 10);
-
-  const quantityAbsolute = convertToTokenPrecision(_quantity, _token);
-
-  Offers.update(_id, { $unset: { helper: '' } });
-  Dapple['maker-otc'].objects.otc.buy(id.toString(10), quantityAbsolute, { gas: BUY_GAS }, (error, tx) => {
-    if (!error) {
-      Transactions.add('offer', tx, { id: _id, status: Status.BOUGHT });
-      Offers.update(_id, { $set: {
-        tx, status: Status.BOUGHT, helper: `Your ${type} order is being processed...` } });
-    } else {
-      Offers.update(_id, { $set: { helper: formatError(error) } });
-    }
-  });
 };
 
 Offers.cancelOffer = (idx) => {

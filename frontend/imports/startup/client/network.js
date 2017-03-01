@@ -207,9 +207,6 @@ Meteor.startup(() => {
       case Status.CANCELLED:
         syncAndSetMessageOnError(document);
         break;
-      case Status.BOUGHT:
-        syncAndSetMessageOnError(document);
-        break;
       case Status.PENDING:
         setMessageAndScheduleRemoval(document);
         break;

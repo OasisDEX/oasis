@@ -14,7 +14,6 @@ import './neworder.html';
 Template.neworder.viewmodel({
   share: 'newOffer',
   lastError: '',
-  bestOffer: undefined,
   validAmount: true,
   type() {
     const orderType = (this !== null && this !== undefined) ? this.orderType() : '';
@@ -198,43 +197,6 @@ Template.neworder.viewmodel({
   preventDefault(event) {
     event.preventDefault();
   },
-  betterOffer() {
-    try {
-      const quoteCurrency = Session.get('quoteCurrency');
-      const baseCurrency = Session.get('baseCurrency');
-      const price = new BigNumber(this.price());
-      if (price.lte(0) || price.isNaN()) {
-        this.bestOffer(undefined);
-        return undefined;
-      }
-
-      let offer;
-      if (this.type() === 'buy') {
-        offer = Offers.findOne({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
-                               { sort: { ask_price_sort: 1 } });
-        if (offer && Object.prototype.hasOwnProperty.call(offer, 'ask_price')
-            && price.gt(new BigNumber(offer.ask_price))) {
-          this.bestOffer(offer._id);
-          return offer;
-        }
-        this.bestOffer(undefined);
-        return undefined;
-      } else if (this.type() === 'sell') {
-        offer = Offers.findOne({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
-                               { sort: { ask_price_sort: 1 } });
-        if (offer && Object.prototype.hasOwnProperty.call(offer, 'bid_price')
-            && price.lt(new BigNumber(offer.bid_price))) {
-          this.bestOffer(offer._id);
-          return offer;
-        }
-      }
-    } catch (e) {
-      this.bestOffer(undefined);
-      return undefined;
-    }
-    this.bestOffer(undefined);
-    return undefined;
-  },
   autofill() {
     const marketOpen = Session.get('market_open');
     const quoteCurrency = Session.get('quoteCurrency');
@@ -264,9 +226,6 @@ Template.neworder.viewmodel({
         this.calcTotal();
       }
     }
-  },
-  openOfferModal() {
-    Session.set('selectedOffer', this.bestOffer());
   },
   showConfirmation(event) {
     event.preventDefault();

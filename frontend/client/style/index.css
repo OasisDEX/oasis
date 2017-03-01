@@ -56,7 +56,6 @@ small { color: lightgray }
 .o tbody tr.cancelled td:before { border-bottom: 1px solid #333 }
 .o tbody tr.cancelled td:before { width: 100% }
 .o tbody tr.pending { color: grey }
-.o tbody tr.bought { font-weight: 600 }
 .o tbody tr.helper-row { color: grey }
 .o tbody tr.helper-row { font-size: smaller }
 

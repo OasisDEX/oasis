@@ -57,8 +57,6 @@ Template.newallowance.viewmodel({
                 $(`#allowanceModal${this.templateInstance.data.token._id}`).modal('hide');
                 if (refer === 'newOrder') {
                   $('#newOrderModal').modal('show');
-                } else if (refer === 'existingOrder') {
-                  $('#offerModal').modal('show');
                 }
               });
             } else {
