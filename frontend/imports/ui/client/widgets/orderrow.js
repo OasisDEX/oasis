@@ -9,7 +9,6 @@ import './orderrow.html';
 Template.orderRow.events({
   'click .cancel': function cancel(event, templateInstance) {
     event.preventDefault();
-
     event.stopPropagation();
     const orderId = templateInstance.data.order._id;
     Session.set('selectedOffer', orderId);
