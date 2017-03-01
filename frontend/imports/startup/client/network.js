@@ -187,19 +187,20 @@ Meteor.startup(() => {
 
   function syncAndSetMessageOnError(document) {
     Offers.syncOffer(document.object.id);
-    let helperMsg = '';
     if (document.receipt.logs.length === 0) {
-      helperMsg = `${document.object.status.toUpperCase()}: Error during Contract Execution`;
+      let helperMsg = `${document.object.status.toUpperCase()}: Error during Contract Execution`;
+      Offers.update(document.object.id, { $set: { helper: helperMsg } });
     }
-    Offers.update(document.object.id, { $set: { helper: helperMsg } });
   }
 
-  function setMessageAndScheduleRemoval(document) {
-    // The ItemUpdate event will be triggered on successful generation, which will delete the object; otherwise set helper
-    Offers.update(document.object.id, { $set: { helper: 'Error during Contract Execution' } });
-    Meteor.setTimeout(() => {
-      Offers.remove(document.object.id);
-    }, 5000);
+  function setMessageAndScheduleRemovalOnError(document) {
+    // The ItemUpdate event will be triggered on successful generation, otherwise set helper
+    if (document.receipt.logs.length === 0) {
+      Offers.update(document.object.id, {$set: {helper: 'Error during Contract Execution'}});
+      Meteor.setTimeout(() => {
+        Offers.remove(document.object.id);
+      }, 5000);
+    }
   }
 
   Transactions.observeRemoved('offer', (document) => {
@@ -208,7 +209,7 @@ Meteor.startup(() => {
         syncAndSetMessageOnError(document);
         break;
       case Status.PENDING:
-        setMessageAndScheduleRemoval(document);
+        setMessageAndScheduleRemovalOnError(document);
         break;
       default:
         break;
