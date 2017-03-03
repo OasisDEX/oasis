@@ -2265,13 +2265,6 @@ span.right {
       color: #222228;
     }
   }
-  .owner-address {
-    font-size: 12px;
-    font-weight: bold;
-    color: #68686C;
-    font-family: 'Roboto';
-    margin-right: 15px;
-  }
 }
 .modal-header {
   border: none;
@@ -2301,10 +2294,6 @@ span.right {
     }
     span.quote-currency {
       transform: translate(0px,5px);
-    }
-    &.row-data-line.owner {
-      border-bottom: 1px solid #E0E6E8;
-      border-top: 1px solid #E0E6E8;
     }
     &.row-input-line {
       border-bottom: 1px solid #F0F2F3;

@@ -32,10 +32,6 @@
                   <td>{{{formatBalance baseToken.balance '' '' true}}} <span class="allowance-currency">{{baseToken._id}}</span></td>
                 {{/if}}
               </tr>
-              <tr class="row-data-line owner">
-                <th>OWNER</th>
-                <td><span class="owner-address">{{address}}</span></td>
-              </tr>
               <tr class="row-input-line">
                 <th>PRICE</th>
                 <td><input type="number" class="input" step="any" min="0" {{b "value: offerPrice, input: calcNewOfferTotal"}}><span class="span-offer-currency">{{quoteCurrency}}</span></td>
