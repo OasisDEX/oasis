@@ -325,7 +325,7 @@ Offers.newOfferGasEstimate = async (sellHowMuch, sellWhichToken, buyHowMuch, buy
                                                                                       buyHowMuch, buyWhichToken);
 
   const data = Dapple['maker-otc'].objects.otc.offer.getData(sellHowMuchAbsolute, sellWhichTokenAddress,
-                                                             buyHowMuchAbsolute, buyWhichTokenAddress);
+                                                             buyHowMuchAbsolute, buyWhichTokenAddress, 0);
 
   return new Promise((resolve, reject) => {
     web3.eth.estimateGas({to: Dapple['maker-otc'].environments[Dapple.env].otc.value, data: data}, (error, result) => {
@@ -346,7 +346,7 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
                                                                                             buyHowMuch, buyWhichToken);
 
         Dapple['maker-otc'].objects.otc.offer(sellHowMuchAbsolute, sellWhichTokenAddress,
-                                              buyHowMuchAbsolute, buyWhichTokenAddress,
+                                              buyHowMuchAbsolute, buyWhichTokenAddress, 0,
           {gas: gasEstimate + 500000}, (error, tx) => {
             callback(error, tx);
             if (!error) {
