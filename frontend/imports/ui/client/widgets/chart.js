@@ -136,7 +136,7 @@ Template.chart.viewmodel({
 
     if (Session.get('depthChart')
         && Session.get('isConnected') && !Session.get('outOfSync')
-        && !Session.get('loading') && Session.get('loadingProgress') === 100) {
+        && !Session.get('loading')) {
       askPrices = [];
       bidPrices = [];
       askAmounts = { base: [], quote: [] };

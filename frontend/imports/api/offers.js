@@ -60,8 +60,6 @@ const helpers = {
   },
 };
 
-Offers.syncedOffers = [];
-
 Offers.helpers(_.extend(helpers, {
   canCancel() {
     const marketOpen = Session.get('market_open');
@@ -148,22 +146,44 @@ Offers.syncOffers = () => {
     }
   });
 
-  // Sync all past offers
-  Dapple['maker-otc'].objects.otc.last_offer_id((error, n) => {
-    if (!error) {
-      const lastOfferId = n.toNumber();
-      console.log('last_offer_id', lastOfferId);
-      if (lastOfferId > 0) {
-        Session.set('loading', true);
-        Session.set('loadingProgress', 0);
-        for (let i = lastOfferId; i >= 1; i--) {
-          Offers.syncOffer(i, lastOfferId);
-        }
-      } else {
-        Session.set('loading', false);
-        Session.set('loadingProgress', 100);
+  function cartesianProduct(arr)
+  {
+    return arr.reduce(function(a,b){
+      return a.map(function(x){
+        return b.map(function(y){
+          return x.concat(y);
+        })
+      }).reduce(function(a,b){ return a.concat(b) },[])
+    }, [[]]);
+  }
+
+  function flatten(ary) {
+    return ary.reduce(function(a, b) {
+      if (Array.isArray(b)) {
+        return a.concat(flatten(b))
       }
+      return a.concat(b)
+    }, [])
+  }
+
+  function syncOfferAndAllHigherOnes(id) {
+    if (id != 0) {
+      Session.set('loadingCounter', Session.get('loadingCounter')+1);
+      Offers.syncOffer(id);
+      return Offers.getHigherOfferId(id).then(syncOfferAndAllHigherOnes);
     }
+    else return Promise.resolve(0);
+  }
+
+  Session.set('loading', true);
+  Session.set('loadingCounter', 0);
+
+  const currencyPairs = cartesianProduct([Dapple.getQuoteTokens(), Dapple.getBaseTokens()]);
+  const promisesLowestOfferId = flatten(currencyPairs.map((pair) => [Offers.getLowestOfferId(pair[0], pair[1]),
+                                                                     Offers.getLowestOfferId(pair[1], pair[0])]));
+  const promisesSync = promisesLowestOfferId.map((promise) => promise.then(syncOfferAndAllHigherOnes));
+  Promise.all(promisesSync).then(() => {
+    Session.set('loading', false);
   });
 };
 
@@ -245,11 +265,37 @@ Offers.getBlock = function getBlock(blockNumber) {
   });
 };
 
+Offers.getLowestOfferId = function getLowestOfferId(sellToken, buyToken) {
+    const sellTokenAddress = Dapple.getTokenAddress(sellToken);
+    const buyTokenAddress = Dapple.getTokenAddress(buyToken);
+
+    return new Promise((resolve, reject) => {
+        Dapple['maker-otc'].objects.otc.getLowestOffer(sellTokenAddress, buyTokenAddress, (error, id) => {
+            if (!error) {
+                resolve(id);
+            } else {
+                reject(error);
+            }
+        });
+    });
+};
+
+Offers.getHigherOfferId = function getHigherOfferId(existingId) {
+    return new Promise((resolve, reject) => {
+        Dapple['maker-otc'].objects.otc.getHigherOfferId(existingId, (error, id) => {
+            if (!error) {
+                resolve(id);
+            } else {
+                reject(error);
+            }
+        });
+    });
+};
 
 /**
  * Syncs up a single offer
  */
-Offers.syncOffer = (id, max = 0) => {
+Offers.syncOffer = (id) => {
   Dapple['maker-otc'].objects.otc.offers(id, (error, data) => {
     if (!error) {
       const idx = id.toString();
@@ -260,14 +306,6 @@ Offers.syncOffer = (id, max = 0) => {
                            owner, Status.CONFIRMED);
       } else {
         Offers.remove(idx);
-      }
-      Offers.syncedOffers.push(id);
-
-      if (max > 0 && id > 1) {
-        Session.set('loadingProgress', Math.round(100 * (Offers.syncedOffers.length / max)));
-      } else {
-        Session.set('loading', false);
-        Session.set('loadingProgress', 100);
       }
     }
   });
