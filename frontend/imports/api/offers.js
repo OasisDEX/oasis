@@ -102,6 +102,7 @@ Offers.getHistoricalTradesRange = (numberOfPreviousDays) => {
     return Offers.getBlock('latest').then((block) => block.number);
   }
   function getBlockNumberOfSomeBlockEarlierThan(timestamp, startingFrom) {
+    if (startingFrom < 0) return Promise.resolve(0);
     return Offers.getBlock(startingFrom).then((block) => {
       if (block.timestamp*1000 <= timestamp) {
         return block.number;
