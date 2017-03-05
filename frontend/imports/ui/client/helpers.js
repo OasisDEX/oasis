@@ -141,7 +141,7 @@ Template.registerHelper('findOffers', (type) => {
   const dustLimit = dustLimitMap[quoteCurrency] ? dustLimitMap[quoteCurrency] : 0;
 
   const options = {};
-  options.sort = { ask_price_sort: 1 };
+  options.sort = { ask_price_sort: 1, _id: -1 };
   if (limit) {
     options.limit = limit;
   }
@@ -156,7 +156,7 @@ Template.registerHelper('findOffers', (type) => {
       { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
     ];
     const address = Session.get('address');
-    return Offers.find({ owner: address, $or: or });
+    return Offers.find({ owner: address, $or: or }, { sort: { buyWhichToken: 1, _id: -1 } });
   }
   return [];
 });
