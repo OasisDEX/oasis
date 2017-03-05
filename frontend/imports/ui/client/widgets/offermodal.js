@@ -13,9 +13,16 @@ import './offermodal.html';
 // TODO: DELETE THIS, TESTING PURPOSE
 window.Tokens = Tokens;
 
+const latest = require('promise-latest');
 
 Template.offermodal.viewmodel({
   share: 'newOffer',
+  gasEstimateInProgress: false,
+  gasEstimateResult: null,
+  gasEstimateError: null,
+  autorun() {
+    this.estimateGasUsage();
+  },
   precision() {
     return Dapple.getTokenSpecs(Session.get('baseCurrency')).precision;
   },
@@ -43,6 +50,7 @@ Template.offermodal.viewmodel({
     if (this.precision() === 0 && this.offerAmount() % 1 !== 0) {
       this.validNewOrderAmount(false);
       this.offerTotal('0');
+      this.estimateGasUsage();
       return;
     }
     try {
@@ -57,12 +65,14 @@ Template.offermodal.viewmodel({
     } catch (e) {
       this.offerTotal('0');
     }
+    this.estimateGasUsage();
   },
   calcNewOfferAmount() {
     this.validNewOrderAmount(true);
     if (this.precision() === 0 && this.offerTotal() % 1 !== 0) {
       this.validNewOrderAmount(false);
       this.offerAmount('0');
+      this.estimateGasUsage();
       return;
     }
     try {
@@ -82,6 +92,7 @@ Template.offermodal.viewmodel({
     } catch (e) {
       this.offerAmount('0');
     }
+    this.estimateGasUsage();
   },
   dismiss(event) {
     $(event.target).closest('.modal').modal('hide');
@@ -140,10 +151,7 @@ Template.offermodal.viewmodel({
       return false;
     }
   },
-  confirmOffer(event) {
-    event.preventDefault();
-
-    this.offerError('');
+  newOfferParameters() {
     let sellHowMuch;
     let sellWhichToken;
     let buyHowMuch;
@@ -159,6 +167,40 @@ Template.offermodal.viewmodel({
       buyWhichToken = Session.get('quoteCurrency');
       buyHowMuch = this.offerTotal();
     }
+    return { sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken };
+  },
+  estimateGasUsage() {
+    this.gasEstimateResult(null);
+    this.gasEstimateError(null);
+    if (this.canSubmit()) {
+      this.gasEstimateInProgress(true);
+
+      const {sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken} = this.newOfferParameters();
+      latest(Offers.newOfferGasEstimate)(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken)
+        .then((result) => {
+          if (this.gasEstimateInProgress()) {
+            this.gasEstimateError(null);
+            this.gasEstimateResult(result);
+            this.gasEstimateInProgress(false);
+          }
+        })
+        .catch((error) => {
+          if (this.gasEstimateInProgress()) {
+            this.gasEstimateError(error);
+            this.gasEstimateResult(null);
+            this.gasEstimateInProgress(false);
+          }
+        });
+    }
+    else {
+      this.gasEstimateInProgress(false);
+    }
+  },
+  confirmOffer(event) {
+    event.preventDefault();
+    this.offerError('');
+
+    const {sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken} = this.newOfferParameters();
     Offers.newOffer(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, (error) => {
       if (error != null) {
         this.offerError(formatError(error));
