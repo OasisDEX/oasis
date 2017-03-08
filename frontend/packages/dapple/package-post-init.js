@@ -4,7 +4,7 @@ Dapple.init = function init(env) {
     Dapple.env = 'kovan';
     Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.kovan);
     Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments.kovan);
-    Dapple.makerjs = new Dapple.Maker(web3, 'ropsten');
+    Dapple.makerjs = new Dapple.Maker(web3, 'kovan');
   } else if (env === 'ropsten') {
     Dapple.env = 'ropsten';
     Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.ropsten);
@@ -51,19 +51,19 @@ Dapple.getFirstContractBlock = () => {
 
 const tokens = {
   kovan: {
-    'W-ETH': '0x53eccC9246C1e537d79199d0C7231e425a40f896',
+    'W-ETH': '0x53eccc9246c1e537d79199d0c7231e425a40f896',
     DAI: '0x0000000000000000000000000000000000000000',
-    MKR: '0x4bB514a7F83FBB13c2B41448208e89FabBcfe2fB',
-    DGD: '0xBb7697D091A2B9428053E2D42D088fCD2a6a0Aaf',
-    GNT: '0xecE9Fa304cC965B00afC186f5D0281a00D3dbBFD',
+    MKR: '0x4bb514a7f83fbb13c2b41448208e89fabbcfe2fb',
+    DGD: '0xbb7697d091a2b9428053e2d42d088fcd2a6a0aaf',
+    GNT: '0xece9fa304cc965b00afc186f5d0281a00d3dbbfd',
     'W-GNT': '0xbd1ceb35769eb44b641c8e257005817183fc2817',
-    REP: '0x99e846CfE0321260e51963A2114BC4008d092E24',
-    ICN: '0x8A55Df5dE91eCEB816bd9263d2e5F35FD516D4D0',
-    '1ST': '0x846F258ac72f8a60920D9B613ce9E91F8a7a7b54',
-    SNGLS: '0xF7d57c676Ac2Bc4997ca5d4D34aDc0d072213D29',
-    VSL: '0x2E65483308968F5210167a23BdB46ec94752fe39',
-    PLU: '0x00a0fCAA32b47C4AB4a8fDDA6D108E5c1FfD8E4f',
-    MLN: '0xc3ce96164012eD51c9B1e34a9323fDC38c96aD8A',
+    REP: '0x99e846cfe0321260e51963a2114bc4008d092e24',
+    ICN: '0x8a55df5de91eceb816bd9263d2e5f35fd516d4d0',
+    '1ST': '0x846f258ac72f8a60920d9b613ce9e91f8a7a7b54',
+    SNGLS: '0xf7d57c676ac2bc4997ca5d4d34adc0d072213d29',
+    VSL: '0x2e65483308968f5210167a23bdb46ec94752fe39',
+    PLU: '0x00a0fcaa32b47c4ab4a8fdda6d108e5c1ffd8e4f',
+    MLN: '0xc3ce96164012ed51c9b1e34a9323fdc38c96ad8a',
   },
   ropsten: {
     'W-ETH': '0xece9fa304cc965b00afc186f5d0281a00d3dbbfd',
