@@ -1,6 +1,11 @@
 // console.log('package-post-init start')
 Dapple.init = function init(env) {
-  if (env === 'test' || env === 'ropsten') {
+  if (env === 'test' || env === 'kovan') {
+    Dapple.env = 'kovan';
+    Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.kovan);
+    Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments.kovan);
+    Dapple.makerjs = new Dapple.Maker(web3, 'ropsten');
+  } else if (env === 'ropsten') {
     Dapple.env = 'ropsten';
     Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.ropsten);
     Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments.ropsten);
@@ -38,11 +43,28 @@ Dapple.getFirstContractBlock = () => {
     blockNumber = 23612;
   } else if (Dapple.env === 'morden') {
     blockNumber = 1524881;
+  } else if (Dapple.env === 'kovan') {
+    blockNumber = 97049;
   }
   return blockNumber;
 };
 
 const tokens = {
+  kovan: {
+    'W-ETH': '0x53eccC9246C1e537d79199d0C7231e425a40f896',
+    DAI: '0x0000000000000000000000000000000000000000',
+    MKR: '0x4bB514a7F83FBB13c2B41448208e89FabBcfe2fB',
+    DGD: '0xBb7697D091A2B9428053E2D42D088fCD2a6a0Aaf',
+    GNT: '0xecE9Fa304cC965B00afC186f5D0281a00D3dbBFD',
+    'W-GNT': '0xbd1ceb35769eb44b641c8e257005817183fc2817',
+    REP: '0x99e846CfE0321260e51963A2114BC4008d092E24',
+    ICN: '0x8A55Df5dE91eCEB816bd9263d2e5F35FD516D4D0',
+    '1ST': '0x846F258ac72f8a60920D9B613ce9E91F8a7a7b54',
+    SNGLS: '0xF7d57c676Ac2Bc4997ca5d4D34aDc0d072213D29',
+    VSL: '0x2E65483308968F5210167a23BdB46ec94752fe39',
+    PLU: '0x00a0fCAA32b47C4AB4a8fDDA6D108E5c1FfD8E4f',
+    MLN: '0xc3ce96164012eD51c9B1e34a9323fDC38c96aD8A',
+  },
   ropsten: {
     'W-ETH': '0xece9fa304cc965b00afc186f5d0281a00d3dbbfd',
     DAI: '0x0000000000000000000000000000000000000000',
@@ -57,21 +79,6 @@ const tokens = {
     VSL: '0x5017f42cf680fcbcab1093263468745c9af63e35',
     PLU: '0xcfe185ce294b443c16dd89f00527d8b25c45bf9d',
     MLN: '0xd4a8f8293d639752e263be3869057eaf7536e005',
-  },
-  morden: {
-    'W-ETH': '0x52fe88b987c7829e5d5a61c98f67c9c14e6a7a90',
-    DAI: '0xa6581e37bb19afddd5c11f1d4e5fb16b359eb9fc',
-    MKR: '0xffb1c99b389ba527a9194b1606b3565a07da3eef',
-    DGD: '0x3c6f5633b30aa3817fa50b17e5bd30fb49bddd95',
-    GNT: '0x0000000000000000000000000000000000000000',
-    'W-GNT': '0x0000000000000000000000000000000000000000',
-    REP: '0x0000000000000000000000000000000000000000',
-    ICN: '0x0000000000000000000000000000000000000000',
-    '1ST': '0x0000000000000000000000000000000000000000',
-    SNGLS: '0x0000000000000000000000000000000000000000',
-    VSL: '0x0000000000000000000000000000000000000000',
-    PLU: '0x0000000000000000000000000000000000000000',
-    MLN: '0x0000000000000000000000000000000000000000',
   },
   live: {
     'W-ETH': '0xecf8f87f810ecf450940c9f60066b4a7a501d6a7',
