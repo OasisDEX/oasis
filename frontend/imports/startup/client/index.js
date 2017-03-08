@@ -20,7 +20,7 @@ import '../../ui/client/widgets/orderbook.html';
 import '../../ui/client/widgets/sendtokens.js';
 
 import '../../ui/client/headers/accountselector.js';
-import '../../ui/client/headers/balance.html';
+import '../../ui/client/headers/balance.js';
 import '../../ui/client/headers/currencyselector.js';
 import '../../ui/client/headers/marketdetails.html';
 import '../../ui/client/headers/messages.js';
