@@ -354,16 +354,32 @@ Offers.offerContractParameters = (sellHowMuch, sellWhichToken, buyHowMuch, buyWh
   const sellHowMuchAbsolute = convertToTokenPrecision(sellHowMuch, sellWhichToken);
   const buyHowMuchAbsolute = convertToTokenPrecision(buyHowMuch, buyWhichToken);
 
-  return { sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress };
+  // the ID of the offer that is the smallest in the set of offers containing the offers that are higher,
+  // than the offer to be created. If there are multiple offers that satisfy the previous requirement
+  // than the one with the highest ID will be sent to the contract.
+  const options = { sort: { bid_price_sort: -1, buyHowMuch_filter: -1, _id: 1 }};
+  const higherOrdersSorted = Offers.find({ buyWhichToken: buyWhichToken, sellWhichToken: sellWhichToken }, options)
+    .fetch()
+    .filter((offer) => (offer._id.indexOf("0x") != 0));
+    // .filter((offer) => {
+    //     const offerPrice = new BigNumber(offer.sellHowMuch).div(new BigNumber(offer.buyHowMuch));
+    //     const specifiedPrice = new BigNumber(sellHowMuch).div(new BigNumber(buyHowMuch));
+    //     return offerPrice > specifiedPrice;
+    // });
+  const userHigherId = ((higherOrdersSorted.length > 0) ? higherOrdersSorted[higherOrdersSorted.length-1]._id : 0);
+
+  console.log("Found " + higherOrdersSorted.length + " higher orders: " + higherOrdersSorted.map((it) => it._id));
+  console.log("user_higher_id is " + userHigherId);
+
+  return { sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId };
 };
 
 Offers.newOfferGasEstimate = async (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken) => {
-  const { sellHowMuchAbsolute, sellWhichTokenAddress,
-          buyHowMuchAbsolute, buyWhichTokenAddress } = Offers.offerContractParameters(sellHowMuch, sellWhichToken,
-                                                                                      buyHowMuch, buyWhichToken);
+  const { sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId } =
+    Offers.offerContractParameters(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken);
 
   const data = Dapple['maker-otc'].objects.otc.offer.getData(sellHowMuchAbsolute, sellWhichTokenAddress,
-                                                             buyHowMuchAbsolute, buyWhichTokenAddress, 0);
+                                                             buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId);
 
   return new Promise((resolve, reject) => {
     web3.eth.estimateGas({to: Dapple['maker-otc'].environments[Dapple.env].otc.value, data: data}, (error, result) => {
@@ -379,12 +395,11 @@ Offers.newOfferGasEstimate = async (sellHowMuch, sellWhichToken, buyHowMuch, buy
 Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callback) => {
   Offers.newOfferGasEstimate(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken)
       .then((gasEstimate) => {
-        const { sellHowMuchAbsolute, sellWhichTokenAddress,
-                buyHowMuchAbsolute, buyWhichTokenAddress } = Offers.offerContractParameters(sellHowMuch, sellWhichToken,
-                                                                                            buyHowMuch, buyWhichToken);
+        const { sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId } =
+          Offers.offerContractParameters(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken);
 
         Dapple['maker-otc'].objects.otc.offer(sellHowMuchAbsolute, sellWhichTokenAddress,
-                                              buyHowMuchAbsolute, buyWhichTokenAddress, 0,
+                                              buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId,
           {gas: gasEstimate + 500000}, (error, tx) => {
             callback(error, tx);
             if (!error) {
