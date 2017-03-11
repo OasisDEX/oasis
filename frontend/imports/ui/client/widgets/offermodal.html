@@ -84,6 +84,9 @@
                   {{else}}
                     {{#if gasEstimateResult}}
                       This action is estimated to use {{formatGas gasEstimateResult}} gas.
+                      {{#if gasEstimateMoreThanGasLimit}}
+                        This is more than the block gas limit, so your order will fail. Please try to lower the amount.
+                      {{/if}}
                     {{else}}
                       {{#if gasEstimateError}}
                         Gas estimation failed.

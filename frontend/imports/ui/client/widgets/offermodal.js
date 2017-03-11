@@ -19,6 +19,7 @@ Template.offermodal.viewmodel({
   share: 'newOffer',
   gasEstimateInProgress: false,
   gasEstimateResult: null,
+  gasEstimateMoreThanGasLimit: false,
   gasEstimateError: null,
   autorun() {
     this.estimateGasUsage();
@@ -171,6 +172,7 @@ Template.offermodal.viewmodel({
   },
   estimateGasUsage() {
     this.gasEstimateResult(null);
+    this.gasEstimateMoreThanGasLimit(false);
     this.gasEstimateError(null);
     if (this.canSubmit()) {
       this.gasEstimateInProgress(true);
@@ -180,7 +182,8 @@ Template.offermodal.viewmodel({
         .then((result) => {
           if (this.gasEstimateInProgress()) {
             this.gasEstimateError(null);
-            this.gasEstimateResult(result);
+            this.gasEstimateResult(result[0]);
+            this.gasEstimateMoreThanGasLimit(result[0] > result[1]);
             this.gasEstimateInProgress(false);
           }
         })
@@ -188,6 +191,7 @@ Template.offermodal.viewmodel({
           if (this.gasEstimateInProgress()) {
             this.gasEstimateError(error);
             this.gasEstimateResult(null);
+            this.gasEstimateMoreThanGasLimit(false);
             this.gasEstimateInProgress(false);
           }
         });
