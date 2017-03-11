@@ -363,10 +363,12 @@ Offers.offerContractParameters = (sellHowMuch, sellWhichToken, buyHowMuch, buyWh
     .filter((offer) => {
       const offerPrice = new BigNumber(offer.sellHowMuch).div(new BigNumber(offer.buyHowMuch));
       const specifiedPrice = new BigNumber(sellHowMuch).div(new BigNumber(buyHowMuch));
-      return offerPrice > specifiedPrice;
+      return offerPrice.comparedTo(specifiedPrice) > 0;
     })
     .sort((offer1, offer2) => {
-      if (offer1.buyHowMuch != offer2.buyHowMuch) return (offer2.buyHowMuch - offer1.buyHowMuch);
+      const buyHowMuch1 = new BigNumber(offer1.buyHowMuch);
+      const buyHowMuch2 = new BigNumber(offer2.buyHowMuch);
+      if (buyHowMuch1.comparedTo(buyHowMuch2) != 0) return (buyHowMuch2.minus(buyHowMuch1).toNumber());
       else return (offer1._id - offer2._id);
     });
   const userHigherId = ((higherOrdersSorted.length > 0) ? higherOrdersSorted[higherOrdersSorted.length-1]._id : 0);
