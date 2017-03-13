@@ -1,7 +1,8 @@
-[submodule "dapple_packages/maker-otc"]
-	path = dapple_packages/maker-otc
-	url = https://github.com/MakerDAO/maker-otc.git
-	branch = master
-[submodule "dapple_packages/token-wrapper"]
-	path = dapple_packages/token-wrapper
+[submodule "dependencies/maker-otc"]
+	path = dependencies/maker-otc
+	url = https://github.com/r001/maker-otc.git
+	branch = matcher
+[submodule "dependencies/token-wrapper"]
+	path = dependencies/token-wrapper
 	url = https://github.com/makerdao/token-wrapper.git
+	branch = dapp-tool

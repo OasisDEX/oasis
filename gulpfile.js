@@ -8,7 +8,7 @@ var rename = require('gulp-rename');
 
 // npm run build
 gulp.task('build-dapple-maker-otc', function (cb) {
-  exec('dapple build --template meteor --no-deploy-data', {cwd: 'dapple_packages/maker-otc'}, function (err, res, failed) {
+  exec('dapple build --template meteor --no-deploy-data', {cwd: 'dependencies_build/maker-otc'}, function (err, res, failed) {
     if (err) {
       console.log(err)
     } else if (failed) {
@@ -22,14 +22,14 @@ gulp.task('build-dapple-maker-otc', function (cb) {
 
 gulp.task('copy-dapple-maker-otc', ['build-dapple-maker-otc'], function (){
   return gulp.src([
-      'dapple_packages/maker-otc/build/meteor.js'
+      'dependencies_build/maker-otc/build/meteor.js'
   ])
   .pipe(rename('maker-otc.js'))
   .pipe(gulp.dest('frontend/packages/dapple/build/'))
 })
 
 gulp.task('build-dapple-token-wrapper', function (cb) {
-  exec('dapple build --template meteor --no-deploy-data', {cwd: 'dapple_packages/token-wrapper'}, function (err, res, failed) {
+  exec('dapple build --template meteor --no-deploy-data', {cwd: 'dependencies_build/token-wrapper'}, function (err, res, failed) {
     if (err) {
       console.log(err)
     } else if (failed) {
@@ -43,7 +43,7 @@ gulp.task('build-dapple-token-wrapper', function (cb) {
 
 gulp.task('copy-dapple-token-wrapper', ['build-dapple-token-wrapper'], function (){
   return gulp.src([
-      'dapple_packages/token-wrapper/build/meteor.js'
+      'dependencies_build/token-wrapper/build/meteor.js'
   ])
   .pipe(rename('token-wrapper.js'))
   .pipe(gulp.dest('frontend/packages/dapple/build/'))
