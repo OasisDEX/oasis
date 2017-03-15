@@ -199,7 +199,7 @@ Meteor.startup(() => {
   function setMessageAndScheduleRemovalOnError(document) {
     // The ItemUpdate event will be triggered on successful generation, otherwise set helper
     if (document.receipt.logs.length === 0) {
-      Offers.update(document.object.id, {$set: {helper: 'Error during Contract Execution'}});
+      Offers.update(document.object.id, { $set: { helper: 'Error during Contract Execution' } });
       Meteor.setTimeout(() => {
         Offers.remove(document.object.id);
       }, 5000);

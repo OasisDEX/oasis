@@ -115,11 +115,11 @@ Offers.getHistoricalTradesRange = (numberOfPreviousDays) => {
     const startTimestamp = moment(Date.now()).startOf('day').subtract(numberOfPreviousDays, 'days');
     const initialGuess = blockNumberOfTheMostRecentBlock-INITIAL_NUMBER_OF_BLOCKS_BACKWARDS;
     return getBlockNumberOfSomeBlockEarlierThan(startTimestamp, initialGuess).then((foundBlockNumber) => {
-        return {
-            startBlockNumber: foundBlockNumber,
-            startTimestamp: startTimestamp,
-            endBlockNumber: blockNumberOfTheMostRecentBlock
-        };
+      return {
+        startBlockNumber: foundBlockNumber,
+        startTimestamp: startTimestamp,
+        endBlockNumber: blockNumberOfTheMostRecentBlock
+      };
     });
   });
 };
@@ -153,7 +153,7 @@ Offers.syncOffers = () => {
         return b.map(function(y){
           return x.concat(y);
         })
-      }).reduce(function(a,b){ return a.concat(b) },[])
+      }).reduce(function(a,b){ return a.concat(b) }, [])
     }, [[]]);
   }
 
@@ -266,30 +266,30 @@ Offers.getBlock = function getBlock(blockNumber) {
 };
 
 Offers.getLowestOfferId = function getLowestOfferId(sellToken, buyToken) {
-    const sellTokenAddress = Dapple.getTokenAddress(sellToken);
-    const buyTokenAddress = Dapple.getTokenAddress(buyToken);
+  const sellTokenAddress = Dapple.getTokenAddress(sellToken);
+  const buyTokenAddress = Dapple.getTokenAddress(buyToken);
 
-    return new Promise((resolve, reject) => {
-        Dapple['maker-otc'].objects.otc.getLowestOffer(sellTokenAddress, buyTokenAddress, (error, id) => {
-            if (!error) {
-                resolve(id);
-            } else {
-                reject(error);
-            }
-        });
+  return new Promise((resolve, reject) => {
+    Dapple['maker-otc'].objects.otc.getLowestOffer(sellTokenAddress, buyTokenAddress, (error, id) => {
+      if (!error) {
+        resolve(id);
+      } else {
+        reject(error);
+      }
     });
+  });
 };
 
 Offers.getHigherOfferId = function getHigherOfferId(existingId) {
-    return new Promise((resolve, reject) => {
-        Dapple['maker-otc'].objects.otc.getHigherOfferId(existingId, (error, id) => {
-            if (!error) {
-                resolve(id);
-            } else {
-                reject(error);
-            }
-        });
+  return new Promise((resolve, reject) => {
+    Dapple['maker-otc'].objects.otc.getHigherOfferId(existingId, (error, id) => {
+      if (!error) {
+        resolve(id);
+      } else {
+        reject(error);
+      }
     });
+  });
 };
 
 /**
