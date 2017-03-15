@@ -4,8 +4,10 @@ import { $ } from 'meteor/jquery';
 import { BigNumber } from 'meteor/ethereum:web3';
 import { web3 } from 'meteor/makerotc:dapple';
 import { formatError } from '/imports/utils/functions';
+import { convertToTokenPrecision } from '/imports/utils/conversion';
 
 import Tokens from '/imports/api/tokens';
+import Limits from '/imports/api/limits';
 import { Offers, Status } from '/imports/api/offers';
 
 import './offermodal.html';
@@ -44,6 +46,20 @@ Template.offermodal.viewmodel({
                                                                        ? this.offerTotal() : this.offerAmount())));
     } catch (e) {
       return false;
+    }
+  },
+  limit() {
+    const sellToken = this.offerType() === 'buy' ? Session.get('quoteCurrency') : Session.get('baseCurrency');
+    return Limits.limitForToken(sellToken);
+  },
+  aboveLimit() {
+    try {
+      const sellToken = this.offerType() === 'buy' ? Session.get('quoteCurrency') : Session.get('baseCurrency');
+      const sellAmount = this.offerType() === 'buy' ? this.offerTotal() : this.offerAmount();
+      const sellAmountAbsolute = new BigNumber(convertToTokenPrecision(sellAmount, sellToken));
+      return sellAmountAbsolute.greaterThanOrEqualTo(Limits.limitForToken(sellToken));
+    } catch (e) {
+      return true;
     }
   },
   calcNewOfferTotal() {
@@ -145,8 +161,9 @@ Template.offermodal.viewmodel({
       const total = new BigNumber(this.offerTotal());
       const maxTotal = new BigNumber(this.maxNewOfferTotal());
       const marketOpen = Session.get('market_open');
+      const aboveLimit = this.aboveLimit();
       const validTokenPair = Session.get('quoteCurrency') !== Session.get('baseCurrency');
-      return marketOpen && price.gt(0) && amount.gt(0) && total.gt(0) && validTokenPair &&
+      return marketOpen && price.gt(0) && amount.gt(0) && total.gt(0) && validTokenPair && aboveLimit &&
         (type !== 'buy' || total.lte(maxTotal)) && (type !== 'sell' || amount.lte(maxAmount));
     } catch (e) {
       return false;

@@ -4,6 +4,7 @@ import { Dapple, web3 } from 'meteor/makerotc:dapple';
 import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
 
+import Limits from '/imports/api/limits';
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
 import TokenEvents from '/imports/api/tokenEvents';
@@ -44,6 +45,7 @@ function initNetwork(newNetwork) {
   Session.set('latestBlock', 0);
   Session.set('startBlock', 0);
   Tokens.sync();
+  Limits.sync();
   Offers.sync();
 }
 
@@ -127,6 +129,7 @@ function initSession() {
 
   Session.set('balanceLoaded', false);
   Session.set('allowanceLoaded', false);
+  Session.set('limitsLoaded', false);
 
   doHashChange();
 
@@ -159,6 +162,7 @@ Meteor.startup(() => {
 
   web3.eth.filter('latest', () => {
     Tokens.sync();
+    Limits.sync();
     Transactions.sync();
     TokenEvents.syncTimestamps();
   });
@@ -182,6 +186,7 @@ Meteor.startup(() => {
         Offers.sync();
         web3.eth.filter('latest', () => {
           Tokens.sync();
+          Limits.sync();
           Transactions.sync();
         });
       }

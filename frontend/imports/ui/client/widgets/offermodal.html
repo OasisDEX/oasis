@@ -55,17 +55,26 @@
                 {{#unless validNewOrderAmount}}
                   Amount is invalid because {{baseCurrency}} has no decimals.
                 {{else}}
-                  {{#unless hasAllowanceNewOrder offerType}}
-                    You are trying to create a {{offerType}} order above your <strong>defined allowance</strong>.
-                  {{else}}
-                    {{#unless canSubmit}}
-                      You are trying to create an invalid {{offerType}} order. Please check the price and the amounts.
+                  {{#unless aboveLimit}}
+                    You are trying to create a {{offerType}} order below the minimum <strong>market limit</strong>,
+                    {{#if equals offerType 'buy'}}
+                      which is {{{formatBalance limit '' '' true}}} {{quoteCurrency}}.
                     {{else}}
-                      {{#if equals offerType 'buy'}}
-                        This action will remove {{{formatBalance (toWei offerTotal) '' '' true}}} {{quoteCurrency}} {{formatPrice (toWei offerTotal) quoteCurrency}} from your token balance and allowance.
+                      which is {{{formatBalance limit '' '' true}}} {{baseCurrency}}.
+                    {{/if}}
+                  {{else}}
+                    {{#unless hasAllowanceNewOrder offerType}}
+                      You are trying to create a {{offerType}} order above your <strong>defined allowance</strong>.
+                    {{else}}
+                      {{#unless canSubmit}}
+                        You are trying to create an invalid {{offerType}} order. Please check the price and the amounts.
                       {{else}}
-                        This action will remove {{{formatBalance (toWei offerAmount) '' '' true}}} {{baseCurrency}} {{formatPrice (toWei offerAmount) baseCurrency}} from your token balance and allowance.
-                      {{/if}}
+                        {{#if equals offerType 'buy'}}
+                          This action will remove {{{formatBalance (toWei offerTotal) '' '' true}}} {{quoteCurrency}} {{formatPrice (toWei offerTotal) quoteCurrency}} from your token balance and allowance.
+                        {{else}}
+                          This action will remove {{{formatBalance (toWei offerAmount) '' '' true}}} {{baseCurrency}} {{formatPrice (toWei offerAmount) baseCurrency}} from your token balance and allowance.
+                        {{/if}}
+                      {{/unless}}
                     {{/unless}}
                   {{/unless}}
                 {{/unless}}

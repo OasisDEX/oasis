@@ -75,7 +75,7 @@ Template.registerHelper('loadingCounter', () => Session.get('loadingCounter'));
 Template.registerHelper('loadingTradeHistory', () => Session.get('loadingTradeHistory'));
 
 Template.registerHelper('loadedCurrencies', () => Session.get('balanceLoaded') === true
-  && Session.get('allowanceLoaded') === true);
+  && Session.get('allowanceLoaded') === true && Session.get('limitsLoaded') === true);
 
 Template.registerHelper('address', () => Session.get('address'));
 
