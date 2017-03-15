@@ -32,7 +32,7 @@ environments:
   kovan:
     objects:
       otc:
-        value: '0x72eA71A7D784077393AB66FdC5dD93f0D94cA2A0'
+        value: '0x5490ebdbABC74046855A3104095E71f19BE97f20'
         type: >-
           ExpiringMarket[]
     type: kovan
