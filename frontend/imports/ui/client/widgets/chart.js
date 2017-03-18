@@ -125,7 +125,12 @@ Template.chart.viewmodel({
                 },
               }],
               xAxes: [{
+                type: 'linear',
+                position: 'bottom',
                 display: false,
+                ticks: {
+                  stepSize: 0.1
+                }
               }],
             },
           },
@@ -203,7 +208,9 @@ Template.chart.viewmodel({
           return -1;
         }
         return 1;
-      }));
+      }))
+      // Remove upper values so that the spread is seen at the middle
+      .filter(val => val <= askPrices[0] * 2);
 
       // Preparing arrays for graph
       const askAmountsGraph = [];
