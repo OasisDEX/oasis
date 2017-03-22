@@ -1,4 +1,4 @@
-export default class DappleTokenSpy {
+export default class DappTokenSpy {
   constructor(canLookup, canCall) {
     this.canLookup = canLookup;
     this.canCall = canCall;

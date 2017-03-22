@@ -1,7 +1,7 @@
 import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
 import { BigNumber } from 'meteor/ethereum:web3';
-import { web3 } from 'meteor/makerotc:dapple';
+import { web3 } from 'meteor/makerotc:dapp';
 
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
@@ -77,7 +77,7 @@ Template.ethtokens.viewmodel({
         value: web3.toWei(this.amount()),
       };
       // XXX EIP20
-      Dapple.getToken('W-ETH', (error, token) => {
+      dapp.getToken('W-ETH', (error, token) => {
         if (!error) {
           Session.set('ETHDepositProgress', 33);
           Session.set('ETHDepositProgressMessage', 'Starting deposit... (waiting for your approval)');
@@ -102,7 +102,7 @@ Template.ethtokens.viewmodel({
       });
     } else {
       // XXX EIP20
-      Dapple.getToken('W-ETH', (error, token) => {
+      dapp.getToken('W-ETH', (error, token) => {
         if (!error) {
           Session.set('ETHWithdrawProgress', 33);
           Session.set('ETHWithdrawProgressMessage', 'Starting withdraw... (waiting for your approval)');

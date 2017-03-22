@@ -1,7 +1,7 @@
 Package.describe({
-  name: 'makerotc:dapple',
+  name: 'makerotc:dapp',
   version: '0.0.1',
-  summary: 'Dapple related code for MakerOTC',
+  summary: 'dapp related code for MakerOTC',
   git: '',
   documentation: 'README.md',
 });
@@ -19,5 +19,5 @@ Package.onUse((api) => {
   api.addFiles(['package-post-init.js'], 'client');
 
   api.export('web3', 'client');
-  api.export('Dapple', 'client');
+  api.export('dapp', 'client');
 });

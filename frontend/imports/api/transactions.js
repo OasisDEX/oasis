@@ -1,5 +1,5 @@
 import { Mongo } from 'meteor/mongo';
-import { web3 } from 'meteor/makerotc:dapple';
+import { web3 } from 'meteor/makerotc:dapp';
 
 class TransactionsCollection extends Mongo.Collection {
 

@@ -1,38 +1,38 @@
 // console.log('package-post-init start')
-Dapple.init = function init(env) {
+dapp.init = function init(env) {
   if (env === 'test' || env === 'kovan') {
-    Dapple.env = 'kovan';
-    Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.kovan);
-    Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments.kovan);
-    Dapple.makerjs = new Dapple.Maker(web3, 'kovan');
+    dapp.env = 'kovan';
+    dapp['maker-otc'].class(web3, dapp['maker-otc'].environments.kovan);
+    dapp['token-wrapper'].class(web3, dapp['token-wrapper'].environments.kovan);
+    dapp.makerjs = new dapp.Maker(web3, 'kovan');
   } else if (env === 'ropsten') {
-    Dapple.env = 'ropsten';
-    Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.ropsten);
-    Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments.ropsten);
-    Dapple.makerjs = new Dapple.Maker(web3, 'ropsten');
+    dapp.env = 'ropsten';
+    dapp['maker-otc'].class(web3, dapp['maker-otc'].environments.ropsten);
+    dapp['token-wrapper'].class(web3, dapp['token-wrapper'].environments.ropsten);
+    dapp.makerjs = new dapp.Maker(web3, 'ropsten');
   } else if (env === 'live' || env === 'main') {
-    Dapple.env = 'live';
-    Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.live);
-    Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments.live);
-    Dapple.makerjs = new Dapple.Maker(web3, 'live');
+    dapp.env = 'live';
+    dapp['maker-otc'].class(web3, dapp['maker-otc'].environments.live);
+    dapp['token-wrapper'].class(web3, dapp['token-wrapper'].environments.live);
+    dapp.makerjs = new dapp.Maker(web3, 'live');
   } else if (env === 'private') {
-    Dapple.env = 'develop';
-    Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.develop);
-    Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments.develop);
-    Dapple.makerjs = new Dapple.Maker(web3, 'develop');
+    dapp.env = 'develop';
+    dapp['maker-otc'].class(web3, dapp['maker-otc'].environments.develop);
+    dapp['token-wrapper'].class(web3, dapp['token-wrapper'].environments.develop);
+    dapp.makerjs = new dapp.Maker(web3, 'develop');
   } else if (env === 'default') {
-    Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.default);
-    Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments.default);
+    dapp['maker-otc'].class(web3, dapp['maker-otc'].environments.default);
+    dapp['token-wrapper'].class(web3, dapp['token-wrapper'].environments.default);
   } else if (env === 'morden') {
-    Dapple.env = 'morden';
-    Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.morden);
-    Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments.morden);
-    Dapple.makerjs = new Dapple.Maker(web3, 'morden');
+    dapp.env = 'morden';
+    dapp['maker-otc'].class(web3, dapp['maker-otc'].environments.morden);
+    dapp['token-wrapper'].class(web3, dapp['token-wrapper'].environments.morden);
+    dapp.makerjs = new dapp.Maker(web3, 'morden');
   }
 
   if (env !== false) {
     // Check if contract exists on new environment
-    const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
+    const contractAddress = dapp['maker-otc'].environments[dapp.env].otc.value;
     web3.eth.getCode(contractAddress, (error, code) => {
       Session.set('contractExists', !error && typeof code === 'string' && code !== '' && code !== '0x');
     });
@@ -119,42 +119,42 @@ const tokenSpecs = {
   MLN: { precision: 18, format: '0,0.00[0000000000000000]' },
 };
 
-Dapple.getQuoteTokens = () => ['W-ETH'];
+dapp.getQuoteTokens = () => ['W-ETH'];
 
-Dapple.getBaseTokens = () => ['MKR', 'DGD', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN'];
+dapp.getBaseTokens = () => ['MKR', 'DGD', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN'];
 
-Dapple.getTokens = () => ['W-ETH', 'MKR', 'DGD', 'GNT', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN'];
+dapp.getTokens = () => ['W-ETH', 'MKR', 'DGD', 'GNT', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN'];
 
-Dapple.getTokenSpecs = (symbol) => {
+dapp.getTokenSpecs = (symbol) => {
   if (typeof (tokenSpecs[symbol]) !== 'undefined') {
     return tokenSpecs[symbol];
   }
   return tokenSpecs['W-ETH'];
 };
 
-Dapple.getTokenAddress = (symbol) => tokens[Dapple.env][symbol];
+dapp.getTokenAddress = (symbol) => tokens[dapp.env][symbol];
 
-Dapple.getTokenByAddress = (address) => _.invert(tokens[Dapple.env])[address];
+dapp.getTokenByAddress = (address) => _.invert(tokens[dapp.env])[address];
 
-Dapple.getToken = (symbol, callback) => {
-  if (!(Dapple.env in tokens)) {
+dapp.getToken = (symbol, callback) => {
+  if (!(dapp.env in tokens)) {
     callback('Unknown environment', null);
     return;
   }
-  if (!(symbol in tokens[Dapple.env])) {
+  if (!(symbol in tokens[dapp.env])) {
     callback(`Unknown token "${symbol}"`, null);
     return;
   }
 
   let tokenClass = 'DSTokenFrontend';
-  const address = Dapple.getTokenAddress(symbol);
-  let that = Dapple.makerjs.dappsys;
+  const address = dapp.getTokenAddress(symbol);
+  let that = dapp.makerjs.dappsys;
 
   if (symbol === 'W-ETH') {
     tokenClass = 'DSEthToken';
   } else if (symbol === 'W-GNT') {
     tokenClass = 'TokenWrapper';
-    that = Dapple['token-wrapper'];
+    that = dapp['token-wrapper'];
   }
 
   try {

@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 import { BigNumber } from 'meteor/ethereum:web3';
-import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { dapp, web3 } from 'meteor/makerotc:dapp';
 import { $ } from 'meteor/jquery';
 
 import Transactions from '/imports/api/transactions';
@@ -41,11 +41,11 @@ Template.newallowance.viewmodel({
 
     this.lastError('');
 
-    const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
+    const contractAddress = dapp['maker-otc'].environments[dapp.env].otc.value;
     const options = { gas: APPROVE_GAS };
 
     // XXX EIP20
-    Dapple.getToken(this.templateInstance.data.token._id, (error, token) => {
+    dapp.getToken(this.templateInstance.data.token._id, (error, token) => {
       if (!error) {
         token.approve(contractAddress,
           convertToTokenPrecision(this.value(), this.templateInstance.data.token._id), options, (txError, tx) => {

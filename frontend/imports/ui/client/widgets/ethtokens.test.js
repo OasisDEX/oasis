@@ -1,7 +1,7 @@
 import { chai } from 'meteor/practicalmeteor:chai';
 import { MeteorStubs } from 'meteor/velocity:meteor-stubs';
 import StubCollections from 'meteor/hwillson:stub-collections';
-import DappleTokenSpy from '/imports/test/dapple-token-spy';
+import DappTokenSpy from '/imports/test/dapp-token-spy';
 import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
 
@@ -18,17 +18,17 @@ const fakeEvent = {
 
 describe('EthTokens View Model', () => {
   let vm;
-  let dappleBackup;
+  let dappBackup;
   beforeEach(() => {
     vm = Template.ethtokens.createViewModel();
     MeteorStubs.install();
     StubCollections.stub([Tokens, Transactions]);
-    dappleBackup = Dapple;
+    dappBackup = dapp;
   });
   afterEach(() => {
     MeteorStubs.uninstall();
     StubCollections.restore();
-    Dapple = dappleBackup;
+    dapp = dappBackup;
   });
   it('should have default properties', () => {
     chai.assert.equal(vm.type(), 'deposit');
@@ -73,8 +73,8 @@ describe('EthTokens View Model', () => {
       Tokens.insert({ _id: 'W-ETH', balance: '3450000000000000000' });
     });
     it('should call token.deposit when depositing', () => {
-      const tokenSpy = new DappleTokenSpy(true, true);
-      Dapple = tokenSpy;
+      const tokenSpy = new DappTokenSpy(true, true);
+      dapp = tokenSpy;
       vm.type('deposit');
       vm.amount('1.00');
       vm.deposit(fakeEvent);
@@ -84,32 +84,32 @@ describe('EthTokens View Model', () => {
       chai.assert.deepEqual(tx.object, { type: 'deposit', amount: '1.00' });
     });
     it('should set lastError when an error happens getting the token upon deposit', () => {
-      const tokenSpy = new DappleTokenSpy(false, true);
-      Dapple = tokenSpy;
+      const tokenSpy = new DappTokenSpy(false, true);
+      dapp = tokenSpy;
       vm.type('deposit');
       vm.amount('1.00');
       vm.deposit(fakeEvent);
       chai.assert.equal(vm.lastError(), 'token lookup error');
     });
     it('should set lastError when an error happens getting the token upon withdraw', () => {
-      const tokenSpy = new DappleTokenSpy(false, true);
-      Dapple = tokenSpy;
+      const tokenSpy = new DappTokenSpy(false, true);
+      dapp = tokenSpy;
       vm.type('withdraw');
       vm.amount('1.00');
       vm.deposit(fakeEvent);
       chai.assert.equal(vm.lastError(), 'token lookup error');
     });
     it('should set lastError when an error happens calling the token upon deposit', () => {
-      const tokenSpy = new DappleTokenSpy(true, false);
-      Dapple = tokenSpy;
+      const tokenSpy = new DappTokenSpy(true, false);
+      dapp = tokenSpy;
       vm.type('deposit');
       vm.amount('1.00');
       vm.deposit(fakeEvent);
       chai.assert.equal(vm.lastError(), 'token.deposit call error');
     });
     it('should set lastError when an error happens calling the token upon withdraw', () => {
-      const tokenSpy = new DappleTokenSpy(true, false);
-      Dapple = tokenSpy;
+      const tokenSpy = new DappTokenSpy(true, false);
+      dapp = tokenSpy;
       vm.type('withdraw');
       vm.amount('1.00');
       vm.deposit(fakeEvent);

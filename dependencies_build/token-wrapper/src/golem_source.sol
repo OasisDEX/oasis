@@ -1,1 +1,0 @@
-../../../dependencies/token-wrapper/src/golem_source.sol

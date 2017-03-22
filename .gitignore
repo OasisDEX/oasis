@@ -3,7 +3,7 @@
 .publish/
 .vscode/
 scripts/blockchain/tmp
-frontend/packages/dapple/build/
+frontend/packages/dapp/build/
 dist/
 node_modules/
 npm-debug.log

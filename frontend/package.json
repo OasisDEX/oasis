@@ -58,7 +58,7 @@
       "node": true
     },
     "globals": {
-      "Dapple": true,
+      "dapp": true,
       "describe": false,
       "it": false,
       "before": false,

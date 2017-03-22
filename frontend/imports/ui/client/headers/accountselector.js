@@ -1,6 +1,6 @@
 import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
-import { web3 } from 'meteor/makerotc:dapple';
+import { web3 } from 'meteor/makerotc:dapp';
 
 import Tokens from '/imports/api/tokens';
 

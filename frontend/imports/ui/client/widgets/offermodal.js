@@ -2,7 +2,7 @@ import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
 import { $ } from 'meteor/jquery';
 import { BigNumber } from 'meteor/ethereum:web3';
-import { web3 } from 'meteor/makerotc:dapple';
+import { web3 } from 'meteor/makerotc:dapp';
 import { formatError } from '/imports/utils/functions';
 import { convertToTokenPrecision } from '/imports/utils/conversion';
 
@@ -27,7 +27,7 @@ Template.offermodal.viewmodel({
     this.estimateGasUsage();
   },
   precision() {
-    return Dapple.getTokenSpecs(Session.get('baseCurrency')).precision;
+    return dapp.getTokenSpecs(Session.get('baseCurrency')).precision;
   },
   validNewOrderAmount: true,
   quoteToken() {

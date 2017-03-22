@@ -22,9 +22,9 @@
       "localStorage",
       "Template",
       "EthTools",
-      "Dapple",
       "BigNumber",
       "web3",
+      "dapp",
       "Spacebars",
       "Offers",
       "Trades",
@@ -36,7 +36,6 @@
       "_"
     ],
     "ignore": [
-      "dapple_packages/**",
       "frontend/.meteor/**",
       "frontend/packages/**",
       "scripts/**"

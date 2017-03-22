@@ -1,7 +1,7 @@
 import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
 import { BigNumber } from 'meteor/ethereum:web3';
-import { web3 } from 'meteor/makerotc:dapple';
+import { web3 } from 'meteor/makerotc:dapp';
 
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
@@ -47,7 +47,7 @@ Template.gnttokens.viewmodel({
   },
   clearBroker(event) {
     event.preventDefault();
-    Dapple['token-wrapper'].classes.DepositBroker.at(this.broker()).clear({ gas: CLEAR_BROKER_GAS }, (txError, tx) => {
+    dapp['token-wrapper'].classes.DepositBroker.at(this.broker()).clear({ gas: CLEAR_BROKER_GAS }, (txError, tx) => {
       if (!txError) {
         Session.set('GNTDepositProgress', 90);
         Session.set('GNTDepositProgressMessage', 'Clearing Broker... (waiting for transaction confirmation)');
@@ -97,7 +97,7 @@ Template.gnttokens.viewmodel({
 
     if (this.type() === DEPOSIT) {
       // XXX EIP20
-      Dapple.getToken('W-GNT', (error, token) => {
+      dapp.getToken('W-GNT', (error, token) => {
         if (!error) {
           Session.set('GNTDepositProgress', 10);
           Session.set('GNTDepositProgressMessage', 'Checking if Broker already exists...');
@@ -146,7 +146,7 @@ Template.gnttokens.viewmodel({
       });
     } else {
       // XXX EIP20
-      Dapple.getToken('W-GNT', (error, token) => {
+      dapp.getToken('W-GNT', (error, token) => {
         if (!error) {
           Session.set('GNTWithdrawProgress', 33);
           Session.set('GNTWithdrawProgressMessage', 'Starting withdraw... (waiting for your approval)');

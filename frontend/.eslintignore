@@ -1,7 +1,7 @@
-packages/dapple/package.js
-packages/dapple/package-pre-init.js
-packages/dapple/package-post-init.js
-packages/dapple/maker.js
-packages/dapple/build/maker-otc.js
-packages/dapple/build/token-wrapper.js
+packages/dapp/package.js
+packages/dapp/package-pre-init.js
+packages/dapp/package-post-init.js
+packages/dapp/maker.js
+packages/dapp/build/maker-otc.js
+packages/dapp/build/token-wrapper.js
 imports/utils/Chart.min.js

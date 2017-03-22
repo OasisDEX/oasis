@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
-import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { dapp, web3 } from 'meteor/makerotc:dapp';
 import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
 
@@ -38,7 +38,7 @@ function checkAccounts() {
 
 // Initialize everything on new network
 function initNetwork(newNetwork) {
-  Dapple.init(newNetwork);
+  dapp.init(newNetwork);
   checkAccounts();
   Session.set('network', newNetwork);
   Session.set('isConnected', true);

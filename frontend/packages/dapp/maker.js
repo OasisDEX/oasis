@@ -1,13 +1,13 @@
 'use strict';
 /*
 // For geth
-if (typeof Dapple === 'undefined') {
-  var Dapple = {};
+if (typeof dapp === 'undefined') {
+  var dapp = {};
 }
 
 // For browsers
 if (typeof window !== 'undefined') {
-  window.Dapple = Dapple;
+  window.dapp = dapp;
 }
 
 // For Node
@@ -16,7 +16,7 @@ if (typeof web3 === 'undefined' && typeof Web3 === 'undefined') {
 }
 */
 // Dappsys definition
-Dapple['dappsys'] = (function builder() {
+dapp['dappsys'] = (function builder() {
   var environments = {
     'kovan': {
       'objects': {
@@ -4568,7 +4568,7 @@ Dapple['dappsys'] = (function builder() {
   };
 })();
 
-Dapple['Maker'] = (function builder() {
+dapp['Maker'] = (function builder() {
   function sanitize(web3, opts, cb) {
     var defaultOpts = {
       from: web3.eth.defaultAccount || web3.eth.coinbase
@@ -4795,7 +4795,7 @@ Dapple['Maker'] = (function builder() {
     }
 
     this._web3 = web3;
-    this.dappsys = new Dapple.dappsys.class(web3, environment);
+    this.dappsys = new dapp.dappsys.class(web3, environment);
     this.admin = new MakerAdmin(this);
   };
 
@@ -4851,6 +4851,6 @@ Dapple['Maker'] = (function builder() {
 })();
 /*
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = Dapple['dappsys'];
+  module.exports = dapp['dappsys'];
 }
 */

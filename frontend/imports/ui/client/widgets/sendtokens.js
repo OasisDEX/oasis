@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 import { BigNumber } from 'meteor/ethereum:web3';
-import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { dapp, web3 } from 'meteor/makerotc:dapp';
 
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
@@ -15,12 +15,12 @@ const TRANSACTION_TYPE = 'transfer';
 
 Template.sendtokens.viewmodel({
   currency: 'MKR',
-  currencies: Dapple.getTokens(),
+  currencies: dapp.getTokens(),
   recipient: '',
   lastError: '',
   validAmount: true,
   precision() {
-    return Dapple.getTokenSpecs(this.currency()).precision;
+    return dapp.getTokenSpecs(this.currency()).precision;
   },
   pending() {
     return Transactions.findType(TRANSACTION_TYPE);
@@ -68,7 +68,7 @@ Template.sendtokens.viewmodel({
     const options = { gas: TRANSFER_GAS };
 
     // XXX EIP20
-    Dapple.getToken(this.currency(), (error, token) => {
+    dapp.getToken(this.currency(), (error, token) => {
       if (!error) {
         token.transfer(recipient, convertToTokenPrecision(this.amount(), this.currency()), options, (txError, tx) => {
           if (!txError) {

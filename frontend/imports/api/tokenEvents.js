@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 import { Session } from 'meteor/session';
-import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { dapp, web3 } from 'meteor/makerotc:dapp';
 import { convertTo18Precision } from '/imports/utils/conversion';
 
 class TokenEventCollection extends Mongo.Collection {
@@ -26,17 +26,17 @@ class TokenEventCollection extends Mongo.Collection {
       case 'transfer':
         row.from = event.args.from;
         row.to = event.args.to;
-        row.amount = convertTo18Precision(event.args.value, Dapple.getTokenByAddress(event.address));
+        row.amount = convertTo18Precision(event.args.value, dapp.getTokenByAddress(event.address));
         break;
       case 'deposit':
         row.from = event.args.who;
         row.to = event.address;
-        row.amount = convertTo18Precision(event.args.amount, Dapple.getTokenByAddress(event.address));
+        row.amount = convertTo18Precision(event.args.amount, dapp.getTokenByAddress(event.address));
         break;
       case 'withdrawal':
         row.from = event.address;
         row.to = event.args.who;
-        row.amount = convertTo18Precision(event.args.amount, Dapple.getTokenByAddress(event.address));
+        row.amount = convertTo18Precision(event.args.amount, dapp.getTokenByAddress(event.address));
         break;
       default:
         break;
@@ -70,9 +70,9 @@ class TokenEventCollection extends Mongo.Collection {
   watchTokenEvents() {
     if (Session.get('startBlock') !== 0) {
       // console.log('filtering token events from ', Session.get('startBlock'));
-      const ALL_TOKENS = Dapple.getTokens();
+      const ALL_TOKENS = dapp.getTokens();
       ALL_TOKENS.forEach((tokenId) => {
-        Dapple.getToken(tokenId, (error, token) => {
+        dapp.getToken(tokenId, (error, token) => {
           if (!error) {
             const events = token.allEvents({
               fromBlock: Session.get('startBlock'),
@@ -91,9 +91,9 @@ class TokenEventCollection extends Mongo.Collection {
   }
 
   watchGNTTokenEvents() {
-    Dapple.getToken('GNT', (errorGNT, GNT) => {
+    dapp.getToken('GNT', (errorGNT, GNT) => {
       if (!errorGNT) {
-        Dapple.getToken('W-GNT', (errorWGNT, WGNT) => {
+        dapp.getToken('W-GNT', (errorWGNT, WGNT) => {
           if (!errorWGNT) {
             WGNT.getBroker.call((errorBroker, broker) => {
               if (!errorBroker && broker !== '0x0000000000000000000000000000000000000000') {
@@ -105,7 +105,7 @@ class TokenEventCollection extends Mongo.Collection {
                         blockNumber: eventDeposit.blockNumber,
                         transactionHash: eventDeposit.transactionHash,
                         timestamp: null,
-                        token: Dapple.getTokenByAddress(WGNT.address),
+                        token: dapp.getTokenByAddress(WGNT.address),
                         type: 'deposit',
                         from: Session.get('address'),
                         to: WGNT.address,
@@ -122,7 +122,7 @@ class TokenEventCollection extends Mongo.Collection {
                         blockNumber: eventWithdrawal.blockNumber,
                         transactionHash: eventWithdrawal.transactionHash,
                         timestamp: null,
-                        token: Dapple.getTokenByAddress(WGNT.address),
+                        token: dapp.getTokenByAddress(WGNT.address),
                         type: 'withdrawal',
                         from: WGNT.address,
                         to: Session.get('address'),

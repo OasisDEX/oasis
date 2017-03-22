@@ -1,7 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 import { Session } from 'meteor/session';
 import { BigNumber } from 'meteor/ethereum:web3';
-import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { dapp, web3 } from 'meteor/makerotc:dapp';
 import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
 
@@ -79,7 +79,7 @@ Trades.helpers(helpers);
  */
 Offers.checkMarketOpen = () => {
    // Fetch the market close time
-  Dapple['maker-otc'].objects.otc.close_time((error, t) => {
+  dapp['maker-otc'].objects.otc.close_time((error, t) => {
     if (!error) {
       const closeTime = t.toNumber();
       Session.set('close_time', closeTime);
@@ -138,7 +138,7 @@ Offers.syncOffers = () => {
 
   // Watch ItemUpdate Event
   /* eslint new-cap: ["error", { "capIsNewExceptions": ["ItemUpdate", "Trade"] }] */
-  Dapple['maker-otc'].objects.otc.ItemUpdate((error, result) => {
+  dapp['maker-otc'].objects.otc.ItemUpdate((error, result) => {
     if (!error) {
       const id = result.args.id.toNumber();
       Offers.syncOffer(id);
@@ -178,7 +178,7 @@ Offers.syncOffers = () => {
   Session.set('loading', true);
   Session.set('loadingCounter', 0);
 
-  const currencyPairs = cartesianProduct([Dapple.getQuoteTokens(), Dapple.getBaseTokens()]);
+  const currencyPairs = cartesianProduct([dapp.getQuoteTokens(), dapp.getBaseTokens()]);
   const promisesLowestOfferId = flatten(currencyPairs.map((pair) => [Offers.getLowestOfferId(pair[0], pair[1]),
                                                                      Offers.getLowestOfferId(pair[1], pair[0])]));
   const promisesSync = promisesLowestOfferId.map((promise) => promise.then(syncOfferAndAllHigherOnes));
@@ -189,8 +189,8 @@ Offers.syncOffers = () => {
 
 Offers.syncTrades = (historicalTradesRange) => {
   function transformArgs(trade) {
-    const buyWhichToken = Dapple.getTokenByAddress(trade.args.buy_which_token);
-    const sellWhichToken = Dapple.getTokenByAddress(trade.args.sell_which_token);
+    const buyWhichToken = dapp.getTokenByAddress(trade.args.buy_which_token);
+    const sellWhichToken = dapp.getTokenByAddress(trade.args.sell_which_token);
 
     if (buyWhichToken && sellWhichToken) {
       // Transform arguments
@@ -209,7 +209,7 @@ Offers.syncTrades = (historicalTradesRange) => {
 
 
   // Get all Trade events in one go so we can fill up prices, volume and history
-  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: historicalTradesRange.startBlockNumber,
+  dapp['maker-otc'].objects.otc.Trade({}, { fromBlock: historicalTradesRange.startBlockNumber,
     toBlock: historicalTradesRange.endBlockNumber }).get((error, trades) => {
     if (!error) {
       let trade = null;
@@ -238,7 +238,7 @@ Offers.syncTrades = (historicalTradesRange) => {
   });
 
   // Watch Trade events in realtime
-  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: historicalTradesRange.endBlockNumber+1 }, (error, trade) => {
+  dapp['maker-otc'].objects.otc.Trade({}, { fromBlock: historicalTradesRange.endBlockNumber+1 }, (error, trade) => {
     if (!error) {
       const args = transformArgs(trade);
       if (args) {
@@ -266,11 +266,11 @@ Offers.getBlock = function getBlock(blockNumber) {
 };
 
 Offers.getLowestOfferId = function getLowestOfferId(sellToken, buyToken) {
-  const sellTokenAddress = Dapple.getTokenAddress(sellToken);
-  const buyTokenAddress = Dapple.getTokenAddress(buyToken);
+  const sellTokenAddress = dapp.getTokenAddress(sellToken);
+  const buyTokenAddress = dapp.getTokenAddress(buyToken);
 
   return new Promise((resolve, reject) => {
-    Dapple['maker-otc'].objects.otc.getLowestOffer(sellTokenAddress, buyTokenAddress, (error, id) => {
+    dapp['maker-otc'].objects.otc.getLowestOffer(sellTokenAddress, buyTokenAddress, (error, id) => {
       if (!error) {
         resolve(id);
       } else {
@@ -282,7 +282,7 @@ Offers.getLowestOfferId = function getLowestOfferId(sellToken, buyToken) {
 
 Offers.getHigherOfferId = function getHigherOfferId(existingId) {
   return new Promise((resolve, reject) => {
-    Dapple['maker-otc'].objects.otc.getHigherOfferId(existingId, (error, id) => {
+    dapp['maker-otc'].objects.otc.getHigherOfferId(existingId, (error, id) => {
       if (!error) {
         resolve(id);
       } else {
@@ -296,7 +296,7 @@ Offers.getHigherOfferId = function getHigherOfferId(existingId) {
  * Syncs up a single offer
  */
 Offers.syncOffer = (id) => {
-  Dapple['maker-otc'].objects.otc.offers(id, (error, data) => {
+  dapp['maker-otc'].objects.otc.offers(id, (error, data) => {
     if (!error) {
       const idx = id.toString();
       const [sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress, owner, active] = data;
@@ -312,8 +312,8 @@ Offers.syncOffer = (id) => {
 };
 
 Offers.updateOffer = (idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress, owner, status) => {
-  const sellToken = Dapple.getTokenByAddress(sellWhichTokenAddress);
-  const buyToken = Dapple.getTokenByAddress(buyWhichTokenAddress);
+  const sellToken = dapp.getTokenByAddress(sellWhichTokenAddress);
+  const buyToken = dapp.getTokenByAddress(buyWhichTokenAddress);
 
   if (sellToken && buyToken) {
     let sellHowMuchValue = convertTo18Precision(sellHowMuch, sellToken);
@@ -348,8 +348,8 @@ Offers.updateOffer = (idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWh
 };
 
 Offers.offerContractParameters = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken) => {
-  const sellWhichTokenAddress = Dapple.getTokenAddress(sellWhichToken);
-  const buyWhichTokenAddress = Dapple.getTokenAddress(buyWhichToken);
+  const sellWhichTokenAddress = dapp.getTokenAddress(sellWhichToken);
+  const buyWhichTokenAddress = dapp.getTokenAddress(buyWhichToken);
 
   const sellHowMuchAbsolute = convertToTokenPrecision(sellHowMuch, sellWhichToken);
   const buyHowMuchAbsolute = convertToTokenPrecision(buyHowMuch, buyWhichToken);
@@ -383,12 +383,12 @@ Offers.newOfferGasEstimate = async (sellHowMuch, sellWhichToken, buyHowMuch, buy
   const { sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId } =
     Offers.offerContractParameters(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken);
 
-  const data = Dapple['maker-otc'].objects.otc.offer.getData(sellHowMuchAbsolute, sellWhichTokenAddress,
+  const data = dapp['maker-otc'].objects.otc.offer.getData(sellHowMuchAbsolute, sellWhichTokenAddress,
                                                              buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId);
 
   const latestBlockPromise = Offers.getBlock('latest');
   const estimateGasPromise = new Promise((resolve, reject) => {
-    web3.eth.estimateGas({to: Dapple['maker-otc'].environments[Dapple.env].otc.value, data: data}, (error, result) => {
+    web3.eth.estimateGas({to: dapp['maker-otc'].environments[dapp.env].otc.value, data: data}, (error, result) => {
       if (!error) {
         resolve(result);
       } else {
@@ -408,7 +408,7 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
         const { sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId } =
           Offers.offerContractParameters(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken);
 
-        Dapple['maker-otc'].objects.otc.offer(sellHowMuchAbsolute, sellWhichTokenAddress,
+        dapp['maker-otc'].objects.otc.offer(sellHowMuchAbsolute, sellWhichTokenAddress,
                                               buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId,
           {gas: Math.min(gasEstimate[0] + 500000, gasEstimate[1])}, (error, tx) => {
             callback(error, tx);
@@ -425,7 +425,7 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
 Offers.cancelOffer = (idx) => {
   const id = parseInt(idx, 10);
   Offers.update(idx, { $unset: { helper: '' } });
-  Dapple['maker-otc'].objects.otc.cancel(id, { gas: CANCEL_GAS }, (error, tx) => {
+  dapp['maker-otc'].objects.otc.cancel(id, { gas: CANCEL_GAS }, (error, tx) => {
     if (!error) {
       Transactions.add('offer', tx, { id: idx, status: Status.CANCELLED });
       Offers.update(idx, { $set: { tx, status: Status.CANCELLED, helper: 'The order is being cancelled...' } });

@@ -1,7 +1,7 @@
 import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
 import { BigNumber } from 'meteor/ethereum:web3';
-import { web3 } from 'meteor/makerotc:dapple';
+import { web3 } from 'meteor/makerotc:dapp';
 
 import Tokens from '/imports/api/tokens';
 import { Offers } from '/imports/api/offers';
@@ -20,7 +20,7 @@ Template.neworder.viewmodel({
     return orderType;
   },
   precision() {
-    return Dapple.getTokenSpecs(Session.get('baseCurrency')).precision;
+    return dapp.getTokenSpecs(Session.get('baseCurrency')).precision;
   },
   sellCurrency() {
     if (this.type() === 'buy') {

@@ -13,8 +13,8 @@ Template.markets.viewmodel({
     this.quoteCurrency(Session.get('quoteCurrency'));
     this.baseCurrency(Session.get('baseCurrency'));
   },
-  quoteCurrencies: Dapple.getQuoteTokens(),
-  baseCurrencies: Dapple.getBaseTokens(),
+  quoteCurrencies: dapp.getQuoteTokens(),
+  baseCurrencies: dapp.getBaseTokens(),
   showDropdownQuoteCurrencies() {
     return this.quoteCurrencies().length > 1;
   },
@@ -76,7 +76,7 @@ Template.markets.viewmodel({
   },
   quoteChange() {
     // XXX EIP20
-    Dapple.getToken(this.quoteCurrency(), (error, token) => {
+    dapp.getToken(this.quoteCurrency(), (error, token) => {
       if (!error) {
         token.totalSupply((callError) => {
           if (!callError) {
@@ -102,7 +102,7 @@ Template.markets.viewmodel({
   baseChange(newBaseCurrency) {
     this.baseCurrency(newBaseCurrency);
     // XXX EIP20
-    Dapple.getToken(this.baseCurrency(), (error, token) => {
+    dapp.getToken(this.baseCurrency(), (error, token) => {
       if (!error) {
         token.totalSupply((callError) => {
           if (!callError) {

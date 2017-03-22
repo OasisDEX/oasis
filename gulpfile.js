@@ -7,46 +7,46 @@ var surge = require('gulp-surge')
 var rename = require('gulp-rename');
 
 // npm run build
-gulp.task('build-dapple-maker-otc', function (cb) {
-  exec('dapple build --template meteor --no-deploy-data', {cwd: 'dependencies_build/maker-otc'}, function (err, res, failed) {
+gulp.task('build-dapp-maker-otc', function (cb) {
+  exec('dapp build && dapp bind', {cwd: 'dependencies/maker-otc'}, function (err, res, failed) {
     if (err) {
       console.log(err)
     } else if (failed) {
       process.stdout.write(failed)
     } else {
-      process.stdout.write('\u001b[32mDapple build completed!\n')
+      process.stdout.write('\u001b[32mdapp build completed!\n')
     }
     cb(err)
   })
 })
 
-gulp.task('copy-dapple-maker-otc', ['build-dapple-maker-otc'], function (){
+gulp.task('copy-dapp-maker-otc', ['build-dapp-maker-otc'], function (){
   return gulp.src([
-      'dependencies_build/maker-otc/build/meteor.js'
+      'dependencies/maker-otc/build/dapp.js'
   ])
   .pipe(rename('maker-otc.js'))
-  .pipe(gulp.dest('frontend/packages/dapple/build/'))
+  .pipe(gulp.dest('frontend/packages/dapp/build/'))
 })
 
-gulp.task('build-dapple-token-wrapper', function (cb) {
-  exec('dapple build --template meteor --no-deploy-data', {cwd: 'dependencies_build/token-wrapper'}, function (err, res, failed) {
+gulp.task('build-dapp-token-wrapper', function (cb) {
+  exec('dapp build && dapp bind', {cwd: 'dependencies/token-wrapper'}, function (err, res, failed) {
     if (err) {
       console.log(err)
     } else if (failed) {
       process.stdout.write(failed)
     } else {
-      process.stdout.write('\u001b[32mDapple build completed!\n')
+      process.stdout.write('\u001b[32mdapp build completed!\n')
     }
     cb(err)
   })
 })
 
-gulp.task('copy-dapple-token-wrapper', ['build-dapple-token-wrapper'], function (){
+gulp.task('copy-dapp-token-wrapper', ['build-dapp-token-wrapper'], function (){
   return gulp.src([
-      'dependencies_build/token-wrapper/build/meteor.js'
+      'dependencies/token-wrapper/build/dapp.js'
   ])
   .pipe(rename('token-wrapper.js'))
-  .pipe(gulp.dest('frontend/packages/dapple/build/'))
+  .pipe(gulp.dest('frontend/packages/dapp/build/'))
 })
 
 // meteor-build-client ../build
@@ -77,8 +77,8 @@ gulp.task('deploy-surge', [], function () {
   })
 })
 
-gulp.task('build-dapple', ['copy-dapple-maker-otc', 'copy-dapple-token-wrapper'])
-gulp.task('deploy', gulpsync.sync(['build-dapple', 'build-meteor', 'deploy-gh-pages']))
+gulp.task('build-dapp', ['copy-dapp-maker-otc', 'copy-dapp-token-wrapper'])
+gulp.task('deploy', gulpsync.sync(['build-dapp', 'build-meteor', 'deploy-gh-pages']))
 
-gulp.task('build', ['build-dapple'])
+gulp.task('build', ['build-dapp'])
 gulp.task('default', ['build'])

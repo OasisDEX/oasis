@@ -50,7 +50,7 @@ export function doHashChange() {
 
 export function txHref(tx) {
   let txLink = '';
-  if (Dapple['maker-otc'].objects) {
+  if (dapp['maker-otc'].objects) {
     const network = Session.get('network');
     const networkPrefix = (network === 'kovan' ? 'kovan.' : '');
     txLink = `https://${networkPrefix}etherscan.io/tx/${tx}`;

@@ -4,7 +4,7 @@ import { moment } from 'meteor/momentjs:moment';
 import { Session } from 'meteor/session';
 import { BigNumber } from 'meteor/ethereum:web3';
 import { _ } from 'meteor/underscore';
-import { web3 } from 'meteor/makerotc:dapple';
+import { web3 } from 'meteor/makerotc:dapp';
 import { Offers, Trades } from '/imports/api/offers';
 import Chart from '/imports/utils/Chart.min';
 import { formatNumber, removeOutliersFromArray } from '/imports/utils/functions';

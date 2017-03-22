@@ -5,7 +5,7 @@ import { Template } from 'meteor/templating';
 import { _ } from 'meteor/underscore';
 import { BigNumber } from 'meteor/ethereum:web3';
 import { EthTools } from 'meteor/ethereum:tools';
-import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { dapp, web3 } from 'meteor/makerotc:dapp';
 import { moment } from 'meteor/momentjs:moment';
 
 import Tokens from '/imports/api/tokens';
@@ -24,18 +24,18 @@ Template.registerHelper('network', () => Session.get('network'));
 
 Template.registerHelper('contractAddress', () => {
   let contractAddress = '';
-  if (Dapple['maker-otc'].objects) {
-    contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
+  if (dapp['maker-otc'].objects) {
+    contractAddress = dapp['maker-otc'].environments[dapp.env].otc.value;
   }
   return contractAddress;
 });
 
 Template.registerHelper('contractHref', () => {
   let contractHref = '';
-  if (Dapple['maker-otc'].objects) {
+  if (dapp['maker-otc'].objects) {
     const network = Session.get('network');
     const networkPrefix = (network === 'ropsten' ? 'testnet.' : '');
-    const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
+    const contractAddress = dapp['maker-otc'].environments[dapp.env].otc.value;
     contractHref = `https://${networkPrefix}etherscan.io/address/${contractAddress}`;
   }
   return contractHref;
@@ -229,7 +229,7 @@ Template.registerHelper('validPrecision', (value, precision) => {
   let displayValue = value;
   /* let tokenPrecision = precision;
   if (isNaN(tokenPrecision)) {
-    const tokenSpecs = Dapple.getTokenSpecs(precision);
+    const tokenSpecs = dapp.getTokenSpecs(precision);
     tokenPrecision = tokenSpecs.precision;
   }*/
   try {

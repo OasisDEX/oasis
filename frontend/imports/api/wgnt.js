@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
-import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { dapp, web3 } from 'meteor/makerotc:dapp';
 import { formatError } from '/imports/utils/functions';
 import Transactions from './transactions';
 
@@ -20,7 +20,7 @@ class WGNT {
         Session.set('GNTDepositProgress', 40);
         Session.set('GNTDepositProgressMessage', 'Transfering to Broker... (Waiting for your approval)');
         // We get the broker, we transfer GNT to it
-        Dapple.getToken('GNT', (err, gntToken) => {
+        dapp.getToken('GNT', (err, gntToken) => {
           gntToken.transfer(broker, web3.toWei(document.object.amount), { gas: TRANSFER_TO_BROKER_GAS },
             (txError, tx) => {
               if (!txError) {
@@ -50,7 +50,7 @@ class WGNT {
         console.log('Transfer to Broker done');
         Session.set('GNTDepositProgress', 75);
         Session.set('GNTDepositProgressMessage', 'Clearing Broker... (Waiting for your approval)');
-        Dapple['token-wrapper'].classes.DepositBroker.at(
+        dapp['token-wrapper'].classes.DepositBroker.at(
           document.object.broker.slice(-40)).clear({ gas: CLEAR_BROKER_GAS }, (txError, tx) => {
             if (!txError) {
               console.log('TX Clear Broker:', tx);

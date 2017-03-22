@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 import { Session } from 'meteor/session';
-import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { dapp, web3 } from 'meteor/makerotc:dapp';
 import { convertTo18Precision } from '/imports/utils/conversion';
 
 class TokensCollection extends Mongo.Collection {
@@ -21,7 +21,7 @@ class TokensCollection extends Mongo.Collection {
 
       // Get GNTBalance
       // XXX EIP20
-      Dapple.getToken('GNT', (error, token) => {
+      dapp.getToken('GNT', (error, token) => {
         if (!error) {
           token.balanceOf(address, (callError, balance) => {
             const newGNTBalance = balance.toString(10);
@@ -44,12 +44,12 @@ class TokensCollection extends Mongo.Collection {
       });
 
       // const ALL_TOKENS = _.uniq([Session.get('quoteCurrency'), Session.get('baseCurrency')]);
-      const ALL_TOKENS = Dapple.getTokens();
+      const ALL_TOKENS = dapp.getTokens();
 
       // Sync token balances and allowances asynchronously
       ALL_TOKENS.forEach((tokenId) => {
         // XXX EIP20
-        Dapple.getToken(tokenId, (error, token) => {
+        dapp.getToken(tokenId, (error, token) => {
           if (!error) {
             token.balanceOf(address, (callError, balance) => {
               if (!error) {
@@ -68,7 +68,7 @@ class TokensCollection extends Mongo.Collection {
                 }
               }
             });
-            const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
+            const contractAddress = dapp['maker-otc'].environments[dapp.env].otc.value;
             token.allowance(address, contractAddress, (callError, allowance) => {
               if (!error) {
                 super.upsert(tokenId, { $set: {

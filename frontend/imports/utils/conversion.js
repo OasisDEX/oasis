@@ -1,9 +1,9 @@
-import { Dapple } from 'meteor/makerotc:dapple';
+import { dapp } from 'meteor/makerotc:dapp';
 import { BigNumber } from 'meteor/ethereum:web3';
 
 export function convertToTokenPrecision(amount, token) {
   if (typeof token !== 'undefined' && token !== '') {
-    const tokenSpecs = Dapple.getTokenSpecs(token);
+    const tokenSpecs = dapp.getTokenSpecs(token);
     if (tokenSpecs) {
       let value = amount;
       if (!(amount instanceof BigNumber)) {
@@ -18,7 +18,7 @@ export function convertToTokenPrecision(amount, token) {
 
 export function convertTo18Precision(amount, token) {
   if (typeof token !== 'undefined' && token !== '') {
-    const tokenSpecs = Dapple.getTokenSpecs(token);
+    const tokenSpecs = dapp.getTokenSpecs(token);
     if (tokenSpecs) {
       if (tokenSpecs.precision === 18) {
         return amount;
