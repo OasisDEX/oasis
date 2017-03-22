@@ -5,6 +5,7 @@ var gulpsync = require('gulp-sync')(gulp)
 var ghPages = require('gulp-gh-pages')
 var surge = require('gulp-surge')
 var rename = require('gulp-rename');
+var replace = require('gulp-replace');
 
 // npm run build
 gulp.task('build-dapp-maker-otc', function (cb) {
@@ -24,6 +25,7 @@ gulp.task('copy-dapp-maker-otc', ['build-dapp-maker-otc'], function (){
   return gulp.src([
       'dependencies/maker-otc/build/dapp.js'
   ])
+  .pipe(replace("var dapp = {};", "dapp = {};"))
   .pipe(rename('maker-otc.js'))
   .pipe(gulp.dest('frontend/packages/dapp/build/'))
 })
@@ -45,6 +47,7 @@ gulp.task('copy-dapp-token-wrapper', ['build-dapp-token-wrapper'], function (){
   return gulp.src([
       'dependencies/token-wrapper/build/dapp.js'
   ])
+  .pipe(replace("var dapp = {};", "dapp = {};"))
   .pipe(rename('token-wrapper.js'))
   .pipe(gulp.dest('frontend/packages/dapp/build/'))
 })
