@@ -11,6 +11,7 @@ import { formatNumber, removeOutliersFromArray } from '/imports/utils/functions'
 import './chart.html';
 
 const charts = [];
+Session.set('priceChart', false);
 Session.set('depthChart', false);
 Session.set('volumeChart', false);
 Session.set('rendered', false);
@@ -23,7 +24,10 @@ const volumes = { base: {}, quote: {} };
 let days = [];
 
 Template.chart.viewmodel({
-  currentChart: 'DEPTH',
+  currentChart: 'PRICE',
+  showPrice() {
+    return this.currentChart() === 'PRICE' ? '' : 'hidden';
+  },
   showDepth() {
     return this.currentChart() === 'DEPTH' ? '' : 'hidden';
   },
@@ -56,6 +60,118 @@ Template.chart.viewmodel({
     tooltipEl.style.padding = `${tooltip.yPadding}px${tooltip.xPadding}px`;
 
     return tooltipEl;
+  },
+  fillPriceChart() {
+    Meteor.defer(() => {
+      if (Session.get('rendered') && typeof charts.price === 'undefined') {
+        const ctx = document.getElementById('market-chart-price');
+        charts.price = new Chart(ctx, {
+          type: 'line',
+          data: {},
+          options: {
+            maintainAspectRatio: true,
+            layout: {
+              padding: 5,
+            },
+            tooltips: {
+              enabled: false,
+              mode: 'index',
+              position: 'nearest',
+              custom: (tooltip) => {
+                const tooltipEl = this.prepareTooltip(tooltip, 'market-chart-price');
+                if (tooltipEl && tooltip.body) {
+                  const date = parseInt(tooltip.dataPoints[0].xLabel, 10);
+                  let quoteAmount = null;
+                  let baseAmount = null;
+                  quoteAmount = formatNumber(web3.fromWei(volumes.quote[date]), 5);
+                  baseAmount = formatNumber(web3.fromWei(volumes.base[date]), 5);
+
+                  tooltipEl.innerHTML =
+                    `<div class="row-custom-tooltip">
+                      <span class="left">Date</span>
+                      <span class="right">${moment(date).format('ll')}</span>
+                    </div>
+                    <div class="row-custom-tooltip middle">
+                      <span class="left">SUM(${Session.get('quoteCurrency')})</span>
+                      <span class="right">${quoteAmount}</span>
+                    </div>
+                    <div class="row-custom-tooltip">
+                      <span class="left">SUM(${Session.get('baseCurrency')})</span>
+                      <span class="right">${baseAmount}</span>
+                    </div>`;
+
+                  tooltipEl.style.opacity = 1;
+                }
+              },
+            },
+            legend: {
+              display: false,
+            },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true,
+                },
+              }],
+              xAxes: [{
+                display: false,
+              }],
+            },
+          },
+        });
+        Session.set('priceChart', true);
+      }
+    });
+
+    if (Session.get('priceChart')
+        && !Session.get('loadingTradeHistory')) {
+      const quoteCurrency = Session.get('quoteCurrency');
+      const baseCurrency = Session.get('baseCurrency');
+      let day = null;
+      days = [];
+      volumes.base = {};
+      volumes.quote = {};
+      for (let i = 6; i >= 0; i--) {
+        day = moment(Date.now()).startOf('day').subtract(i, 'days');
+        days.push(day);
+        volumes.base[day.unix() * 1000] = new BigNumber(0);
+        volumes.quote[day.unix() * 1000] = new BigNumber(0);
+      }
+
+      const trades = Trades.find({ $or: [
+        { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
+        { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
+      ],
+        timestamp: { $gte: days[0].unix() },
+      });
+
+      trades.forEach((trade) => {
+        day = moment.unix(trade.timestamp).startOf('day').unix() * 1000;
+        if (trade.buyWhichToken === quoteCurrency) {
+          volumes.quote[day] = volumes.quote[day].add(new BigNumber(trade.buyHowMuch));
+          volumes.base[day] = volumes.base[day].add(new BigNumber(trade.sellHowMuch));
+        } else {
+          volumes.quote[day] = volumes.quote[day].add(new BigNumber(trade.sellHowMuch));
+          volumes.base[day] = volumes.base[day].add(new BigNumber(trade.buyHowMuch));
+        }
+      });
+
+      charts.price.data.labels = days;
+
+      charts.price.data.datasets = [{
+        label: 'Volume',
+        data: Object.keys(volumes.quote).map((key) =>
+                                              formatNumber(web3.fromWei(volumes.quote[key]), 5).replace(/,/g, '')),
+        backgroundColor: 'rgba(140, 133, 200, 0.1)',
+        borderColor: '#8D86C9',
+        borderWidth: 3,
+        // fill: false,
+        pointBackgroundColor: '#8D86C9',
+        pointRadius: 3,
+      }];
+
+      charts.price.update();
+    }
   },
   fillDepthChart() {
     Meteor.defer(() => {
