@@ -16,7 +16,7 @@ Dapple['token-wrapper'] = (function builder () {
         },
         'GNT_wrapper': {
           'value': '0xa5d92f318247c3b43241436dbb55ec4be600dc42',
-          'type': 'TokenWrapper[74e33d3d8845c25656659612e0989064a5ac9732b29bdd6f942dc662407827bd]'
+          'type': 'TokenWrapper[]'
         }
       },
       'live': {
@@ -26,7 +26,7 @@ Dapple['token-wrapper'] = (function builder () {
         },
         'GNT_wrapper': {
           'value': '0x01afc37f4f85babc47c0e2d0eababc7fb49793c8',
-          'type': 'TokenWrapper[b10b907625d773ba71be6676c46c412e3736d4bb27ec4f9f0f45a52d7fa3685c]'
+          'type': 'TokenWrapper[]'
         }
       }
     };
