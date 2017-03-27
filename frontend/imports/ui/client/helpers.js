@@ -75,7 +75,7 @@ Template.registerHelper('syncingPercentage', () => {
 
 Template.registerHelper('loading', () => Session.get('loading'));
 
-Template.registerHelper('loadingProgress', () => Session.get('loadingProgress'));
+Template.registerHelper('loadingCounter', () => Session.get('loadingCounter'));
 
 Template.registerHelper('loadingTradeHistory', () => Session.get('loadingTradeHistory'));
 
