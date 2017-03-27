@@ -34,21 +34,6 @@ Dapple.init = function init(env) {
   }
 };
 
-// XXX generated blocknumbers, should use incremental lookback instead
-Dapple.getFirstContractBlock = () => {
-  let blockNumber = 0;
-  if (Dapple.env === 'live') {
-    blockNumber = 2100636;
-  } else if (Dapple.env === 'ropsten') {
-    blockNumber = 23612;
-  } else if (Dapple.env === 'morden') {
-    blockNumber = 1524881;
-  } else if (Dapple.env === 'kovan') {
-    blockNumber = 97049;
-  }
-  return blockNumber;
-};
-
 const tokens = {
   kovan: {
     'W-ETH': '0x53eccc9246c1e537d79199d0c7231e425a40f896',
