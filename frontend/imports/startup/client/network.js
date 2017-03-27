@@ -83,6 +83,9 @@ function checkNetwork() {
           let network = false;
           if (!e) {
             switch (res.hash) {
+              case '0xa3c565fc15c7478862d50ccd6561e3c06b24cc509bf388941c25ea985ce32cb9':
+                network = 'kovan';
+                break;
               case '0x41941023680923e0fe4d74a34bdac8141f2540e3ae90623718e47d66d1ca4a2d':
                 network = 'ropsten';
                 break;
@@ -144,7 +147,7 @@ function initSession() {
     Session.set('volumeSelector', 'quote');
   }
 
-  Session.set('orderBookDustLimit', {"W-ETH": 1000000000000000});
+  Session.set('orderBookDustLimit', { 'W-ETH': 1000000000000000 });
 }
 
 /**
