@@ -3,26 +3,22 @@ Dapple.init = function init(env) {
   if (env === 'test' || env === 'kovan') {
     Dapple.env = 'kovan';
     Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.kovan);
+    Dapple['ds-eth-token'].class(web3, Dapple['maker-otc'].environments.kovan);
     Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments.kovan);
-    Dapple.makerjs = new Dapple.Maker(web3, 'kovan');
   } else if (env === 'ropsten') {
     Dapple.env = 'ropsten';
     Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.ropsten);
+    Dapple['ds-eth-token'].class(web3, Dapple['maker-otc'].environments.ropsten);
     Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments.ropsten);
-    Dapple.makerjs = new Dapple.Maker(web3, 'ropsten');
   } else if (env === 'live' || env === 'main') {
     Dapple.env = 'live';
     Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.live);
+    Dapple['ds-eth-token'].class(web3, Dapple['maker-otc'].environments.live);
     Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments.live);
-    Dapple.makerjs = new Dapple.Maker(web3, 'live');
   } else if (env === 'private' || env === 'default') {
     Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.default);
+    Dapple['ds-eth-token'].class(web3, Dapple['maker-otc'].environments.default);
     Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments.default);
-  } else if (env === 'morden') {
-    Dapple.env = 'morden';
-    Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.morden);
-    Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments.morden);
-    Dapple.makerjs = new Dapple.Maker(web3, 'morden');
   }
 
   if (env !== false) {
@@ -126,9 +122,9 @@ Dapple.getToken = (symbol, callback) => {
     return;
   }
 
-  let tokenClass = 'DSTokenFrontend';
   const address = Dapple.getTokenAddress(symbol);
-  let that = Dapple.makerjs.dappsys;
+  let tokenClass = 'DSTokenBase';
+  let that = Dapple['ds-eth-token'];
 
   if (symbol === 'W-ETH') {
     tokenClass = 'DSEthToken';
