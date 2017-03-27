@@ -9,25 +9,6 @@ if (typeof web3 === 'undefined' && typeof Web3 === 'undefined') {
 Dapple['token-wrapper'] = (function builder () {
   var environments = {
       'develop': {},
-      'festfork': {
-        'gnt': {
-          'type': 'GolemNetworkToken',
-          'value': '0xa74476443119A942dE498590Fe1f2454d7D4aC0d'
-        }
-      },
-      'testfork': {
-        'gnt': {
-          'type': 'GolemNetworkToken',
-          'value': '0xa74476443119A942dE498590Fe1f2454d7D4aC0d'
-        }
-      },
-      'localtest': {},
-      'morden': {
-        'gnt': {
-          'type': 'GolemNetworkToken',
-          'value': '0x9d6bb976159a6c131512ce27c83ba1fcb05b22ea'
-        }
-      },
       'ropsten': {
         'gnt': {
           'type': 'GolemNetworkToken',
@@ -36,12 +17,6 @@ Dapple['token-wrapper'] = (function builder () {
         'GNT_wrapper': {
           'value': '0xa5d92f318247c3b43241436dbb55ec4be600dc42',
           'type': 'TokenWrapper[74e33d3d8845c25656659612e0989064a5ac9732b29bdd6f942dc662407827bd]'
-        }
-      },
-      'IntegTests': {
-        'gnt': {
-          'type': 'GolemNetworkToken',
-          'value': '0xa74476443119A942dE498590Fe1f2454d7D4aC0d'
         }
       },
       'live': {
