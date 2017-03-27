@@ -93,10 +93,52 @@ Offers.checkMarketOpen = () => {
   });
 };
 
+// As it is expensive to load historical Trades, we load them only for the last week
+// Enough for the Volume chart and the Market History section
+Offers.getHistoricalTradesRange = (numberOfPreviousDays) => {
+  // 5760 is an average number of blocks per day. in case we didn't get far enough
+  // after the initial jump we step back 1000 blocks at a time
+  const INITIAL_NUMBER_OF_BLOCKS_BACKWARDS = 5760*(numberOfPreviousDays+1)+3000;
+  const STEP_NUMBER_OF_BLOCKS_BACKWARDS = 1000;
+
+  function getBlockNumberOfTheMostRecentBlock() {
+    return Offers.getBlock('latest').then((block) => block.number);
+  }
+  function getBlockNumberOfSomeBlockEarlierThan(timestamp, startingFrom) {
+    if (startingFrom < 0) return Promise.resolve(0);
+    return Offers.getBlock(startingFrom).then((block) => {
+      if (block.timestamp*1000 <= timestamp) {
+        return block.number;
+      }
+      else {
+        return getBlockNumberOfSomeBlockEarlierThan(timestamp, startingFrom-STEP_NUMBER_OF_BLOCKS_BACKWARDS);
+      }
+    });
+  }
+
+  return getBlockNumberOfTheMostRecentBlock().then((blockNumberOfTheMostRecentBlock) => {
+    const startTimestamp = moment(Date.now()).startOf('day').subtract(numberOfPreviousDays, 'days');
+    const initialGuess = blockNumberOfTheMostRecentBlock-INITIAL_NUMBER_OF_BLOCKS_BACKWARDS;
+    return getBlockNumberOfSomeBlockEarlierThan(startTimestamp, initialGuess).then((foundBlockNumber) => {
+        return {
+            startBlockNumber: foundBlockNumber,
+            startTimestamp: startTimestamp,
+            endBlockNumber: blockNumberOfTheMostRecentBlock
+        };
+    });
+  });
+};
+
 /**
  * Syncs up all offers and trades
  */
 Offers.sync = () => {
+  Offers.checkMarketOpen();
+  Offers.syncOffers();
+  Offers.getHistoricalTradesRange(6).then(Offers.syncTrades);
+};
+
+Offers.syncOffers = () => {
   Offers.remove({});
 
   // Watch ItemUpdate Event
@@ -111,8 +153,6 @@ Offers.sync = () => {
       }
     }
   });
-
-  Offers.checkMarketOpen();
 
   // Sync all past offers
   Dapple['maker-otc'].objects.otc.last_offer_id((error, n) => {
@@ -131,7 +171,9 @@ Offers.sync = () => {
       }
     }
   });
+};
 
+Offers.syncTrades = (historicalTradesRange) => {
   function transformArgs(trade) {
     const buyWhichToken = Dapple.getTokenByAddress(trade.args.buy_which_token);
     const sellWhichToken = Dapple.getTokenByAddress(trade.args.sell_which_token);
@@ -153,7 +195,8 @@ Offers.sync = () => {
 
 
   // Get all Trade events in one go so we can fill up prices, volume and history
-  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: Dapple.getFirstContractBlock() }).get((error, trades) => {
+  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: historicalTradesRange.startBlockNumber,
+    toBlock: historicalTradesRange.endBlockNumber }).get((error, trades) => {
     if (!error) {
       let trade = null;
       const promises = [];
@@ -168,7 +211,7 @@ Offers.sync = () => {
             trade = trades[i];
             const args = transformArgs(trade);
 
-            if (args) {
+            if (args && (resultProm[i].timestamp*1000 >= historicalTradesRange.startTimestamp)) {
               Trades.upsert(trade.transactionHash, _.extend(resultProm[i], trade, args));
             }
           }
@@ -181,7 +224,7 @@ Offers.sync = () => {
   });
 
   // Watch Trade events in realtime
-  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: Session.get('startingBlock') }, (error, trade) => {
+  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: historicalTradesRange.endBlockNumber+1 }, (error, trade) => {
     if (!error) {
       const args = transformArgs(trade);
       if (args) {
