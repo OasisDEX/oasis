@@ -12,13 +12,13 @@ Dapple['maker-otc'] = (function builder () {
       'live': {
         'otc': {
           'value': '0xc350ebf34b6d83b64ea0ee4e39b6ebe18f02ad2f',
-          'type': 'ExpiringMarket[1387b0b87fb0a5fcfebad2fdb1502ea07a3332aa0595e1501711b55656a92711]'
+          'type': 'ExpiringMarket[]'
         }
       },
       'kovan': {
         'otc': {
           'value': '0x5490ebdbABC74046855A3104095E71f19BE97f20',
-          'type': 'ExpiringMarket[3873a13b354d896be99d9d86b7ee2a6af27805d93f934a8b6b321965f6d699fe]'
+          'type': 'ExpiringMarket[]'
         }
       }
     };
