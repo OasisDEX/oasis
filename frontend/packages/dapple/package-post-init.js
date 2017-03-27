@@ -10,7 +10,12 @@ Dapple.init = function init(env) {
     Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.live);
     Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments.live);
     Dapple.makerjs = new Dapple.Maker(web3, 'live');
-  } else if (env === 'private' || env === 'default') {
+  } else if (env === 'private') {
+    Dapple.env = 'develop';
+    Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.develop);
+    Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments.develop);
+    Dapple.makerjs = new Dapple.Maker(web3, 'develop');
+  } else if (env === 'default') {
     Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments.default);
     Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments.default);
   } else if (env === 'morden') {
@@ -74,6 +79,21 @@ const tokens = {
     VSL: '0x5c543e7ae0a1104f78406c340e9c64fd9fce5170',
     PLU: '0xd8912c10681d8b21fd3742244f44658dba12264e',
     MLN: '0xbeb9ef514a379b997e0798fdcc901ee474b6d9a1',
+  },
+  develop: {
+    'W-ETH': '0x0000000000000000000000000000000000000000',
+    DAI: '0x0000000000000000000000000000000000000000',
+    MKR: '0x0000000000000000000000000000000000000000',
+    DGD: '0x0000000000000000000000000000000000000000',
+    GNT: '0x0000000000000000000000000000000000000000',
+    'W-GNT': '0x0000000000000000000000000000000000000000',
+    REP: '0x0000000000000000000000000000000000000000',
+    ICN: '0x0000000000000000000000000000000000000000',
+    '1ST': '0x0000000000000000000000000000000000000000',
+    SNGLS: '0x0000000000000000000000000000000000000000',
+    VSL: '0x0000000000000000000000000000000000000000',
+    PLU: '0x0000000000000000000000000000000000000000',
+    MLN: '0x0000000000000000000000000000000000000000',
   },
 };
 

@@ -46,47 +46,41 @@ class TokensCollection extends Mongo.Collection {
       // const ALL_TOKENS = _.uniq([Session.get('quoteCurrency'), Session.get('baseCurrency')]);
       const ALL_TOKENS = Dapple.getTokens();
 
-      if (network !== 'private') {
-        // Sync token balances and allowances asynchronously
-        ALL_TOKENS.forEach((tokenId) => {
-          // XXX EIP20
-          Dapple.getToken(tokenId, (error, token) => {
-            if (!error) {
-              token.balanceOf(address, (callError, balance) => {
-                if (!error) {
-                  super.upsert(tokenId, { $set: {
-                    balance: convertTo18Precision(balance, tokenId).toString(10),
-                    realBalance: balance.toString(10),
-                  } });
-                  Session.set('balanceLoaded', true);
-                  if (tokenId === 'W-GNT') {
-                    token.getBroker.call((e, broker) => {
-                      if (!e) {
-                        super.upsert('W-GNT', { $set: { broker } });
-                        Session.set('GNTBroker', broker);
-                      }
-                    });
-                  }
+      // Sync token balances and allowances asynchronously
+      ALL_TOKENS.forEach((tokenId) => {
+        // XXX EIP20
+        Dapple.getToken(tokenId, (error, token) => {
+          if (!error) {
+            token.balanceOf(address, (callError, balance) => {
+              if (!error) {
+                super.upsert(tokenId, { $set: {
+                  balance: convertTo18Precision(balance, tokenId).toString(10),
+                  realBalance: balance.toString(10),
+                } });
+                Session.set('balanceLoaded', true);
+                if (tokenId === 'W-GNT') {
+                  token.getBroker.call((e, broker) => {
+                    if (!e) {
+                      super.upsert('W-GNT', { $set: { broker } });
+                      Session.set('GNTBroker', broker);
+                    }
+                  });
                 }
-              });
-              const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
-              token.allowance(address, contractAddress, (callError, allowance) => {
-                if (!error) {
-                  super.upsert(tokenId, { $set: {
-                    allowance: convertTo18Precision(allowance, tokenId).toString(10),
-                    realAllowance: allowance.toString(10),
-                  } });
-                  Session.set('allowanceLoaded', true);
-                }
-              });
-            }
-          });
+              }
+            });
+            const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
+            token.allowance(address, contractAddress, (callError, allowance) => {
+              if (!error) {
+                super.upsert(tokenId, { $set: {
+                  allowance: convertTo18Precision(allowance, tokenId).toString(10),
+                  realAllowance: allowance.toString(10),
+                } });
+                Session.set('allowanceLoaded', true);
+              }
+            });
+          }
         });
-      } else {
-        ALL_TOKENS.forEach((token) => {
-          super.upsert(token, { $set: { balance: '0', allowance: '0' } });
-        });
-      }
+      });
     }
   }
 }
