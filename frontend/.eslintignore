@@ -2,6 +2,7 @@ packages/dapple/package.js
 packages/dapple/package-pre-init.js
 packages/dapple/package-post-init.js
 packages/dapple/maker.js
-packages/dapple/build/maker-otc.js
-packages/dapple/build/token-wrapper.js
+packages/dapple/contracts-abi/maker-otc.js
+packages/dapple/contracts-abi/token-wrapper.js
+packages/dapple/contracts-abi/ds-eth-token.js
 imports/utils/Chart.min.js
