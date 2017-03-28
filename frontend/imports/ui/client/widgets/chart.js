@@ -125,9 +125,16 @@ Template.chart.viewmodel({
         timestamp: { $gte:  moment(Date.now()).startOf('day').subtract(6, 'days').unix() },
       });
       const prices = trades.map((trade) => {
-        return trade.buyWhichToken === quoteCurrency ?
-          trade.buyHowMuch / trade.sellHowMuch :
-          trade.sellHowMuch / trade.buyHowMuch;
+        let baseAmount;
+        let quoteAmount;
+        if(trade.buyWhichToken === quoteCurrency) {
+          quoteAmount = new BigNumber(trade.buyHowMuch);
+          baseAmount = new BigNumber(trade.sellHowMuch);
+        } else {
+          baseAmount = new BigNumber(trade.buyHowMuch);
+          quoteAmount = new BigNumber(trade.sellHowMuch);
+        }
+        return formatNumber(quoteAmount.dividedBy(baseAmount), 5);
       });
       charts.price.data.labels = trades.map(trade => trade.timestamp);
       charts.price.data.datasets = [{
