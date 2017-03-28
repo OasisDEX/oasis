@@ -80,12 +80,12 @@ Template.ethtokens.viewmodel({
       Dapple.getToken('W-ETH', (error, token) => {
         if (!error) {
           Session.set('ETHDepositProgress', 33);
-          Session.set('ETHDepositProgressMessage', 'Starting deposit... (waiting for your approval)');
+          Session.set('ETHDepositProgressMessage', 'Starting wrapping... (waiting for your approval)');
           Session.set('ETHDepositErrorMessage', '');
           token.deposit(options, (txError, tx) => {
             if (!txError) {
               Session.set('ETHDepositProgress', 66);
-              Session.set('ETHDepositProgressMessage', 'Executing deposit... (waiting for transaction confirmation)');
+              Session.set('ETHDepositProgressMessage', 'Executing wrapping... (waiting for transaction confirmation)');
               Session.set('ETHDepositErrorMessage', '');
               Transactions.add(TRANSACTION_TYPE_DEPOSIT, tx, { type: DEPOSIT, amount: this.amount() });
             } else {
@@ -105,12 +105,12 @@ Template.ethtokens.viewmodel({
       Dapple.getToken('W-ETH', (error, token) => {
         if (!error) {
           Session.set('ETHWithdrawProgress', 33);
-          Session.set('ETHWithdrawProgressMessage', 'Starting withdraw... (waiting for your approval)');
+          Session.set('ETHWithdrawProgressMessage', 'Starting unwrapping... (waiting for your approval)');
           Session.set('ETHWithdrawErrorMessage', '');
           token.withdraw(web3.toWei(this.amount()), { gas: WITHDRAW_GAS }, (txError, tx) => {
             if (!txError) {
               Session.set('ETHWithdrawProgress', 66);
-              Session.set('ETHWithdrawProgressMessage', 'Executing withdraw... (waiting for transaction confirmation)');
+              Session.set('ETHWithdrawProgressMessage', 'Executing unwrapping... (waiting for transaction confirmation)');
               Transactions.add(TRANSACTION_TYPE_WITHDRAW, tx, { type: WITHDRAW, amount: this.amount() });
             } else {
               Session.set('ETHWithdrawProgress', 0);

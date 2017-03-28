@@ -8,10 +8,10 @@ class WETH {
       if (document.receipt.logs.length === 0) {
         Session.set('ETHDepositProgress', 0);
         Session.set('ETHDepositProgressMessage', '');
-        Session.set('ETHDepositErrorMessage', 'Deposit went wrong. Please execute the deposit again.');
+        Session.set('ETHDepositErrorMessage', 'Wrap went wrong. Please execute the wrap again.');
       } else {
         Session.set('ETHDepositProgress', 100);
-        Session.set('ETHDepositProgressMessage', 'Deposit Done!');
+        Session.set('ETHDepositProgressMessage', 'Wrap Done!');
         Meteor.setTimeout(() => {
           Session.set('ETHDepositProgress', 0);
           Session.set('ETHDepositProgressMessage', '');
@@ -25,10 +25,10 @@ class WETH {
       if (document.receipt.logs.length === 0) {
         Session.set('ETHWithdrawProgress', 0);
         Session.set('ETHWithdrawProgressMessage', '');
-        Session.set('ETHWithdrawErrorMessage', 'Withdrawing went wrong. Please execute the withdraw again.');
+        Session.set('ETHWithdrawErrorMessage', 'Unwrapping went wrong. Please execute the withdraw again.');
       } else {
         Session.set('ETHWithdrawProgress', 100);
-        Session.set('ETHWithdrawProgressMessage', 'Withdraw Done!');
+        Session.set('ETHWithdrawProgressMessage', 'Unwrap Done!');
         Meteor.setTimeout(() => {
           Session.set('ETHWithdrawProgress', 0);
           Session.set('ETHWithdrawProgressMessage', '');
