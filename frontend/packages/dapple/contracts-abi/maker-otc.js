@@ -13,19 +13,19 @@ Dapple['maker-otc'] = (function builder() {
     'develop': {},
     'live': {
       'otc': {
-        'value': '0xc350ebf34b6d83b64ea0ee4e39b6ebe18f02ad2f',
+        'value': '',
         'type': 'ExpiringMarket[]'
       }
     },
     'ropsten': {
       'otc': {
-        'value': '0xb996fff774d37b900872609bf8b11e31f51bd19e',
+        'value': '',
         'type': 'ExpiringMarket[]'
       }
     },
     'kovan': {
       'otc': {
-        'value': '0x4da4a658af01902a86173d80ddcaa89e8c930c29',
+        'value': '',
         'type': 'ExpiringMarket[]'
       }
     },
