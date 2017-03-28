@@ -13,9 +13,9 @@ Package.onUse((api) => {
   api.use('ethereum:web3', 'client');
 
   api.addFiles(['package-pre-init.js'], 'client');
-  api.addFiles(['maker-otc.js'], 'client');
-  api.addFiles(['token-wrapper.js'], 'client');
-  api.addFiles(['maker.js'], 'client');
+  api.addFiles(['contracts-abi/maker-otc.js'], 'client');
+  api.addFiles(['contracts-abi/ds-eth-token.js'], 'client');
+  api.addFiles(['contracts-abi/token-wrapper.js'], 'client');
   api.addFiles(['package-post-init.js'], 'client');
 
   api.export('web3', 'client');
