@@ -139,10 +139,10 @@ Template.chart.viewmodel({
       charts.price.data.labels = trades.map(trade => trade.timestamp);
       charts.price.data.datasets = [{
         data: prices,
-        borderColor: '#8D86C9',
+        borderColor: '#5071b3',
         borderWidth: 3,
         fill: false,
-        pointBackgroundColor: '#8D86C9',
+        pointBackgroundColor: '#5071b3',
         pointRadius: 3,
       }];
 
