@@ -149,12 +149,12 @@ Template.gnttokens.viewmodel({
       Dapple.getToken('W-GNT', (error, token) => {
         if (!error) {
           Session.set('GNTWithdrawProgress', 33);
-          Session.set('GNTWithdrawProgressMessage', 'Starting withdraw... (waiting for your approval)');
+          Session.set('GNTWithdrawProgressMessage', 'Starting unwrapping... (waiting for your approval)');
           Session.set('GNTWithdrawErrorMessage', '');
           token.withdraw(web3.toWei(this.amount()), { gas: WITHDRAW_GAS }, (txError, tx) => {
             if (!txError) {
               Session.set('GNTWithdrawProgress', 66);
-              Session.set('GNTWithdrawProgressMessage', 'Executing withdraw... (waiting for transaction confirmation)');
+              Session.set('GNTWithdrawProgressMessage', 'Executing unwrapping... (waiting for transaction confirmation)');
               Transactions.add(TRANSACTION_TYPE_WITHDRAW, tx, { type: WITHDRAW, amount: this.amount() });
             } else {
               Session.set('GNTWithdrawProgress', 0);
