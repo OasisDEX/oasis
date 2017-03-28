@@ -81,23 +81,14 @@ Template.chart.viewmodel({
                 const tooltipEl = this.prepareTooltip(tooltip, 'market-chart-price');
                 if (tooltipEl && tooltip.body) {
                   const date = parseInt(tooltip.dataPoints[0].xLabel, 10);
-                  let quoteAmount = null;
-                  let baseAmount = null;
-                  quoteAmount = formatNumber(web3.fromWei(volumes.quote[date]), 5);
-                  baseAmount = formatNumber(web3.fromWei(volumes.base[date]), 5);
-
                   tooltipEl.innerHTML =
                     `<div class="row-custom-tooltip">
                       <span class="left">Date</span>
-                      <span class="right">${moment(date).format('ll')}</span>
+                      <span class="right">${moment(date * 1000).format('ll')}</span>
                     </div>
                     <div class="row-custom-tooltip middle">
-                      <span class="left">SUM(${Session.get('quoteCurrency')})</span>
-                      <span class="right">${quoteAmount}</span>
-                    </div>
-                    <div class="row-custom-tooltip">
-                      <span class="left">SUM(${Session.get('baseCurrency')})</span>
-                      <span class="right">${baseAmount}</span>
+                      <span class="left">Price</span>
+                      <span class="right">${tooltip.dataPoints[0].yLabel}</span>
                     </div>`;
 
                   tooltipEl.style.opacity = 1;
@@ -138,14 +129,12 @@ Template.chart.viewmodel({
           trade.buyHowMuch / trade.sellHowMuch :
           trade.sellHowMuch / trade.buyHowMuch;
       });
-      charts.price.data.labels = prices;
+      charts.price.data.labels = trades.map(trade => trade.timestamp);
       charts.price.data.datasets = [{
-        label: 'Volume',
         data: prices,
-        backgroundColor: 'rgba(140, 133, 200, 0.1)',
         borderColor: '#8D86C9',
         borderWidth: 3,
-        // fill: false,
+        fill: false,
         pointBackgroundColor: '#8D86C9',
         pointRadius: 3,
       }];
