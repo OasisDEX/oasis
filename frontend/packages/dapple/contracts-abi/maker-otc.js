@@ -25,7 +25,7 @@ Dapple['maker-otc'] = (function builder() {
     },
     'kovan': {
       'otc': {
-        'value': '',
+        'value': '0xEAa38834396F96cFCb93Da3613e80393702C18B9',
         'type': 'ExpiringMarket[]'
       }
     },
