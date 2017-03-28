@@ -1,5 +1,5 @@
 {
-  "markets": {
+  "market": {
     "kovan": "0x4da4a658af01902a86173d80ddcaa89e8c930c29",
     "ropsten": "0xb996fff774d37b900872609bf8b11e31f51bd19e",
     "live": "0xc350ebf34b6d83b64ea0ee4e39b6ebe18f02ad2f"

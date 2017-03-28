@@ -16,7 +16,7 @@ Dapple.init = function init(env) {
       break;
   }
 
-  Dapple['maker-otc']['environments'][Dapple.env]['otc']['value'] = config.markets[Dapple.env]
+  Dapple['maker-otc']['environments'][Dapple.env]['otc']['value'] = config.market[Dapple.env]
   Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments[Dapple.env]);
   Dapple['ds-eth-token'].class(web3, Dapple['ds-eth-token'].environments[Dapple.env]);
   Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments[Dapple.env]);
