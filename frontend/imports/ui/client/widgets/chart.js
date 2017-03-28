@@ -127,41 +127,21 @@ Template.chart.viewmodel({
         && !Session.get('loadingTradeHistory')) {
       const quoteCurrency = Session.get('quoteCurrency');
       const baseCurrency = Session.get('baseCurrency');
-      let day = null;
-      days = [];
-      volumes.base = {};
-      volumes.quote = {};
-      for (let i = 6; i >= 0; i--) {
-        day = moment(Date.now()).startOf('day').subtract(i, 'days');
-        days.push(day);
-        volumes.base[day.unix() * 1000] = new BigNumber(0);
-        volumes.quote[day.unix() * 1000] = new BigNumber(0);
-      }
-
       const trades = Trades.find({ $or: [
         { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
         { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
       ],
-        timestamp: { $gte: days[0].unix() },
+        timestamp: { $gte:  moment(Date.now()).startOf('day').subtract(6, 'days').unix() },
       });
-
-      trades.forEach((trade) => {
-        day = moment.unix(trade.timestamp).startOf('day').unix() * 1000;
-        if (trade.buyWhichToken === quoteCurrency) {
-          volumes.quote[day] = volumes.quote[day].add(new BigNumber(trade.buyHowMuch));
-          volumes.base[day] = volumes.base[day].add(new BigNumber(trade.sellHowMuch));
-        } else {
-          volumes.quote[day] = volumes.quote[day].add(new BigNumber(trade.sellHowMuch));
-          volumes.base[day] = volumes.base[day].add(new BigNumber(trade.buyHowMuch));
-        }
+      const prices = trades.map((trade) => {
+        return trade.buyWhichToken === quoteCurrency ?
+          trade.buyHowMuch / trade.sellHowMuch :
+          trade.sellHowMuch / trade.buyHowMuch;
       });
-
-      charts.price.data.labels = days;
-
+      charts.price.data.labels = prices;
       charts.price.data.datasets = [{
         label: 'Volume',
-        data: Object.keys(volumes.quote).map((key) =>
-                                              formatNumber(web3.fromWei(volumes.quote[key]), 5).replace(/,/g, '')),
+        data: prices,
         backgroundColor: 'rgba(140, 133, 200, 0.1)',
         borderColor: '#8D86C9',
         borderWidth: 3,
