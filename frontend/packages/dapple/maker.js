@@ -16,143 +16,187 @@ if (typeof web3 === 'undefined' && typeof Web3 === 'undefined') {
 }
 */
 // Dappsys definition
-Dapple['dappsys'] = (function builder () {
+Dapple['dappsys'] = (function builder() {
   var environments = {
-    'ropsten': {
-        'objects': {
-          'auth_factory1': {
-            'class': 'DSAuthFactory',
-            'address': '0x0000000000000000000000000000000000000000'
-          },
-          'data_factory1': {
-            'class': 'DSDataFactory',
-            'address': '0x0000000000000000000000000000000000000000'
-          },
-          'multisig_factory1': {
-            'class': 'DSMultisigFactory',
-            'address': '0x0000000000000000000000000000000000000000'
-          },
-          'token_factory1': {
-            'class': 'DSTokenFactory',
-            'address': '0x0000000000000000000000000000000000000000'
-          },
-          'token_installer1': {
-            'class': 'DSTokenInstaller',
-            'address': '0x0000000000000000000000000000000000000000'
-          },
-          'factory1': {
-            'class': 'DSFactory1',
-            'address': '0x0000000000000000000000000000000000000000'
-          },
-          'eth_token1': {
-            'class': 'DSEthToken',
-            'address': '0x0000000000000000000000000000000000000000'
-          },
-          'token_registry': {
-            'class': 'DSTokenRegistry',
-            'address': '0x0000000000000000000000000000000000000000'
-          },
-          'multisig': {
-            'class': 'DSEasyMultisig',
-            'address': '0x0000000000000000000000000000000000000000'
-          },
-          'echo': {
-            'class': 'DSEcho',
-            'address': '0x0000000000000000000000000000000000000000'
-          }
-        }
-      },
-      'morden': {
-        'objects': {
-          'auth_factory1': {
-            'class': 'DSAuthFactory',
-            'address': '0x7639a37b8ecbd68e15b8e173897c6c0dea462452'
-          },
-          'data_factory1': {
-            'class': 'DSDataFactory',
-            'address': '0x619104fd4f8abdd2ee651f0ec4985719dbb2c599'
-          },
-          'multisig_factory1': {
-            'class': 'DSMultisigFactory',
-            'address': '0x0b30a24e7257e1842d681b0f2f8aff4182eb2a78'
-          },
-          'token_factory1': {
-            'class': 'DSTokenFactory',
-            'address': '0x9fc46bdfa075c2aad6437e9cc771e1bf6b72a9d4'
-          },
-          'token_installer1': {
-            'class': 'DSTokenInstaller',
-            'address': '0x5b605da3a721ba809be030d225312c4c39ead11b'
-          },
-          'factory1': {
-            'class': 'DSFactory1',
-            'address': '0x3da0d9695d0099f98582f58a64b2e2616fcbaa00'
-          },
-          'eth_token1': {
-            'class': 'DSEthToken',
-            'address': '0x52fe88b987c7829e5d5a61c98f67c9c14e6a7a90'
-          },
-          'token_registry': {
-            'class': 'DSTokenRegistry',
-            'address': '0x877c5369c747d24d9023c88c1aed1724f1993efe'
-          },
-          'multisig': {
-            'class': 'DSEasyMultisig',
-            'address': '0xcd85c33878a7f378483c6422eee32631ea6f8001'
-          },
-          'echo': {
-            'class': 'DSEcho',
-            'address': '0x002956c57c04f4b0469fa5cfa137a0b823e49293'
-          }
-        }
-      },
-      'live': {
-        'objects': {
-          'auth_factory1': {
-            'class': 'DSAuthFactory',
-            'address': '0x671bed5a8402cd6c250a17e5f02e08c85d51542f'
-          },
-          'data_factory1': {
-            'class': 'DSDataFactory',
-            'address': '0x5d7af7715dfbbfc86e2505c308468f78702a99d9'
-          },
-          'multisig_factory1': {
-            'class': 'DSMultisigFactory',
-            'address': '0x82f39d996d1e9ab119e4b33d581c3eeb4133acf6'
-          },
-          'token_factory1': {
-            'class': 'DSTokenFactory',
-            'address': '0x12bcc9daffda452b6c4b0a1571360925a64fcc79'
-          },
-          'token_installer1': {
-            'class': 'DSTokenInstaller',
-            'address': '0x460df00675f994928457771eb3b9732a99314cbe'
-          },
-          'factory1': {
-            'class': 'DSFactory1',
-            'address': '0x2c139c5a8dd6be98067c5b4258e0dedcdbbff78b'
-          },
-          'eth_token1': {
-            'class': 'DSEthToken',
-            'address': '0xecf8f87f810ecf450940c9f60066b4a7a501d6a7'
-          },
-          'token_registry': {
-            'class': 'DSTokenRegistry',
-            'address': '0xc6882fbffd309dc976dd6e4c79cc91e4c1482140'
-          },
-          'multisig': {
-            'class': 'DSEasyMultisig',
-            'address': '0xe02640be68df835aa3327ea6473c02c8f6c3815a'
-          },
-          'echo': {
-            'class': 'DSEcho',
-            'address': '0x992c64ac907ef9e531e7ff8d06cec599778a0e72'
-          }
+    'kovan': {
+      'objects': {
+        'auth_factory1': {
+          'class': 'DSAuthFactory',
+          'address': '0x0000000000000000000000000000000000000000'
+        },
+        'data_factory1': {
+          'class': 'DSDataFactory',
+          'address': '0x0000000000000000000000000000000000000000'
+        },
+        'multisig_factory1': {
+          'class': 'DSMultisigFactory',
+          'address': '0x0000000000000000000000000000000000000000'
+        },
+        'token_factory1': {
+          'class': 'DSTokenFactory',
+          'address': '0x0000000000000000000000000000000000000000'
+        },
+        'token_installer1': {
+          'class': 'DSTokenInstaller',
+          'address': '0x0000000000000000000000000000000000000000'
+        },
+        'factory1': {
+          'class': 'DSFactory1',
+          'address': '0x0000000000000000000000000000000000000000'
+        },
+        'eth_token1': {
+          'class': 'DSEthToken',
+          'address': '0x0000000000000000000000000000000000000000'
+        },
+        'token_registry': {
+          'class': 'DSTokenRegistry',
+          'address': '0x0000000000000000000000000000000000000000'
+        },
+        'multisig': {
+          'class': 'DSEasyMultisig',
+          'address': '0x0000000000000000000000000000000000000000'
+        },
+        'echo': {
+          'class': 'DSEcho',
+          'address': '0x0000000000000000000000000000000000000000'
         }
       }
-    };
+    },
+    'ropsten': {
+      'objects': {
+        'auth_factory1': {
+          'class': 'DSAuthFactory',
+          'address': '0x0000000000000000000000000000000000000000'
+        },
+        'data_factory1': {
+          'class': 'DSDataFactory',
+          'address': '0x0000000000000000000000000000000000000000'
+        },
+        'multisig_factory1': {
+          'class': 'DSMultisigFactory',
+          'address': '0x0000000000000000000000000000000000000000'
+        },
+        'token_factory1': {
+          'class': 'DSTokenFactory',
+          'address': '0x0000000000000000000000000000000000000000'
+        },
+        'token_installer1': {
+          'class': 'DSTokenInstaller',
+          'address': '0x0000000000000000000000000000000000000000'
+        },
+        'factory1': {
+          'class': 'DSFactory1',
+          'address': '0x0000000000000000000000000000000000000000'
+        },
+        'eth_token1': {
+          'class': 'DSEthToken',
+          'address': '0x0000000000000000000000000000000000000000'
+        },
+        'token_registry': {
+          'class': 'DSTokenRegistry',
+          'address': '0x0000000000000000000000000000000000000000'
+        },
+        'multisig': {
+          'class': 'DSEasyMultisig',
+          'address': '0x0000000000000000000000000000000000000000'
+        },
+        'echo': {
+          'class': 'DSEcho',
+          'address': '0x0000000000000000000000000000000000000000'
+        }
+      }
+    },
+    'morden': {
+      'objects': {
+        'auth_factory1': {
+          'class': 'DSAuthFactory',
+          'address': '0x7639a37b8ecbd68e15b8e173897c6c0dea462452'
+        },
+        'data_factory1': {
+          'class': 'DSDataFactory',
+          'address': '0x619104fd4f8abdd2ee651f0ec4985719dbb2c599'
+        },
+        'multisig_factory1': {
+          'class': 'DSMultisigFactory',
+          'address': '0x0b30a24e7257e1842d681b0f2f8aff4182eb2a78'
+        },
+        'token_factory1': {
+          'class': 'DSTokenFactory',
+          'address': '0x9fc46bdfa075c2aad6437e9cc771e1bf6b72a9d4'
+        },
+        'token_installer1': {
+          'class': 'DSTokenInstaller',
+          'address': '0x5b605da3a721ba809be030d225312c4c39ead11b'
+        },
+        'factory1': {
+          'class': 'DSFactory1',
+          'address': '0x3da0d9695d0099f98582f58a64b2e2616fcbaa00'
+        },
+        'eth_token1': {
+          'class': 'DSEthToken',
+          'address': '0x52fe88b987c7829e5d5a61c98f67c9c14e6a7a90'
+        },
+        'token_registry': {
+          'class': 'DSTokenRegistry',
+          'address': '0x877c5369c747d24d9023c88c1aed1724f1993efe'
+        },
+        'multisig': {
+          'class': 'DSEasyMultisig',
+          'address': '0xcd85c33878a7f378483c6422eee32631ea6f8001'
+        },
+        'echo': {
+          'class': 'DSEcho',
+          'address': '0x002956c57c04f4b0469fa5cfa137a0b823e49293'
+        }
+      }
+    },
+    'live': {
+      'objects': {
+        'auth_factory1': {
+          'class': 'DSAuthFactory',
+          'address': '0x671bed5a8402cd6c250a17e5f02e08c85d51542f'
+        },
+        'data_factory1': {
+          'class': 'DSDataFactory',
+          'address': '0x5d7af7715dfbbfc86e2505c308468f78702a99d9'
+        },
+        'multisig_factory1': {
+          'class': 'DSMultisigFactory',
+          'address': '0x82f39d996d1e9ab119e4b33d581c3eeb4133acf6'
+        },
+        'token_factory1': {
+          'class': 'DSTokenFactory',
+          'address': '0x12bcc9daffda452b6c4b0a1571360925a64fcc79'
+        },
+        'token_installer1': {
+          'class': 'DSTokenInstaller',
+          'address': '0x460df00675f994928457771eb3b9732a99314cbe'
+        },
+        'factory1': {
+          'class': 'DSFactory1',
+          'address': '0x2c139c5a8dd6be98067c5b4258e0dedcdbbff78b'
+        },
+        'eth_token1': {
+          'class': 'DSEthToken',
+          'address': '0xecf8f87f810ecf450940c9f60066b4a7a501d6a7'
+        },
+        'token_registry': {
+          'class': 'DSTokenRegistry',
+          'address': '0xc6882fbffd309dc976dd6e4c79cc91e4c1482140'
+        },
+        'multisig': {
+          'class': 'DSEasyMultisig',
+          'address': '0xe02640be68df835aa3327ea6473c02c8f6c3815a'
+        },
+        'echo': {
+          'class': 'DSEcho',
+          'address': '0x992c64ac907ef9e531e7ff8d06cec599778a0e72'
+        }
+      }
+    }
+  };
 
-  function constructor (_web3, env) {
+  function constructor(_web3, env) {
     if (!env) {
       env = 'default';
     }
@@ -4480,8 +4524,8 @@ Dapple['dappsys'] = (function builder () {
   };
 })();
 
-Dapple['Maker'] = (function builder () {
-  function sanitize (web3, opts, cb) {
+Dapple['Maker'] = (function builder() {
+  function sanitize(web3, opts, cb) {
     var defaultOpts = {
       from: web3.eth.defaultAccount || web3.eth.coinbase
     };
@@ -4494,14 +4538,14 @@ Dapple['Maker'] = (function builder () {
       opts = defaultOpts;
     }
     if (typeof cb === 'undefined') {
-      cb = function () {};
+      cb = function () { };
     }
 
     if (!opts.gas) {
       opts.gas = web3.eth.estimateGas(opts);
     }
 
-    return {opts: opts, cb: cb};
+    return { opts: opts, cb: cb };
   }
 
   var MakerAdmin = function (maker) {
@@ -4516,7 +4560,7 @@ Dapple['Maker'] = (function builder () {
   };
 
   MakerAdmin.prototype.proposeAction = function (
-      contract, func, args, value, opts, cb) {
+    contract, func, args, value, opts, cb) {
     var sanitized = sanitize(this._web3, opts, cb);
     opts = sanitized.opts;
     cb = sanitized.cb;
@@ -4528,12 +4572,12 @@ Dapple['Maker'] = (function builder () {
     var proposalData = this._constructProposalData(contract, func, args);
 
     var filter = this._multisig.Proposed(
-        {calldata: proposalData},
-        function (err, evt) {
-          filter.stopWatching();
-          if (err) return cb(err);
-          cb(null, evt.args.action_id);
-        });
+      { calldata: proposalData },
+      function (err, evt) {
+        filter.stopWatching();
+        if (err) return cb(err);
+        cb(null, evt.args.action_id);
+      });
 
     return this._multisig.propose(contract.address, proposalData, value, opts);
   };
@@ -4547,7 +4591,7 @@ Dapple['Maker'] = (function builder () {
   };
 
   MakerAdmin.prototype.verifyAction = function (
-      actionID, contract, func, args, value, cb) {
+    actionID, contract, func, args, value, cb) {
     var that = this;
     if (typeof contract === 'string') {
       contract = this._stringToContract(contract);
@@ -4559,12 +4603,12 @@ Dapple['Maker'] = (function builder () {
     // which should cover one whole voting round with some room to spare.
     var lookback = 10000;
 
-    function compareTxData (err, tx) {
+    function compareTxData(err, tx) {
       if (err) {
         return cb(err);
       }
       var expectedData = that._getData(
-          that._multisig, 'propose', [contract.address, proposalData, value]);
+        that._multisig, 'propose', [contract.address, proposalData, value]);
       var res = {
         actionID: actionID,
         actualData: tx.input,
@@ -4572,8 +4616,8 @@ Dapple['Maker'] = (function builder () {
       };
       res.verified = (res.actualData === res.expectedData);
       res.message = (res.verified ?
-          'Passes verification. Should be safe to confirm.' :
-          'Does NOT pass verification! Do NOT confirm!');
+        'Passes verification. Should be safe to confirm.' :
+        'Does NOT pass verification! Do NOT confirm!');
       return cb(null, res);
     }
 
@@ -4582,20 +4626,20 @@ Dapple['Maker'] = (function builder () {
         return cb(err);
       }
       that.ActionProposed(
-        {action_id: actionID},
-        {fromBlock: latestBN - lookback, toBlock: latestBN})
-      .get(function (err, logs) {
-        if (err) {
-          return cb(err);
-        }
-        if (logs.length === 0) {
-          return cb('Could not find action proposal with ID ' + actionID +
-                    ' in the last ' + lookback + ' blocks!');
-        }
+        { action_id: actionID },
+        { fromBlock: latestBN - lookback, toBlock: latestBN })
+        .get(function (err, logs) {
+          if (err) {
+            return cb(err);
+          }
+          if (logs.length === 0) {
+            return cb('Could not find action proposal with ID ' + actionID +
+              ' in the last ' + lookback + ' blocks!');
+          }
 
-        that._web3.eth.getTransaction(
-          logs[0].transactionHash, compareTxData);
-      });
+          that._web3.eth.getTransaction(
+            logs[0].transactionHash, compareTxData);
+        });
     })
   };
 
@@ -4633,7 +4677,7 @@ Dapple['Maker'] = (function builder () {
   };
 
   MakerAdmin.prototype._constructProposalData = function (
-      contract, func, args) {
+    contract, func, args) {
     if (!(func in contract)) {
       throw new Error('Unrecognized function name: ' + func);
     }
@@ -4653,11 +4697,11 @@ Dapple['Maker'] = (function builder () {
 
     for (var i = 0; i < targetABI.length; i += 1) {
       if (targetABI[i].type !== 'function') continue;
-      targetABI[i].outputs = [{'name': '', 'type': 'bytes'}];
+      targetABI[i].outputs = [{ 'name': '', 'type': 'bytes' }];
     }
 
     var echoer = this._dappsys.web3.eth.contract(targetABI)
-                     .at(this._dappsys.objects.echo.address);
+      .at(this._dappsys.objects.echo.address);
 
     return echoer[func].call.apply(echoer, args);
   };
@@ -4685,8 +4729,8 @@ Dapple['Maker'] = (function builder () {
 
           if (receipt.logs.length === 0) {
             return cb('Exception was thrown in multisig contract. ' +
-                      'Did you send from your admin multisig address?' +
-                      'Have you already ' + verb + 'ed this action?');
+              'Did you send from your admin multisig address?' +
+              'Have you already ' + verb + 'ed this action?');
           }
           return cb(null, actionID);
         }
@@ -4755,7 +4799,7 @@ Dapple['Maker'] = (function builder () {
       console.log('ERROR: ' + err);
     } else {
       console.log('Action #' + response.actionID + ' verification result: ' +
-          response.message);
+        response.message);
     }
   };
 

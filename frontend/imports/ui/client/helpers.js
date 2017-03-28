@@ -34,7 +34,12 @@ Template.registerHelper('contractHref', () => {
   let contractHref = '';
   if (Dapple['maker-otc'].objects) {
     const network = Session.get('network');
-    const networkPrefix = (network === 'ropsten' ? 'testnet.' : '');
+    let networkPrefix = '';
+    if (network === 'ropsten') {
+      networkPrefix = 'testnet.';
+    } else if (network === 'kovan') {
+      networkPrefix = 'kovan.';
+    }
     const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
     contractHref = `https://${networkPrefix}etherscan.io/address/${contractAddress}`;
   }
@@ -141,7 +146,7 @@ Template.registerHelper('findOffers', (type) => {
   const dustLimit = dustLimitMap[quoteCurrency] ? dustLimitMap[quoteCurrency] : 0;
 
   const options = {};
-  options.sort = { ask_price_sort: 1 };
+  options.sort = { ask_price_sort: 1, _id: -1 };
   if (limit) {
     options.limit = limit;
   }
@@ -156,7 +161,7 @@ Template.registerHelper('findOffers', (type) => {
       { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
     ];
     const address = Session.get('address');
-    return Offers.find({ owner: address, $or: or });
+    return Offers.find({ owner: address, $or: or }, { sort: { buyWhichToken: 1, _id: -1 } });
   }
   return [];
 });
