@@ -73,10 +73,10 @@ class WGNT {
         Session.set('GNTDepositProgress', 0);
         Session.set('GNTDepositProgressMessage', '');
         Session.set('GNTDepositErrorMessage',
-          'Clearing Broker went wrong. Please execute the clearing manually again to get the deposit.');
+          'Clearing Broker went wrong. Please execute the clearing manually again to get the wrapped coin.');
       } else {
         Session.set('GNTDepositProgress', 100);
-        Session.set('GNTDepositProgressMessage', 'Deposit Done!');
+        Session.set('GNTDepositProgressMessage', 'Wrap Done!');
         Meteor.setTimeout(() => {
           Session.set('GNTDepositProgress', 0);
           Session.set('GNTDepositProgressMessage', '');

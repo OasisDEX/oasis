@@ -14,8 +14,8 @@ export function formatError(error) {
 }
 
 export function doTabShow() {
-  if (location.hash.indexOf('#deposit') !== -1) {
-    $('.nav-tabs a[href=#deposit]').tab('show');
+  if (location.hash.indexOf('#wrap') !== -1) {
+    $('.nav-tabs a[href=#wrap]').tab('show');
   } else if (location.hash.indexOf('#transfer') !== -1) {
     $('.nav-tabs a[href=#transfer]').tab('show');
   } else {
@@ -30,7 +30,7 @@ export function doHashChange() {
   let quoteCurrency = null;
   let baseCurrency = null;
 
-  if (location.hash.indexOf('#deposit') === -1 && location.hash.indexOf('#transfer') === -1) {
+  if (location.hash.indexOf('#wrap') === -1 && location.hash.indexOf('#transfer') === -1) {
     if (location.hash.indexOf('#trade') === -1) {
       location.hash = `#trade/${localStorage.getItem('quoteCurrency') || 'W-ETH'}`
                       + `/${localStorage.getItem('baseCurrency') || 'MKR'}`;

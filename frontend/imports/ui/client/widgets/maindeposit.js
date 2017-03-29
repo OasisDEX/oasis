@@ -5,10 +5,10 @@ import { doTabShow } from '../../../utils/functions.js';
 
 Template.maindeposit.viewmodel({
   depositData() {
-    return { title: 'DEPOSIT', depositType: 'deposit' };
+    return { title: 'WRAP', depositType: 'deposit' };
   },
   withdrawData() {
-    return { title: 'WITHDRAW', depositType: 'withdraw' };
+    return { title: 'UNWRAP', depositType: 'withdraw' };
   },
   tokenTemplate() {
     if (typeof Session.get('tokenTemplate') === 'undefined') {
