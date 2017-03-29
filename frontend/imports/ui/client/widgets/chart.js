@@ -99,11 +99,6 @@ Template.chart.viewmodel({
               display: false,
             },
             scales: {
-              yAxes: [{
-                ticks: {
-                  beginAtZero: true,
-                },
-              }],
               xAxes: [{
                 display: false,
               }],
@@ -140,10 +135,12 @@ Template.chart.viewmodel({
       charts.price.data.datasets = [{
         data: prices,
         borderColor: '#5071b3',
-        borderWidth: 3,
+        borderWidth: 2,
         fill: false,
         pointBackgroundColor: '#5071b3',
-        pointRadius: 3,
+        pointRadius: 1,
+        pointHitRadius: 5,
+        pointHoverRadius: 4
       }];
 
       charts.price.update();
