@@ -276,7 +276,7 @@ Template.neworder.viewmodel({
     this.offerType(this.type());
   },
   showDepositTab() {
-    $('#deposit').tab('show');
+    $('#wrap').tab('show');
   },
   showAllowanceModal(token) {
     $(`#allowanceModal${token}`).modal('show');

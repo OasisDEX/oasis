@@ -246,10 +246,6 @@ Template.offermodal.viewmodel({
   dismiss(event) {
     $(event.target).closest('.modal').modal('hide');
   },
-  cancel() {
-    const offerId = this.templateInstance.data.offer._id;
-    Offers.cancelOffer(offerId);
-  },
   canBuy() {
     try {
       if (Template.currentData().offer.status !== Status.CONFIRMED) {
