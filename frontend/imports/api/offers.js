@@ -179,18 +179,16 @@ Offers.syncTrades = (historicalTradesRange) => {
     const sellWhichToken = Dapple.getTokenByAddress(logTake.args.haveToken);
 
     if (buyWhichToken && sellWhichToken && !logTake.removed) {
-      // Transform arguments
-      const args = {
+      return {
         buyWhichToken_address: logTake.args.wantToken,
         buyWhichToken,
         sellWhichToken_address: logTake.args.haveToken,
         sellWhichToken,
-        buyHowMuch: convertTo18Precision(logTake.args.wantAmount.toString(10), buyWhichToken),
-        sellHowMuch: convertTo18Precision(logTake.args.haveAmount.toString(10), sellWhichToken),
-        timestamp: logTake.args.timestamp,
+        buyHowMuch: convertTo18Precision(logTake.args.giveAmount.toString(10), buyWhichToken),
+        sellHowMuch: convertTo18Precision(logTake.args.takeAmount.toString(10), sellWhichToken),
+        timestamp: logTake.args.timestamp.toNumber(),
         transactionHash: logTake.transactionHash
       };
-      return args;
     }
     return false;
   }
@@ -210,17 +208,12 @@ Offers.syncTrades = (historicalTradesRange) => {
     }
   });
 
-  // Watch Trade events in realtime
-  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: historicalTradesRange.endBlockNumber+1 }, (error, trade) => {
+  // Watch LogTake events in realtime
+  Dapple['maker-otc'].objects.otc.LogTake({}, { fromBlock: historicalTradesRange.endBlockNumber+1 }, (error, logTake) => {
     if (!error) {
-      const args = logTakeToTrade(trade);
-      if (args) {
-        // Get block for timestamp
-        web3.eth.getBlock(trade.blockNumber, (blockError, block) => {
-          if (!error) {
-            Trades.upsert(trade.transactionHash, _.extend(block, trade, args));
-          }
-        });
+      const trade = logTakeToTrade(logTake);
+      if (trade) {
+        Trades.upsert(trade.transactionHash, trade);
       }
     }
   });
