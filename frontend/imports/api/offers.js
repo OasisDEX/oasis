@@ -174,19 +174,21 @@ Offers.syncOffers = () => {
 };
 
 Offers.syncTrades = (historicalTradesRange) => {
-  function transformArgs(trade) {
-    const buyWhichToken = Dapple.getTokenByAddress(trade.args.buy_which_token);
-    const sellWhichToken = Dapple.getTokenByAddress(trade.args.sell_which_token);
+  function logTakeToTrade(logTake) {
+    const buyWhichToken = Dapple.getTokenByAddress(logTake.args.wantToken);
+    const sellWhichToken = Dapple.getTokenByAddress(logTake.args.haveToken);
 
-    if (buyWhichToken && sellWhichToken) {
+    if (buyWhichToken && sellWhichToken && !logTake.removed) {
       // Transform arguments
       const args = {
-        buyWhichToken_address: trade.args.buy_which_token,
+        buyWhichToken_address: logTake.args.wantToken,
         buyWhichToken,
-        sellWhichToken_address: trade.args.sell_which_token,
+        sellWhichToken_address: logTake.args.haveToken,
         sellWhichToken,
-        buyHowMuch: convertTo18Precision(trade.args.buy_how_much.toString(10), buyWhichToken),
-        sellHowMuch: convertTo18Precision(trade.args.sell_how_much.toString(10), sellWhichToken),
+        buyHowMuch: convertTo18Precision(logTake.args.wantAmount.toString(10), buyWhichToken),
+        sellHowMuch: convertTo18Precision(logTake.args.haveAmount.toString(10), sellWhichToken),
+        timestamp: logTake.args.timestamp,
+        transactionHash: logTake.transactionHash
       };
       return args;
     }
@@ -194,39 +196,24 @@ Offers.syncTrades = (historicalTradesRange) => {
   }
 
 
-  // Get all Trade events in one go so we can fill up prices, volume and history
-  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: historicalTradesRange.startBlockNumber,
-    toBlock: historicalTradesRange.endBlockNumber }).get((error, trades) => {
+  // Get all LogTake events in one go so we can fill up prices, volume and trade history
+  Dapple['maker-otc'].objects.otc.LogTake({}, { fromBlock: historicalTradesRange.startBlockNumber,
+    toBlock: historicalTradesRange.endBlockNumber }).get((error, logTakes) => {
     if (!error) {
-      let trade = null;
-      const promises = [];
-
-      if (trades.length > 0) {
-        for (let i = 0; i < trades.length; i++) {
-          promises.push(Offers.getBlock(trades[i].blockNumber));
+      for (let i = 0; i < logTakes.length; i++) {
+        const trade = logTakeToTrade(logTakes[i]);
+        if (trade && (trade.timestamp*1000 >= historicalTradesRange.startTimestamp)) {
+          Trades.upsert(trade.transactionHash, trade);
         }
-
-        Promise.all(promises).then((resultProm) => {
-          for (let i = 0; i < trades.length; i++) {
-            trade = trades[i];
-            const args = transformArgs(trade);
-
-            if (args && (resultProm[i].timestamp*1000 >= historicalTradesRange.startTimestamp)) {
-              Trades.upsert(trade.transactionHash, _.extend(resultProm[i], trade, args));
-            }
-          }
-          Session.set('loadingTradeHistory', false);
-        });
-      } else {
-        Session.set('loadingTradeHistory', false);
       }
+      Session.set('loadingTradeHistory', false);
     }
   });
 
   // Watch Trade events in realtime
   Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: historicalTradesRange.endBlockNumber+1 }, (error, trade) => {
     if (!error) {
-      const args = transformArgs(trade);
+      const args = logTakeToTrade(trade);
       if (args) {
         // Get block for timestamp
         web3.eth.getBlock(trade.blockNumber, (blockError, block) => {
