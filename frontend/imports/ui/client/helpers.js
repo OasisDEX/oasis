@@ -199,6 +199,15 @@ Template.registerHelper('timestampToString', (ts, inSeconds, short) => {
   return timestampStr;
 });
 
+Template.registerHelper('formatDateMarketClose', (ts, inSeconds) => {
+  let timestampStr = '';
+  if (ts) {
+    const momentFromTimestamp = (inSeconds === true) ? moment.unix(ts) : moment.unix(ts / 1000);
+    timestampStr = momentFromTimestamp.format('DD-MMM-YYYY');
+  }
+  return timestampStr;
+});
+
 Template.registerHelper('log', (value) => {
   console.log(value);
 });
