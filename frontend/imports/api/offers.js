@@ -99,7 +99,7 @@ Offers.checkMarketOpen = () => {
 Offers.getHistoricalTradesRange = (numberOfPreviousDays) => {
   // 5760 is an average number of blocks per day. in case we didn't get far enough
   // after the initial jump we step back 1000 blocks at a time
-  const INITIAL_NUMBER_OF_BLOCKS_BACKWARDS = (5760 * (numberOfPreviousDays + 1)) + 3000;
+  const INITIAL_NUMBER_OF_BLOCKS_BACKWARDS = (Session.get('AVGBlocksPerDay') * (numberOfPreviousDays + 1)) + 3000;
   const STEP_NUMBER_OF_BLOCKS_BACKWARDS = 1000;
 
   function getBlockNumberOfTheMostRecentBlock() {
@@ -135,7 +135,9 @@ Offers.getHistoricalTradesRange = (numberOfPreviousDays) => {
 Offers.sync = () => {
   Offers.checkMarketOpen();
   Offers.syncOffers();
-  Offers.getHistoricalTradesRange(6).then(Offers.syncTrades);
+  if (typeof Session.get('AVGBlocksPerDay') !== 'undefined') {
+    Offers.getHistoricalTradesRange(6).then(Offers.syncTrades);
+  }
 };
 
 Offers.syncOffers = () => {
