@@ -143,6 +143,8 @@ function initSession() {
   Session.set('GNTWithdrawProgressMessage', '');
   Session.set('GNTWithdrawErrorMessage', '');
   Session.set('loadingTradeHistory', true);
+  Session.set('AVGBlocksPerDay', null);
+  Session.set('watchedEvents', false);
   if (!Session.get('volumeSelector')) {
     Session.set('volumeSelector', 'quote');
   }

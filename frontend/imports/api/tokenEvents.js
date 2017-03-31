@@ -21,10 +21,7 @@ class TokenEventCollection extends Mongo.Collection {
       });
     });
   }
-  syncEvent(tokenId, event) {
-    if (typeof (event.event) === 'undefined') {
-      return;
-    }
+  prepareRow(tokenId, event) {
     const row = {
       blockNumber: event.blockNumber,
       transactionHash: event.transactionHash,
@@ -56,7 +53,22 @@ class TokenEventCollection extends Mongo.Collection {
     if (typeof (row.amount) !== 'undefined') {
       row.amount = row.amount.toString(10);
     }
-    super.upsert({ transactionHash: event.transactionHash, from: row.from, to: row.to }, row, { upsert: true });
+
+    return row;
+  }
+
+  syncEvent(tokenId, event) {
+    const row = this.prepareRow(tokenId, event);
+    super.insert(row);
+  }
+
+  syncEvents(tokenId, events) {
+    const rows = [];
+    for (let i = 0; i < events.length; i++) {
+      rows[i] = this.prepareRow(tokenId, events[i]);
+    }
+    super.batchInsert(rows, () => {
+    });
   }
 
   syncTimestamps() {
@@ -79,33 +91,64 @@ class TokenEventCollection extends Mongo.Collection {
   }
 
   watchEvents() {
-    if (typeof Session.get('AVGBlocksPerDay') !== 'undefined') {
+    if (Session.get('AVGBlocksPerDay') && !Session.get('watchedEvents')) {
+      Session.set('watchedEvents', true);
       const self = this;
       self.getLatestBlock().then((block) => {
-        const startingBlock = block.number - (Session.get('AVGBlocksPerDay') * 7);
-        console.log(startingBlock);
-        self.watchTokenEvents(startingBlock);
-        self.watchGNTTokenEvents(startingBlock);
+        self.watchTokenEvents(block.number);
+        // self.watchGNTTokenEvents(startingBlock);
       });
     }
   }
 
-  watchTokenEvents(startingBlock) {
+  /* eslint new-cap: ["error", { "capIsNewExceptions": ["Transfer", "Deposit", "Withdrawal"] }] */
+
+  watchTokenEvents(latestBlock) {
     // console.log('filtering token events from ', Session.get('startBlock'));
     const ALL_TOKENS = Dapple.getTokens();
     ALL_TOKENS.forEach((tokenId) => {
       Dapple.getToken(tokenId, (error, token) => {
+        console.log(tokenId);
         if (!error) {
-          const events = token.allEvents({
-            fromBlock: startingBlock,
-            toBlock: 'latest',
-          });
           const self = this;
-          events.watch((err, event) => {
-            if (!err) {
-              self.syncEvent(tokenId, event);
-            }
-          });
+          token.Transfer({}, {
+            fromBlock: latestBlock - parseInt(Session.get('AVGBlocksPerDay') / 12, 10),
+            toBlock: 'latest' }).get((err, result) => {
+              if (!err) {
+                self.syncEvents(tokenId, result);
+              }
+              token.Transfer({}, { fromBlock: 'latest' }, (err2, result2) => {
+                if (!err2) {
+                  self.syncEvent(tokenId, result2);
+                }
+              });
+            });
+          if (tokenId === 'W-ETH') {
+            token.Deposit({}, {
+              fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7),
+              toBlock: 'latest' }).get((err, result) => {
+                if (!err) {
+                  self.syncEvents(tokenId, result);
+                }
+                token.Deposit({}, { fromBlock: 'latest' }, (err2, result2) => {
+                  if (!err2) {
+                    self.syncEvent(tokenId, result2);
+                  }
+                });
+              });
+            token.Withdrawal({}, {
+              fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7),
+              toBlock: 'latest' }).get((err, result) => {
+                if (!err) {
+                  self.syncEvents(tokenId, result);
+                }
+                token.Withdrawal({}, { fromBlock: 'latest' }, (err2, result2) => {
+                  if (!err2) {
+                    self.syncEvent(tokenId, result2);
+                  }
+                });
+              });
+          }
         }
       });
     });
