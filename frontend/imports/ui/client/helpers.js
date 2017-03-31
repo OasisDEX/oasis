@@ -100,7 +100,7 @@ Template.registerHelper('countLastTrades', () => {
   const quoteCurrency = Session.get('quoteCurrency');
   const baseCurrency = Session.get('baseCurrency');
   const options = {};
-  options.sort = { blockNumber: -1, transactionIndex: -1 };
+  options.sort = { timestamp: -1 };
   const obj = { $or: [
     { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
     { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
@@ -116,7 +116,7 @@ Template.registerHelper('lastTrades', () => {
   if (limit) {
     options.limit = limit;
   }
-  options.sort = { blockNumber: -1, transactionIndex: -1 };
+  options.sort = { timestamp: -1 };
   const obj = { $or: [
     { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
     { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
