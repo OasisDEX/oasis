@@ -22,6 +22,12 @@ let bidAmounts = { base: [], quote: [] }; // Array of bid amounts
 const volumes = { base: {}, quote: {} };
 let days = [];
 
+// Options applied to all charts
+Object.assign(Chart.defaults.global, {
+  maintainAspectRatio: false,
+  responsive: false,
+});
+
 Template.chart.viewmodel({
   currentChart: 'DEPTH',
   showDepth() {
@@ -65,7 +71,6 @@ Template.chart.viewmodel({
           type: 'line',
           data: {},
           options: {
-            maintainAspectRatio: true,
             layout: {
               padding: 5,
             },
@@ -296,7 +301,6 @@ Template.chart.viewmodel({
           type: 'line',
           data: {},
           options: {
-            maintainAspectRatio: true,
             layout: {
               padding: 5,
             },
