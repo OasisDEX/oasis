@@ -10,17 +10,6 @@ class TokenEventCollection extends Mongo.Collection {
   toLabel() {
     return super.to;
   }
-  getLatestBlock() {
-    return new Promise((resolve, reject) => {
-      web3.eth.getBlock('latest', (blockError, block) => {
-        if (!blockError) {
-          resolve(block);
-        } else {
-          reject(blockError);
-        }
-      });
-    });
-  }
   syncEvent(tokenId, event) {
     if (typeof (event.event) === 'undefined') {
       return;
@@ -78,40 +67,30 @@ class TokenEventCollection extends Mongo.Collection {
     syncTs(0);
   }
 
-  watchEvents() {
-    if (typeof Session.get('AVGBlocksPerDay') !== 'undefined') {
-      const self = this;
-      self.getLatestBlock().then((block) => {
-        const startingBlock = block.number - (Session.get('AVGBlocksPerDay') * 7);
-        console.log(startingBlock);
-        self.watchTokenEvents(startingBlock);
-        self.watchGNTTokenEvents(startingBlock);
+  watchTokenEvents() {
+    if (Session.get('startBlock') !== 0) {
+      // console.log('filtering token events from ', Session.get('startBlock'));
+      const ALL_TOKENS = Dapple.getTokens();
+      ALL_TOKENS.forEach((tokenId) => {
+        Dapple.getToken(tokenId, (error, token) => {
+          if (!error) {
+            const events = token.allEvents({
+              fromBlock: Session.get('startBlock'),
+              toBlock: 'latest',
+            });
+            const self = this;
+            events.watch((err, event) => {
+              if (!err) {
+                self.syncEvent(tokenId, event);
+              }
+            });
+          }
+        });
       });
     }
   }
 
-  watchTokenEvents(startingBlock) {
-    // console.log('filtering token events from ', Session.get('startBlock'));
-    const ALL_TOKENS = Dapple.getTokens();
-    ALL_TOKENS.forEach((tokenId) => {
-      Dapple.getToken(tokenId, (error, token) => {
-        if (!error) {
-          const events = token.allEvents({
-            fromBlock: startingBlock,
-            toBlock: 'latest',
-          });
-          const self = this;
-          events.watch((err, event) => {
-            if (!err) {
-              self.syncEvent(tokenId, event);
-            }
-          });
-        }
-      });
-    });
-  }
-
-  watchGNTTokenEvents(startingBlock) {
+  watchGNTTokenEvents() {
     Dapple.getToken('GNT', (errorGNT, GNT) => {
       if (!errorGNT) {
         Dapple.getToken('W-GNT', (errorWGNT, WGNT) => {
@@ -120,7 +99,7 @@ class TokenEventCollection extends Mongo.Collection {
               if (!errorBroker && broker !== '0x0000000000000000000000000000000000000000') {
                 /* eslint-disable new-cap */
                 GNT.Transfer({ from: broker, to: WGNT.address },
-                  { fromBlock: startingBlock }, (errorDeposit, eventDeposit) => {
+                  { fromBlock: Session.get('startBlock') }, (errorDeposit, eventDeposit) => {
                     if (!errorDeposit) {
                       const row = {
                         blockNumber: eventDeposit.blockNumber,
@@ -137,7 +116,7 @@ class TokenEventCollection extends Mongo.Collection {
                   });
 
                 GNT.Transfer({ from: WGNT.address, to: Session.get('address') },
-                  { fromBlock: startingBlock }, (ErrorWithdrawal, eventWithdrawal) => {
+                  { fromBlock: Session.get('startBlock') }, (ErrorWithdrawal, eventWithdrawal) => {
                     if (!ErrorWithdrawal) {
                       const row = {
                         blockNumber: eventWithdrawal.blockNumber,
