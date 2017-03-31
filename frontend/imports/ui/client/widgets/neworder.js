@@ -264,6 +264,7 @@ Template.neworder.viewmodel({
         this.calcTotal();
       }
     }
+    return false;
   },
   openOfferModal() {
     Session.set('selectedOffer', this.bestOffer());
