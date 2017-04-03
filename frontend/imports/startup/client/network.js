@@ -85,15 +85,15 @@ function checkNetwork() {
             switch (res.hash) {
               case '0xa3c565fc15c7478862d50ccd6561e3c06b24cc509bf388941c25ea985ce32cb9':
                 network = 'kovan';
-                Session.set('AVGBlocksPerDay', 21600);
                 break;
               case '0x41941023680923e0fe4d74a34bdac8141f2540e3ae90623718e47d66d1ca4a2d':
                 network = 'ropsten';
-                Session.set('AVGBlocksPerDay', 5760);
+                break;
+              case '0x0cd786a2425d16f152c658316c423e6ce1181e15c3295826d7c9904cba9ce303':
+                network = 'morden';
                 break;
               case '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3':
                 network = 'main';
-                Session.set('AVGBlocksPerDay', 5760);
                 break;
               default:
                 network = 'private';
@@ -229,7 +229,8 @@ Meteor.startup(() => {
 });
 
 Meteor.autorun(() => {
-  TokenEvents.watchEvents();
+  TokenEvents.watchTokenEvents();
+  TokenEvents.watchGNTTokenEvents();
   WGNT.watchBrokerCreation();
   WGNT.watchBrokerTransfer();
   WGNT.watchBrokerClear();
