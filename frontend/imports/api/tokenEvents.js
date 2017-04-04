@@ -10,10 +10,18 @@ class TokenEventCollection extends Mongo.Collection {
   toLabel() {
     return super.to;
   }
-  syncEvent(tokenId, event) {
-    if (typeof (event.event) === 'undefined') {
-      return;
-    }
+  getLatestBlock() {
+    return new Promise((resolve, reject) => {
+      web3.eth.getBlock('latest', (blockError, block) => {
+        if (!blockError) {
+          resolve(block);
+        } else {
+          reject(blockError);
+        }
+      });
+    });
+  }
+  prepareRow(tokenId, event) {
     const row = {
       blockNumber: event.blockNumber,
       transactionHash: event.transactionHash,
@@ -45,7 +53,21 @@ class TokenEventCollection extends Mongo.Collection {
     if (typeof (row.amount) !== 'undefined') {
       row.amount = row.amount.toString(10);
     }
-    super.upsert({ transactionHash: event.transactionHash, from: row.from, to: row.to }, row, { upsert: true });
+
+    return row;
+  }
+
+  syncEvent(tokenId, event) {
+    const row = this.prepareRow(tokenId, event);
+    super.insert(row);
+  }
+
+  syncEvents(tokenId, events) {
+    const rows = [];
+    for (let i = 0; i < events.length; i++) {
+      rows[i] = this.prepareRow(tokenId, events[i]);
+    }
+    super.batchInsert(rows, () => {});
   }
 
   syncTimestamps() {
@@ -67,71 +89,143 @@ class TokenEventCollection extends Mongo.Collection {
     syncTs(0);
   }
 
-  watchTokenEvents() {
-    if (Session.get('startBlock') !== 0) {
-      // console.log('filtering token events from ', Session.get('startBlock'));
-      const ALL_TOKENS = Dapple.getTokens();
-      ALL_TOKENS.forEach((tokenId) => {
-        Dapple.getToken(tokenId, (error, token) => {
-          if (!error) {
-            const events = token.allEvents({
-              fromBlock: Session.get('startBlock'),
-              toBlock: 'latest',
-            });
-            const self = this;
-            events.watch((err, event) => {
-              if (!err) {
-                self.syncEvent(tokenId, event);
-              }
-            });
-          }
-        });
+  watchEvents() {
+    if (Session.get('AVGBlocksPerDay') && !Session.get('watchedEvents')) {
+      Session.set('watchedEvents', true);
+      const self = this;
+      self.getLatestBlock().then((block) => {
+        self.watchTokenEvents(block.number);
+        self.watchGNTTokenEvents(block.number);
       });
     }
   }
 
-  watchGNTTokenEvents() {
+  /* eslint new-cap: ["error", { "capIsNewExceptions": ["Transfer", "Deposit", "Withdrawal"] }] */
+
+  watchTokenEvents(latestBlock) {
+    // console.log('filtering token events from ', Session.get('startBlock'));
+    const ALL_TOKENS = Dapple.getTokens();
+    ALL_TOKENS.forEach((tokenId) => {
+      Dapple.getToken(tokenId, (error, token) => {
+        // console.log(tokenId);
+        if (!error) {
+          const self = this;
+          token.Transfer({}, {
+            fromBlock: latestBlock - parseInt(Session.get('AVGBlocksPerDay') / 12, 10), // Last 2 hours
+          }).get((err, result) => {
+            if (!err) {
+              self.syncEvents(tokenId, result);
+            }
+            token.Transfer({}, { fromBlock: 'latest' }, (err2, result2) => {
+              if (!err2) {
+                self.syncEvent(tokenId, result2);
+              }
+            });
+          });
+
+          if (tokenId === 'W-ETH') {
+            token.Deposit({}, {
+              fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
+            }).get((err, result) => {
+              if (!err) {
+                self.syncEvents(tokenId, result);
+              }
+              token.Deposit({}, { fromBlock: 'latest' }, (err2, result2) => {
+                if (!err2) {
+                  self.syncEvent(tokenId, result2);
+                }
+              });
+            });
+            token.Withdrawal({}, {
+              fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
+            }).get((err, result) => {
+              if (!err) {
+                self.syncEvents(tokenId, result);
+              }
+              token.Withdrawal({}, { fromBlock: 'latest' }, (err2, result2) => {
+                if (!err2) {
+                  self.syncEvent(tokenId, result2);
+                }
+              });
+            });
+          }
+        }
+      });
+    });
+  }
+
+  prepareRowGNT(event, token, type, to) {
+    const row = {
+      blockNumber: event.blockNumber,
+      transactionHash: event.transactionHash,
+      timestamp: null,
+      token,
+      type,
+      from: Session.get('address'),
+      to,
+      amount: event.args.value.toNumber(),
+    };
+
+    return row;
+  }
+
+  watchGNTTokenEvents(latestBlock) {
+    const self = this;
     Dapple.getToken('GNT', (errorGNT, GNT) => {
       if (!errorGNT) {
         Dapple.getToken('W-GNT', (errorWGNT, WGNT) => {
           if (!errorWGNT) {
             WGNT.getBroker.call((errorBroker, broker) => {
               if (!errorBroker && broker !== '0x0000000000000000000000000000000000000000') {
-                /* eslint-disable new-cap */
-                GNT.Transfer({ from: broker, to: WGNT.address },
-                  { fromBlock: Session.get('startBlock') }, (errorDeposit, eventDeposit) => {
-                    if (!errorDeposit) {
-                      const row = {
-                        blockNumber: eventDeposit.blockNumber,
-                        transactionHash: eventDeposit.transactionHash,
-                        timestamp: null,
-                        token: Dapple.getTokenByAddress(WGNT.address),
-                        type: 'deposit',
-                        from: Session.get('address'),
-                        to: WGNT.address,
-                        amount: eventDeposit.args.value.toNumber(),
-                      };
-                      super.upsert({ transactionHash: eventDeposit.transactionHash }, row, { upsert: true });
+                GNT.Transfer({ from: broker, to: WGNT.address }, {
+                  fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
+                }).get((error, result) => {
+                  if (!error) {
+                    const rows = [];
+                    for (let i = 0; i < result.length; i++) {
+                      rows[i] = self.prepareRowGNT(result[i],
+                                                  Dapple.getTokenByAddress(WGNT.address),
+                                                  'deposit',
+                                                  WGNT.address);
+                    }
+                    super.batchInsert(rows, () => {});
+                  }
+                  GNT.Transfer({ from: broker, to: WGNT.address },
+                  { fromBlock: 'latest' }, (error2, result2) => {
+                    if (!error2) {
+                      const row = self.prepareRowGNT(result2,
+                                                    Dapple.getTokenByAddress(WGNT.address),
+                                                    'deposit',
+                                                    WGNT.address);
+                      super.insert(row);
                     }
                   });
+                });
 
-                GNT.Transfer({ from: WGNT.address, to: Session.get('address') },
-                  { fromBlock: Session.get('startBlock') }, (ErrorWithdrawal, eventWithdrawal) => {
-                    if (!ErrorWithdrawal) {
-                      const row = {
-                        blockNumber: eventWithdrawal.blockNumber,
-                        transactionHash: eventWithdrawal.transactionHash,
-                        timestamp: null,
-                        token: Dapple.getTokenByAddress(WGNT.address),
-                        type: 'withdrawal',
-                        from: WGNT.address,
-                        to: Session.get('address'),
-                        amount: eventWithdrawal.args.value.toNumber(),
-                      };
-                      super.upsert({ transactionHash: eventWithdrawal.transactionHash }, row, { upsert: true });
+                GNT.Transfer({ from: WGNT.address, to: Session.get('address') }, {
+                  fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
+                }).get((error, result) => {
+                  if (!error) {
+                    const rows = [];
+                    for (let i = 0; i < result.length; i++) {
+                      rows[i] = self.prepareRowGNT(result[i],
+                                                  Dapple.getTokenByAddress(WGNT.address),
+                                                  'withdrawal',
+                                                  Session.get('address'));
+                    }
+                    super.batchInsert(rows, () => {});
+                  }
+                  GNT.Transfer({ from: WGNT.address, to: Session.get('address') },
+                  { fromBlock: 'latest' }, (error2, result2) => {
+                    if (!error2) {
+                      const row = self.prepareRowGNT(result2,
+                                                    Dapple.getTokenByAddress(WGNT.address),
+                                                    'withdrawal',
+                                                    Session.get('address'));
+                      super.insert(row);
                     }
                   });
-                /* eslint-enable new-cap */
+                });
               }
             });
           }

@@ -54,6 +54,7 @@ manuel:viewmodel@4.1.9
 manuel:viewmodel-debug@2.7.1
 meteor@1.6.0
 meteor-base@1.0.4
+mikowals:batch-insert@1.1.14
 minifier-css@1.2.15
 minifier-js@1.2.15
 minimongo@1.0.19
