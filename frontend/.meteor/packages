@@ -31,3 +31,4 @@ standard-minifier-js@1.2.1
 shell-server@0.2.1
 fourseven:scss
 momentjs:moment
+mikowals:batch-insert

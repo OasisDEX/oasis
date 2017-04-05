@@ -100,7 +100,7 @@ Template.registerHelper('countLastTrades', () => {
   const quoteCurrency = Session.get('quoteCurrency');
   const baseCurrency = Session.get('baseCurrency');
   const options = {};
-  options.sort = { blockNumber: -1, transactionIndex: -1 };
+  options.sort = { timestamp: -1 };
   const obj = { $or: [
     { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
     { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
@@ -116,7 +116,7 @@ Template.registerHelper('lastTrades', () => {
   if (limit) {
     options.limit = limit;
   }
-  options.sort = { blockNumber: -1, transactionIndex: -1 };
+  options.sort = { timestamp: -1 };
   const obj = { $or: [
     { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
     { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
@@ -131,9 +131,15 @@ Template.registerHelper('countOffers', (type) => {
   const dustLimit = dustLimitMap[quoteCurrency] ? dustLimitMap[quoteCurrency] : 0;
 
   if (type === 'ask') {
-    return Offers.find({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency, buyHowMuch_filter: {$gte: dustLimit} }).count();
+    return Offers.find({
+      buyWhichToken: quoteCurrency,
+      sellWhichToken: baseCurrency,
+      buyHowMuch_filter: { $gte: dustLimit } }).count();
   } else if (type === 'bid') {
-    return Offers.find({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency, sellHowMuch_filter: {$gte: dustLimit} }).count();
+    return Offers.find({
+      buyWhichToken: baseCurrency,
+      sellWhichToken: quoteCurrency,
+      sellHowMuch_filter: { $gte: dustLimit } }).count();
   }
   return 0;
 });
@@ -152,9 +158,15 @@ Template.registerHelper('findOffers', (type) => {
   }
 
   if (type === 'ask') {
-    return Offers.find({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency, buyHowMuch_filter: {$gte: dustLimit} }, options);
+    return Offers.find({
+      buyWhichToken: quoteCurrency,
+      sellWhichToken: baseCurrency,
+      buyHowMuch_filter: { $gte: dustLimit } }, options);
   } else if (type === 'bid') {
-    return Offers.find({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency, sellHowMuch_filter: {$gte: dustLimit} }, options);
+    return Offers.find({
+      buyWhichToken: baseCurrency,
+      sellWhichToken: quoteCurrency,
+      sellHowMuch_filter: { $gte: dustLimit } }, options);
   } else if (type === 'mine') {
     const or = [
       { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
@@ -195,6 +207,15 @@ Template.registerHelper('timestampToString', (ts, inSeconds, short) => {
     } else {
       timestampStr = momentFromTimestamp.format();
     }
+  }
+  return timestampStr;
+});
+
+Template.registerHelper('formatDateMarketClose', (ts, inSeconds) => {
+  let timestampStr = '';
+  if (ts) {
+    const momentFromTimestamp = (inSeconds === true) ? moment.unix(ts) : moment.unix(ts / 1000);
+    timestampStr = momentFromTimestamp.format('DD-MMM-YYYY');
   }
   return timestampStr;
 });

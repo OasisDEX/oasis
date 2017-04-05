@@ -264,6 +264,7 @@ Template.neworder.viewmodel({
         this.calcTotal();
       }
     }
+    return false;
   },
   openOfferModal() {
     Session.set('selectedOffer', this.bestOffer());
@@ -276,7 +277,7 @@ Template.neworder.viewmodel({
     this.offerType(this.type());
   },
   showDepositTab() {
-    $('#deposit').tab('show');
+    $('#wrap').tab('show');
   },
   showAllowanceModal(token) {
     $(`#allowanceModal${token}`).modal('show');

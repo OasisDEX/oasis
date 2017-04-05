@@ -23,25 +23,17 @@ Requirements:
 * geth `brew install ethereum` (or [`apt-get` for ubuntu](https://github.com/ethereum/go-ethereum/wiki/Installation-Instructions-for-Ubuntu))
 * solidity https://solidity.readthedocs.org/en/latest/installing-solidity.html
 * meteor `curl https://install.meteor.com/ | sh`
-* Global dapple, `npm install -g dapple meteor-build-client`
+* meteor-build-client, `npm install -g meteor-build-client`
 
 Clone and install:
 
 ```bash
 git clone https://github.com/OasisDEX/oasis-pro.git
 cd oasis-pro
-git submodule update --init --recursive
 npm install
-npm run build
 ```
 
 ## Usage (for Developers)
-
-You need to build the JS wrappers for the Dapple contracts:
-
-```bash
-npm run build
-```
 
 To run the frontend, start meteor:
 
@@ -50,8 +42,6 @@ cd frontend
 npm install
 meteor
 ```
-
-If you got the error message `File not found: build/maker-otc.js` or `File not found: build/token-wrapper.js`, then you forgot to run the build step from above.
 
 You can access the user interface on [http://localhost:3000/](http://localhost:3000/)
 

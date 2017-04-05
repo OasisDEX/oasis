@@ -2,8 +2,9 @@
 .DS_Store
 .publish/
 .vscode/
+.idea
+*.iml
 scripts/blockchain/tmp
-frontend/packages/dapple/build/
 dist/
 node_modules/
 npm-debug.log

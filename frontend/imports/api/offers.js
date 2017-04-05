@@ -4,6 +4,7 @@ import { BigNumber } from 'meteor/ethereum:web3';
 import { Dapple, web3 } from 'meteor/makerotc:dapple';
 import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
+import { moment } from 'meteor/momentjs:moment';
 
 import Transactions from '/imports/api/transactions';
 import { formatError } from '/imports/utils/functions';
@@ -83,7 +84,7 @@ Trades.helpers(helpers);
  * Get if market is open
  */
 Offers.checkMarketOpen = () => {
-   // Fetch the market close time
+  // Fetch the market close time
   Dapple['maker-otc'].objects.otc.close_time((error, t) => {
     if (!error) {
       const closeTime = t.toNumber();
@@ -98,7 +99,7 @@ Offers.checkMarketOpen = () => {
 Offers.getHistoricalTradesRange = (numberOfPreviousDays) => {
   // 5760 is an average number of blocks per day. in case we didn't get far enough
   // after the initial jump we step back 1000 blocks at a time
-  const INITIAL_NUMBER_OF_BLOCKS_BACKWARDS = 5760*(numberOfPreviousDays+1)+3000;
+  const INITIAL_NUMBER_OF_BLOCKS_BACKWARDS = (5760 * (numberOfPreviousDays + 1)) + 3000;
   const STEP_NUMBER_OF_BLOCKS_BACKWARDS = 1000;
 
   function getBlockNumberOfTheMostRecentBlock() {
@@ -107,24 +108,23 @@ Offers.getHistoricalTradesRange = (numberOfPreviousDays) => {
   function getBlockNumberOfSomeBlockEarlierThan(timestamp, startingFrom) {
     if (startingFrom < 0) return Promise.resolve(0);
     return Offers.getBlock(startingFrom).then((block) => {
-      if (block.timestamp*1000 <= timestamp) {
+      if (block.timestamp * 1000 <= timestamp) {
         return block.number;
       }
-      else {
-        return getBlockNumberOfSomeBlockEarlierThan(timestamp, startingFrom-STEP_NUMBER_OF_BLOCKS_BACKWARDS);
-      }
+      return getBlockNumberOfSomeBlockEarlierThan(timestamp, startingFrom - STEP_NUMBER_OF_BLOCKS_BACKWARDS);
     });
   }
 
   return getBlockNumberOfTheMostRecentBlock().then((blockNumberOfTheMostRecentBlock) => {
     const startTimestamp = moment(Date.now()).startOf('day').subtract(numberOfPreviousDays, 'days');
-    const initialGuess = blockNumberOfTheMostRecentBlock-INITIAL_NUMBER_OF_BLOCKS_BACKWARDS;
+    const initialGuess = blockNumberOfTheMostRecentBlock - INITIAL_NUMBER_OF_BLOCKS_BACKWARDS;
     return getBlockNumberOfSomeBlockEarlierThan(startTimestamp, initialGuess).then((foundBlockNumber) => {
-        return {
-            startBlockNumber: foundBlockNumber,
-            startTimestamp: startTimestamp,
-            endBlockNumber: blockNumberOfTheMostRecentBlock
-        };
+      const ret = {
+        startBlockNumber: foundBlockNumber,
+        startTimestamp,
+        endBlockNumber: blockNumberOfTheMostRecentBlock,
+      };
+      return ret;
     });
   });
 };
@@ -142,7 +142,7 @@ Offers.syncOffers = () => {
   Offers.remove({});
 
   // Watch ItemUpdate Event
-  /* eslint new-cap: ["error", { "capIsNewExceptions": ["ItemUpdate", "Trade"] }] */
+  /* eslint new-cap: ["error", { "capIsNewExceptions": ["ItemUpdate", "Trade", "LogTake"] }] */
   Dapple['maker-otc'].objects.otc.ItemUpdate((error, result) => {
     if (!error) {
       const id = result.args.id.toNumber();
@@ -174,66 +174,49 @@ Offers.syncOffers = () => {
 };
 
 Offers.syncTrades = (historicalTradesRange) => {
-  function transformArgs(trade) {
-    const buyWhichToken = Dapple.getTokenByAddress(trade.args.buy_which_token);
-    const sellWhichToken = Dapple.getTokenByAddress(trade.args.sell_which_token);
+  function logTakeToTrade(logTake) {
+    const buyWhichToken = Dapple.getTokenByAddress(logTake.args.wantToken);
+    const sellWhichToken = Dapple.getTokenByAddress(logTake.args.haveToken);
 
-    if (buyWhichToken && sellWhichToken) {
-      // Transform arguments
-      const args = {
-        buyWhichToken_address: trade.args.buy_which_token,
+    if (buyWhichToken && sellWhichToken && !logTake.removed) {
+      return {
+        buyWhichToken_address: logTake.args.wantToken,
         buyWhichToken,
-        sellWhichToken_address: trade.args.sell_which_token,
+        sellWhichToken_address: logTake.args.haveToken,
         sellWhichToken,
-        buyHowMuch: convertTo18Precision(trade.args.buy_how_much.toString(10), buyWhichToken),
-        sellHowMuch: convertTo18Precision(trade.args.sell_how_much.toString(10), sellWhichToken),
+        buyHowMuch: convertTo18Precision(logTake.args.giveAmount.toString(10), buyWhichToken),
+        sellHowMuch: convertTo18Precision(logTake.args.takeAmount.toString(10), sellWhichToken),
+        timestamp: logTake.args.timestamp.toNumber(),
+        transactionHash: logTake.transactionHash,
       };
-      return args;
     }
     return false;
   }
 
 
-  // Get all Trade events in one go so we can fill up prices, volume and history
-  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: historicalTradesRange.startBlockNumber,
-    toBlock: historicalTradesRange.endBlockNumber }).get((error, trades) => {
+  // Get all LogTake events in one go so we can fill up prices, volume and trade history
+  Dapple['maker-otc'].objects.otc.LogTake({}, {
+    fromBlock: historicalTradesRange.startBlockNumber,
+    toBlock: historicalTradesRange.endBlockNumber,
+  }).get((error, logTakes) => {
     if (!error) {
-      let trade = null;
-      const promises = [];
-
-      if (trades.length > 0) {
-        for (let i = 0; i < trades.length; i++) {
-          promises.push(Offers.getBlock(trades[i].blockNumber));
+      for (let i = 0; i < logTakes.length; i++) {
+        const trade = logTakeToTrade(logTakes[i]);
+        if (trade && (trade.timestamp * 1000 >= historicalTradesRange.startTimestamp)) {
+          Trades.upsert(trade.transactionHash, trade);
         }
-
-        Promise.all(promises).then((resultProm) => {
-          for (let i = 0; i < trades.length; i++) {
-            trade = trades[i];
-            const args = transformArgs(trade);
-
-            if (args && (resultProm[i].timestamp*1000 >= historicalTradesRange.startTimestamp)) {
-              Trades.upsert(trade.transactionHash, _.extend(resultProm[i], trade, args));
-            }
-          }
-          Session.set('loadingTradeHistory', false);
-        });
-      } else {
-        Session.set('loadingTradeHistory', false);
       }
+      Session.set('loadingTradeHistory', false);
     }
   });
 
-  // Watch Trade events in realtime
-  Dapple['maker-otc'].objects.otc.Trade({}, { fromBlock: historicalTradesRange.endBlockNumber+1 }, (error, trade) => {
+  // Watch LogTake events in realtime
+  Dapple['maker-otc'].objects.otc.LogTake({},
+  { fromBlock: historicalTradesRange.endBlockNumber + 1 }, (error, logTake) => {
     if (!error) {
-      const args = transformArgs(trade);
-      if (args) {
-        // Get block for timestamp
-        web3.eth.getBlock(trade.blockNumber, (blockError, block) => {
-          if (!error) {
-            Trades.upsert(trade.transactionHash, _.extend(block, trade, args));
-          }
-        });
+      const trade = logTakeToTrade(logTake);
+      if (trade) {
+        Trades.upsert(trade.transactionHash, trade);
       }
     }
   });
@@ -263,7 +246,7 @@ Offers.syncOffer = (id, max = 0) => {
 
       if (active) {
         Offers.updateOffer(idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress,
-                           owner, Status.CONFIRMED);
+          owner, Status.CONFIRMED);
       } else {
         Offers.remove(idx);
         if (Session.equals('selectedOffer', idx)) {
@@ -326,12 +309,12 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
   const buyHowMuchAbsolute = convertToTokenPrecision(buyHowMuch, buyWhichToken);
 
   Dapple['maker-otc'].objects.otc.offer(sellHowMuchAbsolute, sellWhichTokenAddress,
-                                        buyHowMuchAbsolute, buyWhichTokenAddress,
+    buyHowMuchAbsolute, buyWhichTokenAddress,
     { gas: OFFER_GAS }, (error, tx) => {
       callback(error, tx);
       if (!error) {
         Offers.updateOffer(tx, sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress,
-                           web3.eth.defaultAccount, Status.PENDING);
+          web3.eth.defaultAccount, Status.PENDING);
         Transactions.add('offer', tx, { id: tx, status: Status.PENDING });
       }
     });
@@ -346,8 +329,11 @@ Offers.buyOffer = (_id, type, _quantity, _token) => {
   Dapple['maker-otc'].objects.otc.buy(id.toString(10), quantityAbsolute, { gas: BUY_GAS }, (error, tx) => {
     if (!error) {
       Transactions.add('offer', tx, { id: _id, status: Status.BOUGHT });
-      Offers.update(_id, { $set: {
-        tx, status: Status.BOUGHT, helper: `Your ${type} order is being processed...` } });
+      Offers.update(_id, {
+        $set: {
+          tx, status: Status.BOUGHT, helper: `Your ${type} order is being processed...`,
+        },
+      });
     } else {
       Offers.update(_id, { $set: { helper: formatError(error) } });
     }

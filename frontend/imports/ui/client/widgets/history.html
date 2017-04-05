@@ -24,7 +24,13 @@
               <tr class="clickable">
                 <td></td>
                 <td class="timestamp">{{timestampToString this.timestamp true true}}</td>
-                <td class="type">{{ this.type }}</td>
+                <td class="type">
+                  {{#if equals this.type 'deposit'}}
+                    wrap
+                  {{else}}
+                    unwrap
+                  {{/if}}
+                </td>
                 <td class="coin">{{this.token}}</td>             
                 <td class="amount {{ this.type }}">{{{formatBalance this.amount '' this.token true}}}</td>
                 <td></td>
