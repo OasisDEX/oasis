@@ -1,4 +1,4 @@
-[![Oasis Header](https://cloud.githubusercontent.com/assets/5337809/23130981/a3ef51b2-f788-11e6-9c8a-326368c3cf2e.png)]()
+[![Oasis Header](https://cloud.githubusercontent.com/assets/5337809/24866049/65f8c86e-1e09-11e7-83f5-f5032646cc87.png)]()
 ---
 [![Stories in Ready](https://badge.waffle.io/MakerDAO/maker-market.png?label=ready&title=Ready)](https://waffle.io/MakerDAO/maker-market)
 [![Build Status](https://api.travis-ci.org/makerdao/maker-market.svg?branch=master)](https://travis-ci.org/makerdao/maker-market)
