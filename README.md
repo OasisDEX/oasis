@@ -6,7 +6,7 @@
 
 This is a simple on-chain OTC market for ERC20 Standard Tokens on the Ethereum Blockchain. You can either pick an order from the order book (in which case delivery will happen instantly), or submit a new order yourself.
 
-**Oasis PRO is undergoing alpha testing: Proceed at your own risk, and use only small amounts of ETH and MKR.**
+**Oasis is undergoing alpha testing: Proceed at your own risk, and use only small amounts of ETH and MKR.**
 
 ## Overview
 
@@ -28,8 +28,8 @@ Requirements:
 Clone and install:
 
 ```bash
-git clone https://github.com/OasisDEX/oasis-pro.git
-cd oasis-pro
+git clone https://github.com/OasisDEX/oasis.git
+cd oasis
 npm install
 ```
 
