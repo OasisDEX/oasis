@@ -140,13 +140,13 @@ Template.chart.viewmodel({
       charts.price.data.labels = trades.map(trade => trade.timestamp);
       charts.price.data.datasets = [{
         data: prices,
-        borderColor: '#5071b3',
-        borderWidth: 2,
-        fill: false,
-        pointBackgroundColor: '#5071b3',
+        borderColor: '#03A9F4',
+        borderWidth: 3,
+        pointBackgroundColor: '#03A9F4',
         pointRadius: 1,
         pointHitRadius: 5,
-        pointHoverRadius: 4
+        pointHoverRadius: 4,
+        backgroundColor: '#E2F3F9',
       }];
 
       charts.price.update();
