@@ -1,27 +1,25 @@
 const config = require('./config.addresses.json');
+const ENVs = {
+    "test":"kovan",
+    "main":"live",
+    "private":"default"
+}
 
 Dapple.init = function init(env) {
-  switch (env) {
-    case 'test':
-      Dapple.env = 'kovan';
-      break;
-    case 'main':
-      Dapple.env = 'live';
-      break;
-    case 'private':
-      Dapple.env = 'default';
-      break;
-    default:
-      Dapple.env = env;
-      break;
-  }
+  var predefinedEnv = ENVs[env];
+      
+  if (!predefinedEnv) {
+      predefinedEnv = env;
+  }    
+    
+  Dapple.env = predefinedEnv; 
 
   Dapple['maker-otc']['environments'][Dapple.env]['otc']['value'] = config.market[Dapple.env]
   Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments[Dapple.env]);
   Dapple['ds-eth-token'].class(web3, Dapple['ds-eth-token'].environments[Dapple.env]);
   Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments[Dapple.env]);
 
-  if (env !== false) {
+  if (env) {
     // Check if contract exists on new environment
     const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
     web3.eth.getCode(contractAddress, (error, code) => {
@@ -47,13 +45,14 @@ const tokenSpecs = {
   VSL: { precision: 18, format: '0,0.00[0000000000000000]' },
   PLU: { precision: 18, format: '0,0.00[0000000000000000]' },
   MLN: { precision: 18, format: '0,0.00[0000000000000000]' },
+  RHOC: { precision: 8, format: '0,0.00[000000]'  }
 };
 
 Dapple.getQuoteTokens = () => ['W-ETH'];
 
-Dapple.getBaseTokens = () => ['MKR', 'DGD', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN'];
+Dapple.getBaseTokens = () => ['MKR', 'DGD', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC'];
 
-Dapple.getTokens = () => ['W-ETH', 'MKR', 'DGD', 'GNT', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN'];
+Dapple.getTokens = () => ['W-ETH', 'MKR', 'DGD', 'GNT', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC'];
 
 Dapple.getTokenSpecs = (symbol) => {
   if (typeof (tokenSpecs[symbol]) !== 'undefined') {
