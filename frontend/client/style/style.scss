@@ -479,9 +479,6 @@ table {
     background: url(dot_red.svg) no-repeat left 1px;
     opacity: 1;
 
-    &:first-child {
-      background-position-y: 10px;
-    }
     &:last-child {
       background-position-y: 1px;
     }
