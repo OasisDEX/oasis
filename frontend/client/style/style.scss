@@ -2359,19 +2359,19 @@ span.right {
 }
 
 .logo {
-  transform: translate(0px,15px);
+  transform: translate(0px,18px);
 }
 
 a.logo {
   display: block;
-  width: 150px;
-  height: 31px;
-  background: url(logo-oasis-pro.png);
-  background-size: 150px 31px;
+  width: 103px;
+  height: 37px;
+  background: url(logo-oasis.png);
+  background-size: 103px 37px;
 }
 
 a.logo:hover {
-  background-image: url(logo-oasis-pro-hover.png);
+  background-image: url(logo-oasis-hover.png);
 }
 
 .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
