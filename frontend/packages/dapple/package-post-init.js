@@ -45,14 +45,15 @@ const tokenSpecs = {
   VSL: { precision: 18, format: '0,0.00[0000000000000000]' },
   PLU: { precision: 18, format: '0,0.00[0000000000000000]' },
   MLN: { precision: 18, format: '0,0.00[0000000000000000]' },
-  RHOC: { precision: 8, format: '0,0.00[000000]'  }
+  RHOC: { precision: 8, format: '0,0.00[000000]' },
+  TIME: { precision: 8, format: '0,0.00[000000]' },
 };
 
 Dapple.getQuoteTokens = () => ['W-ETH'];
 
-Dapple.getBaseTokens = () => ['MKR', 'DGD', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC'];
+Dapple.getBaseTokens = () => ['MKR', 'DGD', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC', 'TIME'];
 
-Dapple.getTokens = () => ['W-ETH', 'MKR', 'DGD', 'GNT', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC'];
+Dapple.getTokens = () => ['W-ETH', 'MKR', 'DGD', 'GNT', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC', 'TIME'];
 
 Dapple.getTokenSpecs = (symbol) => {
   if (typeof (tokenSpecs[symbol]) !== 'undefined') {
