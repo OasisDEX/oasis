@@ -19,7 +19,8 @@
       "VSL": "0x2e65483308968f5210167a23bdb46ec94752fe39",
       "PLU": "0x00a0fcaa32b47c4ab4a8fdda6d108e5c1ffd8e4f",
       "MLN": "0xc3ce96164012ed51c9b1e34a9323fdc38c96ad8a",
-      "RHOC": "0x7352c20e00d3c89037a8959699741c341771ed59"
+      "RHOC": "0x7352c20e00d3c89037a8959699741c341771ed59",
+      "TIME": "0xbb4666f10d229a28ff91d07b0e72e0e7f7e43329"
     },
     "ropsten": {
       "W-ETH": "0xece9fa304cc965b00afc186f5d0281a00d3dbbfd",
