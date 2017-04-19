@@ -50,9 +50,12 @@ const tokenSpecs = {
   GUP: { precision: 3, format: '0,0.00[0]'  }
 };
 
+const primaryTokens = ['MKR', 'W-GNT'];
+const secondaryTokens = ['DGD', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC', 'TIME', 'GUP'];
+
 Dapple.getQuoteTokens = () => ['W-ETH'];
 
-Dapple.getBaseTokens = () => ['MKR', 'DGD', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC', 'TIME', 'GUP'];
+Dapple.getBaseTokens = () => primaryTokens.concat(secondaryTokens);
 
 Dapple.getTokens = () => ['W-ETH', 'MKR', 'DGD', 'GNT', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC', 'TIME', 'GUP'];
 
