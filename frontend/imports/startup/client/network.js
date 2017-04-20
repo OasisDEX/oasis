@@ -60,17 +60,21 @@ function checkNetwork() {
     // Check if we are synced
     if (isConnected) {
       web3.eth.getBlock('latest', (e, res) => {
-        if (res.number >= Session.get('latestBlock')) {
-          Session.set('outOfSync', e != null || (new Date().getTime() / 1000) - res.timestamp > 600);
-          Session.set('latestBlock', res.number);
-          if (Session.get('startBlock') === 0) {
-            console.log(`Setting startblock to ${res.number - 6000}`);
-            Session.set('startBlock', (res.number - 6000));
+        if(!e){
+          if (res && res.number >= Session.get('latestBlock')) {
+            Session.set('outOfSync', e != null || (new Date().getTime() / 1000) - res.timestamp > 600);
+            Session.set('latestBlock', res.number);
+            if (Session.get('startBlock') === 0) {
+              console.log(`Setting startblock to ${res.number - 6000}`);
+              Session.set('startBlock', (res.number - 6000));
+            }
+          } else {
+            // XXX MetaMask frequently returns old blocks
+            // https://github.com/MetaMask/metamask-plugin/issues/504
+            console.debug('Skipping old block');
           }
         } else {
-          // XXX MetaMask frequently returns old blocks
-          // https://github.com/MetaMask/metamask-plugin/issues/504
-          console.debug('Skipping old block');
+          console.debug('There is error while getting the latest block! ', e);
         }
       });
     }
