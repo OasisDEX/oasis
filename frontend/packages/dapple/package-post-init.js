@@ -13,7 +13,7 @@ Dapple.init = function init(env) {
   }    
     
   Dapple.env = predefinedEnv;
-  Dapple['maker-otc']['environments'][Dapple.env].otc.address = config.market[Dapple.env].address;
+  Dapple['maker-otc']['environments'][Dapple.env].otc.value = config.market[Dapple.env].address;
   Dapple['maker-otc']['environments'][Dapple.env].otc.blockNumber = config.market[Dapple.env].blockNumber;
   Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments[Dapple.env]);
   Dapple['ds-eth-token'].class(web3, Dapple['ds-eth-token'].environments[Dapple.env]);
@@ -21,7 +21,7 @@ Dapple.init = function init(env) {
 
   if (env) {
     // Check if contract exists on new environment
-    const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.address;
+    const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
     web3.eth.getCode(contractAddress, (error, code) => {
       Session.set('contractExists', !error && typeof code === 'string' && code !== '' && code !== '0x');
     });
