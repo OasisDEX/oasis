@@ -19,6 +19,10 @@ Template.sendtokens.viewmodel({
   recipient: '',
   lastError: '',
   validAmount: true,
+
+  currencyToLowercase() {
+    return this.currency().toLowerCase();
+  },
   precision() {
     return Dapple.getTokenSpecs(this.currency()).precision;
   },
@@ -36,6 +40,9 @@ Template.sendtokens.viewmodel({
     } catch (e) {
       return '0';
     }
+  },
+  isWrappedToken(){
+     return this.currency().indexOf("W-") !== -1;
   },
   canTransfer() {
     this.validAmount(true);
