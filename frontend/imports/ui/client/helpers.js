@@ -25,7 +25,7 @@ Template.registerHelper('network', () => Session.get('network'));
 Template.registerHelper('contractAddress', () => {
   let contractAddress = '';
   if (Dapple['maker-otc'].objects) {
-    contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
+    contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.address;
   }
   return contractAddress;
 });
@@ -40,7 +40,7 @@ Template.registerHelper('contractHref', () => {
     } else if (network === 'kovan') {
       networkPrefix = 'kovan.';
     }
-    const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
+    const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.address;
     contractHref = `https://${networkPrefix}etherscan.io/address/${contractAddress}`;
   }
   return contractHref;

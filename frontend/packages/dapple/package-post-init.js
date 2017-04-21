@@ -1,4 +1,4 @@
-const config = require('./config.addresses.json');
+const config = require('./config.json');
 const ENVs = {
     "test":"kovan",
     "main":"live",
@@ -12,16 +12,16 @@ Dapple.init = function init(env) {
       predefinedEnv = env;
   }    
     
-  Dapple.env = predefinedEnv; 
-
-  Dapple['maker-otc']['environments'][Dapple.env]['otc']['value'] = config.market[Dapple.env]
+  Dapple.env = predefinedEnv;
+  Dapple['maker-otc']['environments'][Dapple.env].otc.address = config.market[Dapple.env].address;
+  Dapple['maker-otc']['environments'][Dapple.env].otc.blockNumber = config.market[Dapple.env].blockNumber;
   Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments[Dapple.env]);
   Dapple['ds-eth-token'].class(web3, Dapple['ds-eth-token'].environments[Dapple.env]);
   Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments[Dapple.env]);
 
   if (env) {
     // Check if contract exists on new environment
-    const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
+    const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.address;
     web3.eth.getCode(contractAddress, (error, code) => {
       Session.set('contractExists', !error && typeof code === 'string' && code !== '' && code !== '0x');
     });
