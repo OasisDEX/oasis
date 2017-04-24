@@ -43,6 +43,7 @@ function initNetwork(newNetwork) {
   Session.set('isConnected', true);
   Session.set('latestBlock', 0);
   Session.set('startBlock', 0);
+  doHashChange();
   Tokens.sync();
   Offers.sync();
 }
@@ -131,8 +132,6 @@ function initSession() {
 
   Session.set('balanceLoaded', false);
   Session.set('allowanceLoaded', false);
-
-  doHashChange();
 
   Session.set('ETHDepositProgress', 0);
   Session.set('ETHDepositProgressMessage', '');
