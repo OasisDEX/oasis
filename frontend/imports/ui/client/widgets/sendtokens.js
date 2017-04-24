@@ -70,13 +70,13 @@ Template.sendtokens.viewmodel({
       $('#transferconfirmation').modal('show');
       $('#transferconfirmation').on('transfer:confirmed', (event) => {
         event.stopPropagation();
-        _transfer(transaction);
+        _process(transaction);
       });
     } else {
-      _transfer(transaction);
+      _process(transaction);
     }
 
-    function _transfer (transaction) {
+    function _process (transaction) {
       let recipient = transaction.recipient().toLowerCase();
       if (!(/^0x/.test(recipient))) {
         recipient = '0x'.concat(recipient);
