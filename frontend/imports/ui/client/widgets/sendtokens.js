@@ -8,6 +8,7 @@ import { formatError } from '/imports/utils/functions';
 
 import { convertToTokenPrecision } from '/imports/utils/conversion';
 
+import './transferconfirmation';
 import './sendtokens.html';
 
 const TRANSFER_GAS = 150000;
@@ -19,10 +20,6 @@ Template.sendtokens.viewmodel({
   recipient: '',
   lastError: '',
   validAmount: true,
-
-  currencyToLowercase() {
-    return this.currency().toLowerCase();
-  },
   precision() {
     return Dapple.getTokenSpecs(this.currency()).precision;
   },
@@ -42,7 +39,7 @@ Template.sendtokens.viewmodel({
     }
   },
   isWrappedToken(){
-     return this.currency().indexOf("W-") !== -1;
+    return this.currency().indexOf('W-') !== -1;
   },
   canTransfer() {
     this.validAmount(true);
@@ -64,29 +61,47 @@ Template.sendtokens.viewmodel({
   },
   transfer(event) {
     event.preventDefault();
+    let transaction = this;
 
-    this.lastError('');
-
-    let recipient = this.recipient().toLowerCase();
-    if (!(/^0x/.test(recipient))) {
-      recipient = '0x'.concat(recipient);
+    if (this.isWrappedToken()) {
+      //https://www.w3.org/TR/css-position-3/#painting-order  - point 8
+      // - for some reason the opacity of all order-s ection is 0.89. This creates stacking order. z-index of modal is ignored.
+      $('.transfer-section').css('opacity', 1);
+      $('#transferconfirmation').modal('show');
+      $('#transferconfirmation').on('transfer:confirmed', (event) => {
+        event.stopPropagation();
+        _transfer(transaction);
+      });
+    } else {
+      _transfer(transaction);
     }
 
-    const options = { gas: TRANSFER_GAS };
-
-    // XXX EIP20
-    Dapple.getToken(this.currency(), (error, token) => {
-      if (!error) {
-        token.transfer(recipient, convertToTokenPrecision(this.amount(), this.currency()), options, (txError, tx) => {
-          if (!txError) {
-            Transactions.add(TRANSACTION_TYPE, tx, { recipient, amount: this.amount(), token: this.currency() });
-          } else {
-            this.lastError(formatError(txError));
-          }
-        });
-      } else {
-        this.lastError(error.toString());
+    function _transfer (transaction) {
+      let recipient = transaction.recipient().toLowerCase();
+      if (!(/^0x/.test(recipient))) {
+        recipient = '0x'.concat(recipient);
       }
-    });
+
+      const options = {gas: TRANSFER_GAS};
+
+      // XXX EIP20
+      Dapple.getToken(transaction.currency(), (error, token) => {
+        if (!error) {
+          token.transfer(recipient, convertToTokenPrecision(transaction.amount(), transaction.currency()), options, (txError, tx) => {
+            if (!txError) {
+              Transactions.add(TRANSACTION_TYPE, tx, {
+                recipient,
+                amount: transaction.amount(),
+                token: transaction.currency()
+              });
+            } else {
+              transaction.lastError(formatError(txError));
+            }
+          });
+        } else {
+          transaction.lastError(error.toString());
+        }
+      });
+    }
   },
 });

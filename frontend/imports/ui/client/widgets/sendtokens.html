@@ -42,40 +42,29 @@
             </td>
           </tr>
         </tbody>
-      </table>
-      <table class="footer">
-        <tbody>
-        <tr>
-          <td class="first-row">
-            {{#if isWrappedToken}}
-              <span class="help-block help-block--left notification notification--highlight">
-                <img src="order-warning.svg" class="order-warning">
-                <span class="warning">
-                  You are sending a Wrapped Token!
-                 <a href="https://github.com/OasisDEX/oasis/wiki#{{currencyToLowercase}}-wrapped-ether-tokens" class="question-circle" target="_blank">?</a>
-                </span>
-               </span>
-            {{/if}}
-          </td>
-          <td class="first-row transfer-button">
-            <button class="btn btn-default" {{b "enable: canTransfer, click: transfer"}}>TRANSFER</button>
-          </td>
-        </tr>
-        {{#unless validAmount}}
+        <tfoot>
           <tr>
-            <td colspan="2">
-              Amount is invalid because {{currency}} has no decimals.
+            <th>
+            </th>
+            <td class="transfer-button">
+              <button class="btn btn-default btn-transfer" {{b "enable: canTransfer, click: transfer"}}>TRANSFER</button>
             </td>
           </tr>
-        {{/unless}}
-        {{#unless equals lastError ''}}
-          <tr>
-            <td colspan="2">
-              {{lastError}}
-            </td>
-          </tr>
-        {{/unless}}
-        </tbody>
+          {{#unless validAmount}}
+            <tr>
+              <td colspan="2">
+                Amount is invalid because {{currency}} has no decimals.
+              </td>
+            </tr>
+          {{/unless}}
+          {{#unless equals lastError ''}}
+            <tr>
+              <td colspan="2">
+                {{lastError}}
+              </td>
+            </tr>
+          {{/unless}}
+        </tfoot>
       </table>
       {{#if pending}}
         <table>
@@ -100,4 +89,5 @@
       {{/if}}
     </div>
   </form>
+  {{> transferconfirmation }}
 </template>

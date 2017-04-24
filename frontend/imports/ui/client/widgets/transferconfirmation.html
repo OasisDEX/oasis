@@ -1,0 +1,34 @@
+<template name="transferconfirmation">
+  <div class="modal fade" id="transferconfirmation" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content modal-order">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Transfer Wrapped Tokens</h4>
+        </div>
+        <div class="modal-body row">
+          <div class="col-xs-1">
+            <img src="order-warning.svg" class="order-warning">
+          </div>
+          <div class="col-xs-11">
+            <span class="text-danger">
+              WARNING: You are attempting to transfer a wrapped token. <br><br>
+              This is not the same as transferring the token itself, and many wallets do not yet support these wrapped tokens. <br><br>
+              This means it could get stuck or be very difficult to transfer back out of this address. <br><br>
+              Are you sure you don't want to unwrap the token first and  then transfer that?
+            </span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default btn-transfer btn-placement-left" data-dismiss="modal">Close
+          </button>
+          <button type="button" class="btn btn-default btn-transfer btn-warning btn-placement-right"
+                  data-dismiss="modal" {{b "click: confirm"}}>
+            Transfer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

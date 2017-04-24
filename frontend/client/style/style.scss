@@ -97,6 +97,7 @@ h2 {
   margin-top: 0;
   margin-bottom: 20px;
   color: #222228;
+  letter-spacing: 3.99px;
 }
 
 table {
@@ -119,7 +120,8 @@ table {
 
 .ask,
 .sell,
-.withdrawal {
+.withdrawal,
+.transfer {
   color: $color-sell;
 }
 
@@ -141,7 +143,7 @@ table {
 }
 
 .row-messages {
-  margin-bottom: 0;
+  margin-bottom: 0px;
 }
 
 .row-tabs {
@@ -162,7 +164,7 @@ table {
     background-color: rgba(0, 0, 0, 0.0);
     margin-left: 25px;
     display: inline-block;
-    padding: 0 17px 0 10px;
+    padding: 0px 17px 0px 10px;
     width: 330px;
     .question-circle {
       @extend .question-circle;
@@ -190,11 +192,12 @@ table {
   .link-contract-address {
     color: #D0D0D0;
     transform: translateX(-10px);
-    padding: 13px 0 13px 17px;
+    padding: 13px 0px 13px 17px;
     display: inline-block;
     opacity: 0.68;
     font-family: 'Montserrat', sans-serif;
     font-size: 10px;
+    color: #D0D0D0;
   }
 }
 
@@ -327,7 +330,7 @@ table {
 
     .middle-tab {
       background-color: rgba(0, 0, 0, 0.0);
-      border-radius: 0;
+      border-radius: 0px;
       border-left: none;
       border-right: none;
       width: 196px;
@@ -335,7 +338,7 @@ table {
 
     .last-tab {
       background-color: rgba(0, 0, 0, 0.0);
-      border-radius: 0 100px 100px 0;
+      border-radius: 0px 100px 100px 0px;
       width: 124px;
     }
   }
@@ -368,7 +371,7 @@ table {
 
 .div-message {
   background: rgba(215, 215, 215, 0.05);
-  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.15);
   border-radius: 3px;
   padding: 8px 25px 8px 20px;
   width: 100%;
@@ -385,7 +388,7 @@ table {
   }
 
   ul {
-    padding-left: 0;
+    padding-left: 0px;
     li {
       opacity: 0.69;
       font-family: 'Montserrat', sans-serif;
@@ -394,10 +397,12 @@ table {
       color: #4F5362;
       letter-spacing: 0.58px;
       margin-bottom: 8px;
+      margin-left: 10px;
+      padding-left: 0px;
       line-height: 18px;
       list-style-type: none;
-      margin-left: 0;
-      padding: 0 0 0 36px;
+      margin-left: 0px;
+      padding: 0px 0px 0px 36px;
     }
   }
 
@@ -408,9 +413,9 @@ table {
     font-size: 14px;
     color: #4F5362;
     letter-spacing: 0.58px;
-    margin-bottom: 0;
+    margin-bottom: 0px;
     line-height: 18px;
-    padding: 0 15px;
+    padding: 0px 15px;
     .attention {
       font-weight: bold;
       font-size: 13px;
@@ -423,7 +428,7 @@ table {
       font-size: 16px;
       text-transform: uppercase;
       font-weight: 800;
-      padding: 10px 0;
+      padding: 10px 0px;
     }
 
     .warning {
@@ -559,7 +564,7 @@ table {
     text-align: center;
     color: #4F5362;
     letter-spacing: 2px;
-    margin: 0;
+    margin: 0px;
     display: block;
     align-self: center;
 
@@ -568,7 +573,7 @@ table {
       -webkit-appearance: none;
       border: none;
       background-color: rgba(0, 0, 0, 0.0);
-      padding: 8px 0 8px 0;
+      padding: 8px 0px 8px 0px;
       cursor: pointer;
     }
 
@@ -597,8 +602,8 @@ table {
       @extend .select-currency;
       border-radius: 100px 0 0 100px;
       background-color: #E8E9ED;
-      padding: 0 0 0 12px;
-      border-right: 0;
+      padding: 0px 0px 0px 12px;
+      border-right: 0px;
       margin-right: -6px;
     }
 
@@ -607,7 +612,7 @@ table {
       border-radius: 0 100px 100px 0;
       opacity: 0.5;
       background-color: rgba(0, 0, 0, 0.0);
-      padding: 0 12px 0 0;
+      padding: 0px 12px 0px 0px;
     }
 
     .span-token-pair {
@@ -629,12 +634,12 @@ table {
   opacity: 0.89;
   background: #FFFFFF;
   border: 1px solid #EFF1F3;
-  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.13);
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.13);
   border-radius: 4px;
   width: 442px;
   min-height: 305px;
-  margin: 0 17px 35px 17px;
-  padding: 30px 0 10px 30px;
+  margin: 0px 17px 35px 17px;
+  padding: 30px 0px 10px 30px;
   overflow: hidden;
 }
 
@@ -747,7 +752,7 @@ table {
         }
 
         td.order-type {
-          font-family: 'Montserrat', sans-serif;
+          font-family: 'Montserrat', 'sans-serif';
           font-weight: 700;
           font-size: 12px;
           line-height: 20px;
@@ -761,7 +766,7 @@ table {
         }
         .cancel {
           border: none;
-          padding: 0;
+          padding: 0px;
           width: 29px;
           height: 16px;
           border-radius: 7px;
@@ -862,7 +867,7 @@ table {
   }
 
   td.order-type {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', 'sans-serif';
     font-weight: 700;
     font-size: 12px;
     line-height: 20px;
@@ -870,13 +875,10 @@ table {
 
   .cancel {
     border: none;
-    padding: 0;
+    padding: 0px;
     width: 29px;
     height: 16px;
     border-radius: 7px;
-    &:hover {
-
-    }
     img {
       transform: translate(0px, -3px);
     }
@@ -888,17 +890,17 @@ table {
     tbody {
       tr.row-input-line {
         td {
-          padding-top: 0;
+          padding-top: 0px;
         }
         th {
           padding-left: 13px;
-          padding-top: 0;
+          padding-top: 0px;
         }
         td {
           &.available {
             span.fill-amount {
               opacity: 0.68;
-              font-family: 'Roboto', sans-serif;
+              font-family: 'Roboto';
               font-weight: 500;
               font-size: 19px;
               color: #222228;
@@ -941,7 +943,7 @@ table {
       }
     }
     input {
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Roboto';
       font-size: 27px;
       font-weight: bold;
       color: #D0D0D0;
@@ -1020,7 +1022,7 @@ table {
         font-size: 13px;
         color: #D0D0D0;
         font-weight: 500;
-        margin: 0;
+        margin: 0px;
         width: 210px;
       }
     }
@@ -1063,7 +1065,7 @@ table {
   td {
     text-align: right;
     &.token {
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Roboto';
       font-weight: 500;
       font-size: 19px;
       color: #222228;
@@ -1074,13 +1076,13 @@ table {
       }
     }
     &.transfer-button {
-      padding: 0;
+      padding: 0px;
     }
   }
 
   th,
   td {
-    padding-bottom: 0;
+    padding-bottom: 0px;
     padding-top: 20px;
   }
 
@@ -1113,7 +1115,7 @@ table {
     background: none;
   }
 
-  button {
+  .btn-transfer {
     border: 1px solid #A8ACB9;
     border-radius: 100px;
     font-family: 'Montserrat', sans-serif;
@@ -1125,6 +1127,13 @@ table {
     height: 36px;
     margin-top: 18px;
   }
+
+  .btn-warning {
+    @extend button;
+    border-color: $color-sell;
+    color: $color-sell;
+  }
+
   .span-transfer-currency {
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
@@ -1215,7 +1224,7 @@ table {
     tr {
       td {
         padding-top: 50px;
-        padding-bottom: 0;
+        padding-bottom: 0px;
       }
     }
   }
@@ -1244,7 +1253,7 @@ table {
 
   td.token {
     opacity: 0.68;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto';
     font-weight: 500;
     font-size: 19px;
     color: #222228;
@@ -1270,7 +1279,7 @@ table {
   tr.row-input-line {
     &:last-of-type {
       td {
-        padding-bottom: 0;
+        padding-bottom: 0px;
       }
     }
   }
@@ -1278,7 +1287,7 @@ table {
     border: none;
     text-align: right;
     /*margin-left: 20px;*/
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto';
     font-weight: 500;
     font-size: 22px;
     color: #D0D0D0;
@@ -1401,7 +1410,7 @@ table {
 
 .div-more {
   text-align: center;
-  margin: 15px 0 5px 0;
+  margin: 15px 0px 5px 0px;
 }
 
 .modal-order {
@@ -1429,7 +1438,7 @@ table {
     font-size: 22px;
     font-weight: bold;
     text-align: right;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto';
     color: #68686C;
   }
 
@@ -1517,7 +1526,7 @@ table {
 
   .horizontal-line {
     color: #DCDDE0;
-    border: 0;
+    border: 0px;
     border-top: solid 1px #DCDDE0;
   }
 
@@ -1562,7 +1571,7 @@ table {
     padding: 33px 10px 33px 27px;
     opacity: 0.89;
     border: 2px solid #EFF1F3;
-    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.13);
+    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.13);
     border-radius: 4px;
     margin: 0 20px;
 
@@ -1592,6 +1601,7 @@ table {
       height: 28px;
       width: 28px;
       line-height: 28px;
+      border-radius: 50%;
       -moz-border-radius: 50%;
       text-align: center;
       border: solid 1px #CFD8DC;
@@ -1658,7 +1668,7 @@ table {
         @include qq-equal(5) {
           max-width: 110px;
           &:last-of-type {
-            width: 0;
+            width: 0px;
           }
         }
         @include qq-equal(6) {
@@ -1667,7 +1677,7 @@ table {
         @include qq-equal(7) {
           max-width: 85px;
           &:first-of-type {
-            width: 0;
+            width: 0px;
           }
           &.th-date {
             max-width: 80px !important;
@@ -1688,7 +1698,7 @@ table {
             max-width: 65px;
           }
           &:last-of-type {
-            width: 0;
+            width: 0px;
           }
         }
       }
@@ -1737,7 +1747,7 @@ table {
           @include qq-equal(5) {
             max-width: 110px;
             &:last-of-type {
-              width: 0;
+              width: 0px;
             }
           }
           @include qq-equal(6) {
@@ -1746,7 +1756,7 @@ table {
           @include qq-equal(7) {
             max-width: 85px;
             &:first-of-type {
-              width: 0;
+              width: 0px;
             }
             &.timestamp {
               max-width: 80px !important;
@@ -1764,7 +1774,7 @@ table {
               max-width: 80px;
             }
             &:last-of-type {
-              width: 0;
+              width: 0px;
             }
           }
         }
@@ -1935,8 +1945,8 @@ table {
   @extend .t-scroll;
   thead {
     tr {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
       th {
         &:first-child {
           width: 20px !important;
@@ -1955,7 +1965,7 @@ table {
           }
         }
         &:last-child {
-          width: 0 !important;
+          width: 0px !important;
         }
       }
     }
@@ -1996,7 +2006,7 @@ table {
           }
         }
         &:last-child {
-          width: 0 !important;
+          width: 0px !important;
         }
       }
     }
@@ -2011,11 +2021,11 @@ span.loading-icon {
 
 .hr-footer {
   max-width: 980px;
-  margin: 50px auto 0 auto;
+  margin: 50px auto 0px auto;
 }
 
 .tab-content {
-  margin-top: 0;
+  margin-top: 0px;
 }
 
 /* MARKET CHART */
@@ -2025,7 +2035,7 @@ span.loading-icon {
   line-height: 205px;
   position: absolute;
   top: 65px;
-  left: 0;
+  left: 0px;
   z-index: 100000;
   text-align: center;
   background: rgba(255, 255, 255, 0.5);
@@ -2050,7 +2060,7 @@ span.loading-icon {
     font-size: 10px;
     background-color: rgba(0, 0, 0, 0.0);
     display: block;
-    padding: 0 17px 0 10px;
+    padding: 0px 17px 0px 10px;
     float: right;
     margin-right: 35px;
     transform: translateY(-6px);
@@ -2074,7 +2084,7 @@ span.loading-icon {
 
 section.markets {
   background: #FCFCFB;
-  padding-left: 0;
+  padding-left: 0px;
   h2 {
     padding-left: 30px;
   }
@@ -2086,7 +2096,7 @@ section.chart {
 
 section.depositbalance {
   background: #FCFCFB;
-  padding-left: 0;
+  padding-left: 0px;
   h2 {
     padding-left: 30px;
   }
@@ -2095,7 +2105,7 @@ section.depositbalance {
 #container-transfer {
   @extend .select-market;
   .select-market-container {
-    margin-right: 0;
+    margin-right: 0px;
   }
 }
 
@@ -2161,16 +2171,16 @@ section.depositbalance {
 }
 
 .npl {
-  padding-left: 0;
+  padding-left: 0px;
 }
 
 .npr {
-  padding-right: 0;
+  padding-right: 0px;
 }
 
 .nplr {
-  padding-left: 0;
-  padding-right: 0;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 .ns-aux {
@@ -2182,7 +2192,7 @@ section.depositbalance {
 }
 
 hr.nmt {
-  margin-top: 0 !important;
+  margin-top: 0px !important;
 }
 
 /* CUSTOM TOOLTIP CHART.JS */
@@ -2234,7 +2244,7 @@ span.right {
 
 /* MODAL RESET */
 #offerModal {
-  padding: 0 !important;
+  padding: 0px !important;
 }
 
 .modal-backdrop {
@@ -2250,12 +2260,12 @@ span.right {
     display: block;
     float: left;
     position: relative;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto';
     font-size: 24px;
     color: #D0D0D0;
     &.price {
       color: #68686C;
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Roboto';
       font-size: 22px;
     }
   }
@@ -2288,7 +2298,7 @@ span.right {
     font-size: 12px;
     font-weight: bold;
     color: #68686C;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto';
     margin-right: 15px;
   }
 }
@@ -2339,7 +2349,7 @@ span.right {
     }
   }
   input {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto';
     font-weight: bolder;
     font-size: 24px;
     color: #D0D0D0;
@@ -2407,35 +2417,7 @@ a.logo:hover {
   opacity: 1;
 }
 
-.notification {
-  font-size: 14px;
-  color: rgba(0, 0, 0, 0.4);
-
-  &--highlight {
-    font-weight: 700;
-  }
-
-  .warning {
-    display: inline-block;
-    vertical-align: middle;
-    color: #EF5350;
-  }
-}
-
-.help-block--left {
-  text-align: left;
-}
-
-#sendtokens {
-  .warning {
-    font-size: 12px;
-    line-height: 1;
-    width: 75%;
-  }
-
-  .question-circle {
-    float: none;
-    display: inline-block;
-  }
-
+.modal-header .close {
+  margin-top: 0;
+  line-height: normal;
 }
