@@ -2421,3 +2421,19 @@ a.logo:hover {
   margin-top: 0;
   line-height: normal;
 }
+
+#transferconfirmation {
+  //dirty hack to make the red more blurry
+  .modal-body {
+    opacity: 0.7;
+  }
+
+  .warning {
+    color: red;
+  }
+
+  img.order-warning {
+    position: relative;
+    top:7.5px;
+  }
+}
