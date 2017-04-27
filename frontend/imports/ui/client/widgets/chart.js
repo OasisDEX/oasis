@@ -105,6 +105,11 @@ Template.chart.viewmodel({
               display: false,
             },
             scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true,
+                },
+              }],
               xAxes: [{
                 display: false,
               }],
