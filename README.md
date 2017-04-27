@@ -63,6 +63,9 @@ cd frontend
 meteor npm run lint
 ```
 
+## License
+This project is licensed under the terms of the Apache License 2.0.
+
 ## TODOs
 See https://waffle.io/MakerDAO/maker-market
 
