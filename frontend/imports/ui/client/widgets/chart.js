@@ -11,6 +11,7 @@ import { formatNumber, removeOutliersFromArray } from '/imports/utils/functions'
 import './chart.html';
 
 const charts = [];
+Session.set('priceChart', false);
 Session.set('depthChart', false);
 Session.set('volumeChart', false);
 Session.set('rendered', false);
@@ -29,7 +30,10 @@ Object.assign(Chart.defaults.global, {
 });
 
 Template.chart.viewmodel({
-  currentChart: 'DEPTH',
+  currentChart: 'PRICE',
+  showPrice() {
+    return this.currentChart() === 'PRICE' ? '' : 'hidden';
+  },
   showDepth() {
     return this.currentChart() === 'DEPTH' ? '' : 'hidden';
   },
@@ -62,6 +66,91 @@ Template.chart.viewmodel({
     tooltipEl.style.padding = `${tooltip.yPadding}px${tooltip.xPadding}px`;
 
     return tooltipEl;
+  },
+  fillPriceChart() {
+    Meteor.defer(() => {
+      if (Session.get('rendered') && typeof charts.price === 'undefined') {
+        const ctx = document.getElementById('market-chart-price');
+        charts.price = new Chart(ctx, {
+          type: 'line',
+          data: {},
+          options: {
+            maintainAspectRatio: true,
+            layout: {
+              padding: 5,
+            },
+            tooltips: {
+              enabled: false,
+              mode: 'index',
+              position: 'nearest',
+              custom: (tooltip) => {
+                const tooltipEl = this.prepareTooltip(tooltip, 'market-chart-price');
+                if (tooltipEl && tooltip.body) {
+                  const date = parseInt(tooltip.dataPoints[0].xLabel, 10);
+                  tooltipEl.innerHTML =
+                    `<div class="row-custom-tooltip">
+                      <span class="left">Date</span>
+                      <span class="right">${moment(date * 1000).format('ll')}</span>
+                    </div>
+                    <div class="row-custom-tooltip middle">
+                      <span class="left">Price</span>
+                      <span class="right">${tooltip.dataPoints[0].yLabel}</span>
+                    </div>`;
+
+                  tooltipEl.style.opacity = 1;
+                }
+              },
+            },
+            legend: {
+              display: false,
+            },
+            scales: {
+              xAxes: [{
+                display: false,
+              }],
+            },
+          },
+        });
+        Session.set('priceChart', true);
+      }
+    });
+
+    if (Session.get('priceChart')
+        && !Session.get('loadingTradeHistory')) {
+      const quoteCurrency = Session.get('quoteCurrency');
+      const baseCurrency = Session.get('baseCurrency');
+      const trades = Trades.find({ $or: [
+        { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
+        { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
+      ],
+        timestamp: { $gte:  moment(Date.now()).startOf('day').subtract(6, 'days').unix() },
+      });
+      const prices = trades.map((trade) => {
+        let baseAmount;
+        let quoteAmount;
+        if(trade.buyWhichToken === quoteCurrency) {
+          quoteAmount = new BigNumber(trade.buyHowMuch);
+          baseAmount = new BigNumber(trade.sellHowMuch);
+        } else {
+          baseAmount = new BigNumber(trade.buyHowMuch);
+          quoteAmount = new BigNumber(trade.sellHowMuch);
+        }
+        return formatNumber(quoteAmount.dividedBy(baseAmount), 5);
+      });
+      charts.price.data.labels = trades.map(trade => trade.timestamp);
+      charts.price.data.datasets = [{
+        data: prices,
+        borderColor: '#03A9F4',
+        borderWidth: 3,
+        pointBackgroundColor: '#03A9F4',
+        pointRadius: 1,
+        pointHitRadius: 5,
+        pointHoverRadius: 4,
+        backgroundColor: '#E2F3F9',
+      }];
+
+      charts.price.update();
+    }
   },
   fillDepthChart() {
     Meteor.defer(() => {

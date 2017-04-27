@@ -9,22 +9,34 @@
       <div class="col-xs-6">
         <span class="select-market-container"> 
             <select class="select-market-graph" {{b "value: currentChart, change: chartChange"}}>
-                <option value="DEPTH" selected>DEPTH</option>
+                <option value="PRICE" selected>PRICE</option>
+                <option value="DEPTH">DEPTH</option>
                 <option value="VOLUME">VOLUME</option>
             </select>
             <span class="glyphicon glyphicon-chevron-down select-glyph" aria-hidden="true"></span>
         </span>
       </div>
     </div>
+    <div class={{showPrice}}>
+      {{#unless loadedCurrencies}}
+        <div class="loading-chart">{{{loadingIcon}}} Loading token...</div>
+      {{else}}
+        {{#if loadingTradeHistory}}
+          <div class="loading-chart">{{{loadingIcon}}} Loading history...</div>
+        {{/if}}
+      {{/unless}}
+      <canvas id="market-chart-price" class="market-chart" width="375" height="195"></canvas>
+      {{fillPriceChart}}
+    </div>
     <div class={{showDepth}}>
       {{#unless loadedCurrencies}}
-        <div class="loading-depth-chart">{{{loadingIcon}}} Loading token...</div>
+        <div class="loading-chart">{{{loadingIcon}}} Loading token...</div>
       {{else}}
         {{#if outOfSync}}
-          <div class="loading-depth-chart">(out of sync, waiting for synchronization)</div>
+          <div class="loading-chart">(out of sync, waiting for synchronization)</div>
         {{else}}
           {{#if loading}}
-            <div class="loading-depth-chart">{{{loadingIcon}}} Loading offers {{loadingProgress}}%</div>
+            <div class="loading-chart">{{{loadingIcon}}} Loading offers {{loadingProgress}}%</div>
           {{/if}}
         {{/if}}
       {{/unless}}
@@ -33,10 +45,10 @@
     </div>
     <div class={{showVolume}}>
       {{#unless loadedCurrencies}}
-        <div class="loading-depth-chart">{{{loadingIcon}}} Loading token...</div>
+        <div class="loading-chart">{{{loadingIcon}}} Loading token...</div>
       {{else}}
         {{#if loadingTradeHistory}}
-          <div class="loading-volume-chart">{{{loadingIcon}}} Loading history...</div>
+          <div class="loading-chart">{{{loadingIcon}}} Loading history...</div>
         {{/if}}
       {{/unless}}
       <canvas id="market-chart-volume" class="market-chart" width="375" height="195"></canvas>
