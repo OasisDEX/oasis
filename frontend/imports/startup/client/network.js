@@ -148,6 +148,7 @@ function initSession() {
   Session.set('GNTWithdrawProgressMessage', '');
   Session.set('GNTWithdrawErrorMessage', '');
   Session.set('loadingTradeHistory', true);
+  Session.set('loadingIndividualTradeHistory', false); //this will be loading only if the user filter by closed status of orders
   Session.set('AVGBlocksPerDay', null);
   Session.set('watchedEvents', false);
   if (!Session.get('volumeSelector')) {

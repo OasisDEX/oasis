@@ -1,11 +1,28 @@
 <template name="myorders">
   <div class="order-section-content">
-    <h2>
-      MY ORDERS
-    </h2>
+    <div class="row">
+      <div class="col-xs-7">
+        <h2>
+          MY ORDERS
+        </h2>
+      </div>
+      <!--Extract the definition for select and unify it instead of using this select-market-->
+      <div class="col-xs-5 select-market">
+        <span class="select-market-container">
+            <select class="select-market-graph" {{b "options: orderStatus, value: filterByStatus"}}>
+            </select>
+            <span class="glyphicon glyphicon-chevron-down select-glyph" aria-hidden="true"></span>
+        </span>
+      </div>
+    </div>
+
     <div id="myorders-container">
       {{#if address}}
-        {{> orders orders=(findOffers 'mine') type='myOrders' priceLabel='PRICE' showCancel=true showType=true}}
+        {{#if loadingIndividualTradeHistory}}
+          <div class="loading-market-history">{{{loadingIcon}}} Loading individual trades history...</div>
+        {{else}}
+           {{> orders orders=(findOrders filterByStatus) type='myOrders' priceLabel='PRICE' showCancel=true showType=true}}
+        {{/if}}
       {{else}}
         <small>Select an account to display your orders</small>
       {{/if}}
