@@ -3,8 +3,8 @@ import { Template } from 'meteor/templating';
 import './transferconfirmation.html';
 
 Template.transferconfirmation.viewmodel({
-  confirm () {
+  confirm() {
     $('#transferconfirmation').trigger('transfer:confirmed');
-  }
+  },
 });
 

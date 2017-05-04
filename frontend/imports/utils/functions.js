@@ -4,6 +4,45 @@ import { BigNumber } from 'meteor/ethereum:web3';
 import { Dapple, web3 } from 'meteor/makerotc:dapple';
 import { Spacebars } from 'meteor/spacebars';
 
+/**
+ * Best case scenario:
+ *  - a valid contract address is passed and we have corresponding token symbol
+ *  then we return the symbol for the token.
+ *
+ *  If the token is a valid address by not known to the market, default value will be returned
+ *  If the token is a symbol already but know among allowedTokens ,default value will be returned
+ *  If the token is not known, default value is returned
+ *
+ * @param token - of type <any>
+ * @param allowedTokens - of type <array> - market supports only specific tokens which can be used as base or quote tokens.
+ * @param symbolIfNothingIsPresented - of type <string> - used as value if token is invalid value
+ *  (not an address, not an address known to the market, not a symbol, not a symbol known to market.
+ *
+ * @return symbol
+ *
+ * @throws error if the method is invoked with missing attributes or the types of the attributes are different than expected
+ */
+function addressToSymbol(token, allowedTokens, symbolIfNothingIsPresented) {
+  if (!token || !allowedTokens || !symbolIfNothingIsPresented
+    || !Array.isArray(allowedTokens)
+    || typeof symbolIfNothingIsPresented !== 'string') {
+    throw Error('Wrong usage of the API. Read documentation');
+  }
+
+  const isAnAddress = web3.isAddress(token);
+  let currency = symbolIfNothingIsPresented;
+
+  if (isAnAddress) {
+    currency = Dapple.getTokenByAddress(token).toUpperCase();
+  }
+
+  if (allowedTokens.includes(token)) {
+    currency = token.toUpperCase();
+  }
+
+  return currency;
+}
+
 export function uppercaseFirstLetter(word) {
   return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 }
@@ -34,19 +73,19 @@ export function doHashChange() {
   if (location.hash.indexOf('#wrap') === -1 && location.hash.indexOf('#transfer') === -1) {
     if (location.hash.indexOf('#trade') === -1) {
       location.hash = `#trade/${localStorage.getItem('quoteCurrency') || 'W-ETH'}`
-        + `/${localStorage.getItem('baseCurrency') || 'MKR'}`
+        + `/${localStorage.getItem('baseCurrency') || 'MKR'}`;
     }
-    const coins = location.hash.replace('#trade/', '').split('/')
+    const coins = location.hash.replace('#trade/', '').split('/');
 
-    const quote = coins[0]
-    quoteCurrency = _addressToSymbol(quote, Dapple.getQuoteTokens(), 'W-ETH')
+    const quote = coins[0];
+    quoteCurrency = addressToSymbol(quote, Dapple.getQuoteTokens(), 'W-ETH');
 
-    const base = coins[1]
-    baseCurrency = _addressToSymbol(base, Dapple.getBaseTokens(), 'MKR')
+    const base = coins[1];
+    baseCurrency = addressToSymbol(base, Dapple.getBaseTokens(), 'MKR');
 
-    if(quote === base){
-      quoteCurrency = "W-ETH";
-      baseCurrency = "MKR";
+    if (quote === base) {
+      quoteCurrency = 'W-ETH';
+      baseCurrency = 'MKR';
     }
   }
 
@@ -111,44 +150,4 @@ export function removeOutliersFromArray(data, fieldName, deviation) {
     }
   }
   return newData;
-}
-
-/**
- * Best case scenario:
- *  - a valid contract address is passed and we have corresponding token symbol
- *  then we return the symbol for the token.
- *
- *  If the token is a valid address by not known to the market, default value will be returned
- *  If the token is a symbol already but know among allowedTokens ,default value will be returned
- *  If the token is not known, default value is returned
- *
- * @param token - of type <any>
- * @param allowedTokens - of type <array> - market supports only specific tokens which can be used as base or quote tokens.
- * @param symbolIfNothingIsPresented - of type <string> - used as value if token is invalid value
- *  (not an address, not an address known to the market, not a symbol, not a symbol known to market.
- *
- * @return symbol
- * 
- * @throws error if the method is invoked with missing attributes or the types of the attributes are different than expected
- */
-function _addressToSymbol (token, allowedTokens, symbolIfNothingIsPresented) {
-  if(!token || !allowedTokens || !symbolIfNothingIsPresented
-    || !Array.isArray(allowedTokens)
-    || typeof  symbolIfNothingIsPresented !== "string")  {
-
-    throw Error("Wrong usage of the API. Read documentation");
-  }
-
-  let isAnAddress = web3.isAddress(token)
-  let currency = symbolIfNothingIsPresented
-
-  if (isAnAddress) {
-    currency = Dapple.getTokenByAddress(token).toUpperCase()
-  }
-
-  if (allowedTokens.includes(token)) {
-    currency = token.toUpperCase()
-  }
-
-  return currency
 }

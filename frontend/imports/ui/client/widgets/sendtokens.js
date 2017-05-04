@@ -38,7 +38,7 @@ Template.sendtokens.viewmodel({
       return '0';
     }
   },
-  isWrappedToken(){
+  isWrappedToken() {
     return this.currency().indexOf('W-') !== -1;
   },
   canTransfer() {
@@ -60,48 +60,49 @@ Template.sendtokens.viewmodel({
     this.amount(this.maxAmount());
   },
   transfer(event) {
-    event.preventDefault();
-    let transaction = this;
-
-    if (this.isWrappedToken()) {
-      //https://www.w3.org/TR/css-position-3/#painting-order  - point 8
-      // - for some reason the opacity of all order-s ection is 0.89. This creates stacking order. z-index of modal is ignored.
-      $('.transfer-section').css('opacity', 1);
-      $('#transferconfirmation').modal('show');
-      $('#transferconfirmation').on('transfer:confirmed', (event) => {
-        event.stopPropagation();
-        _process(transaction);
-      });
-    } else {
-      _process(transaction);
-    }
-
-    function _process (transaction) {
+    function process(transaction) {
       let recipient = transaction.recipient().toLowerCase();
       if (!(/^0x/.test(recipient))) {
         recipient = '0x'.concat(recipient);
       }
 
-      const options = {gas: TRANSFER_GAS};
+      const options = { gas: TRANSFER_GAS };
 
       // XXX EIP20
       Dapple.getToken(transaction.currency(), (error, token) => {
         if (!error) {
-          token.transfer(recipient, convertToTokenPrecision(transaction.amount(), transaction.currency()), options, (txError, tx) => {
-            if (!txError) {
-              Transactions.add(TRANSACTION_TYPE, tx, {
-                recipient,
-                amount: transaction.amount(),
-                token: transaction.currency()
-              });
-            } else {
-              transaction.lastError(formatError(txError));
-            }
-          });
+          token.transfer(recipient, convertToTokenPrecision(transaction.amount(), transaction.currency()), options,
+            (txError, tx) => {
+              if (!txError) {
+                Transactions.add(TRANSACTION_TYPE, tx, {
+                  recipient,
+                  amount: transaction.amount(),
+                  token: transaction.currency(),
+                });
+              } else {
+                transaction.lastError(formatError(txError));
+              }
+            });
         } else {
           transaction.lastError(error.toString());
         }
       });
+    }
+
+    event.preventDefault();
+    const transaction = this;
+
+    if (this.isWrappedToken()) {
+      // https://www.w3.org/TR/css-position-3/#painting-order  - point 8
+      // - for some reason the opacity of all order-s ection is 0.89. This creates stacking order. z-index of modal is ignored.
+      $('.transfer-section').css('opacity', 1);
+      $('#transferconfirmation').modal('show');
+      $('#transferconfirmation').on('transfer:confirmed', (onConfirmation) => {
+        onConfirmation.stopPropagation();
+        process(transaction);
+      });
+    } else {
+      process(transaction);
     }
   },
 });
