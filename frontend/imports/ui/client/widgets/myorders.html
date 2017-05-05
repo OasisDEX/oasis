@@ -19,7 +19,7 @@
     <div id="myorders-container">
       {{#if address}}
         {{#if loadingIndividualTradeHistory}}
-          <div class="loading-market-history">{{{loadingIcon}}} Loading individual trades history...</div>
+          <div class="loading-market-history">{{{loadingIcon}}} Loading closed orders...</div>
         {{else}}
            {{> orders orders=(findOrders filterByStatus) type='myOrders' priceLabel='PRICE' showCancel=true showType=true}}
         {{/if}}

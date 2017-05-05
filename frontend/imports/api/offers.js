@@ -168,7 +168,7 @@ Offers.syncOffers = () => {
 
 Offers.syncIndividualTrades = () => {
   let address = Session.get("address");
-  Dapple['maker-otc'].objects.otc.LogTake({taker: address}, {
+  Dapple['maker-otc'].objects.otc.LogTake({maker: address}, {
     fromBlock: Dapple['maker-otc'].environments[Dapple.env].otc.blockNumber,
     toBlock: 'latest',
   }).get((error, logTakes) => {
@@ -186,7 +186,7 @@ Offers.syncIndividualTrades = () => {
   });
 
   _getBlockNumberOfTheMostRecentBlock().then((latestBlock) => {
-    Dapple['maker-otc'].objects.otc.LogTake({taker: address},
+    Dapple['maker-otc'].objects.otc.LogTake({maker: address},
       {fromBlock: latestBlock + 1}, (error, logTake) => {
         if (!error) {
           const trade = _logTakeToTrade(logTake);
