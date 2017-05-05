@@ -123,12 +123,12 @@ Template.chart.viewmodel({
         { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
         { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
       ],
-        timestamp: { $gte:  moment(Date.now()).startOf('day').subtract(6, 'days').unix() },
+        timestamp: { $gte: moment(Date.now()).startOf('day').subtract(6, 'days').unix() },
       });
       const prices = trades.map((trade) => {
         let baseAmount;
         let quoteAmount;
-        if(trade.buyWhichToken === quoteCurrency) {
+        if (trade.buyWhichToken === quoteCurrency) {
           quoteAmount = new BigNumber(trade.buyHowMuch);
           baseAmount = new BigNumber(trade.sellHowMuch);
         } else {
