@@ -55,7 +55,7 @@ Template.registerHelper('isMarketOpen', () => Session.get('market_open'));
 Template.registerHelper('ready', () =>
     // XXX disabled 'syncing' as parity is being very bouncy
     // Session.get('isConnected') && !Session.get('syncing') && !Session.get('outOfSync')
-  Session.get('isConnected') && !Session.get('outOfSync')
+  Session.get('isConnected') && !Session.get('outOfSync'),
 );
 
 Template.registerHelper('isConnected', () => Session.get('isConnected'));
@@ -101,12 +101,12 @@ Template.registerHelper('countLastTrades', () => {
   const quoteCurrency = Session.get('quoteCurrency');
   const baseCurrency = Session.get('baseCurrency');
   const options = {};
-  options.sort = {timestamp: -1};
+  options.sort = { timestamp: -1 };
   const obj = {
     $or: [
-      {buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency},
-      {buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency},
-    ]
+      { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
+      { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
+    ],
   };
   return Trades.find(obj, options).count();
 });
@@ -119,12 +119,12 @@ Template.registerHelper('lastTrades', () => {
   if (limit) {
     options.limit = limit;
   }
-  options.sort = {timestamp: -1};
+  options.sort = { timestamp: -1 };
   const obj = {
     $or: [
-      {buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency},
-      {buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency},
-    ]
+      { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
+      { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
+    ],
   };
   return Trades.find(obj, options);
 });
@@ -139,13 +139,13 @@ Template.registerHelper('countOffers', (type) => {
     return Offers.find({
       buyWhichToken: quoteCurrency,
       sellWhichToken: baseCurrency,
-      buyHowMuch_filter: {$gte: dustLimit}
+      buyHowMuch_filter: { $gte: dustLimit },
     }).count();
   } else if (type === 'bid') {
     return Offers.find({
       buyWhichToken: baseCurrency,
       sellWhichToken: quoteCurrency,
-      sellHowMuch_filter: {$gte: dustLimit}
+      sellHowMuch_filter: { $gte: dustLimit },
     }).count();
   }
   return 0;
@@ -159,7 +159,7 @@ Template.registerHelper('findOffers', (type) => {
   const dustLimit = dustLimitMap[quoteCurrency] ? dustLimitMap[quoteCurrency] : 0;
 
   const options = {};
-  options.sort = {ask_price_sort: 1, _id: -1};
+  options.sort = { ask_price_sort: 1, _id: -1 };
   if (limit) {
     options.limit = limit;
   }
@@ -168,13 +168,13 @@ Template.registerHelper('findOffers', (type) => {
     return Offers.find({
       buyWhichToken: quoteCurrency,
       sellWhichToken: baseCurrency,
-      buyHowMuch_filter: {$gte: dustLimit}
+      buyHowMuch_filter: { $gte: dustLimit },
     }, options);
   } else if (type === 'bid') {
     return Offers.find({
       buyWhichToken: baseCurrency,
       sellWhichToken: quoteCurrency,
-      sellHowMuch_filter: {$gte: dustLimit}
+      sellHowMuch_filter: { $gte: dustLimit },
     }, options);
   }
   return [];
@@ -188,23 +188,21 @@ Template.registerHelper('findOrders', (state) => {
     const baseCurrency = Session.get('baseCurrency');
 
     const or = [
-      {buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency},
-      {buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency},
+      { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
+      { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
     ];
-
 
     Session.set('loadingIndividualTradeHistory', false);
 
-    return Offers.find({owner: address, $or: or}, {sort: {buyWhichToken: 1, _id: -1}});
+    return Offers.find({ owner: address, $or: or }, { sort: { buyWhichToken: 1, _id: -1 } });
   } else if (state === Status.CLOSED) {
-
-    if(!Session.get("areIndividualTradesSynced")){
+    if (!Session.get('areIndividualTradesSynced')) {
       Session.set('loadingIndividualTradeHistory', true);
 
       Offers.syncIndividualTrades();
     }
 
-    return IndividualTrades.find({}, {sort: {timestamp: -1}});
+    return IndividualTrades.find({}, { sort: { timestamp: -1 } });
   }
 
   return [];

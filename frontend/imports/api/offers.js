@@ -67,6 +67,29 @@ const helpers = {
   },
 };
 
+function logTakeToTrade(logTake) {
+  const buyWhichToken = Dapple.getTokenByAddress(logTake.args.wantToken);
+  const sellWhichToken = Dapple.getTokenByAddress(logTake.args.haveToken);
+
+  if (buyWhichToken && sellWhichToken && !logTake.removed) {
+    return {
+      buyWhichToken_address: logTake.args.wantToken,
+      buyWhichToken,
+      sellWhichToken_address: logTake.args.haveToken,
+      sellWhichToken,
+      buyHowMuch: convertTo18Precision(logTake.args.giveAmount.toString(10), buyWhichToken),
+      sellHowMuch: convertTo18Precision(logTake.args.takeAmount.toString(10), sellWhichToken),
+      timestamp: logTake.args.timestamp.toNumber(),
+      transactionHash: logTake.transactionHash,
+    };
+  }
+  return false;
+}
+
+function getBlockNumberOfTheMostRecentBlock() {
+  return Offers.getBlock('latest').then((block) => block.number);
+}
+
 Offers.syncedOffers = [];
 
 Offers.helpers(_.extend(helpers, {
@@ -107,7 +130,7 @@ Offers.getHistoricalTradesRange = (numberOfPreviousDays) => {
     return Offers.getBlock('latest').then((block) => block.number);
   }
 
-  return _getBlockNumberOfTheMostRecentBlock().then((blockNumberOfTheMostRecentBlock) => {
+  return getBlockNumberOfTheMostRecentBlock().then((blockNumberOfTheMostRecentBlock) => {
     const startTimestamp = moment(Date.now()).startOf('day').subtract(numberOfPreviousDays, 'days');
     const initialGuess = blockNumberOfTheMostRecentBlock - INITIAL_NUMBER_OF_BLOCKS_BACKWARDS;
 
@@ -167,29 +190,29 @@ Offers.syncOffers = () => {
 };
 
 Offers.syncIndividualTrades = () => {
-  let address = Session.get("address");
-  Dapple['maker-otc'].objects.otc.LogTake({maker: address}, {
+  const address = Session.get('address');
+  Dapple['maker-otc'].objects.otc.LogTake({ maker: address }, {
     fromBlock: Dapple['maker-otc'].environments[Dapple.env].otc.blockNumber,
     toBlock: 'latest',
   }).get((error, logTakes) => {
-    if(!error){
+    if (!error) {
       for (let i = 0; i < logTakes.length; i++) {
-        const trade = _logTakeToTrade(logTakes[i]);
+        const trade = logTakeToTrade(logTakes[i]);
 
         if (trade) {
           IndividualTrades.upsert(trade.transactionHash, trade);
         }
       }
-      Session.set("areIndividualTradesSynced", true);
+      Session.set('areIndividualTradesSynced', true);
       Session.set('loadingIndividualTradeHistory', false);
     }
   });
 
-  _getBlockNumberOfTheMostRecentBlock().then((latestBlock) => {
-    Dapple['maker-otc'].objects.otc.LogTake({maker: address},
-      {fromBlock: latestBlock + 1}, (error, logTake) => {
+  getBlockNumberOfTheMostRecentBlock().then((latestBlock) => {
+    Dapple['maker-otc'].objects.otc.LogTake({ maker: address },
+      { fromBlock: latestBlock + 1 }, (error, logTake) => {
         if (!error) {
-          const trade = _logTakeToTrade(logTake);
+          const trade = logTakeToTrade(logTake);
 
           if (trade) {
             IndividualTrades.upsert(trade.transactionHash, trade);
@@ -197,7 +220,6 @@ Offers.syncIndividualTrades = () => {
         }
       });
   });
-
 };
 
 Offers.syncTrades = (historicalTradesRange) => {
@@ -208,7 +230,7 @@ Offers.syncTrades = (historicalTradesRange) => {
   }).get((error, logTakes) => {
     if (!error) {
       for (let i = 0; i < logTakes.length; i++) {
-        const trade = _logTakeToTrade(logTakes[i]);
+        const trade = logTakeToTrade(logTakes[i]);
         if (trade && (trade.timestamp * 1000 >= historicalTradesRange.startTimestamp)) {
           Trades.upsert(trade.transactionHash, trade);
         }
@@ -219,9 +241,9 @@ Offers.syncTrades = (historicalTradesRange) => {
 
   // Watch LogTake events in realtime
   Dapple['maker-otc'].objects.otc.LogTake({},
-    {fromBlock: historicalTradesRange.endBlockNumber + 1}, (error, logTake) => {
+    { fromBlock: historicalTradesRange.endBlockNumber + 1 }, (error, logTake) => {
       if (!error) {
-        const trade = _logTakeToTrade(logTake);
+        const trade = logTakeToTrade(logTake);
         if (trade) {
           Trades.upsert(trade.transactionHash, trade);
         }
@@ -303,7 +325,7 @@ Offers.updateOffer = (idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWh
       bid_price_sort: sellHowMuchValue.div(buyHowMuchValue).toNumber(),
     };
 
-    Offers.upsert(idx, {$set: offer});
+    Offers.upsert(idx, { $set: offer });
   }
 };
 
@@ -316,7 +338,7 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
 
   Dapple['maker-otc'].objects.otc.offer(sellHowMuchAbsolute, sellWhichTokenAddress,
     buyHowMuchAbsolute, buyWhichTokenAddress,
-    {gas: OFFER_GAS}, (error, tx) => {
+    { gas: OFFER_GAS }, (error, tx) => {
       callback(error, tx);
       if (!error) {
         Offers.updateOffer(tx, sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress,
@@ -331,55 +353,31 @@ Offers.buyOffer = (_id, type, _quantity, _token) => {
 
   const quantityAbsolute = convertToTokenPrecision(_quantity, _token);
 
-  Offers.update(_id, {$unset: {helper: ''}});
-  Dapple['maker-otc'].objects.otc.buy(id.toString(10), quantityAbsolute, {gas: BUY_GAS}, (error, tx) => {
+  Offers.update(_id, { $unset: { helper: '' } });
+  Dapple['maker-otc'].objects.otc.buy(id.toString(10), quantityAbsolute, { gas: BUY_GAS }, (error, tx) => {
     if (!error) {
-      Transactions.add('offer', tx, {id: _id, status: Status.BOUGHT});
+      Transactions.add('offer', tx, { id: _id, status: Status.BOUGHT });
       Offers.update(_id, {
         $set: {
           tx, status: Status.BOUGHT, helper: `Your ${type} order is being processed...`,
         },
       });
     } else {
-      Offers.update(_id, {$set: {helper: formatError(error)}});
+      Offers.update(_id, { $set: { helper: formatError(error) } });
     }
   });
 };
 
 Offers.cancelOffer = (idx) => {
   const id = parseInt(idx, 10);
-  Offers.update(idx, {$unset: {helper: ''}});
-  Dapple['maker-otc'].objects.otc.cancel(id, {gas: CANCEL_GAS}, (error, tx) => {
+  Offers.update(idx, { $unset: { helper: '' } });
+  Dapple['maker-otc'].objects.otc.cancel(id, { gas: CANCEL_GAS }, (error, tx) => {
     if (!error) {
-      Transactions.add('offer', tx, {id: idx, status: Status.CANCELLED});
-      Offers.update(idx, {$set: {tx, status: Status.CANCELLED, helper: 'The order is being cancelled...'}});
+      Transactions.add('offer', tx, { id: idx, status: Status.CANCELLED });
+      Offers.update(idx, { $set: { tx, status: Status.CANCELLED, helper: 'The order is being cancelled...' } });
     } else {
-      Offers.update(idx, {$set: {helper: formatError(error)}});
+      Offers.update(idx, { $set: { helper: formatError(error) } });
     }
   });
 };
-
-function _logTakeToTrade (logTake) {
-  const buyWhichToken = Dapple.getTokenByAddress(logTake.args.wantToken);
-  const sellWhichToken = Dapple.getTokenByAddress(logTake.args.haveToken);
-
-  if (buyWhichToken && sellWhichToken && !logTake.removed) {
-    return {
-      buyWhichToken_address: logTake.args.wantToken,
-      buyWhichToken,
-      sellWhichToken_address: logTake.args.haveToken,
-      sellWhichToken,
-      buyHowMuch: convertTo18Precision(logTake.args.giveAmount.toString(10), buyWhichToken),
-      sellHowMuch: convertTo18Precision(logTake.args.takeAmount.toString(10), sellWhichToken),
-      timestamp: logTake.args.timestamp.toNumber(),
-      transactionHash: logTake.transactionHash,
-    };
-  }
-  return false;
-}
-
-
-function _getBlockNumberOfTheMostRecentBlock () {
-  return Offers.getBlock('latest').then((block) => block.number);
-}
 export { Offers, Trades, IndividualTrades, Status };
