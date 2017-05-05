@@ -94,38 +94,25 @@ Offers.checkMarketOpen = () => {
   });
 };
 
-// As it is expensive to load historical Trades, we load them only for the last week
-// Enough for the Volume chart and the Market History section
 Offers.getHistoricalTradesRange = (numberOfPreviousDays) => {
-  // 5760 is an average number of blocks per day. in case we didn't get far enough
   // after the initial jump we step back 1000 blocks at a time
-  const INITIAL_NUMBER_OF_BLOCKS_BACKWARDS = (5760 * (numberOfPreviousDays + 1)) + 3000;
-  const STEP_NUMBER_OF_BLOCKS_BACKWARDS = 1000;
+    // We send one extra day just to have a buffer and be sure that the starBlock covers a full week of volume data
+  const INITIAL_NUMBER_OF_BLOCKS_BACKWARDS = Session.get('AVGBlocksPerDay') * (numberOfPreviousDays + 1 + 1);
 
   function getBlockNumberOfTheMostRecentBlock() {
     return Offers.getBlock('latest').then((block) => block.number);
-  }
-  function getBlockNumberOfSomeBlockEarlierThan(timestamp, startingFrom) {
-    if (startingFrom < 0) return Promise.resolve(0);
-    return Offers.getBlock(startingFrom).then((block) => {
-      if (block.timestamp * 1000 <= timestamp) {
-        return block.number;
-      }
-      return getBlockNumberOfSomeBlockEarlierThan(timestamp, startingFrom - STEP_NUMBER_OF_BLOCKS_BACKWARDS);
-    });
   }
 
   return getBlockNumberOfTheMostRecentBlock().then((blockNumberOfTheMostRecentBlock) => {
     const startTimestamp = moment(Date.now()).startOf('day').subtract(numberOfPreviousDays, 'days');
     const initialGuess = blockNumberOfTheMostRecentBlock - INITIAL_NUMBER_OF_BLOCKS_BACKWARDS;
-    return getBlockNumberOfSomeBlockEarlierThan(startTimestamp, initialGuess).then((foundBlockNumber) => {
-      const ret = {
-        startBlockNumber: foundBlockNumber,
-        startTimestamp,
-        endBlockNumber: blockNumberOfTheMostRecentBlock,
-      };
-      return ret;
-    });
+
+    const ret = {
+      startBlockNumber: initialGuess,
+      startTimestamp,
+      endBlockNumber: blockNumberOfTheMostRecentBlock,
+    };
+    return ret;
   });
 };
 
@@ -135,6 +122,8 @@ Offers.getHistoricalTradesRange = (numberOfPreviousDays) => {
 Offers.sync = () => {
   Offers.checkMarketOpen();
   Offers.syncOffers();
+  // As it is expensive to load historical Trades, we load them only for the last week
+  // Enough for the Volume chart and the Market History section
   Offers.getHistoricalTradesRange(6).then(Offers.syncTrades);
 };
 
