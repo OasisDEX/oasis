@@ -13,7 +13,6 @@ import './offermodal.html';
 // TODO: DELETE THIS, TESTING PURPOSE
 window.Tokens = Tokens;
 
-
 Template.offermodal.viewmodel({
   share: 'newOffer',
   volume: '',
@@ -76,7 +75,7 @@ Template.offermodal.viewmodel({
   hasAllowanceNewOrder() {
     try {
       const token = Tokens.findOne(this.offerType() === 'buy'
-                                                      ? Session.get('quoteCurrency') : Session.get('baseCurrency'));
+        ? Session.get('quoteCurrency') : Session.get('baseCurrency'));
       const allowance = new BigNumber(token.allowance);
 
       return token && allowance.gte(web3Obj.toWei(new BigNumber(this.offerType() === 'buy'
@@ -228,16 +227,20 @@ Template.offermodal.viewmodel({
     let bestOffer = null;
     if (this.type() === 'bid') {
       bestOffer = Offers.findOne({
-        buyWhichToken: Session.get('baseCurrency'),
-        sellWhichToken: Session.get('quoteCurrency') },
-        { sort: { ask_price_sort: 1 },
+          buyWhichToken: Session.get('baseCurrency'),
+          sellWhichToken: Session.get('quoteCurrency'),
+        },
+        {
+          sort: { ask_price_sort: 1 },
         });
       return (new BigNumber(bestOffer.bid_price)).gt(new BigNumber(this.templateInstance.data.offer.bid_price));
     } else if (this.type() === 'ask') {
       bestOffer = Offers.findOne({
-        buyWhichToken: Session.get('quoteCurrency'),
-        sellWhichToken: Session.get('baseCurrency') },
-        { sort: { ask_price_sort: 1 },
+          buyWhichToken: Session.get('quoteCurrency'),
+          sellWhichToken: Session.get('baseCurrency'),
+        },
+        {
+          sort: { ask_price_sort: 1 },
         });
       return (new BigNumber(bestOffer.ask_price)).lt(new BigNumber(this.templateInstance.data.offer.ask_price));
     }
@@ -359,5 +362,8 @@ Template.offermodal.events({
     const token = $(event.target).data('link');
     $(`#allowanceModal${token}`).data('refer', refer);
     $(`#allowanceModal${token}`).modal('show');
+    $(`#allowanceModal${token}`).on('shown.bs.modal', () => {
+      $('.set-allowance input').focus();
+    });
   },
 });
