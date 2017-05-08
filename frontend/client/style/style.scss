@@ -81,6 +81,21 @@ $color-cancel-order: #A8ACB9;
   }
 }
 
+@mixin placeholder {
+  ::-webkit-input-placeholder {
+    @content
+  }
+  :-moz-placeholder {
+    @content
+  }
+  ::-moz-placeholder {
+    @content
+  }
+  :-ms-input-placeholder {
+    @content
+  }
+}
+
 $i: '';
 $max: 7;
 /* / MIXIN TABLE SCROLLING */
@@ -149,6 +164,12 @@ table {
 .row-tabs {
   margin-top: 60px;
   margin-bottom: 60px;
+}
+
+.row-input-line {
+  @include placeholder {
+    color: #D0D0D0;
+  }
 }
 
 .account-section {
@@ -2434,6 +2455,6 @@ a.logo:hover {
 
   img.order-warning {
     position: relative;
-    top:7.5px;
+    top: 7.5px;
   }
 }

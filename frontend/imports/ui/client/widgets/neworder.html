@@ -7,42 +7,50 @@
       </h2>
       <table class="table-fixed">
         <tbody>
-          <tr class="row-input-line">
-            <th class="available">
-              AVAILABLE
-            </th>
-            <td class="available">
-              {{#if equals type 'buy'}}
-              <span class="fill-amount {{#if canAutofill}}clickable{{/if}}" {{b "click: autofill"}}>{{{formatBalance quoteAvailable '' '' true}}}</span> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
-              {{else}}
-              <span class="fill-amount {{#if canAutofill}}clickable{{/if}}" {{b "click: autofill"}}>{{{formatBalance baseAvailable '' '' true}}}</span> <span class="span-buy-sell-currency">{{baseCurrency}}</span>
-              {{/if}}
-            </td>
-          </tr>
-          <tr class="row-input-line">
-            <th>
-              PRICE
-            </th>
-            <td>
-              <input type="number" class="input" step="any" min="0" {{b "value: price, input: calcTotal, enable: canChangePrice"}}> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
-            </td>
-          </tr>
-          <tr class="row-input-line">
-            <th>
-              AMOUNT
-            </th>
-            <td>
-              <input type="number" class="input" step="any" min="0" {{b "value: amount, input: calcTotal, enable: canChangeAmountAndTotal, attr: { max: maxAmount }"}}> <span class="span-buy-sell-currency">{{baseCurrency}}</span>
-            </td>
-          </tr>
-          <tr class="row-input-line">
-            <th>
-              TOTAL
-            </th>
-            <td>
-              <input type="number" class="input" step="any" min="0" {{b "value: total, input: calcAmount, enable: canChangeAmountAndTotal, attr: { max: maxTotal }"}}> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
-            </td>
-          </tr>
+        <tr class="row-input-line">
+          <th class="available">
+            AVAILABLE
+          </th>
+          <td class="available">
+            {{#if equals type 'buy'}}
+              <span class="fill-amount {{#if canAutofill}}clickable{{/if}}" {{b "click: autofill"}}>{{{formatBalance
+                quoteAvailable '' '' true}}}</span> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
+            {{else}}
+              <span class="fill-amount {{#if canAutofill}}clickable{{/if}}" {{b "click: autofill"}}>{{{formatBalance
+                baseAvailable '' '' true}}}</span> <span class="span-buy-sell-currency">{{baseCurrency}}</span>
+            {{/if}}
+          </td>
+        </tr>
+        <tr class="row-input-line">
+          <th>
+            PRICE
+          </th>
+          <td>
+            <input type="number" class="input" step="any" min="" placeholder="0"
+              {{b "value: price, input: calcTotal, enable: canChangePrice"}}> <span
+            class="span-buy-sell-currency">{{quoteCurrency}}</span>
+          </td>
+        </tr>
+        <tr class="row-input-line">
+          <th>
+            AMOUNT
+          </th>
+          <td>
+            <input type="number" class="input" step="any" min="" placeholder="0"
+              {{b "value: amount, input: calcTotal, enable: canChangeAmountAndTotal, attr: { max: maxAmount }"}}> <span
+            class="span-buy-sell-currency">{{baseCurrency}}</span>
+          </td>
+        </tr>
+        <tr class="row-input-line">
+          <th>
+            TOTAL
+          </th>
+          <td>
+            <input type="number" class="input" step="any" min="" placeholder="0"
+              {{b "value: total, input: calcAmount, enable: canChangeAmountAndTotal, attr: { max: maxTotal }"}}> <span
+            class="span-buy-sell-currency">{{quoteCurrency}}</span>
+          </td>
+        </tr>
         </tbody>
       </table>
       <table class="footer">
@@ -56,11 +64,15 @@
                 <span class="help-block">Amount is invalid because {{baseCurrency}} has no decimals.</span>
               {{/unless}}
               {{#unless hasBalance sellCurrency}}
-                <span class="help-block">You don't have enough {{#if equals sellCurrency 'W-ETH'}}<a href="#ethtokens" {{b "click: showDepositTab"}}>{{sellCurrency}}</a>{{else}}{{sellCurrency}}{{/if}} tokens.</span>
+                <span class="help-block">You don't have enough {{#if equals sellCurrency 'W-ETH'}}
+                  <a href="#ethtokens" {{b "click: showDepositTab"}}>{{sellCurrency}}</a>{{else}}{{sellCurrency}}{{/if}}
+                  tokens.</span>
               {{else}}
                 {{#let offer=betterOffer}}
                   {{#if offer}}
-                    <span class="help-block">There is a better <a href="#offerModal" data-toggle="modal" data-target="#offerModal" {{b "click: openOfferModal"}}>offer</a>.</span>
+                    <span class="help-block">There is a better <a href="#offerModal" data-toggle="modal"
+                                                                  data-target="#offerModal" {{b
+                        "click: openOfferModal"}}>offer</a>.</span>
                   {{/if}}
                 {{/let}}
               {{/unless}}
@@ -74,7 +86,8 @@
           </td>
           <td class="first-row">
             <div class="row-height">
-              <button class="btn btn-default btn-submit-order-{{type}} {{type}} btn-placement-right" data-toggle="modal" data-target="#newOrderModal" {{b "enable: canSubmit, click: showConfirmation"}}>{{title}}</button>
+              <button class="btn btn-default btn-submit-order-{{type}} {{type}} btn-placement-right" data-toggle="modal"
+                      data-target="#newOrderModal" {{b "enable: canSubmit, click: showConfirmation"}}>{{title}}</button>
             </div>
           </td>
         </tr>
