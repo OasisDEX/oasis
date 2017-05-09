@@ -18,6 +18,6 @@ Package.onUse((api) => {
   api.addFiles(['contracts-abi/token-wrapper.js'], 'client');
   api.addFiles(['package-post-init.js'], 'client');
 
-  api.export('web3', 'client');
+  api.export('web3Obj', 'client');
   api.export('Dapple', 'client');
 });

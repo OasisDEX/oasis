@@ -1,7 +1,7 @@
 import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
 import { BigNumber } from 'meteor/ethereum:web3';
-import { web3 } from 'meteor/makerotc:dapple';
+import { web3Obj } from 'meteor/makerotc:dapple';
 
 import Tokens from '/imports/api/tokens';
 import { Offers } from '/imports/api/offers';
@@ -100,8 +100,8 @@ Template.neworder.viewmodel({
       if (token) {
         const balance = new BigNumber(token.balance);
         /* const allowance = new BigNumber(token.allowance);
-        maxAmount = web3.fromWei(BigNumber.min(balance, allowance).toString(10));*/
-        maxAmount = web3.fromWei(balance.toString(10));
+        maxAmount = web3Obj.fromWei(BigNumber.min(balance, allowance).toString(10));*/
+        maxAmount = web3Obj.fromWei(balance.toString(10));
       }
     } else {
       maxAmount = '9e999';
@@ -125,8 +125,8 @@ Template.neworder.viewmodel({
       if (token) {
         const balance = new BigNumber(token.balance);
         /* const allowance = new BigNumber(token.allowance);
-        maxTotal = web3.fromWei(BigNumber.min(balance, allowance).toString(10));*/
-        maxTotal = web3.fromWei(balance.toString(10));
+        maxTotal = web3Obj.fromWei(BigNumber.min(balance, allowance).toString(10));*/
+        maxTotal = web3Obj.fromWei(balance.toString(10));
       }
     } else {
       maxTotal = '9e999';
@@ -137,7 +137,7 @@ Template.neworder.viewmodel({
     try {
       const token = Tokens.findOne(currency);
       const balance = new BigNumber(token.balance);
-      return token && balance.gte(web3.toWei(new BigNumber(this.type() === 'sell' ? this.amount() : this.total())));
+      return token && balance.gte(web3Obj.toWei(new BigNumber(this.type() === 'sell' ? this.amount() : this.total())));
     } catch (e) {
       return false;
     }
@@ -174,7 +174,7 @@ Template.neworder.viewmodel({
     try {
       const token = Tokens.findOne(currency);
       const allowance = new BigNumber(token.allowance);
-      return token && allowance.gte(web3.toWei(new BigNumber(this.type() === 'sell' ? this.amount() : this.total())));
+      return token && allowance.gte(web3Obj.toWei(new BigNumber(this.type() === 'sell' ? this.amount() : this.total())));
     } catch (e) {
       return false;
     }
@@ -248,7 +248,7 @@ Template.neworder.viewmodel({
                               { sort: { ask_price_sort: 1 } });
       if (offer && Object.prototype.hasOwnProperty.call(offer, 'ask_price')) {
         price = new BigNumber(offer.ask_price);
-        available = web3.fromWei(this.quoteAvailable()).toString(10);
+        available = web3Obj.fromWei(this.quoteAvailable()).toString(10);
         this.price(price);
         this.total(available);
         this.calcAmount();
@@ -258,7 +258,7 @@ Template.neworder.viewmodel({
                               { sort: { ask_price_sort: 1 } });
       if (offer && Object.prototype.hasOwnProperty.call(offer, 'bid_price')) {
         price = new BigNumber(offer.bid_price);
-        available = web3.fromWei(this.baseAvailable()).toString(10);
+        available = web3Obj.fromWei(this.baseAvailable()).toString(10);
         this.price(price);
         this.amount(available);
         this.calcTotal();

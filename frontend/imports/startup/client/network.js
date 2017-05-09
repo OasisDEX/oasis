@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
-import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { Dapple, web3Obj } from 'meteor/makerotc:dapple';
 import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
 
@@ -15,21 +15,21 @@ import { doHashChange } from '/imports/utils/functions';
 // Check which accounts are available and if defaultAccount is still available,
 // Otherwise set it to localStorage, Session, or first element in accounts
 function checkAccounts() {
-  web3.eth.getAccounts((error, accounts) => {
+  web3Obj.eth.getAccounts((error, accounts) => {
     if (!error) {
-      if (!_.contains(accounts, web3.eth.defaultAccount)) {
+      if (!_.contains(accounts, web3Obj.eth.defaultAccount)) {
         if (_.contains(accounts, localStorage.getItem('address'))) {
-          web3.eth.defaultAccount = localStorage.getItem('address');
+          web3Obj.eth.defaultAccount = localStorage.getItem('address');
         } else if (_.contains(accounts, Session.get('address'))) {
-          web3.eth.defaultAccount = Session.get('address');
-        } else if (accounts && accounts.length > 0) {
-          web3.eth.defaultAccount = accounts[0];
+          web3Obj.eth.defaultAccount = Session.get('address');
+        } else if (accounts.length > 0) {
+          web3Obj.eth.defaultAccount = accounts[0];
         } else {
-          web3.eth.defaultAccount = undefined;
+          web3Obj.eth.defaultAccount = undefined;
         }
       }
-      localStorage.setItem('address', web3.eth.defaultAccount);
-      Session.set('address', web3.eth.defaultAccount);
+      localStorage.setItem('address', web3Obj.eth.defaultAccount);
+      Session.set('address', web3Obj.eth.defaultAccount);
       Session.set('accounts', accounts);
     }
   });
@@ -55,13 +55,13 @@ function checkMarketOpen() {
 
 // CHECK FOR NETWORK
 function checkNetwork() {
-  if (Session.get('web3Ready') && typeof web3 !== 'undefined') {
-    web3.version.getNode((error) => {
+  if (Session.get('web3ObjReady') && typeof web3Obj !== 'undefined') {
+    web3Obj.version.getNode((error) => {
       const isConnected = !error;
 
       // Check if we are synced
       if (isConnected) {
-        web3.eth.getBlock('latest', (e, res) => {
+        web3Obj.eth.getBlock('latest', (e, res) => {
           if (!e) {
             if (res && res.number >= Session.get('latestBlock')) {
               Session.set('outOfSync', e != null || (new Date().getTime() / 1000) - res.timestamp > 600);
@@ -85,7 +85,7 @@ function checkNetwork() {
       // https://github.com/ethereum/meteor-dapp-wallet/blob/90ad8148d042ef7c28610115e97acfa6449442e3/app/client/lib/ethereum/walletInterface.js#L32-L46
       if (!Session.equals('isConnected', isConnected)) {
         if (isConnected === true) {
-          web3.eth.getBlock(0, (e, res) => {
+          web3Obj.eth.getBlock(0, (e, res) => {
             let network = false;
             if (!e) {
               switch (res.hash) {
@@ -164,21 +164,21 @@ Meteor.startup(() => {
   initSession();
   checkNetwork();
 
-  if (Session.get('web3Ready')) {
-    web3.eth.filter('latest', () => {
+  if (Session.get('web3ObjReady')) {
+    web3Obj.eth.filter('latest', () => {
       Tokens.sync();
       Transactions.sync();
       TokenEvents.syncTimestamps();
     });
 
-    web3.eth.isSyncing((error, sync) => {
+    web3Obj.eth.isSyncing((error, sync) => {
       if (!error) {
         Session.set('syncing', sync !== false);
 
         // Stop all app activity
         if (sync === true) {
-          // We use `true`, so it stops all filters, but not the web3.eth.syncing polling
-          web3.reset(true);
+          // We use `true`, so it stops all filters, but not the web3Obj.eth.syncing polling
+          web3Obj.reset(true);
           checkNetwork();
         // show sync info
         } else if (sync) {
@@ -188,7 +188,7 @@ Meteor.startup(() => {
         } else {
           Session.set('outOfSync', false);
           Offers.sync();
-          web3.eth.filter('latest', () => {
+          web3Obj.eth.filter('latest', () => {
             Tokens.sync();
             Transactions.sync();
           });

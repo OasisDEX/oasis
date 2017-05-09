@@ -4,7 +4,7 @@ import { moment } from 'meteor/momentjs:moment';
 import { Session } from 'meteor/session';
 import { BigNumber } from 'meteor/ethereum:web3';
 import { _ } from 'meteor/underscore';
-import { web3 } from 'meteor/makerotc:dapple';
+import { web3Obj } from 'meteor/makerotc:dapple';
 import { Offers, Trades } from '/imports/api/offers';
 import Chart from '/imports/utils/Chart.min';
 import { formatNumber, removeOutliersFromArray } from '/imports/utils/functions';
@@ -188,8 +188,8 @@ Template.chart.viewmodel({
                     quoteAmount = bidAmounts.quote[bidPrices.indexOf(price)];
                     baseAmount = bidAmounts.base[bidPrices.indexOf(price)];
                   }
-                  quoteAmount = formatNumber(web3.fromWei(quoteAmount), 5);
-                  baseAmount = formatNumber(web3.fromWei(baseAmount), 5);
+                  quoteAmount = formatNumber(web3Obj.fromWei(quoteAmount), 5);
+                  baseAmount = formatNumber(web3Obj.fromWei(baseAmount), 5);
 
                   tooltipEl.innerHTML =
                     `<div class="row-custom-tooltip">
@@ -309,7 +309,7 @@ Template.chart.viewmodel({
         index = askPrices.indexOf(vals[i]);
         if (index !== -1) {
           // If there is a specific value for the price in asks, we add it
-          amount = formatNumber(web3.fromWei(askAmounts.quote[index]), 3).replace(/,/g, '');
+          amount = formatNumber(web3Obj.fromWei(askAmounts.quote[index]), 3).replace(/,/g, '');
         } else if (askPrices.length === 0 ||
                   (new BigNumber(vals[i])).lt((new BigNumber(askPrices[0]))) ||
                   (new BigNumber(vals[i])).gt((new BigNumber(askPrices[askPrices.length - 1])))) {
@@ -324,7 +324,7 @@ Template.chart.viewmodel({
         index = bidPrices.indexOf(vals[i]);
         if (index !== -1) {
           // If there is a specific value for the price in bids, we add it
-          amount = formatNumber(web3.fromWei(bidAmounts.quote[index]), 3).replace(/,/g, '');
+          amount = formatNumber(web3Obj.fromWei(bidAmounts.quote[index]), 3).replace(/,/g, '');
         } else if (bidPrices.length === 0 ||
                   (new BigNumber(vals[i])).lt((new BigNumber(bidPrices[0]))) ||
                   (new BigNumber(vals[i])).gt((new BigNumber(bidPrices[bidPrices.length - 1])))) {
@@ -334,7 +334,7 @@ Template.chart.viewmodel({
           // If there is not a bid amount for this price, we need to add the next available amount
           for (let j = 0; j < bidPrices.length; j++) {
             if (bidPrices[j] >= vals[i]) {
-              amount = formatNumber(web3.fromWei(bidAmounts.quote[j]), 3).replace(/,/g, '');
+              amount = formatNumber(web3Obj.fromWei(bidAmounts.quote[j]), 3).replace(/,/g, '');
               break;
             }
           }
@@ -403,8 +403,8 @@ Template.chart.viewmodel({
                   const date = parseInt(tooltip.dataPoints[0].xLabel, 10);
                   let quoteAmount = null;
                   let baseAmount = null;
-                  quoteAmount = formatNumber(web3.fromWei(volumes.quote[date]), 5);
-                  baseAmount = formatNumber(web3.fromWei(volumes.base[date]), 5);
+                  quoteAmount = formatNumber(web3Obj.fromWei(volumes.quote[date]), 5);
+                  baseAmount = formatNumber(web3Obj.fromWei(volumes.base[date]), 5);
 
                   tooltipEl.innerHTML =
                     `<div class="row-custom-tooltip">
@@ -481,7 +481,7 @@ Template.chart.viewmodel({
       charts.volume.data.datasets = [{
         label: 'Volume',
         data: Object.keys(volumes.quote).map((key) =>
-                                              formatNumber(web3.fromWei(volumes.quote[key]), 5).replace(/,/g, '')),
+                                              formatNumber(web3Obj.fromWei(volumes.quote[key]), 5).replace(/,/g, '')),
         backgroundColor: 'rgba(140, 133, 200, 0.1)',
         borderColor: '#8D86C9',
         borderWidth: 3,

@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 import { BigNumber } from 'meteor/ethereum:web3';
-import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { Dapple, web3Obj } from 'meteor/makerotc:dapple';
 
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
@@ -33,7 +33,7 @@ Template.sendtokens.viewmodel({
   maxAmount() {
     try {
       const token = Tokens.findOne(this.currency());
-      return web3.fromWei(token.balance).toString(10);
+      return web3Obj.fromWei(token.balance).toString(10);
     } catch (e) {
       return '0';
     }

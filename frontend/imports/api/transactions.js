@@ -1,5 +1,5 @@
 import { Mongo } from 'meteor/mongo';
-import { web3 } from 'meteor/makerotc:dapple';
+import { web3Obj } from 'meteor/makerotc:dapple';
 
 class TransactionsCollection extends Mongo.Collection {
 
@@ -23,7 +23,7 @@ class TransactionsCollection extends Mongo.Collection {
     const syncTransaction = (index) => {
       if (index >= 0 && index < open.length) {
         const document = open[index];
-        web3.eth.getTransactionReceipt(document.tx, (error, result) => {
+        web3Obj.eth.getTransactionReceipt(document.tx, (error, result) => {
           if (!error && result != null) {
             if (result.logs.length > 0) {
               console.log('tx_success', document.tx, result.gasUsed);

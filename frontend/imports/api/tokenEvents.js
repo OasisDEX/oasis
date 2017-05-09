@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 import { Session } from 'meteor/session';
-import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { Dapple, web3Obj } from 'meteor/makerotc:dapple';
 import { convertTo18Precision } from '/imports/utils/conversion';
 
 class TokenEventCollection extends Mongo.Collection {
@@ -12,7 +12,7 @@ class TokenEventCollection extends Mongo.Collection {
   }
   getLatestBlock() {
     return new Promise((resolve, reject) => {
-      web3.eth.getBlock('latest', (blockError, block) => {
+      web3Obj.eth.getBlock('latest', (blockError, block) => {
         if (!blockError) {
           resolve(block);
         } else {
@@ -76,7 +76,7 @@ class TokenEventCollection extends Mongo.Collection {
     const syncTs = (index) => {
       // console.log('syncing ts', index);
       if (index >= 0 && index < open.length) {
-        web3.eth.getBlock(open[index].blockNumber, (error, result) => {
+        web3Obj.eth.getBlock(open[index].blockNumber, (error, result) => {
           if (!error) {
             // console.log('update', open[index].blockNumber, result.timestamp);
             super.update({ blockNumber: open[index].blockNumber },

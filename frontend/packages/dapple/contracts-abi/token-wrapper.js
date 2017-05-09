@@ -4,10 +4,6 @@ if (typeof Dapple === 'undefined') {
   Dapple = {};
 }
 
-if (typeof web3 === 'undefined' && typeof Web3 === 'undefined') {
-  var Web3 = require('web3');
-}
-
 Dapple['token-wrapper'] = (function builder() {
   var environments = {
     "internal": {}
@@ -15,7 +11,7 @@ Dapple['token-wrapper'] = (function builder() {
 
   function ContractWrapper(headers, _web3) {
     if (!_web3) {
-      throw new Error('Must supply a Web3 connection!');
+      throw new Error('Must supply a web3 connection!');
     }
 
     this.headers = headers;
@@ -54,13 +50,6 @@ Dapple['token-wrapper'] = (function builder() {
         throw new Error('Cannot resolve environment name: ' + env);
       }
       env = environments[env];
-    }
-
-    if (typeof _web3 === 'undefined') {
-      if (!env.rpcURL) {
-        throw new Error('Need either a Web3 instance or an RPC URL!');
-      }
-      _web3 = new Web3(new Web3.providers.HttpProvider(env.rpcURL));
     }
 
     this.headers = {

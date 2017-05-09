@@ -15,14 +15,14 @@ Dapple.init = function init(env) {
   Dapple.env = predefinedEnv;
   Dapple['maker-otc']['environments'][Dapple.env].otc.value = config.market[Dapple.env].address;
   Dapple['maker-otc']['environments'][Dapple.env].otc.blockNumber = config.market[Dapple.env].blockNumber;
-  Dapple['maker-otc'].class(web3, Dapple['maker-otc'].environments[Dapple.env]);
-  Dapple['ds-eth-token'].class(web3, Dapple['ds-eth-token'].environments[Dapple.env]);
-  Dapple['token-wrapper'].class(web3, Dapple['token-wrapper'].environments[Dapple.env]);
+  Dapple['maker-otc'].class(web3Obj, Dapple['maker-otc'].environments[Dapple.env]);
+  Dapple['ds-eth-token'].class(web3Obj, Dapple['ds-eth-token'].environments[Dapple.env]);
+  Dapple['token-wrapper'].class(web3Obj, Dapple['token-wrapper'].environments[Dapple.env]);
 
   if (env) {
     // Check if contract exists on new environment
     const contractAddress = Dapple['maker-otc'].environments[Dapple.env].otc.value;
-    web3.eth.getCode(contractAddress, (error, code) => {
+    web3Obj.eth.getCode(contractAddress, (error, code) => {
       Session.set('contractExists', !error && typeof code === 'string' && code !== '' && code !== '0x');
     });
   }

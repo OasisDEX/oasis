@@ -1,7 +1,7 @@
 import { Session } from 'meteor/session';
 import { $ } from 'meteor/jquery';
 import { BigNumber } from 'meteor/ethereum:web3';
-import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { Dapple, web3Obj } from 'meteor/makerotc:dapple';
 import { Spacebars } from 'meteor/spacebars';
 
 /**
@@ -29,7 +29,7 @@ function addressToSymbol(token, allowedTokens, symbolIfNothingIsPresented) {
     throw Error('Wrong usage of the API. Read documentation');
   }
 
-  const isAnAddress = web3.isAddress(token);
+  const isAnAddress = web3Obj.isAddress(token);
   let currency = symbolIfNothingIsPresented;
 
   if (isAnAddress) {
