@@ -1,9 +1,9 @@
 import { Template } from 'meteor/templating';
 import { Status } from '/imports/api/offers';
 
-import './myorders.html';
+import './mytrades.html';
 
-Template.myorders.viewmodel({
+Template.mytrades.viewmodel({
   orderStatus: [Status.OPENED, Status.CLOSED],
   filterByStatus: Status.OPENED,
 });

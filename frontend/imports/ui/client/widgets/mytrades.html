@@ -1,9 +1,9 @@
-<template name="myorders">
+<template name="mytrades">
   <div class="order-section-content">
     <div class="row">
       <div class="col-xs-7">
         <h2>
-          MY ORDERS
+          MY TRADES
         </h2>
       </div>
       <!--Extract the definition for select and unify it instead of using this select-market-->
@@ -16,12 +16,12 @@
       </div>
     </div>
 
-    <div id="myorders-container">
+    <div id="mytrades-container">
       {{#if address}}
         {{#if loadingIndividualTradeHistory}}
           <div class="loading-market-history">{{{loadingIcon}}} Loading closed orders...</div>
         {{else}}
-          {{> orders orders=(findOrders filterByStatus) type='myOrders' priceLabel='PRICE' showCancel=true showType=true}}
+          {{> orders orders=(findOrders filterByStatus) type='myTrades' priceLabel='PRICE' showCancel=true showType=true}}
         {{/if}}
       {{else}}
         <small>Select an account to display your orders</small>
