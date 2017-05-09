@@ -81,6 +81,8 @@ function logTakeToTrade(logTake) {
       sellHowMuch: convertTo18Precision(logTake.args.takeAmount.toString(10), sellWhichToken),
       timestamp: logTake.args.timestamp.toNumber(),
       transactionHash: logTake.transactionHash,
+      issuer: logTake.args.maker,
+      counterParty: logTake.args.taker,
     };
   }
   return false;
@@ -88,6 +90,89 @@ function logTakeToTrade(logTake) {
 
 function getBlockNumberOfTheMostRecentBlock() {
   return Offers.getBlock('latest').then((block) => block.number);
+}
+
+function fetchIssuedTradesFor(address) {
+  return new Promise((resolve, reject) => {
+    Dapple['maker-otc'].objects.otc.LogTake({ maker: address }, {
+      fromBlock: Dapple['maker-otc'].environments[Dapple.env].otc.blockNumber,
+      toBlock: 'latest',
+    }).get((error, logTakes) => {
+      if (!error) {
+        for (let i = 0; i < logTakes.length; i++) {
+          const trade = logTakeToTrade(logTakes[i]);
+
+          if (trade) {
+            IndividualTrades.upsert(trade.transactionHash, trade);
+          }
+        }
+        resolve();
+      } else {
+        // TODO: Display this to the user in a fixed error display panel
+        console.debug('Cannot fetch issued trades');
+        reject();
+      }
+    });
+  });
+}
+function fetchAcceptedTradesFor(address) {
+  return new Promise((resolve, reject) => {
+    Dapple['maker-otc'].objects.otc.LogTake({ taker: address }, {
+      fromBlock: Dapple['maker-otc'].environments[Dapple.env].otc.blockNumber,
+      toBlock: 'latest',
+    }).get((error, logTakes) => {
+      if (!error) {
+        for (let i = 0; i < logTakes.length; i++) {
+          const currentTrade = logTakes[i].args;
+
+          // We handle those scenario when we are filtering events base on maker property
+          if (currentTrade.maker !== currentTrade.taker) {
+            const trade = logTakeToTrade(logTakes[i]);
+
+            if (trade) {
+              IndividualTrades.upsert(trade.transactionHash, trade);
+            }
+          }
+        }
+        resolve();
+      } else {
+        // TODO: Display this to the user in a fixed error display panel
+        console.debug('Cannot fetch accepted trades');
+        reject();
+      }
+    });
+  });
+}
+
+function listenForNewTradesOf(address) {
+  getBlockNumberOfTheMostRecentBlock().then((latestBlock) => {
+    Dapple['maker-otc'].objects.otc.LogTake({ maker: address },
+      { fromBlock: latestBlock + 1 }, (error, logTake) => {
+        if (!error) {
+          const trade = logTakeToTrade(logTake);
+
+          if (trade) {
+            IndividualTrades.upsert(trade.transactionHash, trade);
+          }
+        }
+      });
+  });
+}
+function listenForAcceptedTradesOf(address) {
+  getBlockNumberOfTheMostRecentBlock().then((latestBlock) => {
+    Dapple['maker-otc'].objects.otc.LogTake({ taker: address },
+      { fromBlock: latestBlock + 1 }, (error, logTake) => {
+        if (!error) {
+          if (logTake.args.maker !== logTake.args.taker) {
+            const trade = logTakeToTrade(logTake);
+
+            if (trade) {
+              IndividualTrades.upsert(trade.transactionHash, trade);
+            }
+          }
+        }
+      });
+  });
 }
 
 Offers.syncedOffers = [];
@@ -191,34 +276,15 @@ Offers.syncOffers = () => {
 
 Offers.syncIndividualTrades = () => {
   const address = Session.get('address');
-  Dapple['maker-otc'].objects.otc.LogTake({ maker: address }, {
-    fromBlock: Dapple['maker-otc'].environments[Dapple.env].otc.blockNumber,
-    toBlock: 'latest',
-  }).get((error, logTakes) => {
-    if (!error) {
-      for (let i = 0; i < logTakes.length; i++) {
-        const trade = logTakeToTrade(logTakes[i]);
+  const fetchIssuedTrades = fetchIssuedTradesFor(address);
+  const fetchAcceptedTrades = fetchAcceptedTradesFor(address);
 
-        if (trade) {
-          IndividualTrades.upsert(trade.transactionHash, trade);
-        }
-      }
-      Session.set('areIndividualTradesSynced', true);
-      Session.set('loadingIndividualTradeHistory', false);
-    }
-  });
+  Promise.all([fetchIssuedTrades, fetchAcceptedTrades]).then(() => {
+    Session.set('areIndividualTradesSynced', true);
+    Session.set('loadingIndividualTradeHistory', false);
 
-  getBlockNumberOfTheMostRecentBlock().then((latestBlock) => {
-    Dapple['maker-otc'].objects.otc.LogTake({ maker: address },
-      { fromBlock: latestBlock + 1 }, (error, logTake) => {
-        if (!error) {
-          const trade = logTakeToTrade(logTake);
-
-          if (trade) {
-            IndividualTrades.upsert(trade.transactionHash, trade);
-          }
-        }
-      });
+    listenForNewTradesOf(address);
+    listenForAcceptedTradesOf(address);
   });
 };
 

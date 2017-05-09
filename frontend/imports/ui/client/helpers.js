@@ -372,12 +372,23 @@ Template.registerHelper('formatNumber', (value, decimals, sle) => {
 
 Template.registerHelper('determineOrderType', (order, section) => {
   const baseCurrency = Session.get('baseCurrency');
+  const address = Session.get('address');
   let type = '';
   if (section === 'lastTrades') {
     if (order.buyWhichToken === baseCurrency) {
       type = 'ask';
     } else if (order.sellWhichToken === baseCurrency) {
       type = 'bid';
+    }
+  } else if (section === 'myTrades') {
+    if (address === order.counterParty && order.sellWhichToken === baseCurrency) {
+      type = 'bid';
+    } else if (address === order.counterParty && order.buyWhichToken === baseCurrency) {
+      type = 'ask';
+    } else if (address === order.issuer && order.buyWhichToken === baseCurrency) {
+      type = 'bid';
+    } else if (address === order.issuer && order.sellWhichToken === baseCurrency) {
+      type = 'ask';
     }
   } else if (order.buyWhichToken === baseCurrency) {
     type = 'bid';
