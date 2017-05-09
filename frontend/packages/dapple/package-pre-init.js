@@ -9,25 +9,27 @@ const web3Interval = setInterval(
   function() {
     if (window.web3) {
       web3Obj.setProvider(window.web3.currentProvider);
-      window.web3 = web3Obj;
-      Session.set('web3ObjReady', true);
       console.log('Using current provider');
-      clearInterval(Session.get('web3Interval'));
-      Session.delete('web3Interval');
+      initWeb3();
     } else {
       let counter = Session.get('web3Counter');
       counter++;
       Session.set('web3Counter', counter);
       if (counter >= 3) {
-        clearInterval(Session.get('web3Interval'));
-        Session.delete('web3Interval');
         web3Obj.setProvider(new Web3.providers.HttpProvider('http://localhost:8545'));
         console.log('Using new provider');
-        window.web3 = web3Obj;
-        Session.set('web3ObjReady', true);
+        initWeb3();
       }
     }
-  }, 300)
+  }, 300
+);
+
+function initWeb3() {
+  window.web3 = web3Obj;
+  clearInterval(Session.get('web3Interval'));
+  Session.delete('web3Interval');
+  Session.set('web3ObjReady', true);
+}
 
 Session.set('web3Interval', web3Interval);
 // console.log('package-pre-init done')
