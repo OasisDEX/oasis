@@ -139,7 +139,8 @@ Template.neworder.viewmodel({
       const balance = new BigNumber(token.balance);
       return token && balance.gte(web3Obj.toWei(new BigNumber(this.type() === 'sell' ? this.amount() : this.total())));
     } catch (e) {
-      return false;
+      // since we have placeholders the value will be empty string so we have to true its a valid data
+      return this.amount() === '' || this.total() === '';
     }
   },
   quoteAvailable() {
