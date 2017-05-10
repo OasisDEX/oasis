@@ -183,7 +183,7 @@ Template.registerHelper('findOffers', (type) => {
 Template.registerHelper('findOrders', (state) => {
   const address = Session.get('address');
 
-  if (state === Status.OPENED) {
+  if (state === Status.OPEN) {
     const quoteCurrency = Session.get('quoteCurrency');
     const baseCurrency = Session.get('baseCurrency');
 

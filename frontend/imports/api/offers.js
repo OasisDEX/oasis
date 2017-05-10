@@ -20,7 +20,7 @@ const Status = {
   CONFIRMED: 'confirmed',
   CANCELLED: 'cancelled',
   BOUGHT: 'bought',
-  OPENED: 'opened',
+  OPEN: 'open',
   CLOSED: 'closed',
 };
 
