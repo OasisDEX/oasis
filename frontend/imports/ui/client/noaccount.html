@@ -2,9 +2,17 @@
     <div class="no-ethereum-section">
         <img class="img-maker-logo" alt="Maker" src="logo.svg">
         <hr class="horizontal-line">
+        {{#if metamask}}
+        <h2>METAMASK ACCOUNT LOCKED</h2>
+        <p class="p-not-found">
+            You are trying to access OasisDEX without an unlocked account.<br />
+            Unlock your account on the Metamask Extension.
+        </p>
+        {{else}}
         <h2>NO ACCOUNT FOUND</h2>
-        <p class="p-not-found">You are trying to access Maker Market without an Ethereum account loaded. 
+        <p class="p-not-found">You are trying to access OasisDEX without an Ethereum account loaded.
             Select an account to use in your Ethereum browser.</p>
         <p class="p-use-clients">If you are using Mist, please click the CONNECT button in the top right corner and authorize an account.</p>
+        {{/if}}
     </div>
 </template>
