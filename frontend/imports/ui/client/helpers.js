@@ -380,14 +380,14 @@ Template.registerHelper('determineOrderType', (order, section) => {
     } else if (order.sellWhichToken === baseCurrency) {
       type = 'bid';
     }
-  } else if (section === 'myTrades') {
-    if (address === order.counterParty && order.sellWhichToken === baseCurrency) {
-      type = 'bid';
-    } else if (address === order.counterParty && order.buyWhichToken === baseCurrency) {
-      type = 'ask';
-    } else if (address === order.issuer && order.buyWhichToken === baseCurrency) {
+  } else if (section === 'myTrades' && order.counterParty) { // this reflects only trades which are closed ( has a counterparty)
+    if (address === order.issuer && order.buyWhichToken === baseCurrency) {
       type = 'bid';
     } else if (address === order.issuer && order.sellWhichToken === baseCurrency) {
+      type = 'ask';
+    } else if (address === order.counterParty && order.sellWhichToken === baseCurrency) {
+      type = 'bid';
+    } else if (address === order.counterParty && order.buyWhichToken === baseCurrency) {
       type = 'ask';
     }
   } else if (order.buyWhichToken === baseCurrency) {
