@@ -6,7 +6,7 @@
         {{#if showDate}}<th class="th-date">DATE</th>{{/if}}
         {{#if showType}}
           <th class="th-type">
-            {{#if equals section 'lastTrades'}}
+            {{#if equals section 'lastTrades'}}￼
               ACTION
             {{else}}
               TYPE
@@ -25,7 +25,7 @@
         <th class="th-quote-currency">{{quoteCurrency}}</th>
         <th class="th-base-currency">{{baseCurrency}}</th>
 
-        <th></th>        
+        <th></th>
       </tr>
     </thead>
     <tbody class="{{#if gt ordersCount 5}}tbody-scrolling{{else}}tbody-not-scrolling{{/if}}">
@@ -34,7 +34,7 @@
       {{/each}}
     </tbody>
     <tfoot>
-      
+
     </tfoot>
   </table>
 
