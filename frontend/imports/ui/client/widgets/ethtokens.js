@@ -1,7 +1,7 @@
 import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
 import { BigNumber } from 'meteor/ethereum:web3';
-import { web3 } from 'meteor/makerotc:dapple';
+import { web3Obj } from 'meteor/makerotc:dapple';
 
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
@@ -27,9 +27,9 @@ Template.ethtokens.viewmodel({
     let amount = '0';
     try {
       if (this.type() === DEPOSIT) {
-        amount = web3.fromWei(Session.get('ETHBalance'));
+        amount = web3Obj.fromWei(Session.get('ETHBalance'));
       } else if (this.type() === WITHDRAW) {
-        amount = web3.fromWei(Tokens.findOne('W-ETH').balance);
+        amount = web3Obj.fromWei(Tokens.findOne('W-ETH').balance);
       }
     } catch (e) {
       amount = '0';
@@ -49,9 +49,9 @@ Template.ethtokens.viewmodel({
     let maxAmount = '0';
     try {
       if (this.type() === DEPOSIT) {
-        maxAmount = web3.fromWei(Session.get('ETHBalance'));
+        maxAmount = web3Obj.fromWei(Session.get('ETHBalance'));
       } else if (this.type() === WITHDRAW) {
-        maxAmount = web3.fromWei(Tokens.findOne('W-ETH').balance);
+        maxAmount = web3Obj.fromWei(Tokens.findOne('W-ETH').balance);
       }
     } catch (e) {
       maxAmount = '0';
@@ -74,7 +74,7 @@ Template.ethtokens.viewmodel({
     if (this.type() === DEPOSIT) {
       const options = {
         gas: DEPOSIT_GAS,
-        value: web3.toWei(this.amount()),
+        value: web3Obj.toWei(this.amount()),
       };
       // XXX EIP20
       Dapple.getToken('W-ETH', (error, token) => {
@@ -107,7 +107,7 @@ Template.ethtokens.viewmodel({
           Session.set('ETHWithdrawProgress', 33);
           Session.set('ETHWithdrawProgressMessage', 'Starting unwrap... (waiting for your approval)');
           Session.set('ETHWithdrawErrorMessage', '');
-          token.withdraw(web3.toWei(this.amount()), { gas: WITHDRAW_GAS }, (txError, tx) => {
+          token.withdraw(web3Obj.toWei(this.amount()), { gas: WITHDRAW_GAS }, (txError, tx) => {
             if (!txError) {
               Session.set('ETHWithdrawProgress', 66);
               Session.set('ETHWithdrawProgressMessage', 'Executing unwrap... (waiting for transaction confirmation)');

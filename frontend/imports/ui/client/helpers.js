@@ -5,7 +5,7 @@ import { Template } from 'meteor/templating';
 import { _ } from 'meteor/underscore';
 import { BigNumber } from 'meteor/ethereum:web3';
 import { EthTools } from 'meteor/ethereum:tools';
-import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { Dapple, web3Obj } from 'meteor/makerotc:dapple';
 import { moment } from 'meteor/momentjs:moment';
 
 import Tokens from '/imports/api/tokens';
@@ -224,9 +224,9 @@ Template.registerHelper('log', (value) => {
   console.log(value);
 });
 
-Template.registerHelper('fromWei', (s) => web3.fromWei(s));
+Template.registerHelper('fromWei', (s) => web3Obj.fromWei(s));
 
-Template.registerHelper('toWei', (s) => web3.toWei(s));
+Template.registerHelper('toWei', (s) => web3Obj.toWei(s));
 
 Template.registerHelper('friendlyAddress', (address) => {
   /* eslint-disable no-underscore-dangle */
@@ -304,7 +304,7 @@ Template.registerHelper('formatBalance', (wei, decimals, currency, sle) => {
     showLabelExact = null;
   }
   decimalsValue = decimalsValue || 3;
-  let exactValue = web3.fromWei(wei);
+  let exactValue = web3Obj.fromWei(wei);
   let finalValue = formatNumber(exactValue, decimalsValue);
   exactValue = thousandSeparator(exactValue);
 

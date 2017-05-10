@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 import { Session } from 'meteor/session';
-import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { Dapple, web3Obj } from 'meteor/makerotc:dapple';
 import { convertTo18Precision } from '/imports/utils/conversion';
 
 class TokensCollection extends Mongo.Collection {
@@ -10,9 +10,9 @@ class TokensCollection extends Mongo.Collection {
    */
   sync() {
     const network = Session.get('network');
-    const address = web3.eth.defaultAccount;
+    const address = web3Obj.eth.defaultAccount;
     if (address) {
-      web3.eth.getBalance(address, (error, balance) => {
+      web3Obj.eth.getBalance(address, (error, balance) => {
         const newETHBalance = balance.toString(10);
         if (!error && !Session.equals('ETHBalance', newETHBalance)) {
           Session.set('ETHBalance', newETHBalance);

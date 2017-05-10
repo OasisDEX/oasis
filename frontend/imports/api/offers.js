@@ -1,7 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 import { Session } from 'meteor/session';
 import { BigNumber } from 'meteor/ethereum:web3';
-import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { Dapple, web3Obj } from 'meteor/makerotc:dapple';
 import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
 import { moment } from 'meteor/momentjs:moment';
@@ -213,7 +213,7 @@ Offers.syncTrades = (historicalTradesRange) => {
 
 Offers.getBlock = function getBlock(blockNumber) {
   return new Promise((resolve, reject) => {
-    web3.eth.getBlock(blockNumber, (blockError, block) => {
+    web3Obj.eth.getBlock(blockNumber, (blockError, block) => {
       if (!blockError) {
         resolve(block);
       } else {
@@ -303,7 +303,7 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
       callback(error, tx);
       if (!error) {
         Offers.updateOffer(tx, sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress,
-          web3.eth.defaultAccount, Status.PENDING);
+          web3Obj.eth.defaultAccount, Status.PENDING);
         Transactions.add('offer', tx, { id: tx, status: Status.PENDING });
       }
     });

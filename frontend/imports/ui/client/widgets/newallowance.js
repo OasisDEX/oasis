@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 import { BigNumber } from 'meteor/ethereum:web3';
-import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { Dapple, web3Obj } from 'meteor/makerotc:dapple';
 import { $ } from 'meteor/jquery';
 
 import Transactions from '/imports/api/transactions';
@@ -23,15 +23,15 @@ Template.newallowance.viewmodel({
   lastError: '',
   autorun() {
     // Initialize value
-    this.value(web3.fromWei(this.templateInstance.data.token.allowance));
+    this.value(web3Obj.fromWei(this.templateInstance.data.token.allowance));
   },
   setTotalAllowance() {
-    this.value(web3.fromWei(this.templateInstance.data.token.balance));
+    this.value(web3Obj.fromWei(this.templateInstance.data.token.balance));
   },
   canChange() {
     try {
       return this.pending().length === 0 && this.value() !== '' &&
-        !(new BigNumber(this.value()).equals(new BigNumber(web3.fromWei(this.allowance()))));
+        !(new BigNumber(this.value()).equals(new BigNumber(web3Obj.fromWei(this.allowance()))));
     } catch (e) {
       return false;
     }

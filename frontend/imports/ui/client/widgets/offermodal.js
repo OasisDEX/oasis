@@ -2,7 +2,7 @@ import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
 import { $ } from 'meteor/jquery';
 import { BigNumber } from 'meteor/ethereum:web3';
-import { web3 } from 'meteor/makerotc:dapple';
+import { web3Obj } from 'meteor/makerotc:dapple';
 import { formatError } from '/imports/utils/functions';
 
 import Tokens from '/imports/api/tokens';
@@ -20,8 +20,8 @@ Template.offermodal.viewmodel({
   total: '',
   autorun() {
     if (Template.currentData().offer) {
-      const buyHowMuch = web3.fromWei(new BigNumber(Template.currentData().offer.buyHowMuch)).toString(10);
-      const sellHowMuch = web3.fromWei(new BigNumber(Template.currentData().offer.sellHowMuch)).toString(10);
+      const buyHowMuch = web3Obj.fromWei(new BigNumber(Template.currentData().offer.buyHowMuch)).toString(10);
+      const sellHowMuch = web3Obj.fromWei(new BigNumber(Template.currentData().offer.sellHowMuch)).toString(10);
       const baseCurrency = Session.get('baseCurrency');
       if (baseCurrency === Template.currentData().offer.buyWhichToken) {
         this.volume(buyHowMuch);
@@ -59,7 +59,7 @@ Template.offermodal.viewmodel({
     try {
       const token = Tokens.findOne(this.sellCurrency());
       const balance = new BigNumber(token.balance);
-      return token && balance.gte(web3.toWei(new BigNumber(this.type() === 'bid' ? this.volume() : this.total())));
+      return token && balance.gte(web3Obj.toWei(new BigNumber(this.type() === 'bid' ? this.volume() : this.total())));
     } catch (e) {
       return false;
     }
@@ -68,7 +68,7 @@ Template.offermodal.viewmodel({
     try {
       const token = Tokens.findOne(this.sellCurrency());
       const allowance = new BigNumber(token.allowance);
-      return token && allowance.gte(web3.toWei(new BigNumber(this.type() === 'bid' ? this.volume() : this.total())));
+      return token && allowance.gte(web3Obj.toWei(new BigNumber(this.type() === 'bid' ? this.volume() : this.total())));
     } catch (e) {
       return false;
     }
@@ -79,7 +79,7 @@ Template.offermodal.viewmodel({
                                                       ? Session.get('quoteCurrency') : Session.get('baseCurrency'));
       const allowance = new BigNumber(token.allowance);
 
-      return token && allowance.gte(web3.toWei(new BigNumber(this.offerType() === 'buy'
+      return token && allowance.gte(web3Obj.toWei(new BigNumber(this.offerType() === 'buy'
                                                                        ? this.offerTotal() : this.offerAmount())));
     } catch (e) {
       return false;
@@ -88,7 +88,7 @@ Template.offermodal.viewmodel({
   hasVolume() {
     try {
       const volume = new BigNumber(Template.currentData().offer.volume(this.buyCurrency()));
-      return volume.gte(web3.toWei(new BigNumber(this.type() === 'bid' ? this.total() : this.volume())));
+      return volume.gte(web3Obj.toWei(new BigNumber(this.type() === 'bid' ? this.total() : this.volume())));
     } catch (e) {
       return false;
     }
@@ -105,10 +105,10 @@ Template.offermodal.viewmodel({
           // Can at most sell balance, allowance, and offer's volume
           const balance = new BigNumber(token.balance);
           const allowance = new BigNumber(token.allowance);
-          maxVolume = web3.fromWei(BigNumber.min(balance, allowance, volume)).toString(10);
+          maxVolume = web3Obj.fromWei(BigNumber.min(balance, allowance, volume)).toString(10);
         }
       } else {
-        maxVolume = web3.fromWei(volume).toString(10);
+        maxVolume = web3Obj.fromWei(volume).toString(10);
       }
     } catch (e) {
       maxVolume = '0';
@@ -127,10 +127,10 @@ Template.offermodal.viewmodel({
           // Can at most buy balance, allowance, and offer's total
           const balance = new BigNumber(token.balance);
           const allowance = new BigNumber(token.allowance);
-          maxTotal = web3.fromWei(BigNumber.min(balance, allowance, total)).toString(10);
+          maxTotal = web3Obj.fromWei(BigNumber.min(balance, allowance, total)).toString(10);
         }
       } else {
-        maxTotal = web3.fromWei(total).toString(10);
+        maxTotal = web3Obj.fromWei(total).toString(10);
       }
     } catch (e) {
       maxTotal = '0';
@@ -277,7 +277,7 @@ Template.offermodal.viewmodel({
       if (token) {
         const balance = new BigNumber(token.balance);
         const allowance = new BigNumber(token.allowance);
-        maxAmount = web3.fromWei(BigNumber.min(balance, allowance).toString(10));
+        maxAmount = web3Obj.fromWei(BigNumber.min(balance, allowance).toString(10));
       }
     } else {
       maxAmount = '9e999';
@@ -301,7 +301,7 @@ Template.offermodal.viewmodel({
       if (token) {
         const balance = new BigNumber(token.balance);
         const allowance = new BigNumber(token.allowance);
-        maxTotal = web3.fromWei(BigNumber.min(balance, allowance).toString(10));
+        maxTotal = web3Obj.fromWei(BigNumber.min(balance, allowance).toString(10));
       }
     } else {
       maxTotal = '9e999';

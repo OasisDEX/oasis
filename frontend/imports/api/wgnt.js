@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
-import { Dapple, web3 } from 'meteor/makerotc:dapple';
+import { Dapple, web3Obj } from 'meteor/makerotc:dapple';
 import { formatError } from '/imports/utils/functions';
 import Transactions from './transactions';
 
@@ -21,7 +21,7 @@ class WGNT {
         Session.set('GNTDepositProgressMessage', 'Transfering to Broker... (Waiting for your approval)');
         // We get the broker, we transfer GNT to it
         Dapple.getToken('GNT', (err, gntToken) => {
-          gntToken.transfer(broker, web3.toWei(document.object.amount), { gas: TRANSFER_TO_BROKER_GAS },
+          gntToken.transfer(broker, web3Obj.toWei(document.object.amount), { gas: TRANSFER_TO_BROKER_GAS },
             (txError, tx) => {
               if (!txError) {
                 console.log('TX Transfer to Broker:', tx);
