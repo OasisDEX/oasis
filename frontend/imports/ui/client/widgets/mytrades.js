@@ -4,6 +4,6 @@ import { Status } from '/imports/api/offers';
 import './mytrades.html';
 
 Template.mytrades.viewmodel({
-  orderStatus: [Status.OPEN.toUpperCase(), Status.CLOSED.toUpperCase()],
-  filterByStatus: Status.OPEN.toUpperCase(),
+  orderStatus: [Status.OPEN, Status.CLOSED],
+  filterByStatus: Status.OPEN,
 });
