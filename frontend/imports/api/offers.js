@@ -315,7 +315,7 @@ Offers.syncTrades = (historicalTradesRange) => {
 
 Offers.getBlock = function getBlock(blockNumber) {
   return new Promise((resolve, reject) => {
-    web3.eth.getBlock(blockNumber, (blockError, block) => {
+    web3Obj.eth.getBlock(blockNumber, (blockError, block) => {
       if (!blockError) {
         resolve(block);
       } else {
