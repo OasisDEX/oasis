@@ -211,10 +211,6 @@ Offers.getHistoricalTradesRange = (numberOfPreviousDays) => {
     // We send one extra day just to have a buffer and be sure that the starBlock covers a full week of volume data
   const INITIAL_NUMBER_OF_BLOCKS_BACKWARDS = Session.get('AVGBlocksPerDay') * (numberOfPreviousDays + 1 + 1);
 
-  function getBlockNumberOfTheMostRecentBlock() {
-    return Offers.getBlock('latest').then((block) => block.number);
-  }
-
   return getBlockNumberOfTheMostRecentBlock().then((blockNumberOfTheMostRecentBlock) => {
     const startTimestamp = moment(Date.now()).startOf('day').subtract(numberOfPreviousDays, 'days');
     const initialGuess = blockNumberOfTheMostRecentBlock - INITIAL_NUMBER_OF_BLOCKS_BACKWARDS;
