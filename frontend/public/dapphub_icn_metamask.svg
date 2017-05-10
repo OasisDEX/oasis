@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="165px" height="151px" viewBox="0 0 165 151" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
+    <title>metamask copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="metamask-copy">
+            <path d="M82.5,24 L104,24 L153,-7.10542736e-15 L162,25 L158,51 L162,54 L157,58 L161,61 L156,65 L159,67 L152,76 L165,112 L156,151 L117,137 L109,141 L94.4669018,143.123027 L82.5,143.123027 L70.5330982,143.123027 L56,141 L48,137 L9,151 L0,112 L13,76 L6,67 L9,65 L4,61 L8,58 L3,54 L7,51 L3,25 L12,-7.10542736e-15 L61,24 L82.5,24 Z" id="Combined-Shape" fill="#222228" opacity="0.3"></path>
+            <path d="M82.5,110 L89,110 L93,114 L117,137 L109,141 L94.4669018,143.123027 L82.5,143.123027 L70.5330982,143.123027 L56,141 L48,137 L72,114 L76,110 L82.5,110 Z" id="Combined-Shape" fill="#DBC0B1"></path>
+            <polygon id="left_bottom" fill="#7F7F82" points="85 143.123027 70.5330982 143.123027 56 141 48 137 9 151 0 112 31 108 52 107 72 114 76 110 85 110"></polygon>
+            <polygon id="right_bottom" fill="#7F7F82" transform="translate(122.500000, 129.000000) scale(-1, 1) translate(-122.500000, -129.000000) " points="165 143.123027 150.533098 143.123027 136 141 128 137 89 151 80 112 111 108 132 107 152 114 156 110 165 110"></polygon>
+            <path d="M82.5,110 L89,110 L93,114 C93,114 94.3961185,135.865196 95.2817463,136.713922 C96.1673742,137.562649 117,137 117,137 L109,141 L94.4669018,143.123027 L82.5,143.123027 L70.5330982,143.123027 L56,141 L48,137 C48,137 68.8326258,137.562649 69.7182537,136.713922 C70.6038815,135.865196 72,114 72,114 L76,110 L82.5,110 Z" id="Combined-Shape" fill="#D1B9A7"></path>
+            <path d="M82.5,127 L92.0308763,127 L95,131 L93,114 L89,110 L82.5,110 L76,110 L72,114 L70,131 L72.9691237,127 L82.5,127 Z" id="Combined-Shape" fill="#161616"></path>
+            <polygon id="1-copy" fill="#222228" opacity="0.4" transform="translate(126.000000, 53.500000) scale(-1, 1) translate(-126.000000, -53.500000) " points="134 67 100 76 93 67 96 65 91 61 95 58 90 54 94 51 90 25 99 -7.10542736e-15 148 24 158 46 162 107 158 97 139 93 139 104 125 78"></polygon>
+            <polygon id="1-copy" fill-opacity="0.4" fill="#222228" points="47 67 13 76 6 67 9 65 4 61 8 58 3 54 7 51 3 25 12 -7.10542736e-15 61 24 71 46 75 107 71 97 52 93 52 104 38 78"></polygon>
+            <polygon id="1-copy-2" fill-opacity="0.6" fill="#222228" points="73 78 71 97 52 93 38 78"></polygon>
+            <polygon id="1-copy-2" fill-opacity="0.6" fill="#222228" transform="translate(109.500000, 87.500000) scale(-1, 1) translate(-109.500000, -87.500000) " points="127 78 125 97 106 93 92 78"></polygon>
+            <polygon id="1-copy-3" fill="#1F3449" transform="translate(104.500000, 91.500000) scale(-1, 1) translate(-104.500000, -91.500000) " points="108 86 115 97 94 93"></polygon>
+            <polygon id="2" fill="#222228" transform="translate(128.000000, 38.000000) scale(-1, 1) translate(-128.000000, -38.000000) " points="104 76 97 67 100 65 95 61 99 58 94 54 98 51 94 25 103 -7.10542736e-15 162 46 138 67"></polygon>
+            <polygon id="1-copy-5" fill-opacity="0.6" fill="#222228" transform="translate(123.500000, 122.000000) scale(-1, 1) translate(-123.500000, -122.000000) " points="130 137 113 108 134 107"></polygon>
+            <polygon id="1-copy-5" fill-opacity="0.6" fill="#222228" points="48 137 31 108 52 107"></polygon>
+            <polygon id="1-copy-3" fill="#1F3449" points="64 86 71 97 50 93"></polygon>
+            <polygon id="2" fill="#222228" points="13 76 6 67 9 65 4 61 8 58 3 54 7 51 3 25 12 -7.10542736e-15 71 46 47 67"></polygon>
+        </g>
+    </g>
+</svg>
