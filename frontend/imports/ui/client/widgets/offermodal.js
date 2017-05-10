@@ -227,18 +227,18 @@ Template.offermodal.viewmodel({
     let bestOffer = null;
     if (this.type() === 'bid') {
       bestOffer = Offers.findOne({
-          buyWhichToken: Session.get('baseCurrency'),
-          sellWhichToken: Session.get('quoteCurrency'),
-        },
+        buyWhichToken: Session.get('baseCurrency'),
+        sellWhichToken: Session.get('quoteCurrency'),
+      },
         {
           sort: { ask_price_sort: 1 },
         });
       return (new BigNumber(bestOffer.bid_price)).gt(new BigNumber(this.templateInstance.data.offer.bid_price));
     } else if (this.type() === 'ask') {
       bestOffer = Offers.findOne({
-          buyWhichToken: Session.get('quoteCurrency'),
-          sellWhichToken: Session.get('baseCurrency'),
-        },
+        buyWhichToken: Session.get('quoteCurrency'),
+        sellWhichToken: Session.get('baseCurrency'),
+      },
         {
           sort: { ask_price_sort: 1 },
         });
@@ -360,10 +360,14 @@ Template.offermodal.events({
   'click button.btn-allowance-modal': (event) => {
     const refer = $(event.target).data('refer');
     const token = $(event.target).data('link');
+    const allowance = Template.instance().viewmodel.offerAmount();
     $(`#allowanceModal${token}`).data('refer', refer);
     $(`#allowanceModal${token}`).modal('show');
     $(`#allowanceModal${token}`).on('shown.bs.modal', () => {
       $('.set-allowance input').focus();
+      $('.set-allowance input').val(allowance);
+      // changing value of input using val(), doesn't trigger onchange event. it must be manually triggered
+      $('.set-allowance input').trigger('change');
     });
   },
 });
