@@ -9,7 +9,7 @@ import { Dapple, web3Obj } from 'meteor/makerotc:dapple';
 import { moment } from 'meteor/momentjs:moment';
 
 import Tokens from '/imports/api/tokens';
-import { Offers, Trades } from '/imports/api/offers';
+import { Offers, Trades, IndividualTrades, Status } from '/imports/api/offers';
 
 import { txHref, thousandSeparator, formatNumber } from '/imports/utils/functions';
 
@@ -53,9 +53,9 @@ Template.registerHelper('marketCloseTime', () => Session.get('close_time'));
 Template.registerHelper('isMarketOpen', () => Session.get('market_open'));
 
 Template.registerHelper('ready', () =>
-  // XXX disabled 'syncing' as parity is being very bouncy
-  // Session.get('isConnected') && !Session.get('syncing') && !Session.get('outOfSync')
-  Session.get('isConnected') && !Session.get('outOfSync')
+    // XXX disabled 'syncing' as parity is being very bouncy
+    // Session.get('isConnected') && !Session.get('syncing') && !Session.get('outOfSync')
+  Session.get('isConnected') && !Session.get('outOfSync'),
 );
 
 Template.registerHelper('isConnected', () => Session.get('isConnected'));
@@ -78,9 +78,10 @@ Template.registerHelper('loading', () => Session.get('loading'));
 Template.registerHelper('loadingProgress', () => Session.get('loadingProgress'));
 
 Template.registerHelper('loadingTradeHistory', () => Session.get('loadingTradeHistory'));
+Template.registerHelper('loadingIndividualTradeHistory', () => Session.get('loadingIndividualTradeHistory'));
 
 Template.registerHelper('loadedCurrencies', () => Session.get('balanceLoaded') === true
-  && Session.get('allowanceLoaded') === true);
+&& Session.get('allowanceLoaded') === true);
 
 Template.registerHelper('address', () => Session.get('address'));
 
@@ -101,10 +102,12 @@ Template.registerHelper('countLastTrades', () => {
   const baseCurrency = Session.get('baseCurrency');
   const options = {};
   options.sort = { timestamp: -1 };
-  const obj = { $or: [
-    { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
-    { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
-  ] };
+  const obj = {
+    $or: [
+      { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
+      { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
+    ],
+  };
   return Trades.find(obj, options).count();
 });
 
@@ -117,10 +120,12 @@ Template.registerHelper('lastTrades', () => {
     options.limit = limit;
   }
   options.sort = { timestamp: -1 };
-  const obj = { $or: [
-    { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
-    { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
-  ] };
+  const obj = {
+    $or: [
+      { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
+      { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
+    ],
+  };
   return Trades.find(obj, options);
 });
 
@@ -134,12 +139,14 @@ Template.registerHelper('countOffers', (type) => {
     return Offers.find({
       buyWhichToken: quoteCurrency,
       sellWhichToken: baseCurrency,
-      buyHowMuch_filter: { $gte: dustLimit } }).count();
+      buyHowMuch_filter: { $gte: dustLimit },
+    }).count();
   } else if (type === 'bid') {
     return Offers.find({
       buyWhichToken: baseCurrency,
       sellWhichToken: quoteCurrency,
-      sellHowMuch_filter: { $gte: dustLimit } }).count();
+      sellHowMuch_filter: { $gte: dustLimit },
+    }).count();
   }
   return 0;
 });
@@ -161,20 +168,43 @@ Template.registerHelper('findOffers', (type) => {
     return Offers.find({
       buyWhichToken: quoteCurrency,
       sellWhichToken: baseCurrency,
-      buyHowMuch_filter: { $gte: dustLimit } }, options);
+      buyHowMuch_filter: { $gte: dustLimit },
+    }, options);
   } else if (type === 'bid') {
     return Offers.find({
       buyWhichToken: baseCurrency,
       sellWhichToken: quoteCurrency,
-      sellHowMuch_filter: { $gte: dustLimit } }, options);
-  } else if (type === 'mine') {
+      sellHowMuch_filter: { $gte: dustLimit },
+    }, options);
+  }
+  return [];
+});
+
+Template.registerHelper('findOrders', (state) => {
+  const address = Session.get('address');
+
+  if (state === Status.OPEN) {
+    const quoteCurrency = Session.get('quoteCurrency');
+    const baseCurrency = Session.get('baseCurrency');
+
     const or = [
       { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
       { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
     ];
-    const address = Session.get('address');
+
+    Session.set('loadingIndividualTradeHistory', false);
+
     return Offers.find({ owner: address, $or: or }, { sort: { buyWhichToken: 1, _id: -1 } });
+  } else if (state === Status.CLOSED) {
+    if (!Session.get('areIndividualTradesSynced')) {
+      Session.set('loadingIndividualTradeHistory', true);
+
+      Offers.syncIndividualTrades();
+    }
+
+    return IndividualTrades.find({}, { sort: { timestamp: -1 } });
   }
+
   return [];
 });
 
@@ -254,10 +284,10 @@ Template.registerHelper('fromPrecision', (value, precision) => {
 Template.registerHelper('validPrecision', (value, precision) => {
   let displayValue = value;
   /* let tokenPrecision = precision;
-  if (isNaN(tokenPrecision)) {
-    const tokenSpecs = Dapple.getTokenSpecs(precision);
-    tokenPrecision = tokenSpecs.precision;
-  }*/
+   if (isNaN(tokenPrecision)) {
+   const tokenSpecs = Dapple.getTokenSpecs(precision);
+   tokenPrecision = tokenSpecs.precision;
+   }*/
   try {
     if (!(displayValue instanceof BigNumber)) {
       displayValue = new BigNumber(displayValue);
@@ -342,12 +372,23 @@ Template.registerHelper('formatNumber', (value, decimals, sle) => {
 
 Template.registerHelper('determineOrderType', (order, section) => {
   const baseCurrency = Session.get('baseCurrency');
+  const address = Session.get('address');
   let type = '';
   if (section === 'lastTrades') {
     if (order.buyWhichToken === baseCurrency) {
       type = 'ask';
     } else if (order.sellWhichToken === baseCurrency) {
       type = 'bid';
+    }
+  } else if (section === 'myTrades' && order.counterParty) { // this reflects only trades which are closed ( has a counterparty)
+    if (address === order.issuer && order.buyWhichToken === baseCurrency) {
+      type = 'bid';
+    } else if (address === order.issuer && order.sellWhichToken === baseCurrency) {
+      type = 'ask';
+    } else if (address === order.counterParty && order.sellWhichToken === baseCurrency) {
+      type = 'bid';
+    } else if (address === order.counterParty && order.buyWhichToken === baseCurrency) {
+      type = 'ask';
     }
   } else if (order.buyWhichToken === baseCurrency) {
     type = 'bid';

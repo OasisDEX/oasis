@@ -653,7 +653,7 @@ table {
   margin-left: 17px;
 }
 
-#myorders-container {
+#mytrades-container {
   h2 {
     padding-right: 30px;
   }
@@ -728,7 +728,6 @@ table {
           font-weight: 500;
           font-size: 14.5px;
           color: #4A4A4A;
-          padding-top: 10px;
           text-align: right;
           max-width: 92px;
         }
@@ -2071,13 +2070,14 @@ span.loading-icon {
       color: #222228;
       opacity: 0.68;
       border: none;
-      margin-right: -18px;
+      margin-right: -20px;
       padding: 9px 30px 9px 15px;
       z-index: 1;
       position: relative;
       cursor: pointer;
       @extend .montserrat-semibold;
       font-size: 12px;
+      text-transform: uppercase;
     }
   }
 }
