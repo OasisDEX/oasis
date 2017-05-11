@@ -21,6 +21,8 @@ let bidPrices = []; // Array of bid prices
 let askAmounts = { base: [], quote: [] }; // Array of ask amounts
 let bidAmounts = { base: [], quote: [] }; // Array of bid amounts
 const volumes = { base: {}, quote: {} };
+const askAmountsTooltip = {};
+const bidAmountsTooltip = {};
 let days = [];
 
 // Options applied to all charts
@@ -182,11 +184,11 @@ Template.chart.viewmodel({
                   });
                   [type, quoteAmount] = tooltip.body[typeIndex].lines[0].split(': ');
                   if (type === 'Sell') {
-                    quoteAmount = askAmounts.quote[askPrices.indexOf(price)];
-                    baseAmount = askAmounts.base[askPrices.indexOf(price)];
+                    quoteAmount = askAmountsTooltip[price].quote;
+                    baseAmount = askAmountsTooltip[price].base;
                   } else {
-                    quoteAmount = bidAmounts.quote[bidPrices.indexOf(price)];
-                    baseAmount = bidAmounts.base[bidPrices.indexOf(price)];
+                    quoteAmount = bidAmountsTooltip[price].quote;
+                    baseAmount = bidAmountsTooltip[price].base;
                   }
                   quoteAmount = formatNumber(web3Obj.fromWei(quoteAmount), 5);
                   baseAmount = formatNumber(web3Obj.fromWei(baseAmount), 5);
@@ -302,44 +304,57 @@ Template.chart.viewmodel({
       // Preparing arrays for graph
       const askAmountsGraph = [];
       const bidAmountsGraph = [];
+
       let index = null;
       let amount = null;
+      let amountTool = { quote: null, base: null };
 
       for (let i = 0; i < vals.length; i++) {
         index = askPrices.indexOf(vals[i]);
         if (index !== -1) {
           // If there is a specific value for the price in asks, we add it
           amount = formatNumber(web3Obj.fromWei(askAmounts.quote[index]), 3).replace(/,/g, '');
+          amountTool.quote = askAmounts.quote[index];
+          amountTool.base = askAmounts.base[index];
         } else if (askPrices.length === 0 ||
                   (new BigNumber(vals[i])).lt((new BigNumber(askPrices[0]))) ||
                   (new BigNumber(vals[i])).gt((new BigNumber(askPrices[askPrices.length - 1])))) {
           // If the price is lower or higher than the asks range there is not value to print in the graph
           amount = null;
+          amountTool.quote = amountTool.base = null;
         } else {
           // If there is not an ask amount for this price, we need to add the previous amount
           amount = askAmountsGraph[askAmountsGraph.length - 1];
+          amountTool = { ...askAmountsTooltip[vals[i - 1]] };
         }
         askAmountsGraph.push({ x: vals[i], y: amount });
+        askAmountsTooltip[vals[i]] = { ...amountTool };
 
         index = bidPrices.indexOf(vals[i]);
         if (index !== -1) {
           // If there is a specific value for the price in bids, we add it
           amount = formatNumber(web3Obj.fromWei(bidAmounts.quote[index]), 3).replace(/,/g, '');
+          amountTool.quote = bidAmounts.quote[index];
+          amountTool.base = bidAmounts.base[index];
         } else if (bidPrices.length === 0 ||
                   (new BigNumber(vals[i])).lt((new BigNumber(bidPrices[0]))) ||
                   (new BigNumber(vals[i])).gt((new BigNumber(bidPrices[bidPrices.length - 1])))) {
           // If the price is lower or higher than the bids range there is not value to print in the graph
           amount = null;
+          amountTool.quote = amountTool.base = null;
         } else {
           // If there is not a bid amount for this price, we need to add the next available amount
           for (let j = 0; j < bidPrices.length; j++) {
             if (bidPrices[j] >= vals[i]) {
               amount = formatNumber(web3Obj.fromWei(bidAmounts.quote[j]), 3).replace(/,/g, '');
+              amountTool.quote = bidAmounts.quote[j];
+              amountTool.base = bidAmounts.base[j];
               break;
             }
           }
         }
         bidAmountsGraph.push({ x: vals[i], y: amount });
+        bidAmountsTooltip[vals[i]] = { ...amountTool };
       }
 
       charts.depth.data.labels = vals;
