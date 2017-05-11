@@ -10,7 +10,7 @@ import Transactions from '/imports/api/transactions';
 import { formatError } from '/imports/utils/functions';
 
 import { convertToTokenPrecision, convertTo18Precision } from '/imports/utils/conversion';
-window.Transactions = Transactions;
+
 const Offers = new Mongo.Collection(null);
 const Trades = new Mongo.Collection(null);
 const IndividualTrades = new Mongo.Collection(null);
