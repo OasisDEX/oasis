@@ -163,40 +163,48 @@ function initSession() {
  */
 Meteor.startup(() => {
   initSession();
-  checkNetwork();
 
-  if (Session.get('web3ObjReady')) {
-    web3Obj.eth.filter('latest', () => {
-      Tokens.sync();
-      Transactions.sync();
-      TokenEvents.syncTimestamps();
-    });
+  const syncingInterval = setInterval(
+    () => {
+      if (Session.get('web3ObjReady')) {
+        checkNetwork();
 
-    web3Obj.eth.isSyncing((error, sync) => {
-      if (!error) {
-        Session.set('syncing', sync !== false);
+        web3Obj.eth.filter('latest', () => {
+          Tokens.sync();
+          Transactions.sync();
+          TokenEvents.syncTimestamps();
+        });
 
-        // Stop all app activity
-        if (sync === true) {
-          // We use `true`, so it stops all filters, but not the web3Obj.eth.syncing polling
-          web3Obj.reset(true);
-          checkNetwork();
-        // show sync info
-        } else if (sync) {
-          Session.set('startingBlock', sync.startingBlock);
-          Session.set('currentBlock', sync.currentBlock);
-          Session.set('highestBlock', sync.highestBlock);
-        } else {
-          Session.set('outOfSync', false);
-          Offers.sync();
-          web3Obj.eth.filter('latest', () => {
-            Tokens.sync();
-            Transactions.sync();
-          });
-        }
+        web3Obj.eth.isSyncing((error, sync) => {
+          if (!error) {
+            Session.set('syncing', sync !== false);
+
+            // Stop all app activity
+            if (sync === true) {
+              // We use `true`, so it stops all filters, but not the web3Obj.eth.syncing polling
+              web3Obj.reset(true);
+              checkNetwork();
+            // show sync info
+            } else if (sync) {
+              Session.set('startingBlock', sync.startingBlock);
+              Session.set('currentBlock', sync.currentBlock);
+              Session.set('highestBlock', sync.highestBlock);
+            } else {
+              Session.set('outOfSync', false);
+              Offers.sync();
+              web3Obj.eth.filter('latest', () => {
+                Tokens.sync();
+                Transactions.sync();
+              });
+            }
+          }
+        });
+        clearInterval(syncingInterval);
       }
-    });
-  }
+    }, 350
+  );
+
+  // Session.set('web3Interval', web3Interval);
 
   function syncAndSetMessageOnError(document) {
     Offers.syncOffer(document.object.id);
