@@ -1,14 +1,16 @@
 <template name="noAccount">
     <div class="no-ethereum-section">
-        <img class="img-maker-logo" alt="Maker" src="dapphub_icn_metamask.svg">
-        <hr class="horizontal-line">
         {{#if metamask}}
+        <img class="img-header-logo" alt="Maker" src="dapphub_icn_metamask.svg">
+        <hr class="horizontal-line">
         <h2>METAMASK ACCOUNT LOCKED</h2>
         <p class="p-not-found">
             You are trying to access OasisDEX without an unlocked account.<br />
             Unlock your account on the Metamask Extension.
         </p>
         {{else}}
+          <img class="img-header-logo" alt="Maker" src="logo.svg">
+          <hr class="horizontal-line">
         <h2>NO ACCOUNT FOUND</h2>
         <p class="p-not-found">You are trying to access OasisDEX without an Ethereum account loaded.
             Select an account to use in your Ethereum browser.</p>
