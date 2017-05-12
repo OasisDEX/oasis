@@ -36,9 +36,9 @@
             </th>
             <td>
               {{#if equals type 'deposit'}}
-                <input type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}> <span class="span-deposit-withdraw-currency">ETH</span> 
+                <input placeholder="0" type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}> <span class="span-deposit-withdraw-currency">ETH</span>
               {{else}}
-                <input type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}> <span class="span-deposit-withdraw-currency">W-ETH</span> 
+                <input placeholder="0" type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}> <span class="span-deposit-withdraw-currency">W-ETH</span>
               {{/if}}
             </td>
           </tr>

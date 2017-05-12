@@ -10,12 +10,15 @@ import { $ } from 'meteor/jquery';
 import '/imports/ui/client/shared.js';
 import './neworder.html';
 
-
 Template.neworder.viewmodel({
   share: 'newOffer',
   lastError: '',
   bestOffer: undefined,
   validAmount: true,
+  total: '',
+  price: '',
+  amount: '',
+
   type() {
     const orderType = (this !== null && this !== undefined) ? this.orderType() : '';
     return orderType;
@@ -29,7 +32,6 @@ Template.neworder.viewmodel({
     }
     return Session.get('baseCurrency');
   },
-  price: '0',
   canAutofill() {
     return Session.get('market_open');
   },
@@ -46,7 +48,6 @@ Template.neworder.viewmodel({
       return false;
     }
   },
-  amount: '0',
   calcTotal() {
     this.validAmount(true);
     if (this.precision() === 0 && this.amount() % 1 !== 0) {
@@ -67,7 +68,6 @@ Template.neworder.viewmodel({
       this.total('0');
     }
   },
-  total: '0',
   calcAmount() {
     this.validAmount(true);
     if (this.precision() === 0 && this.total() % 1 !== 0) {
@@ -139,7 +139,8 @@ Template.neworder.viewmodel({
       const balance = new BigNumber(token.balance);
       return token && balance.gte(web3Obj.toWei(new BigNumber(this.type() === 'sell' ? this.amount() : this.total())));
     } catch (e) {
-      return false;
+      // since we have placeholders the value will be empty string so we have to true its a valid data
+      return this.amount() === '' || this.total() === '';
     }
   },
   quoteAvailable() {
@@ -211,9 +212,9 @@ Template.neworder.viewmodel({
       let offer;
       if (this.type() === 'buy') {
         offer = Offers.findOne({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
-                               { sort: { ask_price_sort: 1 } });
+          { sort: { ask_price_sort: 1 } });
         if (offer && Object.prototype.hasOwnProperty.call(offer, 'ask_price')
-            && price.gt(new BigNumber(offer.ask_price))) {
+          && price.gt(new BigNumber(offer.ask_price))) {
           this.bestOffer(offer._id);
           return offer;
         }
@@ -221,9 +222,9 @@ Template.neworder.viewmodel({
         return undefined;
       } else if (this.type() === 'sell') {
         offer = Offers.findOne({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
-                               { sort: { ask_price_sort: 1 } });
+          { sort: { ask_price_sort: 1 } });
         if (offer && Object.prototype.hasOwnProperty.call(offer, 'bid_price')
-            && price.lt(new BigNumber(offer.bid_price))) {
+          && price.lt(new BigNumber(offer.bid_price))) {
           this.bestOffer(offer._id);
           return offer;
         }
@@ -245,7 +246,7 @@ Template.neworder.viewmodel({
     if (!marketOpen) return false;
     if (this.type() === 'buy') {
       offer = Offers.findOne({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
-                              { sort: { ask_price_sort: 1 } });
+        { sort: { ask_price_sort: 1 } });
       if (offer && Object.prototype.hasOwnProperty.call(offer, 'ask_price')) {
         price = new BigNumber(offer.ask_price);
         available = web3Obj.fromWei(this.quoteAvailable()).toString(10);
@@ -255,7 +256,7 @@ Template.neworder.viewmodel({
       }
     } else if (this.type() === 'sell') {
       offer = Offers.findOne({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
-                              { sort: { ask_price_sort: 1 } });
+        { sort: { ask_price_sort: 1 } });
       if (offer && Object.prototype.hasOwnProperty.call(offer, 'bid_price')) {
         price = new BigNumber(offer.bid_price);
         available = web3Obj.fromWei(this.baseAvailable()).toString(10);

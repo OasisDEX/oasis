@@ -19,6 +19,7 @@ Template.sendtokens.viewmodel({
   currencies: Dapple.getTokens(),
   recipient: '',
   lastError: '',
+  amount: '',
   validAmount: true,
   precision() {
     return Dapple.getTokenSpecs(this.currency()).precision;
@@ -29,7 +30,6 @@ Template.sendtokens.viewmodel({
   resetAmount() {
     this.amount(0);
   },
-  amount: '0',
   maxAmount() {
     try {
       const token = Tokens.findOne(this.currency());

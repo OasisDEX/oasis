@@ -14,7 +14,7 @@
             </th>
             <td class="token">
               <span class="fill-amount" {{b "click: fillAmount"}}>{{{formatBalance GNTBalance 5 '' true}}}</span>
-              <span class="span-buy-sell-currency">GNT</span>                
+              <span class="span-buy-sell-currency">GNT</span>
             </td>
           </tr>
           {{else}}
@@ -25,7 +25,7 @@
             <td class="token">
               {{#let token=(findToken 'W-GNT')}}
                 <span class="fill-amount" {{b "click: fillAmount"}}>{{{formatBalance token.balance 5 '' true}}}</span>
-                <span class="span-buy-sell-currency">W-GNT</span>              
+                <span class="span-buy-sell-currency">W-GNT</span>
               {{/let}}
             </td>
           </tr>
@@ -36,9 +36,9 @@
             </th>
             <td>
               {{#if equals type 'deposit'}}
-                <input type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}> <span class="span-deposit-withdraw-currency">GNT</span> 
+                <input placeholder="0" type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}> <span class="span-deposit-withdraw-currency">GNT</span>
               {{else}}
-                <input type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}> <span class="span-deposit-withdraw-currency">W-GNT</span> 
+                <input placeholder="0" type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}> <span class="span-deposit-withdraw-currency">W-GNT</span>
               {{/if}}
             </td>
           </tr>
@@ -66,7 +66,7 @@
       {{#if brokerBalance }}
         <div class="messageDiv alert alert-warning">
           <span id='brokerMessage'>
-            You have an outstanding balance of {{formatBalance brokerBalance}} GNT in your broker. 
+            You have an outstanding balance of {{formatBalance brokerBalance}} GNT in your broker.
             <a id="clearBroker" href="#" {{b "click: clearBroker"}}>Click here to convert it to W-GNT.</a>
           </span>
         </div>

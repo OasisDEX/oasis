@@ -7,7 +7,7 @@
         </h2>
       </div>
       <div id="container-transfer" class="col-xs-6">
-        <span class="select-market-container"> 
+        <span class="select-market-container">
             <select class="select-market-graph" {{b "options: currencies, value: currency, change: resetAmount"}}></select>
             <span class="glyphicon glyphicon-chevron-down select-glyph" aria-hidden="true"></span>
         </span>
@@ -38,7 +38,7 @@
               AMOUNT
             </th>
             <td>
-              <input type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}><span class="span-transfer-currency">{{currency}}</span>
+              <input type="number" class="input amount" step="any" min="0" placeholder="0" {{b "value: amount, attr: { max: maxAmount }"}}><span class="span-transfer-currency">{{currency}}</span>
             </td>
           </tr>
         </tbody>

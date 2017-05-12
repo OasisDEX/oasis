@@ -13,7 +13,6 @@ import './offermodal.html';
 // TODO: DELETE THIS, TESTING PURPOSE
 window.Tokens = Tokens;
 
-
 Template.offermodal.viewmodel({
   share: 'newOffer',
   volume: '',
@@ -76,11 +75,11 @@ Template.offermodal.viewmodel({
   hasAllowanceNewOrder() {
     try {
       const token = Tokens.findOne(this.offerType() === 'buy'
-                                                      ? Session.get('quoteCurrency') : Session.get('baseCurrency'));
+        ? Session.get('quoteCurrency') : Session.get('baseCurrency'));
       const allowance = new BigNumber(token.allowance);
 
       return token && allowance.gte(web3Obj.toWei(new BigNumber(this.offerType() === 'buy'
-                                                                       ? this.offerTotal() : this.offerAmount())));
+          ? this.offerTotal() : this.offerAmount())));
     } catch (e) {
       return false;
     }
@@ -229,15 +228,19 @@ Template.offermodal.viewmodel({
     if (this.type() === 'bid') {
       bestOffer = Offers.findOne({
         buyWhichToken: Session.get('baseCurrency'),
-        sellWhichToken: Session.get('quoteCurrency') },
-        { sort: { ask_price_sort: 1 },
+        sellWhichToken: Session.get('quoteCurrency'),
+      },
+        {
+          sort: { ask_price_sort: 1 },
         });
       return (new BigNumber(bestOffer.bid_price)).gt(new BigNumber(this.templateInstance.data.offer.bid_price));
     } else if (this.type() === 'ask') {
       bestOffer = Offers.findOne({
         buyWhichToken: Session.get('quoteCurrency'),
-        sellWhichToken: Session.get('baseCurrency') },
-        { sort: { ask_price_sort: 1 },
+        sellWhichToken: Session.get('baseCurrency'),
+      },
+        {
+          sort: { ask_price_sort: 1 },
         });
       return (new BigNumber(bestOffer.ask_price)).lt(new BigNumber(this.templateInstance.data.offer.ask_price));
     }
@@ -357,7 +360,14 @@ Template.offermodal.events({
   'click button.btn-allowance-modal': (event) => {
     const refer = $(event.target).data('refer');
     const token = $(event.target).data('link');
+    const allowance = Template.instance().viewmodel.offerAmount();
     $(`#allowanceModal${token}`).data('refer', refer);
     $(`#allowanceModal${token}`).modal('show');
+    $(`#allowanceModal${token}`).on('shown.bs.modal', () => {
+      $('.set-allowance input').focus();
+      $('.set-allowance input').val(allowance);
+      // changing value of input using val(), doesn't trigger onchange event. it must be manually triggered
+      $('.set-allowance input').trigger('change');
+    });
   },
 });
