@@ -81,6 +81,7 @@ class TokenEventCollection extends Mongo.Collection {
             // console.log('update', open[index].blockNumber, result.timestamp);
             super.update({ blockNumber: open[index].blockNumber },
               { $set: { timestamp: result.timestamp } }, { multi: true });
+            Session.set(`loadingTokenEvent${open[index].transactionHash}`, false);
           }
           syncTs(index + 1);
         });
@@ -110,14 +111,19 @@ class TokenEventCollection extends Mongo.Collection {
         // console.log(tokenId);
         if (!error) {
           const self = this;
+          // TODO: extract duplicated logic for every event in separate abstraction layer
           token.Transfer({}, {
             fromBlock: latestBlock - parseInt(Session.get('AVGBlocksPerDay') / 12, 10), // Last 2 hours
           }).get((err, result) => {
             if (!err) {
+              result.forEach((transferEvent) => {
+                Session.set(`loadingTokenEvent${transferEvent.transactionHash}`, true);
+              });
               self.syncEvents(tokenId, result);
             }
             token.Transfer({}, { fromBlock: 'latest' }, (err2, result2) => {
               if (!err2) {
+                Session.set(`loadingTokenEvent${result2.transactionHash}`, true);
                 self.syncEvent(tokenId, result2);
               }
             });
@@ -128,10 +134,15 @@ class TokenEventCollection extends Mongo.Collection {
               fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
             }).get((err, result) => {
               if (!err) {
+                result.forEach((depositEvent) => {
+                  Session.set(`loadingTokenEvent${depositEvent.transactionHash}`, true);
+                });
+
                 self.syncEvents(tokenId, result);
               }
               token.Deposit({}, { fromBlock: 'latest' }, (err2, result2) => {
                 if (!err2) {
+                  Session.set(`loadingTokenEvent${result2.transactionHash}`, true);
                   self.syncEvent(tokenId, result2);
                 }
               });
@@ -140,10 +151,14 @@ class TokenEventCollection extends Mongo.Collection {
               fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
             }).get((err, result) => {
               if (!err) {
+                result.forEach((withdrawEvent) => {
+                  Session.set(`loadingTokenEvent${withdrawEvent.transactionHash}`, true);
+                });
                 self.syncEvents(tokenId, result);
               }
               token.Withdrawal({}, { fromBlock: 'latest' }, (err2, result2) => {
                 if (!err2) {
+                  Session.set(`loadingTokenEvent${result2.transactionHash}`, true);
                   self.syncEvent(tokenId, result2);
                 }
               });
