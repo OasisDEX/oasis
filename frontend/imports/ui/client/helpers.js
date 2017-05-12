@@ -202,7 +202,15 @@ Template.registerHelper('findOrders', (state) => {
       Offers.syncIndividualTrades();
     }
 
-    return IndividualTrades.find({}, { sort: { timestamp: -1 } });
+    const baseCurrencyAddress = Dapple.getTokenAddress(Session.get('baseCurrency'));
+    const quoteCurrencyAddress = Dapple.getTokenAddress(Session.get('quoteCurrency'));
+
+    return IndividualTrades.find({
+      $or: [
+        { $and: [{ buyWhichToken_address: baseCurrencyAddress }, { sellWhichToken_address: quoteCurrencyAddress }] },
+        { $and: [{ buyWhichToken_address: quoteCurrencyAddress }, { sellWhichToken_address: baseCurrencyAddress }] },
+      ],
+    }, { sort: { timestamp: -1 } });
   }
 
   return [];
