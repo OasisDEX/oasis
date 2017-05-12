@@ -225,10 +225,14 @@ Template.offermodal.viewmodel({
   },
   alertBetterOffer() {
     let bestOffer = null;
+    const dustLimitMap = Session.get('orderBookDustLimit');
+    const dustLimit = dustLimitMap[Session.get('quoteCurrency')] ? dustLimitMap[Session.get('quoteCurrency')] : 0;
+
     if (this.type() === 'bid') {
       bestOffer = Offers.findOne({
         buyWhichToken: Session.get('baseCurrency'),
         sellWhichToken: Session.get('quoteCurrency'),
+        sellHowMuch_filter: { $gte: dustLimit },
       },
         {
           sort: { ask_price_sort: 1 },
@@ -238,6 +242,7 @@ Template.offermodal.viewmodel({
       bestOffer = Offers.findOne({
         buyWhichToken: Session.get('quoteCurrency'),
         sellWhichToken: Session.get('baseCurrency'),
+        buyHowMuch_filter: { $gte: dustLimit },
       },
         {
           sort: { ask_price_sort: 1 },
