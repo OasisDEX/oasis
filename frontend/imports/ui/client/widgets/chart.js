@@ -248,12 +248,12 @@ Template.chart.viewmodel({
       asks = removeOutliersFromArray(asks, 'ask_price_sort', 3);
 
       asks.forEach(ask => {
-        const index = askPrices.indexOf(ask.ask_price);
+        const index = askPrices.indexOf(ask.ask_price_sort);
         if (index === -1) {
           // If it is the first order for this price
 
           // Keep track of new price index
-          askPrices.push(ask.ask_price);
+          askPrices.push(ask.ask_price_sort);
 
           if (askAmounts.quote.length > 0) {
             // If there is a lower price we need to sum the amount of the previous price (to make a cumulative graph)
@@ -271,12 +271,12 @@ Template.chart.viewmodel({
       });
 
       bids.forEach(bid => {
-        const index = bidPrices.indexOf(bid.bid_price);
+        const index = bidPrices.indexOf(bid.bid_price_sort);
         if (index === -1) {
           // If it is the first order for this price
 
           // Keep track of new price index and value
-          bidPrices.push(bid.bid_price);
+          bidPrices.push(bid.bid_price_sort);
           bidAmounts.quote.push(new BigNumber(bid.sellHowMuch));
           bidAmounts.base.push(new BigNumber(bid.buyHowMuch));
         } else {
