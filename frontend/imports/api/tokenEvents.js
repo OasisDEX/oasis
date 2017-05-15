@@ -10,6 +10,13 @@ class TokenEventCollection extends Mongo.Collection {
   toLabel() {
     return super.to;
   }
+
+  setEventLoadingIndicatorStatus(txhash, status) {
+    const currentlyLoading = Session.get('loadingTokenEvents') || {};
+    currentlyLoading[txhash] = status;
+    Session.set('loadingTokenEvents', currentlyLoading);
+  }
+
   getLatestBlock() {
     return new Promise((resolve, reject) => {
       web3Obj.eth.getBlock('latest', (blockError, block) => {
@@ -81,7 +88,7 @@ class TokenEventCollection extends Mongo.Collection {
             // console.log('update', open[index].blockNumber, result.timestamp);
             super.update({ blockNumber: open[index].blockNumber },
               { $set: { timestamp: result.timestamp } }, { multi: true });
-            Session.set(`loadingTokenEvent${open[index].transactionHash}`, false);
+            this.setEventLoadingIndicatorStatus(open[index].transactionHash, false);
           }
           syncTs(index + 1);
         });
@@ -117,13 +124,13 @@ class TokenEventCollection extends Mongo.Collection {
           }).get((err, result) => {
             if (!err) {
               result.forEach((transferEvent) => {
-                Session.set(`loadingTokenEvent${transferEvent.transactionHash}`, true);
+                this.setEventLoadingIndicatorStatus(transferEvent.transactionHash, true);
               });
               self.syncEvents(tokenId, result);
             }
             token.Transfer({}, { fromBlock: 'latest' }, (err2, result2) => {
               if (!err2) {
-                Session.set(`loadingTokenEvent${result2.transactionHash}`, true);
+                this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
                 self.syncEvent(tokenId, result2);
               }
             });
@@ -135,14 +142,14 @@ class TokenEventCollection extends Mongo.Collection {
             }).get((err, result) => {
               if (!err) {
                 result.forEach((depositEvent) => {
-                  Session.set(`loadingTokenEvent${depositEvent.transactionHash}`, true);
+                  this.setEventLoadingIndicatorStatus(depositEvent.transactionHash, true);
                 });
 
                 self.syncEvents(tokenId, result);
               }
               token.Deposit({}, { fromBlock: 'latest' }, (err2, result2) => {
                 if (!err2) {
-                  Session.set(`loadingTokenEvent${result2.transactionHash}`, true);
+                  this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
                   self.syncEvent(tokenId, result2);
                 }
               });
@@ -152,13 +159,13 @@ class TokenEventCollection extends Mongo.Collection {
             }).get((err, result) => {
               if (!err) {
                 result.forEach((withdrawEvent) => {
-                  Session.set(`loadingTokenEvent${withdrawEvent.transactionHash}`, true);
+                  this.setEventLoadingIndicatorStatus(withdrawEvent.transactionHash, true);
                 });
                 self.syncEvents(tokenId, result);
               }
               token.Withdrawal({}, { fromBlock: 'latest' }, (err2, result2) => {
                 if (!err2) {
-                  Session.set(`loadingTokenEvent${result2.transactionHash}`, true);
+                  this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
                   self.syncEvent(tokenId, result2);
                 }
               });
@@ -202,6 +209,7 @@ class TokenEventCollection extends Mongo.Collection {
                                                   Dapple.getTokenByAddress(WGNT.address),
                                                   'deposit',
                                                   WGNT.address);
+                      this.setEventLoadingIndicatorStatus(result[i].transactionHash, true);
                     }
                     super.batchInsert(rows, () => {});
                   }
@@ -212,6 +220,7 @@ class TokenEventCollection extends Mongo.Collection {
                                                     Dapple.getTokenByAddress(WGNT.address),
                                                     'deposit',
                                                     WGNT.address);
+                      this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
                       super.insert(row);
                     }
                   });
@@ -227,6 +236,7 @@ class TokenEventCollection extends Mongo.Collection {
                                                   Dapple.getTokenByAddress(WGNT.address),
                                                   'withdrawal',
                                                   Session.get('address'));
+                      this.setEventLoadingIndicatorStatus(result[i].transactionHash, true);
                     }
                     super.batchInsert(rows, () => {});
                   }
@@ -237,6 +247,7 @@ class TokenEventCollection extends Mongo.Collection {
                                                     Dapple.getTokenByAddress(WGNT.address),
                                                     'withdrawal',
                                                     Session.get('address'));
+                      this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
                       super.insert(row);
                     }
                   });
