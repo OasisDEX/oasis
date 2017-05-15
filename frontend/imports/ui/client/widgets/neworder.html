@@ -26,7 +26,7 @@
             PRICE
           </th>
           <td>
-            <input type="number" class="input" step="any" min="" placeholder="0"
+            <input type="text" class="input number" step="any" min="" placeholder="0"
               {{b "value: price, input: calcTotal, enable: canChangePrice"}}> <span
             class="span-buy-sell-currency">{{quoteCurrency}}</span>
           </td>
@@ -36,7 +36,7 @@
             AMOUNT
           </th>
           <td>
-            <input type="number" class="input" step="any" min="" placeholder="0"
+            <input type="text" class="input number" step="any" min="" placeholder="0"
               {{b "value: amount, input: calcTotal, enable: canChangeAmountAndTotal, attr: { max: maxAmount }"}}> <span
             class="span-buy-sell-currency">{{baseCurrency}}</span>
           </td>
@@ -46,7 +46,7 @@
             TOTAL
           </th>
           <td>
-            <input type="number" class="input" step="any" min="" placeholder="0"
+            <input type="text" class="input number" step="any" min="" placeholder="0"
               {{b "value: total, input: calcAmount, enable: canChangeAmountAndTotal, attr: { max: maxTotal }"}}> <span
             class="span-buy-sell-currency">{{quoteCurrency}}</span>
           </td>
