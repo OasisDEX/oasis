@@ -78,10 +78,16 @@ Template.registerHelper('loading', () => Session.get('loading'));
 Template.registerHelper('loadingProgress', () => Session.get('loadingProgress'));
 
 Template.registerHelper('loadingTradeHistory', () => Session.get('loadingTradeHistory'));
+
 Template.registerHelper('loadingIndividualTradeHistory', () => Session.get('loadingIndividualTradeHistory'));
 
 Template.registerHelper('loadedCurrencies', () => Session.get('balanceLoaded') === true
 && Session.get('allowanceLoaded') === true);
+
+Template.registerHelper('loadingTokenEvents', (txHash) => {
+  const currentlyLoading = Session.get('loadingTokenEvents');
+  return currentlyLoading[txHash];
+});
 
 Template.registerHelper('address', () => Session.get('address'));
 
