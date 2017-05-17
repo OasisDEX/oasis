@@ -27,6 +27,13 @@ $color-cancel-order: #A8ACB9;
   font-weight: 700;
 }
 
+@font-face {
+  font-family: Montserrat;
+  src: url("../fonts/Montserrat-Medium.woff"),
+  url("../fonts/Montserrat-Medium.woff2");
+  font-weight: 500;
+}
+
 /* CUSTOM SCROLLBAR TABLE SCROLLING */
 
 .t-scroll tbody::-webkit-scrollbar {
@@ -905,29 +912,66 @@ table {
 
 .buy-sell-section {
   form#neworder {
+    .available {
+      font-family: Montserrat, sans-serif;
+      font-weight: 500;
+      opacity: 0.68;
+      margin-bottom: 16px;
+
+      &-label {
+        font-size: 13px;
+        text-align: center;
+        display: inline-block;
+        width: 100px;
+      }
+
+      &-amount {
+        font-size: 19px;
+        text-align: right;
+        display: inline-block;
+        width: 220px;
+      }
+
+      &-currency {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-align: center;
+        display: inline-block;
+        width: 50px;
+      }
+    }
+    table {
+      border-collapse: separate;
+      border-spacing: 0;
+    }
     tbody {
       tr.row-input-line {
         td {
-          padding-top: 0px;
+          padding-top: 0;
         }
         th {
           padding-left: 13px;
-          padding-top: 0px;
+          padding-top: 0;
         }
-        td {
-          &.available {
-            span.fill-amount {
-              opacity: 0.68;
-              font-family: 'Roboto';
-              font-weight: 500;
-              font-size: 19px;
-              color: #222228;
-              text-align: right;
-              padding-right: 10px;
-              &.clickable {
-                cursor: pointer;
-              }
-            }
+        th.dex-label-cell {
+          font-family: Montserrat, sans-serif;
+          font-weight: 500;
+          opacity: 0.68;
+          font-size: 13px;
+          background-color: #FBFBFB;
+          padding: 0;
+          text-align: center;
+        }
+
+        td.dex-input-cell {
+          width: 225px;
+
+          .btn-submit-order-buy, .btn-submit-order-sell {
+            padding: 5px 10px;
+            font-size: 10px;
+            border-radius: 5px;
+            transform: translateY(2.5px);
           }
         }
       }
@@ -942,15 +986,10 @@ table {
   }
 
   th {
-    width: 150px;
+    width: 100px;
   }
 
   tbody {
-    tr {
-      th {
-        transform: translateY(5px);
-      }
-    }
     th {
       opacity: 0.68;
       font-size: 15px;
@@ -960,15 +999,17 @@ table {
         color: #222228;
       }
     }
+
     input {
-      font-family: 'Roboto';
-      font-size: 27px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 21px;
       font-weight: bold;
       color: #D0D0D0;
       border: none;
+      float: right;
       text-align: right;
-      padding-right: 10px;
-      max-width: 170px;
+      padding-right: 5px;
+      max-width: 120px;
       background: none;
       &[disabled] {
         border: none;
@@ -983,24 +1024,55 @@ table {
     }
 
     tr.row-input-line {
-      td,
-      th {
-        border-bottom: 1px #F0F2F3 solid;
+      td, th {
         padding-top: 10px;
-        &.available {
-          border: none;
-          transform: none;
-          input {
-            opacity: 0.68;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 17px;
-            color: #222228;
-            cursor: pointer;
-          }
-        }
       }
+
       td:last-child {
         text-align: right;
+      }
+    }
+
+    tr.row-input-line {
+      th {
+        border-top: 1px #F0F2F3 solid;
+        border-right: 1px #F0F2F3 solid;
+        border-left: 1px #F0F2F3 solid;
+      }
+
+      td {
+        border-top: 1px #F0F2F3 solid;
+      }
+
+      td:last-child {
+        border-top: 1px #F0F2F3 solid;
+        border-right: 1px #F0F2F3 solid;
+        border-left: 1px #F0F2F3 solid;
+      }
+    }
+
+    tr.row-input-line:first-child {
+      th {
+        border-top-left-radius: 5px;
+      }
+
+      td:last-child {
+        border-top-right-radius: 5px;
+      }
+    }
+
+    tr.row-input-line:last-child {
+      th {
+        border-bottom-left-radius: 5px;
+        border-bottom: 1px #F0F2F3 solid;
+      }
+
+      td {
+        border-bottom: 1px #F0F2F3 solid;
+      }
+
+      td:last-child {
+        border-bottom-right-radius: 5px;
       }
     }
 
@@ -1011,8 +1083,7 @@ table {
       letter-spacing: 1px;
       width: 52px;
       display: inline-block;
-      text-align: left;
-      margin-left: 2px;
+      text-align: center;
     }
   }
 

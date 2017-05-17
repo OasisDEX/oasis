@@ -18,10 +18,9 @@ Template.neworder.viewmodel({
   total: '',
   price: '',
   amount: '',
-
+  shouldShowMaxBtn: false,
   type() {
-    const orderType = (this !== null && this !== undefined) ? this.orderType() : '';
-    return orderType;
+    return this.orderType() ? this.orderType() : '';
   },
   precision() {
     return Dapple.getTokenSpecs(Session.get('baseCurrency')).precision;
@@ -31,6 +30,12 @@ Template.neworder.viewmodel({
       return Session.get('quoteCurrency');
     }
     return Session.get('baseCurrency');
+  },
+  onFocus() {
+    this.shouldShowMaxBtn(true);
+  },
+  onBlur() {
+    this.shouldShowMaxBtn(false);
   },
   canAutofill() {
     return Session.get('market_open');
@@ -100,7 +105,7 @@ Template.neworder.viewmodel({
       if (token) {
         const balance = new BigNumber(token.balance);
         /* const allowance = new BigNumber(token.allowance);
-        maxAmount = web3Obj.fromWei(BigNumber.min(balance, allowance).toString(10));*/
+         maxAmount = web3Obj.fromWei(BigNumber.min(balance, allowance).toString(10));*/
         maxAmount = web3Obj.fromWei(balance.toString(10));
       }
     } else {
@@ -125,7 +130,7 @@ Template.neworder.viewmodel({
       if (token) {
         const balance = new BigNumber(token.balance);
         /* const allowance = new BigNumber(token.allowance);
-        maxTotal = web3Obj.fromWei(BigNumber.min(balance, allowance).toString(10));*/
+         maxTotal = web3Obj.fromWei(BigNumber.min(balance, allowance).toString(10));*/
         maxTotal = web3Obj.fromWei(balance.toString(10));
       }
     } else {
