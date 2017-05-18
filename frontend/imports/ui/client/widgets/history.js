@@ -7,6 +7,14 @@ import { txHref } from '/imports/utils/functions';
 import './history.html';
 
 Template.history.viewmodel({
+  autorun() {
+    if (this.historyType() === 'depositHistory') {
+      Session.set('loadingWrapHistory', true);
+    }
+    if (this.historyType() === 'transferHistory') {
+      Session.set('loadingTransferHistory', true);
+    }
+  },
   currencyClass(token) {
     return token === Session.get('quoteCurrency') ? 'quote-currency' : 'base-currency';
   },
@@ -24,7 +32,7 @@ Template.history.viewmodel({
     // const address = Session.get('address');
     return TokenEvents.find({
       type: { $in: ['transfer'] },
-       /* $or: [{ to: address }, { from: address }], */
+      /* $or: [{ to: address }, { from: address }], */
     }, { sort: { blockNumber: -1 } });
   },
   transferHistoryCount() {
