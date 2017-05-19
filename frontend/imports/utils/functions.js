@@ -112,7 +112,15 @@ export function txHref(tx) {
 
 export function thousandSeparator(number) {
   const parts = number.toString().split('.');
-  return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',') + (parts[1] ? `.${parts[1]}` : '');
+  const formatter = new Intl.NumberFormat(navigator.language);
+
+  // Usage of this line is define the separator of fractions based on users locale
+  const localeSeparator = formatter.format(0.123).charAt(1);
+
+  const whole = formatter.format(parts[0]);
+  const fraction = (parts[1] ? `${localeSeparator}${parts[1]}` : '');
+
+  return whole + fraction;
 }
 
 export function formatNumber(number, dec) {
