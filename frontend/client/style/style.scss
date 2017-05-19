@@ -1459,6 +1459,10 @@ table {
     background-color: #5ECFB9 !important;
     border-color: #1ABC9C;
   }
+
+  &[disabled]:hover {
+    border-color: #1ABC9C;
+  }
 }
 
 .btn-submit-order-sell {
@@ -1468,6 +1472,10 @@ table {
   &:hover {
     color: #FFFFFF;
     background-color: #EF5350 !important;
+    border-color: #E34D4B;
+  }
+
+  &[disabled]:hover {
     border-color: #E34D4B;
   }
 }
