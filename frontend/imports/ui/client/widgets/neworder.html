@@ -48,7 +48,7 @@
             <span>TOTAL</span>
           </th>
           <td class="dex-input-cell total-cell">
-            <div class="wrappa" {{b "focusin: onFocus(type), focusout: onBlur"}}>
+            <div {{b "focusin: onFocus(type), focusout: onBlur"}}>
               {{#if and canAutofill shouldShowMaxBtn  }}
                 <button class="btn btn-sm btn-default btn-submit-order-{{type}} {{type}}" {{b
                   "mousedown: autofill"}}>{{title}} MAX

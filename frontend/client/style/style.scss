@@ -919,24 +919,28 @@ table {
       margin-bottom: 16px;
 
       &-label {
-        font-size: 13px;
-        text-align: center;
+        font-size: 15px;
+        text-align: left;
+        padding-left: 5px;
         display: inline-block;
-        width: 100px;
+        width: 80px;
       }
 
       &-amount {
+        font-family: Roboto, sans-serif;
         font-size: 19px;
         text-align: right;
         display: inline-block;
-        width: 220px;
+        padding-right: 10px;
+        width: 230px;
       }
 
       &-currency {
         font-size: 10px;
         font-weight: 700;
         letter-spacing: 1px;
-        text-align: center;
+        text-align: left;
+        padding-left: 7px;
         display: inline-block;
         width: 50px;
       }
@@ -960,15 +964,15 @@ table {
           opacity: 0.68;
           font-size: 13px;
           background-color: #FBFBFB;
-          padding: 0;
+          padding: 10px;
           text-align: center;
         }
 
         td.dex-input-cell {
-          width: 225px;
+          width: 230px;
 
           .btn-submit-order-buy, .btn-submit-order-sell {
-            padding: 5px 10px;
+            padding: 5px;
             font-size: 10px;
             border-radius: 5px;
             transform: translateY(2.5px);
@@ -986,7 +990,7 @@ table {
   }
 
   th {
-    width: 100px;
+    width: 80px;
   }
 
   tbody {
@@ -1008,7 +1012,7 @@ table {
       border: none;
       float: right;
       text-align: right;
-      padding-right: 5px;
+      padding-right: 10px;
       max-width: 120px;
       background: none;
       &[disabled] {
@@ -1081,9 +1085,10 @@ table {
       font-size: 10px;
       color: #68686C; /* #222228;*/
       letter-spacing: 1px;
-      width: 52px;
+      width: 100%;
       display: inline-block;
-      text-align: center;
+      text-align: left;
+      padding-left: 10px;
     }
   }
 
@@ -1434,6 +1439,7 @@ table {
 
 .btn-submit-order {
   @extend .montserrat-semibold;
+  background-color: transparent;
   border: 1px solid;
   border-radius: 100px;
   font-size: 13.5px;
@@ -1447,11 +1453,23 @@ table {
 .btn-submit-order-buy {
   @extend .btn-submit-order;
   border-color: $color-buy;
+
+  &:hover {
+    color: #FFFFFF;
+    background-color: #5ECFB9 !important;
+    border-color: #1ABC9C;
+  }
 }
 
 .btn-submit-order-sell {
   @extend .btn-submit-order;
   border-color: $color-sell;
+
+  &:hover {
+    color: #FFFFFF;
+    background-color: #EF5350 !important;
+    border-color: #E34D4B;
+  }
 }
 
 .btn-submit-order-more {
