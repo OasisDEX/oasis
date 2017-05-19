@@ -945,19 +945,44 @@ table {
         width: 50px;
       }
     }
-    table {
-      border-collapse: separate;
+
+    .order-table {
+      border-collapse: separate !important;
       border-spacing: 0;
+    }
+
+    table.bordered {
+      border: solid #ccc 1px;
+      -moz-border-radius: 6px;
+      -webkit-border-radius: 6px;
+      border-radius: 6px;
+    }
+
+    table {
+      border-collapse: separate !important;
+      border-spacing: 0;
+      border: solid #ccc 1px;
+      -moz-border-radius: 6px;
+      -webkit-border-radius: 6px;
+      border-radius: 6px;
+    }
+
+    table.footer {
+      border: none;
+      -moz-border-radius: 6px;
+      -webkit-border-radius: 6px;
     }
     tbody {
       tr.row-input-line {
         td {
           padding-top: 0;
         }
+
         th {
           padding-left: 13px;
           padding-top: 0;
         }
+
         th.dex-label-cell {
           font-family: Montserrat, sans-serif;
           font-weight: 500;
@@ -1037,21 +1062,20 @@ table {
       }
     }
 
+    tr.row-input-line:first-child {
+      th, td {
+        border-top: none;
+      }
+    }
+
     tr.row-input-line {
       th {
-        border-top: 1px #F0F2F3 solid;
-        border-right: 1px #F0F2F3 solid;
-        border-left: 1px #F0F2F3 solid;
+        border-top: 1px #E1E1E1 solid;
       }
 
       td {
-        border-top: 1px #F0F2F3 solid;
-      }
-
-      td:last-child {
-        border-top: 1px #F0F2F3 solid;
-        border-right: 1px #F0F2F3 solid;
-        border-left: 1px #F0F2F3 solid;
+        border-top: 1px #E1E1E1 solid;
+        border-left: 1px #E1E1E1 solid;
       }
     }
 
@@ -1061,18 +1085,13 @@ table {
       }
 
       td:last-child {
-        border-top-right-radius: 5px;
+        border-top: none;
       }
     }
 
     tr.row-input-line:last-child {
       th {
         border-bottom-left-radius: 5px;
-        border-bottom: 1px #F0F2F3 solid;
-      }
-
-      td {
-        border-bottom: 1px #F0F2F3 solid;
       }
 
       td:last-child {
@@ -1472,10 +1491,6 @@ table {
   &:hover {
     color: #FFFFFF;
     background-color: #EF5350 !important;
-    border-color: #E34D4B;
-  }
-
-  &[disabled]:hover {
     border-color: #E34D4B;
   }
 }
