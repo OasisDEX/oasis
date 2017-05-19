@@ -114,6 +114,7 @@ export function thousandSeparator(number) {
   const parts = number.toString().split('.');
   const formatter = new Intl.NumberFormat(navigator.language);
 
+  // Usage of this line is define the separator of fractions based on users locale
   const localeSeparator = formatter.format(0.123).charAt(1);
 
   const whole = formatter.format(parts[0]);
