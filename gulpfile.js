@@ -22,7 +22,7 @@ gulp.task('build-meteor', function (cb) {
 
 // gh-pages
 gulp.task('deploy-gh-pages', function () {
-  require('fs').writeFileSync('./dist/CNAME', 'oasisdex.com');
+  require('fs').writeFileSync('./dist/CNAME', 'pro.oasisdex.com');
   return gulp.src('./dist/**/*')
     .pipe(ghPages())
 })
