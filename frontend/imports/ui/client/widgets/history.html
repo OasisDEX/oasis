@@ -19,58 +19,66 @@
         </tr>
         </thead>
         {{#if equals historyType 'depositHistory'}}
-          <tbody class="{{#if gt historyCount 5}}tbody-scrolling{{else}}tbody-not-scrolling{{/if}}">
-          {{#each history}}
-            <tr class="clickable">
-              <td></td>
-              <td class="timestamp">
-                {{#if loadingTokenEvents this.transactionHash}}
-                  <span class="loading-icon">
-                    {{{loadingIcon}}}
-                  </span>
-                {{else}}
-                  {{timestampToString this.timestamp true true}}
-                {{/if}}
-              </td>
-              <td class="type">
-                {{#if equals this.type 'deposit'}}
-                  wrap
-                {{else}}
-                  unwrap
-                {{/if}}
-              </td>
-              <td class="coin">{{this.token}}</td>
-              <td class="amount {{ this.type }}">{{{formatBalance this.amount '' this.token true}}}</td>
-              <td></td>
-            </tr>
-          {{/each}}
-          </tbody>
+          {{#if loadingWrapHistory}}
+            <div class="loading-market-history">{{{loadingIcon}}} Loading history...</div>
+          {{else}}
+            <tbody class="{{#if gt historyCount 5}}tbody-scrolling{{else}}tbody-not-scrolling{{/if}}">
+            {{#each history}}
+              <tr class="clickable">
+                <td></td>
+                <td class="timestamp">
+                  {{#if loadingTokenEvents this.transactionHash}}
+                    <span class="loading-icon">
+                      {{{loadingIcon}}}
+                    </span>
+                  {{else}}
+                    {{timestampToString this.timestamp true true}}
+                  {{/if}}
+                </td>
+                <td class="type">
+                  {{#if equals this.type 'deposit'}}
+                    wrap
+                  {{else}}
+                    unwrap
+                  {{/if}}
+                </td>
+                <td class="coin">{{this.token}}</td>
+                <td class="amount {{ this.type }}">{{{formatBalance this.amount '' this.token true}}}</td>
+                <td></td>
+              </tr>
+            {{/each}}
+            </tbody>
+          {{/if}}
         {{else}}
-          <tbody class="{{#if gt transferHistoryCount 5}}tbody-scrolling{{else}}tbody-not-scrolling{{/if}}">
-          {{#each transferHistory}}
-            <tr class="clickable">
-              <td></td>
-              <td class="timestamp">
-                {{#if loadingTokenEvents this.transactionHash}}
-                  <span class="loading-icon">
-                    {{{loadingIcon}}}
-                  </span>
+          {{#if loadingTransferHistory}}
+            <div class="loading-market-history">{{{loadingIcon}}} Loading history...</div>
+          {{else}}
+            <tbody class="{{#if gt transferHistoryCount 5}}tbody-scrolling{{else}}tbody-not-scrolling{{/if}}">
+            {{#each transferHistory}}
+              <tr class="clickable">
+                <td></td>
+                <td class="timestamp">
+                  {{#if loadingTokenEvents this.transactionHash}}
+                    <span class="loading-icon">
+                      {{{loadingIcon}}}
+                    </span>
+                  {{else}}
+                    {{timestampToString this.timestamp true true}}
+                  {{/if}}
+                </td>
+                {{#if equals historyType 'depositHistory'}}
+                  <td class="transaction-hash">{{ friendlyAddress(this.to) }}</td>
                 {{else}}
-                  {{timestampToString this.timestamp true true}}
+                  <td class="transaction-hash-recipient">{{ friendlyAddress(this.to) }}</td>
                 {{/if}}
-               </td>
-              {{#if equals historyType 'depositHistory'}}
-                <td class="transaction-hash">{{ friendlyAddress(this.to) }}</td>
-              {{else}}
-                <td class="transaction-hash-recipient">{{ friendlyAddress(this.to) }}</td>
-              {{/if}}
-              <td class="coin deposit">{{this.token}}</td>
-              <td class="{{ this.type }} {{ currencyClass this.token }}">{{{formatBalance this.amount '' this.token
-                                                                                          true}}}</td>
-              <td></td>
-            </tr>
-          {{/each}}
-          </tbody>
+                <td class="coin deposit">{{this.token}}</td>
+                <td class="{{ this.type }} {{ currencyClass this.token }}">{{{formatBalance this.amount '' this.token
+                                                                                            true}}}</td>
+                <td></td>
+              </tr>
+            {{/each}}
+            </tbody>
+          {{/if}}
         {{/if}}
       </table>
     </div>

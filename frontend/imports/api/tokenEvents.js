@@ -123,10 +123,11 @@ class TokenEventCollection extends Mongo.Collection {
             fromBlock: latestBlock - parseInt(Session.get('AVGBlocksPerDay') / 12, 10), // Last 2 hours
           }).get((err, result) => {
             if (!err) {
+              self.syncEvents(tokenId, result);
               result.forEach((transferEvent) => {
                 this.setEventLoadingIndicatorStatus(transferEvent.transactionHash, true);
               });
-              self.syncEvents(tokenId, result);
+              Session.set('loadingTransferHistory', false);
             }
             token.Transfer({}, { fromBlock: 'latest' }, (err2, result2) => {
               if (!err2) {
@@ -141,11 +142,11 @@ class TokenEventCollection extends Mongo.Collection {
               fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
             }).get((err, result) => {
               if (!err) {
+                self.syncEvents(tokenId, result);
                 result.forEach((depositEvent) => {
                   this.setEventLoadingIndicatorStatus(depositEvent.transactionHash, true);
                 });
-
-                self.syncEvents(tokenId, result);
+                Session.set('loadingWrapHistory', false);
               }
               token.Deposit({}, { fromBlock: 'latest' }, (err2, result2) => {
                 if (!err2) {
@@ -158,10 +159,11 @@ class TokenEventCollection extends Mongo.Collection {
               fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
             }).get((err, result) => {
               if (!err) {
+                self.syncEvents(tokenId, result);
                 result.forEach((withdrawEvent) => {
                   this.setEventLoadingIndicatorStatus(withdrawEvent.transactionHash, true);
                 });
-                self.syncEvents(tokenId, result);
+                Session.set('loadingWrapHistory', false);
               }
               token.Withdrawal({}, { fromBlock: 'latest' }, (err2, result2) => {
                 if (!err2) {
@@ -212,6 +214,7 @@ class TokenEventCollection extends Mongo.Collection {
                       this.setEventLoadingIndicatorStatus(result[i].transactionHash, true);
                     }
                     super.batchInsert(rows, () => {});
+                    Session.set('loadingWrapHistory', false);
                   }
                   GNT.Transfer({ from: broker, to: WGNT.address },
                   { fromBlock: 'latest' }, (error2, result2) => {
@@ -239,6 +242,7 @@ class TokenEventCollection extends Mongo.Collection {
                       this.setEventLoadingIndicatorStatus(result[i].transactionHash, true);
                     }
                     super.batchInsert(rows, () => {});
+                    Session.set('loadingWrapHistory', false);
                   }
                   GNT.Transfer({ from: WGNT.address, to: Session.get('address') },
                   { fromBlock: 'latest' }, (error2, result2) => {

@@ -77,6 +77,10 @@ Template.registerHelper('loading', () => Session.get('loading'));
 
 Template.registerHelper('loadingProgress', () => Session.get('loadingProgress'));
 
+Template.registerHelper('loadingTransferHistory', () => Session.get('loadingTransferHistory'));
+
+Template.registerHelper('loadingWrapHistory', () => Session.get('loadingWrapHistory'));
+
 Template.registerHelper('loadingTradeHistory', () => Session.get('loadingTradeHistory'));
 
 Template.registerHelper('loadingIndividualTradeHistory', () => Session.get('loadingIndividualTradeHistory'));

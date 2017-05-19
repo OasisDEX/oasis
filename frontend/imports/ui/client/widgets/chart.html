@@ -7,7 +7,7 @@
         </h2>
       </div>
       <div class="col-xs-6">
-        <span class="select-market-container"> 
+        <span class="select-market-container">
             <select class="select-market-graph" {{b "value: currentChart, change: chartChange"}}>
                 <option value="PRICE" selected>PRICE</option>
                 <option value="DEPTH">DEPTH</option>
@@ -22,7 +22,7 @@
         <div class="loading-chart">{{{loadingIcon}}} Loading token...</div>
       {{else}}
         {{#if loadingTradeHistory}}
-          <div class="loading-chart">{{{loadingIcon}}} Loading history...</div>
+          <div class="loading-chart">{{{loadingIcon}}} Loading chart...</div>
         {{/if}}
       {{/unless}}
       <canvas id="market-chart-price" class="market-chart" width="375" height="195"></canvas>
@@ -48,7 +48,7 @@
         <div class="loading-chart">{{{loadingIcon}}} Loading token...</div>
       {{else}}
         {{#if loadingTradeHistory}}
-          <div class="loading-chart">{{{loadingIcon}}} Loading history...</div>
+          <div class="loading-chart">{{{loadingIcon}}} Loading chart...</div>
         {{/if}}
       {{/unless}}
       <canvas id="market-chart-volume" class="market-chart" width="375" height="195"></canvas>
