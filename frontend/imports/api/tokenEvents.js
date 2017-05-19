@@ -4,15 +4,6 @@ import { Dapple, web3Obj } from 'meteor/makerotc:dapple';
 import { convertTo18Precision } from '/imports/utils/conversion';
 
 class TokenEventCollection extends Mongo.Collection {
-
-  constructor() {
-    super();
-    this.loadingTokenEvents = {
-      transfer: [],
-      wrap_unwrap: [],
-    };
-  }
-
   fromLabel() {
     return this.from;
   }
@@ -113,12 +104,6 @@ class TokenEventCollection extends Mongo.Collection {
       self.getLatestBlock().then((block) => {
         self.watchTokenEvents(block.number);
         self.watchGNTTokenEvents(block.number);
-        Promise.all(this.loadingTokenEvents.transfer).then(() => {
-          Session.set('loadingTransferHistory', false);
-        });
-        Promise.all(this.loadingTokenEvents.wrap_unwrap).then(() => {
-          Session.set('loadingWrapHistory', false);
-        });
       });
     }
   }
@@ -134,76 +119,59 @@ class TokenEventCollection extends Mongo.Collection {
         if (!error) {
           const self = this;
           // TODO: extract duplicated logic for every event in separate abstraction layer
-          const loadingTransferEvent = new Promise((resolve, reject) => {
-            token.Transfer({}, {
-              fromBlock: latestBlock - parseInt(Session.get('AVGBlocksPerDay') / 12, 10), // Last 2 hours
+          token.Transfer({}, {
+            fromBlock: latestBlock - parseInt(Session.get('AVGBlocksPerDay') / 12, 10), // Last 2 hours
+          }).get((err, result) => {
+            if (!err) {
+              self.syncEvents(tokenId, result);
+              result.forEach((transferEvent) => {
+                this.setEventLoadingIndicatorStatus(transferEvent.transactionHash, true);
+              });
+              Session.set('loadingTransferHistory', false);
+            }
+            token.Transfer({}, { fromBlock: 'latest' }, (err2, result2) => {
+              if (!err2) {
+                this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
+                self.syncEvent(tokenId, result2);
+              }
+            });
+          });
+
+          if (tokenId === 'W-ETH') {
+            token.Deposit({}, {
+              fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
             }).get((err, result) => {
               if (!err) {
-                result.forEach((transferEvent) => {
-                  this.setEventLoadingIndicatorStatus(transferEvent.transactionHash, true);
-                });
                 self.syncEvents(tokenId, result);
-                resolve();
-              } else {
-                reject();
+                result.forEach((depositEvent) => {
+                  this.setEventLoadingIndicatorStatus(depositEvent.transactionHash, true);
+                });
+                Session.set('loadingWrapHistory', false);
               }
-              token.Transfer({}, { fromBlock: 'latest' }, (err2, result2) => {
+              token.Deposit({}, { fromBlock: 'latest' }, (err2, result2) => {
                 if (!err2) {
                   this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
                   self.syncEvent(tokenId, result2);
                 }
               });
             });
-          });
-          this.loadingTokenEvents.transfer.push(loadingTransferEvent);
-
-
-          if (tokenId === 'W-ETH') {
-            const loadingDepositEvent = new Promise((resolve, reject) => {
-              token.Deposit({}, {
-                fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
-              }).get((err, result) => {
-                if (!err) {
-                  result.forEach((depositEvent) => {
-                    this.setEventLoadingIndicatorStatus(depositEvent.transactionHash, true);
-                  });
-                  self.syncEvents(tokenId, result);
-                  resolve();
-                } else {
-                  reject();
-                }
-                token.Deposit({}, { fromBlock: 'latest' }, (err2, result2) => {
-                  if (!err2) {
-                    this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
-                    self.syncEvent(tokenId, result2);
-                  }
+            token.Withdrawal({}, {
+              fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
+            }).get((err, result) => {
+              if (!err) {
+                self.syncEvents(tokenId, result);
+                result.forEach((withdrawEvent) => {
+                  this.setEventLoadingIndicatorStatus(withdrawEvent.transactionHash, true);
                 });
+                Session.set('loadingWrapHistory', false);
+              }
+              token.Withdrawal({}, { fromBlock: 'latest' }, (err2, result2) => {
+                if (!err2) {
+                  this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
+                  self.syncEvent(tokenId, result2);
+                }
               });
             });
-            this.loadingTokenEvents.wrap_unwrap.push(loadingDepositEvent);
-
-            const loadingWithdrawEvent = new Promise((resolve, reject) => {
-              token.Withdrawal({}, {
-                fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
-              }).get((err, result) => {
-                if (!err) {
-                  result.forEach((withdrawEvent) => {
-                    this.setEventLoadingIndicatorStatus(withdrawEvent.transactionHash, true);
-                  });
-                  self.syncEvents(tokenId, result);
-                  resolve();
-                } else {
-                  reject();
-                }
-                token.Withdrawal({}, { fromBlock: 'latest' }, (err2, result2) => {
-                  if (!err2) {
-                    this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
-                    self.syncEvent(tokenId, result2);
-                  }
-                });
-              });
-            });
-            this.loadingTokenEvents.wrap_unwrap.push(loadingWithdrawEvent);
           }
         }
       });
@@ -233,72 +201,61 @@ class TokenEventCollection extends Mongo.Collection {
           if (!errorWGNT) {
             WGNT.getBroker.call((errorBroker, broker) => {
               if (!errorBroker && broker !== '0x0000000000000000000000000000000000000000') {
-                const loadingDepositEvent = new Promise((resolve, reject) => {
-                  GNT.Transfer({ from: broker, to: WGNT.address }, {
-                    fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
-                  }).get((error, result) => {
-                    if (!error) {
-                      const rows = [];
-                      for (let i = 0; i < result.length; i++) {
-                        rows[i] = self.prepareRowGNT(result[i],
-                          Dapple.getTokenByAddress(WGNT.address),
-                          'deposit',
-                          WGNT.address);
-                        this.setEventLoadingIndicatorStatus(result[i].transactionHash, true);
-                      }
-                      super.batchInsert(rows, () => {});
-                      resolve();
-                    } else {
-                      reject();
+                GNT.Transfer({ from: broker, to: WGNT.address }, {
+                  fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
+                }).get((error, result) => {
+                  if (!error) {
+                    const rows = [];
+                    for (let i = 0; i < result.length; i++) {
+                      rows[i] = self.prepareRowGNT(result[i],
+                                                  Dapple.getTokenByAddress(WGNT.address),
+                                                  'deposit',
+                                                  WGNT.address);
+                      this.setEventLoadingIndicatorStatus(result[i].transactionHash, true);
                     }
-                    GNT.Transfer({ from: broker, to: WGNT.address },
-                      { fromBlock: 'latest' }, (error2, result2) => {
-                        if (!error2) {
-                          const row = self.prepareRowGNT(result2,
-                            Dapple.getTokenByAddress(WGNT.address),
-                            'deposit',
-                            WGNT.address);
-                          this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
-                          super.insert(row);
-                        }
-                      });
+                    super.batchInsert(rows, () => {});
+                    Session.set('loadingWrapHistory', false);
+                  }
+                  GNT.Transfer({ from: broker, to: WGNT.address },
+                  { fromBlock: 'latest' }, (error2, result2) => {
+                    if (!error2) {
+                      const row = self.prepareRowGNT(result2,
+                                                    Dapple.getTokenByAddress(WGNT.address),
+                                                    'deposit',
+                                                    WGNT.address);
+                      this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
+                      super.insert(row);
+                    }
                   });
                 });
-                this.loadingTokenEvents.wrap_unwrap.push(loadingDepositEvent);
 
-
-                const loadingWithdrawEvent = new Promise((resolve, reject) => {
-                  GNT.Transfer({ from: WGNT.address, to: Session.get('address') }, {
-                    fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
-                  }).get((error, result) => {
-                    if (!error) {
-                      const rows = [];
-                      for (let i = 0; i < result.length; i++) {
-                        rows[i] = self.prepareRowGNT(result[i],
-                          Dapple.getTokenByAddress(WGNT.address),
-                          'withdrawal',
-                          Session.get('address'));
-                        this.setEventLoadingIndicatorStatus(result[i].transactionHash, true);
-                      }
-                      super.batchInsert(rows, () => {});
-                      resolve();
-                    } else {
-                      reject();
+                GNT.Transfer({ from: WGNT.address, to: Session.get('address') }, {
+                  fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
+                }).get((error, result) => {
+                  if (!error) {
+                    const rows = [];
+                    for (let i = 0; i < result.length; i++) {
+                      rows[i] = self.prepareRowGNT(result[i],
+                                                  Dapple.getTokenByAddress(WGNT.address),
+                                                  'withdrawal',
+                                                  Session.get('address'));
+                      this.setEventLoadingIndicatorStatus(result[i].transactionHash, true);
                     }
-                    GNT.Transfer({ from: WGNT.address, to: Session.get('address') },
-                      { fromBlock: 'latest' }, (error2, result2) => {
-                        if (!error2) {
-                          const row = self.prepareRowGNT(result2,
-                            Dapple.getTokenByAddress(WGNT.address),
-                            'withdrawal',
-                            Session.get('address'));
-                          this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
-                          super.insert(row);
-                        }
-                      });
+                    super.batchInsert(rows, () => {});
+                    Session.set('loadingWrapHistory', false);
+                  }
+                  GNT.Transfer({ from: WGNT.address, to: Session.get('address') },
+                  { fromBlock: 'latest' }, (error2, result2) => {
+                    if (!error2) {
+                      const row = self.prepareRowGNT(result2,
+                                                    Dapple.getTokenByAddress(WGNT.address),
+                                                    'withdrawal',
+                                                    Session.get('address'));
+                      this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
+                      super.insert(row);
+                    }
                   });
                 });
-                this.loadingTokenEvents.wrap_unwrap.push(loadingWithdrawEvent);
               }
             });
           }
