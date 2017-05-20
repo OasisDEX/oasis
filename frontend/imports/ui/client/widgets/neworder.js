@@ -18,7 +18,7 @@ Template.neworder.viewmodel({
   total: '',
   price: '',
   amount: '',
-  shouldShowMaxBtn: false,
+  shouldShowMaxBtn: true,
   type() {
     return this.orderType() ? this.orderType() : '';
   },
@@ -35,7 +35,7 @@ Template.neworder.viewmodel({
     this.shouldShowMaxBtn(true);
   },
   onBlur() {
-    this.shouldShowMaxBtn(false);
+    this.shouldShowMaxBtn(true);
   },
   canAutofill() {
     return Session.get('market_open');

@@ -1473,7 +1473,7 @@ table {
   @extend .btn-submit-order;
   border-color: $color-buy;
 
-  &:hover {
+  &:hover  {
     color: #FFFFFF;
     background-color: #5ECFB9 !important;
     border-color: #1ABC9C;
@@ -1481,6 +1481,12 @@ table {
 
   &[disabled]:hover {
     border-color: #1ABC9C;
+  }
+
+  &:active, &:focus {
+    background-color: #FFFFFF !important;
+    color: $color-buy !important;
+    border-color: $color-buy !important;
   }
 }
 
@@ -1492,6 +1498,16 @@ table {
     color: #FFFFFF;
     background-color: #EF5350 !important;
     border-color: #E34D4B;
+  }
+
+  &[disabled]:hover {
+    border-color: #E34D4B;
+  }
+
+  &:active, &:focus {
+    background-color: #FFFFFF !important;
+    color: $color-sell !important;
+    border-color: $color-sell !important;
   }
 }
 
