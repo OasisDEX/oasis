@@ -176,6 +176,9 @@ Template.neworder.viewmodel({
     }
     return 0;
   },
+  sup(event) {
+  },
+
   hasAllowance(currency) {
     try {
       const token = Tokens.findOne(currency);
@@ -241,7 +244,8 @@ Template.neworder.viewmodel({
     this.bestOffer(undefined);
     return undefined;
   },
-  autofill() {
+  autofill(event) {
+    event.preventDefault();
     const marketOpen = Session.get('market_open');
     const quoteCurrency = Session.get('quoteCurrency');
     const baseCurrency = Session.get('baseCurrency');

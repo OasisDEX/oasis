@@ -50,8 +50,8 @@
           <td class="dex-input-cell total-cell">
             <div {{b "focusin: onFocus(type), focusout: onBlur"}}>
               {{#if and canAutofill shouldShowMaxBtn  }}
-                <button class="btn btn-sm btn-default btn-submit-order-{{type}} {{type}}" {{b
-                  "mousedown: autofill"}}>{{title}} MAX
+                <button type="button" class="btn btn-sm btn-default btn-submit-order-{{type}} {{type}}" {{b
+                  "click: autofill"}}>{{title}} MAX
                 </button>
               {{/if}}
               <input type="number" class="input" step="any" min="" placeholder="0"
