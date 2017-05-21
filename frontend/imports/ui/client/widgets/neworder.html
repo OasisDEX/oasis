@@ -5,50 +5,61 @@
         {{title}} {{baseCurrency}}
         <!-- {{> whatisthis section="new-order"}} -->
       </h2>
-      <table class="table-fixed">
+      <div class="available">
+        <span class="available-label">
+          AVAILABLE
+        </span>
+        {{#if equals type 'buy'}}
+          <span class="available-amount">{{{formatBalance quoteAvailable '' '' true}}}</span>
+          <span class="available-currency">{{quoteCurrency}}</span>
+        {{else}}
+          <span class="available-amount">{{{formatBalance baseAvailable '' '' true}}}</span>
+          <span class="available-currency">{{baseCurrency}}</span>
+        {{/if}}
+      </div>
+      <table>
         <tbody>
         <tr class="row-input-line">
-          <th class="available">
-            AVAILABLE
+          <th class="dex-label-cell">
+            <span>PRICE</span>
           </th>
-          <td class="available">
-            {{#if equals type 'buy'}}
-              <span class="fill-amount {{#if canAutofill}}clickable{{/if}}" {{b "click: autofill"}}>{{{formatBalance
-                quoteAvailable '' '' true}}}</span> <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
-            {{else}}
-              <span class="fill-amount {{#if canAutofill}}clickable{{/if}}" {{b "click: autofill"}}>{{{formatBalance
-                baseAvailable '' '' true}}}</span> <span class="span-buy-sell-currency">{{baseCurrency}}</span>
-            {{/if}}
+          <td class="dex-input-cell">
+            <input type="number" class="input" step="any" min="" placeholder="0"
+              {{b "value: price, input: calcTotal, enable: canChangePrice"}}>
+          </td>
+          <td>
+            <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
           </td>
         </tr>
         <tr class="row-input-line">
-          <th>
-            PRICE
+          <th class="dex-label-cell">
+            <span>AMOUNT</span>
           </th>
-          <td>
+          <td class="dex-input-cell">
             <input type="number" class="input" step="any" min="" placeholder="0"
-              {{b "value: price, input: calcTotal, enable: canChangePrice"}}> <span
-            class="span-buy-sell-currency">{{quoteCurrency}}</span>
+              {{b "value: amount, input: calcTotal, enable: canChangeAmountAndTotal, attr: { max: maxAmount }"}}>
+          </td>
+          <td>
+            <span class="span-buy-sell-currency">{{baseCurrency}}</span>
           </td>
         </tr>
         <tr class="row-input-line">
-          <th>
-            AMOUNT
+          <th class="dex-label-cell">
+            <span>TOTAL</span>
           </th>
-          <td>
-            <input type="number" class="input" step="any" min="" placeholder="0"
-              {{b "value: amount, input: calcTotal, enable: canChangeAmountAndTotal, attr: { max: maxAmount }"}}> <span
-            class="span-buy-sell-currency">{{baseCurrency}}</span>
+          <td class="dex-input-cell total-cell">
+            <div {{b "focusin: onFocus(type), focusout: onBlur"}}>
+              {{#if and canAutofill shouldShowMaxBtn  }}
+                <button type="button" class="btn btn-sm btn-default btn-submit-order-{{type}} {{type}}" {{b
+                  "click: autofill"}}>{{title}} MAX
+                </button>
+              {{/if}}
+              <input type="number" class="input" step="any" min="" placeholder="0"
+                {{b "value: total, input: calcAmount, enable: canChangeAmountAndTotal, attr: { max: maxTo tal }"}}>
+            </div>
           </td>
-        </tr>
-        <tr class="row-input-line">
-          <th>
-            TOTAL
-          </th>
           <td>
-            <input type="number" class="input" step="any" min="" placeholder="0"
-              {{b "value: total, input: calcAmount, enable: canChangeAmountAndTotal, attr: { max: maxTotal }"}}> <span
-            class="span-buy-sell-currency">{{quoteCurrency}}</span>
+            <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
           </td>
         </tr>
         </tbody>

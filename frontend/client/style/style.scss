@@ -27,6 +27,13 @@ $color-cancel-order: #A8ACB9;
   font-weight: 700;
 }
 
+@font-face {
+  font-family: Montserrat;
+  src: url("../fonts/Montserrat-Medium.woff"),
+  url("../fonts/Montserrat-Medium.woff2");
+  font-weight: 500;
+}
+
 /* CUSTOM SCROLLBAR TABLE SCROLLING */
 
 .t-scroll tbody::-webkit-scrollbar {
@@ -905,29 +912,95 @@ table {
 
 .buy-sell-section {
   form#neworder {
+    .available {
+      font-family: Montserrat, sans-serif;
+      font-weight: 500;
+      opacity: 0.68;
+      margin-bottom: 16px;
+
+      &-label {
+        font-size: 15px;
+        text-align: left;
+        padding-left: 5px;
+        display: inline-block;
+        width: 80px;
+      }
+
+      &-amount {
+        font-family: Roboto, sans-serif;
+        font-size: 19px;
+        text-align: right;
+        display: inline-block;
+        padding-right: 10px;
+        width: 230px;
+      }
+
+      &-currency {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-align: left;
+        padding-left: 7px;
+        display: inline-block;
+        width: 50px;
+      }
+    }
+
+    .order-table {
+      border-collapse: separate !important;
+      border-spacing: 0;
+    }
+
+    table.bordered {
+      border: solid #ccc 1px;
+      -moz-border-radius: 6px;
+      -webkit-border-radius: 6px;
+      border-radius: 6px;
+    }
+
+    table {
+      border-collapse: separate !important;
+      border-spacing: 0;
+      border: solid #ccc 1px;
+      -moz-border-radius: 6px;
+      -webkit-border-radius: 6px;
+      border-radius: 6px;
+    }
+
+    table.footer {
+      border: none;
+      -moz-border-radius: 6px;
+      -webkit-border-radius: 6px;
+    }
     tbody {
       tr.row-input-line {
         td {
-          padding-top: 0px;
+          padding-top: 0;
         }
+
         th {
           padding-left: 13px;
-          padding-top: 0px;
+          padding-top: 0;
         }
-        td {
-          &.available {
-            span.fill-amount {
-              opacity: 0.68;
-              font-family: 'Roboto';
-              font-weight: 500;
-              font-size: 19px;
-              color: #222228;
-              text-align: right;
-              padding-right: 10px;
-              &.clickable {
-                cursor: pointer;
-              }
-            }
+
+        th.dex-label-cell {
+          font-family: Montserrat, sans-serif;
+          font-weight: 500;
+          opacity: 0.68;
+          font-size: 13px;
+          background-color: #FBFBFB;
+          padding: 10px;
+          text-align: center;
+        }
+
+        td.dex-input-cell {
+          width: 230px;
+
+          .btn-submit-order-buy, .btn-submit-order-sell {
+            padding: 5px;
+            font-size: 10px;
+            border-radius: 5px;
+            transform: translateY(2.5px);
           }
         }
       }
@@ -942,15 +1015,10 @@ table {
   }
 
   th {
-    width: 150px;
+    width: 80px;
   }
 
   tbody {
-    tr {
-      th {
-        transform: translateY(5px);
-      }
-    }
     th {
       opacity: 0.68;
       font-size: 15px;
@@ -960,15 +1028,17 @@ table {
         color: #222228;
       }
     }
+
     input {
-      font-family: 'Roboto';
-      font-size: 27px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 21px;
       font-weight: bold;
       color: #D0D0D0;
       border: none;
+      float: right;
       text-align: right;
       padding-right: 10px;
-      max-width: 170px;
+      max-width: 120px;
       background: none;
       &[disabled] {
         border: none;
@@ -983,24 +1053,49 @@ table {
     }
 
     tr.row-input-line {
-      td,
-      th {
-        border-bottom: 1px #F0F2F3 solid;
+      td, th {
         padding-top: 10px;
-        &.available {
-          border: none;
-          transform: none;
-          input {
-            opacity: 0.68;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 17px;
-            color: #222228;
-            cursor: pointer;
-          }
-        }
       }
+
       td:last-child {
         text-align: right;
+      }
+    }
+
+    tr.row-input-line:first-child {
+      th, td {
+        border-top: none;
+      }
+    }
+
+    tr.row-input-line {
+      th {
+        border-top: 1px #E1E1E1 solid;
+      }
+
+      td {
+        border-top: 1px #E1E1E1 solid;
+        border-left: 1px #E1E1E1 solid;
+      }
+    }
+
+    tr.row-input-line:first-child {
+      th {
+        border-top-left-radius: 5px;
+      }
+
+      td:last-child {
+        border-top: none;
+      }
+    }
+
+    tr.row-input-line:last-child {
+      th {
+        border-bottom-left-radius: 5px;
+      }
+
+      td:last-child {
+        border-bottom-right-radius: 5px;
       }
     }
 
@@ -1009,10 +1104,10 @@ table {
       font-size: 10px;
       color: #68686C; /* #222228;*/
       letter-spacing: 1px;
-      width: 52px;
+      width: 100%;
       display: inline-block;
       text-align: left;
-      margin-left: 2px;
+      padding-left: 10px;
     }
   }
 
@@ -1363,6 +1458,7 @@ table {
 
 .btn-submit-order {
   @extend .montserrat-semibold;
+  background-color: transparent;
   border: 1px solid;
   border-radius: 100px;
   font-size: 13.5px;
@@ -1376,11 +1472,31 @@ table {
 .btn-submit-order-buy {
   @extend .btn-submit-order;
   border-color: $color-buy;
+
+  &:hover, &:active, &:focus {
+    color: #FFFFFF !important;
+    background-color: #5ECFB9 !important;
+    border-color: #1ABC9C !important;
+  }
+
+  &[disabled]:hover {
+    border-color: #1ABC9C;
+  }
 }
 
 .btn-submit-order-sell {
   @extend .btn-submit-order;
   border-color: $color-sell;
+
+  &:hover, &:active, &:focus {
+    color: #FFFFFF !important;
+    background-color: #EF5350 !important;
+    border-color: #E34D4B !important;
+  }
+
+  &[disabled]:hover {
+    border-color: #E34D4B;
+  }
 }
 
 .btn-submit-order-more {
