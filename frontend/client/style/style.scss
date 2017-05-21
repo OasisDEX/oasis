@@ -1473,20 +1473,14 @@ table {
   @extend .btn-submit-order;
   border-color: $color-buy;
 
-  &:hover  {
-    color: #FFFFFF;
+  &:hover, &:active, &:focus {
+    color: #FFFFFF !important;
     background-color: #5ECFB9 !important;
-    border-color: #1ABC9C;
+    border-color: #1ABC9C !important;
   }
 
   &[disabled]:hover {
     border-color: #1ABC9C;
-  }
-
-  &:active, &:focus {
-    background-color: #FFFFFF !important;
-    color: $color-buy !important;
-    border-color: $color-buy !important;
   }
 }
 
@@ -1494,20 +1488,14 @@ table {
   @extend .btn-submit-order;
   border-color: $color-sell;
 
-  &:hover {
-    color: #FFFFFF;
+  &:hover, &:active, &:focus {
+    color: #FFFFFF !important;
     background-color: #EF5350 !important;
-    border-color: #E34D4B;
+    border-color: #E34D4B !important;
   }
 
   &[disabled]:hover {
     border-color: #E34D4B;
-  }
-
-  &:active, &:focus {
-    background-color: #FFFFFF !important;
-    color: $color-sell !important;
-    border-color: $color-sell !important;
   }
 }
 
