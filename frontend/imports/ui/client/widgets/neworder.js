@@ -82,12 +82,11 @@ Template.neworder.viewmodel({
     }
     try {
       const price = new BigNumber(this.price());
-      let amount = new BigNumber(this.amount());
       const total = new BigNumber(this.total());
-      if (total.isZero() && price.isZero() && (amount.isNaN() || amount.isNegative())) {
+      if (total.isZero() && price.isZero()) {
         this.amount('0');
-      } else if (!total.isZero() || !price.isZero()) {
-        amount = total.div(price);
+      } else {
+        const amount = total.div(price);
         if (amount.isNaN()) {
           this.amount('0');
         } else {
@@ -247,32 +246,16 @@ Template.neworder.viewmodel({
   autofill(event) {
     event.preventDefault();
     const marketOpen = Session.get('market_open');
-    const quoteCurrency = Session.get('quoteCurrency');
-    const baseCurrency = Session.get('baseCurrency');
-    let offer;
-    let price = 0;
     let available = 0;
     if (!marketOpen) return false;
     if (this.type() === 'buy') {
-      offer = Offers.findOne({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
-        { sort: { ask_price_sort: 1 } });
-      if (offer && Object.prototype.hasOwnProperty.call(offer, 'ask_price')) {
-        price = new BigNumber(offer.ask_price);
-        available = web3Obj.fromWei(this.quoteAvailable()).toString(10);
-        this.price(price);
-        this.total(available);
-        this.calcAmount();
-      }
+      available = web3Obj.fromWei(this.quoteAvailable()).toString(10);
+      this.total(available);
+      this.calcAmount();
     } else if (this.type() === 'sell') {
-      offer = Offers.findOne({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
-        { sort: { ask_price_sort: 1 } });
-      if (offer && Object.prototype.hasOwnProperty.call(offer, 'bid_price')) {
-        price = new BigNumber(offer.bid_price);
-        available = web3Obj.fromWei(this.baseAvailable()).toString(10);
-        this.price(price);
-        this.amount(available);
-        this.calcTotal();
-      }
+      available = web3Obj.fromWei(this.baseAvailable()).toString(10);
+      this.amount(available);
+      this.calcTotal();
     }
     return false;
   },
