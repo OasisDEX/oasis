@@ -8,7 +8,7 @@
             <h4 class="modal-title">BUY OFFER</h4>
           {{else}}
             <h4 class="modal-title">SELL OFFER</h4>
-          {{/if}}          
+          {{/if}}
         </div>
         <div class="modal-body">
           {{#if offer}}
@@ -40,11 +40,11 @@
                 </tr>
                 <tr class="row-input-line">
                   <th>VOLUME</th>
-                  <td><input type="number" class="input" step="any" min="0" max={{maxVolume}} {{b "value: volume, input: calcTotal"}}> <span class="span-offer-currency">{{baseCurrency}}</span></td>
+                  <td><input type="text" class="input number" step="any" min="0" max={{maxVolume}} {{b "value: volume, input: calcTotal"}}> <span class="span-offer-currency">{{baseCurrency}}</span></td>
                 </tr>
                 <tr class="row-input-line">
                   <th>TOTAL</th>
-                  <td><input type="number" class="input" step="any" min="0" max={{maxTotal}} {{b "value: total, input: calcVolume"}}> <span class="span-offer-currency">{{quoteCurrency}}</span></td>
+                  <td><input type="text" class="input number" step="any" min="0" max={{maxTotal}} {{b "value: total, input: calcVolume"}}> <span class="span-offer-currency">{{quoteCurrency}}</span></td>
                 </tr>
                 {{#if offer.helper}}
                   <tr>
@@ -127,7 +127,7 @@
               <button type="button" data-refer="existingOrder" data-link={{quoteCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order-allowance {{offerType}} btn-placement-right" data-dismiss="modal">Change Allowance</button>
             {{/if}}
           {{/if}}
-          <button type="button" class="btn btn-default btn-placement-left btn-submit-order-cancel" data-dismiss="modal">CANCEL</button>          
+          <button type="button" class="btn btn-default btn-placement-left btn-submit-order-cancel" data-dismiss="modal">CANCEL</button>
         </div>
       </div>
     </div>
@@ -172,15 +172,15 @@
               </tr>
               <tr class="row-input-line">
                 <th>PRICE</th>
-                <td><input type="number" class="input" step="any" min="0" {{b "value: offerPrice, input: calcNewOfferTotal"}}><span class="span-offer-currency">{{quoteCurrency}}</span></td>
+                <td><input type="text" class="input number" step="any" min="0" {{b "value: offerPrice, input: calcNewOfferTotal"}}><span class="span-offer-currency">{{quoteCurrency}}</span></td>
               </tr>
               <tr class="row-input-line">
                 <th>VOLUME</th>
-                <td><input type="number" class="input" step="any" min="0" max={{maxNewOfferAmount}} {{b "value: offerAmount, input: calcNewOfferTotal"}}><span class="span-offer-currency">{{baseCurrency}}</span></td>
+                <td><input type="text" class="input number" step="any" min="0" max={{maxNewOfferAmount}} {{b "value: offerAmount, input: calcNewOfferTotal"}}><span class="span-offer-currency">{{baseCurrency}}</span></td>
               </tr>
               <tr class="row-input-line">
                 <th>TOTAL</th>
-                <td><input type="number" class="input" step="any" min="0" max={{maxNewOfferTotal}} {{b "value: offerTotal, input: calcNewOfferAmount"}}><span class="span-offer-currency">{{quoteCurrency}}</span></td>
+                <td><input type="text" class="input number" step="any" min="0" max={{maxNewOfferTotal}} {{b "value: offerTotal, input: calcNewOfferAmount"}}><span class="span-offer-currency">{{quoteCurrency}}</span></td>
               </tr>
             </tbody>
           </table>
