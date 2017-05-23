@@ -175,9 +175,6 @@ Template.neworder.viewmodel({
     }
     return 0;
   },
-  sup(event) {
-  },
-
   hasAllowance(currency) {
     try {
       const token = Tokens.findOne(currency);

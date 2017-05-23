@@ -7,14 +7,14 @@
       <section class="order-section col-md-6 order-section-content">
         {{> history historyType='depositHistory'}}
       </section>
-    </div>   
+    </div>
   </div>
   <div class="row">
     <div class="order-center">
-      <section class="order-section col-md-6 deposit-section">
+      <section class="order-section col-md-6 deposit-section input-section">
         {{> UI.dynamic template=tokenTemplate data=depositData}}
       </section>
-      <section class="order-section col-md-6 deposit-section">
+      <section class="order-section col-md-6 deposit-section input-section">
         {{> UI.dynamic template=tokenTemplate data=withdrawData}}
       </section>
     </div>
