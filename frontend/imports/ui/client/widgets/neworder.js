@@ -138,13 +138,21 @@ Template.neworder.viewmodel({
     return maxTotal;
   },
   hasBalance(currency) {
+    const token = Tokens.findOne(currency);
+    let balance = new BigNumber(0);
     try {
-      const token = Tokens.findOne(currency);
-      const balance = new BigNumber(token.balance);
-      return token && balance.gte(web3Obj.toWei(new BigNumber(this.type() === 'sell' ? this.amount() : this.total())));
+      balance = new BigNumber(token.balance);
+      const hasPositiveBalance = balance.gt(0) && balance.gte(web3Obj.toWei(new BigNumber(this.type() === 'sell' ? this.amount() : this.total())));
+      const hasZeroBalanceWithNothingAsPrice = balance.equals(0) && !this.price();
+      return hasPositiveBalance || hasZeroBalanceWithNothingAsPrice;
     } catch (e) {
-      // since we have placeholders the value will be empty string so we have to true its a valid data
-      return this.amount() === '' || this.total() === '';
+      /**
+       * This error will happen if we try to create BigNumber from non-number value.
+       *
+       * We would like to consider the user has balance if he enteres value in the price field
+       * because we can allow him just use the form for calculation.
+       */
+      return (balance.equals(0) && !this.price()) || (balance.gt(0) && !this.price());
     }
   },
   quoteAvailable() {

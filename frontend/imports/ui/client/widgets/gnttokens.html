@@ -5,46 +5,46 @@
       {{> whatisthis section="w-gnt-wrapped-gnt-tokens"}}
     </h2>
     {{#if equals type 'deposit'}}
-        <div class="available">
+      <div class="available">
         <span class="available-label">
           WALLET
         </span>
-          <span class="available-amount">{{{formatBalance GNTBalance 5 '' true}}}</span>
-          <span class="available-currency">GNT</span>
-        </div>
+        <span class="available-amount">{{{formatBalance GNTBalance 5 '' true}}}</span>
+        <span class="available-currency">GNT</span>
+      </div>
     {{else}}
-        <div class="available">
+      <div class="available">
         <span class="available-label">
           WRAPPED
         </span>
-          {{#let token = (findToken 'W-GNT')}}
-            <span class="available-amount">{{{formatBalance token.balance 5 '' true}}}</span>
-            <span class="available-currency">W-GNT</span>
-          {{/let}}
-        </div>
+        {{#let token = (findToken 'W-GNT')}}
+          <span class="available-amount">{{{formatBalance token.balance 5 '' true}}}</span>
+          <span class="available-currency">W-GNT</span>
+        {{/let}}
+      </div>
     {{/if}}
-    <div>
+    <div class="input-btn-box">
       <table>
         <tbody>
-          <tr class="row-input-line">
-            <th class="dex-label-cell">
-              AMOUNT
-            </th>
-            <td class="dex-input-cell">
-              <div {{b "focusin: onFocus, focusout: onBlur"}}>
-                {{#if shouldShowMaxBtn}}
-                  <button type="button" class="btn btn-sm dex-btn-max"
-                    {{b "click: fillAmount"}}>{{title}} MAX
-                  </button>
-                {{/if}}
-                <input type="number" class="input" step="any" min="" placeholder="0"
-                  {{b "value: amount, attr: { max: maxAmount }"}}>
-              </div>
-            </td>
-            <td class="dex-currency-cell">
-              <span>{{#if equals type 'deposit'}} GNT {{else}} W-GNT {{/if}}</span>
-            </td>
-          </tr>
+        <tr class="row-input-line">
+          <th class="dex-label-cell">
+            AMOUNT
+          </th>
+          <td class="dex-input-cell">
+            <div {{b "focusin: onFocus, focusout: onBlur"}}>
+              {{#if shouldShowMaxBtn}}
+                <button type="button" class="btn btn-sm dex-btn-max"
+                  {{b "click: fillAmount"}}>{{title}} MAX
+                </button>
+              {{/if}}
+              <input type="number" class="input" step="any" min="" placeholder="0"
+                {{b "value: amount, attr: { max: maxAmount }"}}>
+            </div>
+          </td>
+          <td class="dex-currency-cell">
+            <span>{{#if equals type 'deposit'}} GNT {{else}} W-GNT {{/if}}</span>
+          </td>
+        </tr>
         </tbody>
       </table>
       <table class="footer">
@@ -64,16 +64,16 @@
       </table>
       {{> progressblock progress=progress progressMessage=progressMessage errorMessage=errorMessage}}
       {{#if equals type 'deposit'}}
-      {{#unless progress}}
-      {{#if brokerBalance }}
-        <div class="messageDiv alert alert-warning">
+        {{#unless progress}}
+          {{#if brokerBalance }}
+            <div class="messageDiv alert alert-warning">
           <span id='brokerMessage'>
             You have an outstanding balance of {{formatBalance brokerBalance}} GNT in your broker.
             <a id="clearBroker" href="#" {{b "click: clearBroker"}}>Click here to convert it to W-GNT.</a>
           </span>
-        </div>
-      {{/if}}
-      {{/unless}}
+            </div>
+          {{/if}}
+        {{/unless}}
       {{/if}}
     </div>
   </form>

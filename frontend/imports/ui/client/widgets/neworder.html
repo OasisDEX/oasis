@@ -50,7 +50,7 @@
           <td class="dex-input-cell">
             <div {{b "focusin: onFocus, focusout: onBlur"}}>
               {{#if and canAutofill shouldShowMaxBtn  }}
-                <button type="button" class="btn btn-sm btn-default dex-btn-max btn-submit-order-{{type}} {{type}}"
+                <button type="button" class="btn btn-sm btn-default dex-btn-max {{type}}"
                   {{b "click: autofill"}}>{{title}} MAX
                 </button>
               {{/if}}
@@ -97,7 +97,7 @@
           </td>
           <td>
             <div class="row-height">
-              <button class="btn btn-default dex-btn-default btn-submit-order-{{type}} {{type}} btn-placement-right" data-toggle="modal"
+              <button class="btn btn-default dex-btn-default {{type}} btn-placement-right" data-toggle="modal"
                       data-target="#newOrderModal" {{b "enable: canSubmit, click: showConfirmation"}}>{{title}}</button>
             </div>
           </td>

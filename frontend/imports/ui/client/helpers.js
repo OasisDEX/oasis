@@ -11,7 +11,7 @@ import { moment } from 'meteor/momentjs:moment';
 import Tokens from '/imports/api/tokens';
 import { Offers, Trades, IndividualTrades, Status } from '/imports/api/offers';
 
-import { txHref, thousandSeparator, formatNumber } from '/imports/utils/functions';
+import { txHref, thousandSeparator, formatNumber, fractionSeparator } from '/imports/utils/functions';
 
 Template.registerHelper('contractExists', () => {
   const network = Session.get('network');
@@ -357,7 +357,7 @@ Template.registerHelper('formatBalance', (wei, decimals, currency, sle) => {
   exactValue = thousandSeparator(exactValue);
 
   if (currency === 'W-GNT' || currency === 'GNT' || currency === 'SNGLS') {
-    finalValue = finalValue.substr(0, finalValue.indexOf('.'));
+    finalValue = finalValue.substr(0, finalValue.indexOf(fractionSeparator()));
   }
 
   if (showLabelExact) {
