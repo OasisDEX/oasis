@@ -110,15 +110,19 @@ export function txHref(tx) {
   return txLink;
 }
 
+export function fractionSeparator() {
+  const formatter = new Intl.NumberFormat(navigator.language);
+
+  // Usage of this line is define the separator of fractions based on users locale
+  return formatter.format(0.123).charAt(1);
+}
+
 export function thousandSeparator(number) {
   const parts = number.toString().split('.');
   const formatter = new Intl.NumberFormat(navigator.language);
 
-  // Usage of this line is define the separator of fractions based on users locale
-  const localeSeparator = formatter.format(0.123).charAt(1);
-
   const whole = formatter.format(parts[0]);
-  const fraction = (parts[1] ? `${localeSeparator}${parts[1]}` : '');
+  const fraction = (parts[1] ? `${fractionSeparator()}${parts[1]}` : '');
 
   return whole + fraction;
 }

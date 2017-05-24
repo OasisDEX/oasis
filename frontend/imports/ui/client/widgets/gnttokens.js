@@ -22,6 +22,7 @@ Template.gnttokens.viewmodel({
   },
   amount: '',
   lastError: '',
+  shouldShowMaxBtn: false,
   fillAmount() {
     let amount = '0';
     try {
@@ -34,6 +35,12 @@ Template.gnttokens.viewmodel({
       amount = '0';
     }
     this.amount(amount);
+  },
+  onFocus() {
+    this.shouldShowMaxBtn(true);
+  },
+  onBlur() {
+    this.shouldShowMaxBtn(false);
   },
   broker() {
     return Session.get('GNTBroker');

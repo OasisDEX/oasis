@@ -21,6 +21,13 @@ Template.sendtokens.viewmodel({
   lastError: '',
   amount: '',
   validAmount: true,
+  shouldShowMaxBtn: false,
+  onFocus() {
+    this.shouldShowMaxBtn(true);
+  },
+  onBlur() {
+    this.shouldShowMaxBtn(false);
+  },
   precision() {
     return Dapple.getTokenSpecs(this.currency()).precision;
   },

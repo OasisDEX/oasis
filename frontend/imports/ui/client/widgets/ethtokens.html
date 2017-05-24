@@ -4,61 +4,63 @@
       {{title}}
       {{> whatisthis section="w-eth-wrapped-ether-tokens"}}
     </h2>
-    <div>
+    {{#if equals type 'deposit'}}
+      <div class="available">
+        <span class="available-label">
+          WALLET
+        </span>
+        <span class="available-amount">{{{formatBalance ETHBalance 5 '' true}}}</span>
+        <span class="available-currency">ETH</span>
+      </div>
+    {{else}}
+      <div class="available">
+        <span class="available-label">
+          WRAPPED
+        </span>
+        {{#let token = (findToken 'W-ETH')}}
+          <span class="available-amount">{{{formatBalance token.balance 5 '' true}}}</span>
+          <span class="available-currency">W-ETH</span>
+        {{/let}}
+      </div>
+    {{/if}}
+    <div class="input-btn-box">
       <table>
         <tbody>
-          {{#if equals type 'deposit'}}
-          <tr class="row-data-line">
-            <th>
-              WALLET
-            </th>
-            <td class="token">
-              <span class="fill-amount" {{b "click: fillAmount"}}>{{{formatBalance ETHBalance 5 '' true}}}</span>
-              <span class="span-buy-sell-currency">ETH</span>
-            </td>
-          </tr>
-          {{else}}
-          <tr class="row-data-line">
-            <th>
-              WRAPPED
-            </th>
-            <td class="token">
-              {{#let token=(findToken 'W-ETH')}}
-              <span class="fill-amount" {{b "click: fillAmount"}}>{{{formatBalance token.balance 5 '' true}}}</span>
-              <span class="span-buy-sell-currency">W-ETH</span>
-              {{/let}}
-            </td>
-          </tr>
-          {{/if}}
-          <tr class="row-input-line">
-            <th>
-              AMOUNT
-            </th>
-            <td>
-              {{#if equals type 'deposit'}}
-                <input placeholder="0" type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}> <span class="span-deposit-withdraw-currency">ETH</span>
-              {{else}}
-                <input placeholder="0" type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}> <span class="span-deposit-withdraw-currency">W-ETH</span>
+        <tr class="row-input-line">
+          <th class="dex-label-cell">
+            AMOUNT
+          </th>
+          <td class="dex-input-cell">
+            <div {{b "focusin: onFocus, focusout: onBlur"}}>
+              {{#if shouldShowMaxBtn}}
+                <button type="button" class="btn btn-sm dex-btn-max"
+                  {{b "click: fillAmount"}}>{{title}} MAX
+                </button>
               {{/if}}
-            </td>
-          </tr>
+              <input type="number" class="input" step="any" min="" placeholder="0"
+                {{b "value: amount, attr: { max: maxAmount }"}}>
+            </div>
+          </td>
+          <td class="dex-currency-cell">
+            <span>{{#if equals type 'deposit'}} ETH {{else}} W-ETH {{/if}}</span>
+          </td>
+        </tr>
         </tbody>
-        <tfoot>
+      </table>
+      <table class="footer">
+        <tr class="first-row">
+          <td>
+            <button class="btn dex-btn-default"
+              {{b "enable: canDeposit, click: deposit"}}>{{title}}</button>
+          </td>
+        </tr>
+        {{#unless equals lastError ''}}
           <tr>
-            <th>
-            </th>
-            <td>
-              <button class="btn btn-default" {{b "enable: canDeposit, click: deposit"}}>{{title}}</button>
+            <td colspan="2">
+              {{lastError}}
             </td>
           </tr>
-          {{#unless equals lastError ''}}
-            <tr>
-              <td colspan="2">
-                {{lastError}}
-              </td>
-            </tr>
-          {{/unless}}
-        </tfoot>
+        {{/unless}}
       </table>
       {{> progressblock progress=progress progressMessage=progressMessage errorMessage=errorMessage}}
     </div>

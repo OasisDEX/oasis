@@ -8,82 +8,91 @@
       </div>
       <div id="container-transfer" class="col-xs-6">
         <span class="select-market-container">
-            <select class="select-market-graph" {{b "options: currencies, value: currency, change: resetAmount"}}></select>
+            <select class="select-market-graph" {{b
+              "options: currencies, value: currency, change: resetAmount"}}></select>
             <span class="glyphicon glyphicon-chevron-down select-glyph" aria-hidden="true"></span>
         </span>
       </div>
     </div>
+    <div class="available">
+      <span class="available-label">
+        WALLET
+      </span>
+      <span class="available-amount">{{{formatNumber maxAmount 5 '' true}}}</span>
+      <span class="available-currency">{{currency}}</span>
+    </div>
     <div>
       <table>
         <tbody>
-          <tr class="row-data-line">
-            <th>
-              WALLET
-            </th>
-            <td class="token">
-              <span class="fill-amount" {{b "click: fillAmount"}}>{{{formatNumber maxAmount 5 true}}}</span>
-              <span class="span-transfer-currency">{{currency}}</span>
-            </td>
-          </tr>
-          <tr class="row-input-line">
-            <th>
-              RECIPIENT
-            </th>
-            <td>
-              <input type="text" class="input recipient" minlength="40" maxlength="42" placeholder="0x" pattern="(0x)?[0-9a-fA-F]{40}" {{b "value: recipient"}}>
-            </td>
-          </tr>
-          <tr class="row-input-line">
-            <th>
-              AMOUNT
-            </th>
-            <td>
-              <input type="number" class="input amount" step="any" min="0" placeholder="0" {{b "value: amount, attr: { max: maxAmount }"}}><span class="span-transfer-currency">{{currency}}</span>
-            </td>
-          </tr>
+        <tr class="row-input-line">
+          <th class="dex-label-cell">
+            <span>RECIPIENT</span>
+          </th>
+          <td class="dex-input-cell" colspan="2">
+            <input type="text" class="input recipient" minlength="40" maxlength="42" placeholder="0x"
+                   pattern="(0x)?[0-9a-fA-F]{40}" {{b "value: recipient"}}>
+          </td>
+        </tr>
+        <tr class="row-input-line">
+          <th class="dex-label-cell">
+            <span>AMOUNT</span>
+          </th>
+          <td class="dex-input-cell">
+            <div {{b "focusin: onFocus, focusout: onBlur"}}>
+              {{#if shouldShowMaxBtn}}
+                <button type="button" class="btn btn-sm dex-btn-default dex-btn-max"
+                  {{b "click: fillAmount"}}>TRANSFER MAX
+                </button>
+              {{/if}}
+            <input type="number" class="input" step="any" min="0" placeholder="0"
+              {{b "value: amount, attr: { max: maxAmount }"}}>
+            </div>
+          </td>
+          <td class="dex-currency-cell">
+            <span>{{currency}}</span>
+          </td>
+        </tr>
         </tbody>
-        <tfoot>
+      </table>
+      <table class="footer">
+        <tr class="first-row">
+          <td>
+            <button class="btn dex-btn-default btn-transfer" {{b "enable: canTransfer, click: transfer"}}>TRANSFER</button>
+          </td>
+        </tr>
+        {{#unless validAmount}}
           <tr>
-            <th>
-            </th>
-            <td class="transfer-button">
-              <button class="btn btn-default btn-transfer" {{b "enable: canTransfer, click: transfer"}}>TRANSFER</button>
+            <td colspan="2">
+              Amount is invalid because {{currency}} has no decimals.
             </td>
           </tr>
-          {{#unless validAmount}}
-            <tr>
-              <td colspan="2">
-                Amount is invalid because {{currency}} has no decimals.
-              </td>
-            </tr>
-          {{/unless}}
-          {{#unless equals lastError ''}}
-            <tr>
-              <td colspan="2">
-                {{lastError}}
-              </td>
-            </tr>
-          {{/unless}}
-        </tfoot>
+        {{/unless}}
+        {{#unless equals lastError ''}}
+          <tr>
+            <td colspan="2">
+              {{lastError}}
+            </td>
+          </tr>
+        {{/unless}}
       </table>
       {{#if pending}}
         <table>
           <tbody>
+          <tr>
+            <th colspan="2" style="text-align: center">
+              Pending
+            </th>
+          </tr>
+          {{#each pending}}
             <tr>
-              <th colspan="2" style="text-align: center">
-                Pending
+              <th class="nostretch">
+                {{this.amount}} {{this.token}}
               </th>
+              <td>
+                {{this.recipient}}
+              </td>
             </tr>
-            {{#each pending}}
-              <tr>
-                <th class="nostretch">
-                  {{this.amount}} {{this.token}}
-                </th>
-                <td>
-                  {{this.recipient}}
-                </td>
-              </tr>
-            {{/each}}
+          {{/each}}
           </tbody>
         </table>
       {{/if}}
