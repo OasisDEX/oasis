@@ -23,6 +23,7 @@ Template.ethtokens.viewmodel({
   },
   amount: '',
   lastError: '',
+  shouldShowMaxBtn: false,
   fillAmount() {
     let amount = '0';
     try {
@@ -35,6 +36,12 @@ Template.ethtokens.viewmodel({
       amount = '0';
     }
     this.amount(amount);
+  },
+  onFocus() {
+    this.shouldShowMaxBtn(true);
+  },
+  onBlur() {
+    this.shouldShowMaxBtn(false);
   },
   progress() {
     return Session.get(`ETH${uppercaseFirstLetter(this.type())}Progress`);

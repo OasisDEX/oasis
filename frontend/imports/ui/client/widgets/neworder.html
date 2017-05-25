@@ -1,5 +1,5 @@
 <template name="neworder">
-  <div class="buy-sell-section">
+  <div class="buy-sell-section input-section">
     <form id="neworder">
       <h2>
         {{title}} {{baseCurrency}}
@@ -27,8 +27,8 @@
             <input type="number" class="input" step="any" min="" placeholder="0"
               {{b "value: price, input: calcTotal, enable: canChangePrice"}}>
           </td>
-          <td>
-            <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
+          <td class="dex-currency-cell">
+            <span>{{quoteCurrency}}</span>
           </td>
         </tr>
         <tr class="row-input-line">
@@ -39,34 +39,34 @@
             <input type="number" class="input" step="any" min="" placeholder="0"
               {{b "value: amount, input: calcTotal, enable: canChangeAmountAndTotal, attr: { max: maxAmount }"}}>
           </td>
-          <td>
-            <span class="span-buy-sell-currency">{{baseCurrency}}</span>
+          <td class="dex-currency-cell">
+            <span>{{baseCurrency}}</span>
           </td>
         </tr>
         <tr class="row-input-line">
           <th class="dex-label-cell">
             <span>TOTAL</span>
           </th>
-          <td class="dex-input-cell total-cell">
-            <div {{b "focusin: onFocus(type), focusout: onBlur"}}>
+          <td class="dex-input-cell">
+            <div {{b "focusin: onFocus, focusout: onBlur"}}>
               {{#if and canAutofill shouldShowMaxBtn  }}
-                <button type="button" class="btn btn-sm btn-default btn-submit-order-{{type}} {{type}}" {{b
-                  "click: autofill"}}>{{title}} MAX
+                <button type="button" class="btn btn-sm btn-default dex-btn-max {{type}}"
+                  {{b "click: autofill"}}>{{title}} MAX
                 </button>
               {{/if}}
               <input type="number" class="input" step="any" min="" placeholder="0"
                 {{b "value: total, input: calcAmount, enable: canChangeAmountAndTotal, attr: { max: maxTo tal }"}}>
             </div>
           </td>
-          <td>
-            <span class="span-buy-sell-currency">{{quoteCurrency}}</span>
+          <td class="dex-currency-cell">
+            <span>{{quoteCurrency}}</span>
           </td>
         </tr>
         </tbody>
       </table>
       <table class="footer">
-        <tr>
-          <td class="first-row">
+        <tr class="first-row">
+          <td>
             {{#if isMarketOpen}}
               {{#unless canChangeAmountAndTotal}}
                 <span class="help-block">Enter a price to unlock amount and total.</span>
@@ -95,9 +95,9 @@
               <span class="help-block">The market has closed.</span>
             {{/unless}}
           </td>
-          <td class="first-row">
+          <td>
             <div class="row-height">
-              <button class="btn btn-default btn-submit-order-{{type}} {{type}} btn-placement-right" data-toggle="modal"
+              <button class="btn btn-default dex-btn-default {{type}} btn-placement-right" data-toggle="modal"
                       data-target="#newOrderModal" {{b "enable: canSubmit, click: showConfirmation"}}>{{title}}</button>
             </div>
           </td>
