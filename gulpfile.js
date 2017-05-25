@@ -30,7 +30,7 @@ gulp.task('deploy-gh-pages', function () {
 gulp.task('deploy-surge', [], function () {
   return surge({
     project: './dist',          // Path to your static build directory
-    domain: 'oasisdex.surge.sh'  // Your domain or Surge subdomain
+    domain: 'https://this-is-not-oasis.surge.sh'  // Your domain or Surge subdomain
   })
 })
 

@@ -1,16 +1,16 @@
 {
   "market": {
     "kovan": {
-      "address": "0x45ab8d410049116c7a01f6edfc08d564475c08ed",
-      "blockNumber": 685569
+      "address": "0x912e2bfcf63cc5166c57bb4967ed12e636916e97",
+      "blockNumber": 1688669
     },
     "ropsten": {
       "address": "0xb996fff774d37b900872609bf8b11e31f51bd19e",
       "blockNumber": 459835
     },
     "live": {
-      "address": "0x83ce340889c15a3b4d38cfcd1fc93e5d8497691f",
-      "blockNumber": 3435757
+      "address": "0x2e564bd15eedc045cd17a2766278ae7ce7d4518e",
+      "blockNumber": 3766091
     }
   },
   "tokens": {
