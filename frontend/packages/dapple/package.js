@@ -16,6 +16,9 @@ Package.onUse((api) => {
   api.addFiles(['contracts-abi/maker-otc.js'], 'client');
   api.addFiles(['contracts-abi/ds-eth-token.js'], 'client');
   api.addFiles(['contracts-abi/token-wrapper.js'], 'client');
+  api.addFiles(['contracts-abi/simple-market.js'], 'client');
+  api.addFiles(['contracts-abi/expiring-market.js'], 'client');
+  api.addFiles(['contracts-abi/matching-market.js'], 'client');
   api.addFiles(['package-post-init.js'], 'client');
 
   api.export('web3Obj', 'client');

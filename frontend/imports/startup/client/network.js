@@ -35,10 +35,53 @@ function checkAccounts() {
   });
 }
 
+function checkIfBuyEnabled(marketType) {
+  if (marketType !== 'MatchingMarket') {
+    Session.set('isBuyEnabled', true);
+  } else {
+    Dapple['maker-otc'].objects.otc.LogBuyEnabled({}, {
+      fromBlock: Dapple['maker-otc'].environments[Dapple.env].otc.blockNumber,
+      toBlock: 'latest',
+    }).get((error, result) => {
+      if (!error) {
+        const latestSetup = result.pop();
+        let isBuyEnabled = true;
+        if (latestSetup) {
+          isBuyEnabled = latestSetup.args;
+        }
+        Session.set('isBuyEnabled', isBuyEnabled);
+      }
+    });
+  }
+}
+
+function checkIfOrderMatchingEnabled(marketType) {
+  if (marketType !== 'MatchingMarket') {
+    Session.set('isOrderMatchingEnabled', false);
+  } else {
+    Dapple['maker-otc'].objects.otc.LogMatchingEnabled({}, {
+      fromBlock: Dapple['maker-otc'].environments[Dapple.env].otc.blockNumber,
+      toBlock: 'latest',
+    }).get((error, result) => {
+      if (!error) {
+        const latestSetup = result.pop();
+        let isOrderMatchingEnabled = false;
+        if (latestSetup) {
+          isOrderMatchingEnabled = latestSetup.args;
+        }
+        Session.set('isOrderMatchingEnabled', isOrderMatchingEnabled);
+      }
+    });
+  }
+}
+
 // Initialize everything on new network
 function initNetwork(newNetwork) {
   Dapple.init(newNetwork);
+  const market = Dapple['maker-otc'].environments.kovan.otc;
   checkAccounts();
+  checkIfOrderMatchingEnabled(market.type);
+  checkIfBuyEnabled(market.type);
   Session.set('network', newNetwork);
   Session.set('isConnected', true);
   Session.set('latestBlock', 0);
@@ -184,7 +227,7 @@ Meteor.startup(() => {
               // We use `true`, so it stops all filters, but not the web3Obj.eth.syncing polling
               web3Obj.reset(true);
               checkNetwork();
-            // show sync info
+              // show sync info
             } else if (sync) {
               Session.set('startingBlock', sync.startingBlock);
               Session.set('currentBlock', sync.currentBlock);
@@ -201,7 +244,7 @@ Meteor.startup(() => {
         });
         clearInterval(syncingInterval);
       }
-    }, 350
+    }, 350,
   );
 
   // Session.set('web3Interval', web3Interval);
