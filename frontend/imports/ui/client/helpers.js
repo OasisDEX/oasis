@@ -422,3 +422,5 @@ Template.registerHelper('loadingIcon', (size) => {
 });
 
 Template.registerHelper('volumeSelector', () => Session.get('volumeSelector'));
+
+Template.registerHelper('authorized', () => Session.get('authorized'));

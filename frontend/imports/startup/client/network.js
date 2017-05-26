@@ -31,6 +31,7 @@ function checkAccounts() {
       localStorage.setItem('address', web3Obj.eth.defaultAccount);
       Session.set('address', web3Obj.eth.defaultAccount);
       Session.set('accounts', accounts);
+      Dapple.checkAuthority(web3Obj.eth.defaultAccount);
     }
   });
 }

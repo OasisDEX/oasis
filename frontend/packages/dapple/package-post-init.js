@@ -1,4 +1,7 @@
 const config = require('./config.json');
+const dsroles = require('./contracts-abi/dsroles.json');
+window.dsroles = dsroles;
+
 const ENVs = {
     "test":"kovan",
     "main":"live",
@@ -103,5 +106,36 @@ Dapple.getToken = (symbol, callback) => {
     });
   } catch (e) {
     callback(e, null);
+  }
+};
+
+Dapple.checkAuthority = (account) => {
+  Dapple['maker-otc'].objects.otc.authority((error, authority) => {
+    if (!error) {
+      web3Obj.eth.contract(dsroles.abi).at(authority, (error, res) => {
+        if (!error) {
+          Session.set('authority', authority);
+          Dapple.hasUserRole(res, account);
+        } else {
+          console.log(error);
+        }
+      });
+    } else {
+      Session.set('authority', false);
+    }
+  });
+};
+
+Dapple.hasUserRole = (auth, account) => {
+  const authority = Session.get('authority');
+  if (authority !== '0x0000000000000000000000000000000000000000') {
+
+    auth.hasUserRole(account, 1, (error, res) => {
+      if (!error) {
+        Session.set('authorized', res);
+      } else {
+        console.log(error);
+      }
+    });
   }
 };

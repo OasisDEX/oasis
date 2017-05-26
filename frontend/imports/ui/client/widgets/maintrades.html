@@ -10,56 +10,64 @@
       {{> balance currency=baseCurrency currencyType='base-currency' }}
     </section>
   </div>-->
-  <div class="row">
-    <div class="order-center">
-      <section class="order-section col-md-6 markets">
-        {{> markets title='MARKETS'}}
-      </section>
+  {{#if authorized}}
+    <div class="row">
+      <div class="order-center">
+        <section class="order-section col-md-6 markets">
+          {{> markets title='MARKETS'}}
+        </section>
+      </div>
+      <div class="order-center">
+        <section class="order-section col-md-6 chart">
+          {{> chart title='CHART'}}
+        </section>
+      </div>
     </div>
-    <div class="order-center">
-      <section class="order-section col-md-6 chart">
-        {{> chart title='CHART'}}
-      </section>
+    {{#if loadedCurrencies}}
+    <div class="row">
+      <div class="order-center">
+        <section class="order-section col-md-6">
+          {{> neworder title='BUY' orderType='buy'}}
+        </section>
+        <section class="order-section col-md-6">
+          {{> neworder title='SELL' orderType='sell'}}
+        </section>
+      </div>
     </div>
-  </div>
-  {{#if loadedCurrencies}}
-  <div class="row">
-    <div class="order-center">
-      <section class="order-section col-md-6">
-        {{> neworder title='BUY' orderType='buy'}}
-      </section>
-      <section class="order-section col-md-6">
-        {{> neworder title='SELL' orderType='sell'}}
-      </section>
+    <div class="row">
+      <div class="order-center">
+        <section class="order-section col-md-6">
+          {{> orderbook title='BUY ORDERS' subtitle=(concat '(click on an order listing to sell ' baseCurrency ')') priceClass='bid' priceLabel='BID PRICE' orders=(findOffers 'bid') showType=false}}
+        </section>
+        <section class="order-section col-md-6">
+          {{> orderbook title='SELL ORDERS' subtitle=(concat '(click on an order listing to buy ' baseCurrency ')') priceClass='ask' priceLabel='ASK PRICE' orders=(findOffers 'ask')}}
+        </section>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="order-center">
-      <section class="order-section col-md-6">
-        {{> orderbook title='BUY ORDERS' subtitle=(concat '(click on an order listing to sell ' baseCurrency ')') priceClass='bid' priceLabel='BID PRICE' orders=(findOffers 'bid') showType=false}}
-      </section>
-      <section class="order-section col-md-6">
-        {{> orderbook title='SELL ORDERS' subtitle=(concat '(click on an order listing to buy ' baseCurrency ')') priceClass='ask' priceLabel='ASK PRICE' orders=(findOffers 'ask')}}
-      </section>
+    <div class="row">
+      <div class="order-center">
+        <section class="order-section col-md-6">
+          {{> mytrades}}
+        </section>
+        <section class="order-section col-md-6">
+          {{> lasttrades}}
+        </section>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="order-center">
-      <section class="order-section col-md-6">
-        {{> mytrades}}
-      </section>
-      <section class="order-section col-md-6">
-        {{> lasttrades}}
-      </section>
+    {{> offermodal offer=(findOffer selectedOffer)}}
+    {{> cancelmodal offer=(findOffer selectedOffer)}}
+    {{else}}
+    <div class="row">
+      <div class="col-md-12 text-center">
+        {{{loadingIcon 'large'}}}
+      </div>
     </div>
-  </div>
-  {{> offermodal offer=(findOffer selectedOffer)}}
-  {{> cancelmodal offer=(findOffer selectedOffer)}}
+    {{/if}}
   {{else}}
-  <div class="row">
-    <div class="col-md-12 text-center">
-      {{{loadingIcon 'large'}}}
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <h1>You are not authorized to trade in this market</h1>
+      </div>
     </div>
-  </div>
   {{/if}}
 </template>
