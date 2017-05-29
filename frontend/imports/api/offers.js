@@ -493,7 +493,8 @@ Offers.newOfferGasEstimate = async (sellHowMuch, sellWhichToken, buyHowMuch, buy
   const data = Dapple['maker-otc'].objects.otc.offer.getData(sellHowMuchAbsolute, sellWhichTokenAddress,
     buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId);
 
-  return new Promise((resolve, reject) => {
+  const latestBlockPromise = Offers.getBlock('latest');
+  const estimateGasPromise = new Promise((resolve, reject) => {
     web3Obj.eth.estimateGas({ to: Dapple['maker-otc'].environments[Dapple.env].otc.value, data }, (error, result) => {
       if (!error) {
         resolve(result);
@@ -501,6 +502,10 @@ Offers.newOfferGasEstimate = async (sellHowMuch, sellWhichToken, buyHowMuch, buy
         reject(error);
       }
     });
+  });
+
+  return Promise.all([estimateGasPromise, latestBlockPromise]).then((results) => {
+    return [results[0], results[1].gasLimit];
   });
 };
 
@@ -512,7 +517,7 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
 
       Dapple['maker-otc'].objects.otc.offer(sellHowMuchAbsolute, sellWhichTokenAddress,
         buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId,
-        { gas: gasEstimate + 500000 }, (error, tx) => {
+        {gas: Math.min(gasEstimate[0] + 500000, gasEstimate[1])}, (error, tx) => {
           callback(error, tx);
           if (!error) {
             Offers.updateOffer(tx, sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress,
