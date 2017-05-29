@@ -8,7 +8,7 @@
             <h4 class="modal-title">BUY OFFER</h4>
           {{else}}
             <h4 class="modal-title">SELL OFFER</h4>
-          {{/if}}          
+          {{/if}}
         </div>
         <div class="modal-body">
           {{#if offer}}
@@ -116,8 +116,8 @@
         <div class="modal-footer">
           {{#if or (and hasBalance hasAllowance) (not hasBalance)}}
             {{#if offer}}
-              <button type="button" class="btn btn-default btn-submit-order btn-submit-order-{{offerType}} {{offerType}} btn-placement-right" data-dismiss="modal" {{b "enable: canBuy, click: buy"}}>
-                {{#if equals offer.type 'bid'}}SELL{{else}}BUY{{/if}} {{baseCurrency}}
+              <button type="button" class="btn btn-submit-order dex-btn-default {{offerType}} btn-placement-right" data-dismiss="modal" {{b "enable: canBuy, click: buy"}}>
+                {{#if equals offer.type 'bid'}}SELL{{else}}BUY ASD{{/if}} {{baseCurrency}}
               </button>
             {{/if}}
           {{else}}
@@ -127,7 +127,7 @@
               <button type="button" data-refer="existingOrder" data-link={{quoteCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order-allowance {{offerType}} btn-placement-right" data-dismiss="modal">Change Allowance</button>
             {{/if}}
           {{/if}}
-          <button type="button" class="btn btn-default btn-placement-left btn-submit-order-cancel" data-dismiss="modal">CANCEL</button>          
+          <button type="button" class="btn btn-default btn-placement-left btn-submit-order-cancel" data-dismiss="modal">CANCEL</button>
         </div>
       </div>
     </div>
@@ -215,7 +215,7 @@
               <button type="button" data-refer="newOrder" data-link={{baseCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order-allowance btn-placement-right" data-dismiss="modal">Change Allowance</button>
             {{/if}}
           {{else}}
-            <button type="button" class="btn btn-default btn-submit-order-{{offerType}} {{offerType}} btn-placement-right" data-dismiss="modal" {{b "enable: canSubmit, click: confirmOffer"}}>{{offerType}} {{baseCurrency}}</button>
+            <button type="button" class="btn dex-btn-default {{offerType}} btn-placement-right" data-dismiss="modal" {{b "enable: canSubmit, click: confirmOffer"}}>{{offerType}} {{baseCurrency}}</button>
           {{/unless}}
           <button type="button" class="btn btn-default btn-placement-left btn-submit-order-cancel" data-dismiss="modal">Cancel</button>
         </div>
