@@ -466,15 +466,18 @@ Offers.offerContractParameters = (sellHowMuch, sellWhichToken, buyHowMuch, buyWh
   // the ID of the offer that is the smallest in the set of offers containing the offers that are higher,
   // than the offer to be created. If there are multiple offers that satisfy the previous requirement
   // than the one with the highest ID will be sent to the contract.
-  const options = { sort: { bid_price_sort: -1, buyHowMuch_filter: -1, _id: 1 } };
-  const higherOrdersSorted = Offers.find({ buyWhichToken, sellWhichToken }, options)
+  const higherOrdersSorted = Offers.find({ buyWhichToken, sellWhichToken })
     .fetch()
-    .filter((offer) => (offer._id.indexOf('0x') !== 0));
-  // .filter((offer) => {
-  //     const offerPrice = new BigNumber(offer.sellHowMuch).div(new BigNumber(offer.buyHowMuch));
-  //     const specifiedPrice = new BigNumber(sellHowMuch).div(new BigNumber(buyHowMuch));
-  //     return offerPrice > specifiedPrice;
-  // });
+    .filter((offer) => (offer._id.indexOf('0x') !== 0))
+    .filter((offer) => {
+      const offerPrice = new BigNumber(offer.sellHowMuch).div(new BigNumber(offer.buyHowMuch));
+      const specifiedPrice = new BigNumber(sellHowMuch).div(new BigNumber(buyHowMuch));
+      return offerPrice > specifiedPrice;
+    })
+    .sort((offer1, offer2) => {
+      if (offer1.buyHowMuch !== offer2.buyHowMuch) return (offer2.buyHowMuch - offer1.buyHowMuch);
+      return (offer1._id - offer2._id);
+    });
   const userHigherId = ((higherOrdersSorted.length > 0) ? higherOrdersSorted[higherOrdersSorted.length - 1]._id : 0);
 
   console.log(`Found ${higherOrdersSorted.length} higher orders: ${higherOrdersSorted.map((it) => it._id)}`);
