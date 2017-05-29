@@ -37,40 +37,28 @@ function checkAccounts() {
 
 function checkIfBuyEnabled(marketType) {
   if (marketType !== 'MatchingMarket') {
-    Session.set('isBuyEnabled', true);
+    Session.set('isOrderMatchingEnabled', false);
   } else {
-    Dapple['maker-otc'].objects.otc.LogBuyEnabled({}, {
-      fromBlock: Dapple['maker-otc'].environments[Dapple.env].otc.blockNumber,
-      toBlock: 'latest',
-    }).get((error, result) => {
-      if (!error) {
-        const latestSetup = result.pop();
-        let isBuyEnabled = true;
-        if (latestSetup) {
-          isBuyEnabled = latestSetup.args;
-        }
-        Session.set('isBuyEnabled', isBuyEnabled);
-      }
+    const abi = Dapple['maker-otc'].objects.otc.abi;
+    const addr = Dapple['maker-otc'].environments[Dapple.env].otc.value;
+
+    const contract = web3Obj.eth.contract(abi).at(addr);
+    contract.ema((error, result) => {
+      Session.set('isMatchingEnabled', result);
     });
   }
 }
 
 function checkIfOrderMatchingEnabled(marketType) {
   if (marketType !== 'MatchingMarket') {
-    Session.set('isOrderMatchingEnabled', false);
+    Session.set('isBuyEnabled', true);
   } else {
-    Dapple['maker-otc'].objects.otc.LogMatchingEnabled({}, {
-      fromBlock: Dapple['maker-otc'].environments[Dapple.env].otc.blockNumber,
-      toBlock: 'latest',
-    }).get((error, result) => {
-      if (!error) {
-        const latestSetup = result.pop();
-        let isOrderMatchingEnabled = false;
-        if (latestSetup) {
-          isOrderMatchingEnabled = latestSetup.args;
-        }
-        Session.set('isOrderMatchingEnabled', isOrderMatchingEnabled);
-      }
+    const abi = Dapple['maker-otc'].objects.otc.abi;
+    const addr = Dapple['maker-otc'].environments[Dapple.env].otc.value;
+
+    const contract = web3Obj.eth.contract(abi).at(addr);
+    contract.isBuyEnabled((error, result) => {
+      Session.set('isBuyEnabled', result);
     });
   }
 }
