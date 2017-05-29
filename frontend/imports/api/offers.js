@@ -207,7 +207,7 @@ Offers.checkMarketOpen = () => {
 
 Offers.getHistoricalTradesRange = (numberOfPreviousDays) => {
   // after the initial jump we step back 1000 blocks at a time
-    // We send one extra day just to have a buffer and be sure that the starBlock covers a full week of volume data
+  // We send one extra day just to have a buffer and be sure that the starBlock covers a full week of volume data
   const INITIAL_NUMBER_OF_BLOCKS_BACKWARDS = Session.get('AVGBlocksPerDay') * (numberOfPreviousDays + 1 + 1);
 
   return getBlockNumberOfTheMostRecentBlock().then((blockNumberOfTheMostRecentBlock) => {
@@ -250,23 +250,59 @@ Offers.syncOffers = () => {
     }
   });
 
-  // Sync all past offers
-  Dapple['maker-otc'].objects.otc.last_offer_id((error, n) => {
-    if (!error) {
-      const lastOfferId = n.toNumber();
-      console.log('last_offer_id', lastOfferId);
-      if (lastOfferId > 0) {
-        Session.set('loading', true);
-        Session.set('loadingProgress', 0);
-        for (let i = lastOfferId; i >= 1; i--) {
-          Offers.syncOffer(i, lastOfferId);
-        }
-      } else {
-        Session.set('loading', false);
-        Session.set('loadingProgress', 100);
+  function cartesianProduct(arr) {
+    return arr.reduce((a, b) => a.map((x) => b.map((y) => x.concat(y))).reduce((a, b) => a.concat(b), []), [[]]);
+  }
+
+  function flatten(ary) {
+    return ary.reduce((a, b) => {
+      if (Array.isArray(b)) {
+        return a.concat(flatten(b));
       }
+      return a.concat(b);
+    }, []);
+  }
+
+  function syncOfferAndAllHigherOnes(id) {
+    if (id !== 0) {
+      Session.set('loadingCounter', Session.get('loadingCounter') + 1);
+      Offers.syncOffer(id);
+      return Offers.getHigherOfferId(id).then(syncOfferAndAllHigherOnes);
     }
-  });
+    return Promise.resolve(0);
+  }
+
+  // Sync all past offers TODO: check if order matching is enabled and if not apply it.(applied) . Verify and understand the condition
+  const isMatchingEnabled = Session.get('IsMatchingEnabled');
+  if (isMatchingEnabled) {
+    Session.set('loading', true);
+    Session.set('loadingCounter', 0);
+
+    const currencyPairs = cartesianProduct([Dapple.getQuoteTokens(), Dapple.getBaseTokens()]);
+    const promisesLowestOfferId = flatten(currencyPairs.map((pair) => [Offers.getLowestOfferId(pair[0], pair[1]),
+      Offers.getLowestOfferId(pair[1], pair[0])]));
+    const promisesSync = promisesLowestOfferId.map((promise) => promise.then(syncOfferAndAllHigherOnes));
+    Promise.all(promisesSync).then(() => {
+      Session.set('loading', false);
+    });
+  } else {
+    Dapple['maker-otc'].objects.otc.last_offer_id((error, n) => {
+      if (!error) {
+        const lastOfferId = n.toNumber();
+        console.log('last_offer_id', lastOfferId);
+        if (lastOfferId > 0) {
+          Session.set('loading', true);
+          Session.set('loadingProgress', 0);
+          for (let i = lastOfferId; i >= 1; i--) {
+            Offers.syncOffer(i, lastOfferId);
+          }
+        } else {
+          Session.set('loading', false);
+          Session.set('loadingProgress', 100);
+        }
+      }
+    });
+  }
 };
 
 Offers.syncIndividualTrades = () => {
@@ -324,10 +360,38 @@ Offers.getBlock = function getBlock(blockNumber) {
   });
 };
 
+Offers.getLowestOfferId = function getLowestOfferId(sellToken, buyToken) {
+  const sellTokenAddress = Dapple.getTokenAddress(sellToken);
+  const buyTokenAddress = Dapple.getTokenAddress(buyToken);
+
+  return new Promise((resolve, reject) => {
+    Dapple['maker-otc'].objects.otc.getLowestOffer(sellTokenAddress, buyTokenAddress, (error, id) => {
+      if (!error) {
+        resolve(id);
+      } else {
+        reject(error);
+      }
+    });
+  });
+};
+
+Offers.getHigherOfferId = function getHigherOfferId(existingId) {
+  return new Promise((resolve, reject) => {
+    Dapple['maker-otc'].objects.otc.getHigherOfferId(existingId, (error, id) => {
+      if (!error) {
+        resolve(id);
+      } else {
+        reject(error);
+      }
+    });
+  });
+};
+
 /**
  * Syncs up a single offer
  */
 Offers.syncOffer = (id, max = 0) => {
+  const isMatchingEnabled = Session.get('isMatchingEnabled');
   Dapple['maker-otc'].objects.otc.offers(id, (error, data) => {
     if (!error) {
       const idx = id.toString();
@@ -338,17 +402,20 @@ Offers.syncOffer = (id, max = 0) => {
           owner, Status.CONFIRMED);
       } else {
         Offers.remove(idx);
-        if (Session.equals('selectedOffer', idx)) {
+        if (!isMatchingEnabled && Session.equals('selectedOffer', idx)) {
           $('#offerModal').modal('hide');
         }
       }
-      Offers.syncedOffers.push(id);
+      // TODO check when this condition will be executed
+      if (!isMatchingEnabled) {
+        Offers.syncedOffers.push(id);
 
-      if (max > 0 && id > 1) {
-        Session.set('loadingProgress', Math.round(100 * (Offers.syncedOffers.length / max)));
-      } else {
-        Session.set('loading', false);
-        Session.set('loadingProgress', 100);
+        if (max > 0 && id > 1) {
+          Session.set('loadingProgress', Math.round(100 * (Offers.syncedOffers.length / max)));
+        } else {
+          Session.set('loading', false);
+          Session.set('loadingProgress', 100);
+        }
       }
     }
   });
@@ -400,8 +467,10 @@ Offers.offerContractParameters = (sellHowMuch, sellWhichToken, buyHowMuch, buyWh
 };
 
 Offers.newOfferGasEstimate = async (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken) => {
-  const { sellHowMuchAbsolute, sellWhichTokenAddress,
-    buyHowMuchAbsolute, buyWhichTokenAddress } = Offers.offerContractParameters(sellHowMuch, sellWhichToken,
+  const {
+    sellHowMuchAbsolute, sellWhichTokenAddress,
+    buyHowMuchAbsolute, buyWhichTokenAddress,
+  } = Offers.offerContractParameters(sellHowMuch, sellWhichToken,
     buyHowMuch, buyWhichToken);
 
   const data = Dapple['maker-otc'].objects.otc.offer.getData(sellHowMuchAbsolute, sellWhichTokenAddress,
@@ -421,8 +490,10 @@ Offers.newOfferGasEstimate = async (sellHowMuch, sellWhichToken, buyHowMuch, buy
 Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callback) => {
   Offers.newOfferGasEstimate(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken)
     .then((gasEstimate) => {
-      const { sellHowMuchAbsolute, sellWhichTokenAddress,
-        buyHowMuchAbsolute, buyWhichTokenAddress } = Offers.offerContractParameters(sellHowMuch, sellWhichToken,
+      const {
+        sellHowMuchAbsolute, sellWhichTokenAddress,
+        buyHowMuchAbsolute, buyWhichTokenAddress,
+      } = Offers.offerContractParameters(sellHowMuch, sellWhichToken,
         buyHowMuch, buyWhichToken);
 
       Dapple['maker-otc'].objects.otc.offer(sellHowMuchAbsolute, sellWhichTokenAddress,

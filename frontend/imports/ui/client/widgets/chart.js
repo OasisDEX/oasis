@@ -118,13 +118,14 @@ Template.chart.viewmodel({
     });
 
     if (Session.get('priceChart')
-        && !Session.get('loadingTradeHistory')) {
+      && !Session.get('loadingTradeHistory')) {
       const quoteCurrency = Session.get('quoteCurrency');
       const baseCurrency = Session.get('baseCurrency');
-      const trades = Trades.find({ $or: [
-        { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
-        { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
-      ],
+      const trades = Trades.find({
+        $or: [
+          { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
+          { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
+        ],
         timestamp: { $gte: moment(Date.now()).startOf('day').subtract(6, 'days').unix() },
       });
       const prices = trades.map((trade) => {
@@ -231,8 +232,9 @@ Template.chart.viewmodel({
     });
 
     if (Session.get('depthChart')
-        && Session.get('isConnected') && !Session.get('outOfSync')
-        && !Session.get('loading') && Session.get('loadingProgress') === 100) {
+      && Session.get('isConnected') && !Session.get('outOfSync')
+      && !Session.get('loading')
+      && (Session.get('isMatchingEnabled') ? true : Session.get('loadingProgress') === 100)) {
       askPrices = [];
       bidPrices = [];
       askAmounts = { base: [], quote: [] };
@@ -240,9 +242,9 @@ Template.chart.viewmodel({
       const quoteCurrency = Session.get('quoteCurrency');
       const baseCurrency = Session.get('baseCurrency');
       let bids = Offers.find({ buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
-                                { sort: { bid_price_sort: 1 } }).fetch();
+        { sort: { bid_price_sort: 1 } }).fetch();
       let asks = Offers.find({ buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
-                                { sort: { ask_price_sort: 1 } }).fetch();
+        { sort: { ask_price_sort: 1 } }).fetch();
 
       bids = removeOutliersFromArray(bids, 'bid_price_sort', 3);
       asks = removeOutliersFromArray(asks, 'ask_price_sort', 3);
@@ -286,9 +288,9 @@ Template.chart.viewmodel({
 
         // It is necessary to update all the previous prices adding the actual amount (to make a cumulative graph)
         bidAmounts.quote = bidAmounts.quote.map((b, i) =>
-                            ((i < bidAmounts.quote.length - 1) ? b.add(bid.sellHowMuch) : b));
+          ((i < bidAmounts.quote.length - 1) ? b.add(bid.sellHowMuch) : b));
         bidAmounts.base = bidAmounts.base.map((b, i) =>
-                            ((i < bidAmounts.base.length - 1) ? b.add(bid.buyHowMuch) : b));
+          ((i < bidAmounts.base.length - 1) ? b.add(bid.buyHowMuch) : b));
       });
 
       // All price values (bids & asks)
@@ -317,8 +319,8 @@ Template.chart.viewmodel({
           amountTool.quote = askAmounts.quote[index];
           amountTool.base = askAmounts.base[index];
         } else if (askPrices.length === 0 ||
-                  (new BigNumber(vals[i])).lt((new BigNumber(askPrices[0]))) ||
-                  (new BigNumber(vals[i])).gt((new BigNumber(askPrices[askPrices.length - 1])))) {
+          (new BigNumber(vals[i])).lt((new BigNumber(askPrices[0]))) ||
+          (new BigNumber(vals[i])).gt((new BigNumber(askPrices[askPrices.length - 1])))) {
           // If the price is lower or higher than the asks range there is not value to print in the graph
           amount = null;
           amountTool.quote = amountTool.base = null;
@@ -337,8 +339,8 @@ Template.chart.viewmodel({
           amountTool.quote = bidAmounts.quote[index];
           amountTool.base = bidAmounts.base[index];
         } else if (bidPrices.length === 0 ||
-                  (new BigNumber(vals[i])).lt((new BigNumber(bidPrices[0]))) ||
-                  (new BigNumber(vals[i])).gt((new BigNumber(bidPrices[bidPrices.length - 1])))) {
+          (new BigNumber(vals[i])).lt((new BigNumber(bidPrices[0]))) ||
+          (new BigNumber(vals[i])).gt((new BigNumber(bidPrices[bidPrices.length - 1])))) {
           // If the price is lower or higher than the bids range there is not value to print in the graph
           amount = null;
           amountTool.quote = amountTool.base = null;
@@ -459,7 +461,7 @@ Template.chart.viewmodel({
     });
 
     if (Session.get('volumeChart')
-        && !Session.get('loadingTradeHistory')) {
+      && !Session.get('loadingTradeHistory')) {
       const quoteCurrency = Session.get('quoteCurrency');
       const baseCurrency = Session.get('baseCurrency');
       let day = null;
@@ -473,10 +475,11 @@ Template.chart.viewmodel({
         volumes.quote[day.unix() * 1000] = new BigNumber(0);
       }
 
-      const trades = Trades.find({ $or: [
-        { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
-        { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
-      ],
+      const trades = Trades.find({
+        $or: [
+          { buyWhichToken: baseCurrency, sellWhichToken: quoteCurrency },
+          { buyWhichToken: quoteCurrency, sellWhichToken: baseCurrency },
+        ],
         timestamp: { $gte: days[0].unix() },
       });
 
@@ -496,7 +499,7 @@ Template.chart.viewmodel({
       charts.volume.data.datasets = [{
         label: 'Volume',
         data: Object.keys(volumes.quote).map((key) =>
-                                              formatNumber(web3Obj.fromWei(volumes.quote[key]), 5).replace(/,/g, '')),
+          formatNumber(web3Obj.fromWei(volumes.quote[key]), 5).replace(/,/g, '')),
         backgroundColor: 'rgba(140, 133, 200, 0.1)',
         borderColor: '#8D86C9',
         borderWidth: 3,

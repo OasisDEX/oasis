@@ -36,7 +36,10 @@
           <div class="loading-chart">(out of sync, waiting for synchronization)</div>
         {{else}}
           {{#if loading}}
-            <div class="loading-chart">{{{loadingIcon}}} Loading offers {{loadingProgress}}%</div>
+            <div class="loading-chart">{{{loadingIcon}}} Loading offers
+              {{#if not isMatchingEnabled }}
+                {{loadingProgress}}%
+              {{/if}}</div>
           {{/if}}
         {{/if}}
       {{/unless}}

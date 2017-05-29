@@ -35,7 +35,7 @@ function checkAccounts() {
   });
 }
 
-function checkIfBuyEnabled(marketType) {
+function checkIfOrderMatchingEnabled(marketType) {
   if (marketType !== 'MatchingMarket') {
     Session.set('isOrderMatchingEnabled', false);
   } else {
@@ -49,7 +49,7 @@ function checkIfBuyEnabled(marketType) {
   }
 }
 
-function checkIfOrderMatchingEnabled(marketType) {
+function checkIfBuyEnabled(marketType) {
   if (marketType !== 'MatchingMarket') {
     Session.set('isBuyEnabled', true);
   } else {
@@ -157,7 +157,8 @@ $(window).on('hashchange', () => {
 function initSession() {
   Session.set('network', false);
   Session.set('loading', false);
-  Session.set('loadingProgress', 0);
+  Session.set('loadingProgress', 0); // This is needed when order matching is not enabled
+  Session.set('loadingCounter', 0);
   Session.set('outOfSync', false);
   Session.set('syncing', false);
   Session.set('isConnected', false);
