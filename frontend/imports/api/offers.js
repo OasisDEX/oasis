@@ -24,7 +24,6 @@ const Status = {
   CLOSED: 'closed',
 };
 
-const OFFER_GAS = 1000000;
 const BUY_GAS = 1000000;
 const CANCEL_GAS = 1000000;
 
@@ -390,24 +389,54 @@ Offers.updateOffer = (idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWh
     Offers.upsert(idx, { $set: offer });
   }
 };
-
-Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callback) => {
+Offers.offerContractParameters = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken) => {
   const sellWhichTokenAddress = Dapple.getTokenAddress(sellWhichToken);
   const buyWhichTokenAddress = Dapple.getTokenAddress(buyWhichToken);
 
   const sellHowMuchAbsolute = convertToTokenPrecision(sellHowMuch, sellWhichToken);
   const buyHowMuchAbsolute = convertToTokenPrecision(buyHowMuch, buyWhichToken);
 
-  Dapple['maker-otc'].objects.otc.offer(sellHowMuchAbsolute, sellWhichTokenAddress,
-    buyHowMuchAbsolute, buyWhichTokenAddress,
-    { gas: OFFER_GAS }, (error, tx) => {
-      callback(error, tx);
+  return { sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress };
+};
+
+Offers.newOfferGasEstimate = async (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken) => {
+  const { sellHowMuchAbsolute, sellWhichTokenAddress,
+    buyHowMuchAbsolute, buyWhichTokenAddress } = Offers.offerContractParameters(sellHowMuch, sellWhichToken,
+    buyHowMuch, buyWhichToken);
+
+  const data = Dapple['maker-otc'].objects.otc.offer.getData(sellHowMuchAbsolute, sellWhichTokenAddress,
+    buyHowMuchAbsolute, buyWhichTokenAddress);
+
+  return new Promise((resolve, reject) => {
+    web3Obj.eth.estimateGas({ to: Dapple['maker-otc'].environments[Dapple.env].otc.value, data }, (error, result) => {
       if (!error) {
-        Offers.updateOffer(tx, sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress,
-          web3Obj.eth.defaultAccount, Status.PENDING);
-        Transactions.add('offer', tx, { id: tx, status: Status.PENDING });
+        resolve(result);
+      } else {
+        reject(error);
       }
     });
+  });
+};
+
+Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callback) => {
+  Offers.newOfferGasEstimate(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken)
+    .then((gasEstimate) => {
+      const { sellHowMuchAbsolute, sellWhichTokenAddress,
+        buyHowMuchAbsolute, buyWhichTokenAddress } = Offers.offerContractParameters(sellHowMuch, sellWhichToken,
+        buyHowMuch, buyWhichToken);
+
+      Dapple['maker-otc'].objects.otc.offer(sellHowMuchAbsolute, sellWhichTokenAddress,
+        buyHowMuchAbsolute, buyWhichTokenAddress,
+        { gas: gasEstimate + 500000 }, (error, tx) => {
+          callback(error, tx);
+          if (!error) {
+            Offers.updateOffer(tx, sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress,
+              web3Obj.eth.defaultAccount, Status.PENDING);
+            Transactions.add('offer', tx, { id: tx, status: Status.PENDING });
+          }
+        });
+    })
+    .catch((error) => callback(error));
 };
 
 Offers.buyOffer = (_id, type, _quantity, _token) => {
