@@ -1,4 +1,6 @@
 <template name="maintrades">
+  <!--TODO check this behavior with Geronimo for markets with order matching and without-->
+  {{#if loadedCurrencies}}
   <div class="row balance-row">
     <section class="col-md-4">
       {{> balance currency=quoteCurrency currencyType='quote-currency' }}
@@ -22,7 +24,6 @@
       </section>
     </div>
   </div>
-  {{#if loadedCurrencies}}
   <div class="row">
     <div class="order-center">
       <section class="order-section col-md-6">
