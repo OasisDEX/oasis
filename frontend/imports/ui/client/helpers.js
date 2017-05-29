@@ -388,6 +388,10 @@ Template.registerHelper('formatNumber', (value, decimals, sle) => {
   return finalValue;
 });
 
+Template.registerHelper('formatGas', (value) => {
+  return thousandSeparator(value);
+});
+
 Template.registerHelper('determineOrderType', (order, section) => {
   const baseCurrency = Session.get('baseCurrency');
   const address = Session.get('address');
