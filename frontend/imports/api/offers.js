@@ -472,10 +472,12 @@ Offers.offerContractParameters = (sellHowMuch, sellWhichToken, buyHowMuch, buyWh
     .filter((offer) => {
       const offerPrice = new BigNumber(offer.sellHowMuch).div(new BigNumber(offer.buyHowMuch));
       const specifiedPrice = new BigNumber(sellHowMuch).div(new BigNumber(buyHowMuch));
-      return offerPrice > specifiedPrice;
+      return offerPrice.comparedTo(specifiedPrice) > 0;
     })
     .sort((offer1, offer2) => {
-      if (offer1.buyHowMuch !== offer2.buyHowMuch) return (offer2.buyHowMuch - offer1.buyHowMuch);
+      const buyHowMuch1 = new BigNumber(offer1.buyHowMuch);
+      const buyHowMuch2 = new BigNumber(offer2.buyHowMuch);
+      if (buyHowMuch1.comparedTo(buyHowMuch2) !== 0) return (buyHowMuch2.minus(buyHowMuch1).toNumber());
       return (offer1._id - offer2._id);
     });
   const userHigherId = ((higherOrdersSorted.length > 0) ? higherOrdersSorted[higherOrdersSorted.length - 1]._id : 0);
@@ -504,9 +506,7 @@ Offers.newOfferGasEstimate = async (sellHowMuch, sellWhichToken, buyHowMuch, buy
     });
   });
 
-  return Promise.all([estimateGasPromise, latestBlockPromise]).then((results) => {
-    return [results[0], results[1].gasLimit];
-  });
+  return Promise.all([estimateGasPromise, latestBlockPromise]).then((results) => [results[0], results[1].gasLimit]);
 };
 
 Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callback) => {
@@ -517,7 +517,7 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
 
       Dapple['maker-otc'].objects.otc.offer(sellHowMuchAbsolute, sellWhichTokenAddress,
         buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId,
-        {gas: Math.min(gasEstimate[0] + 500000, gasEstimate[1])}, (error, tx) => {
+        { gas: Math.min(gasEstimate[0] + 500000, gasEstimate[1]) }, (error, tx) => {
           callback(error, tx);
           if (!error) {
             Offers.updateOffer(tx, sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress,
