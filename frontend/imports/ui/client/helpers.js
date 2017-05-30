@@ -88,7 +88,7 @@ Template.registerHelper('loadingTradeHistory', () => Session.get('loadingTradeHi
 Template.registerHelper('loadingIndividualTradeHistory', () => Session.get('loadingIndividualTradeHistory'));
 
 Template.registerHelper('loadedCurrencies', () => Session.get('balanceLoaded') === true
-&& Session.get('allowanceLoaded') === true);
+&& Session.get('allowanceLoaded') === true && Session.get('limitsLoaded') === true);
 
 Template.registerHelper('loadingTokenEvents', (txHash) => {
   const currentlyLoading = Session.get('loadingTokenEvents');

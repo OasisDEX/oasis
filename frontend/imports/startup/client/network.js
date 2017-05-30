@@ -3,7 +3,8 @@ import { Session } from 'meteor/session';
 import { Dapple, web3Obj } from 'meteor/makerotc:dapple';
 import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
-
+// TODO: verify with others if we will have limits if the order matching is not enabled
+import Limits from '/imports/api/limits';
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
 import TokenEvents from '/imports/api/tokenEvents';
@@ -76,6 +77,7 @@ function initNetwork(newNetwork) {
   Session.set('startBlock', 0);
   doHashChange();
   Tokens.sync();
+  Limits.sync();
   Offers.sync();
 }
 
@@ -166,6 +168,7 @@ function initSession() {
 
   Session.set('balanceLoaded', false);
   Session.set('allowanceLoaded', false);
+  Session.set('limitsLoaded', false);
 
   Session.set('ETHDepositProgress', 0);
   Session.set('ETHDepositProgressMessage', '');
@@ -203,6 +206,7 @@ Meteor.startup(() => {
 
         web3Obj.eth.filter('latest', () => {
           Tokens.sync();
+          Limits.sync();
           Transactions.sync();
           TokenEvents.syncTimestamps();
         });
@@ -226,6 +230,7 @@ Meteor.startup(() => {
               Offers.sync();
               web3Obj.eth.filter('latest', () => {
                 Tokens.sync();
+                Limits.sync();
                 Transactions.sync();
               });
             }
