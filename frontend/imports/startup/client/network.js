@@ -190,7 +190,8 @@ function initSession() {
     Session.set('volumeSelector', 'quote');
   }
 
-  Session.set('orderBookDustLimit', { 'W-ETH': 1000000000000000 });
+  // TODO: any conditions for dust limit?
+  Session.set('orderBookDustLimit', { 'W-ETH': 1 });
 }
 
 /**
