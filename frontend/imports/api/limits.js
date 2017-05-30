@@ -6,11 +6,11 @@ import { BigNumber } from 'meteor/ethereum:web3';
 class LimitsCollection extends Mongo.Collection {
   // Sync token sell limits asynchronously
   sync() {
-    function getMinSellAmount(sellToken) {
+    function getMinSell(sellToken) {
       const sellTokenAddress = Dapple.getTokenAddress(sellToken);
 
       return new Promise((resolve, reject) => {
-        Dapple['maker-otc'].objects.otc.getMinSellAmount(sellTokenAddress, (error, amount) => {
+        Dapple['maker-otc'].objects.otc.getMinSell(sellTokenAddress, (error, amount) => {
           if (!error) {
             resolve([sellToken, amount]);
           } else {
@@ -21,8 +21,8 @@ class LimitsCollection extends Mongo.Collection {
     }
 
     const promises = Dapple.getTokens()
-      .map((token) => getMinSellAmount(token))
-      .forEach((promise) => {
+      .map((token) => getMinSell(token))
+      .map((promise) => {
         promise.then((tokenAndAmount) => {
           const token = tokenAndAmount[0];
           const amount = tokenAndAmount[1];
