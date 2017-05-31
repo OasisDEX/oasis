@@ -135,7 +135,7 @@
         <div class="modal-footer">
           {{#if or (and hasBalance hasAllowance) (not hasBalance)}}
             {{#if offer}}
-              <button type="button" class="btn dex-btn-default {{#if equals offer.type 'bid'}}sell{{else}}buy{{/if}}git r btn-placement-right"
+              <button type="button" class="btn dex-btn-default {{#if equals offer.type 'bid'}}sell{{else}}buy{{/if}} btn-placement-right"
                       data-dismiss="modal" {{b "enable: canBuy, click: buy"}}>
                 {{#if equals offer.type 'bid'}}SELL{{else}}BUY{{/if}} {{baseCurrency}}
               </button>
