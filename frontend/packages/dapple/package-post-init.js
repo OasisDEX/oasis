@@ -47,7 +47,8 @@ const tokenSpecs = {
   MLN: { precision: 18, format: '0,0.00[0000000000000000]' },
   RHOC: { precision: 8, format: '0,0.00[000000]' },
   TIME: { precision: 8, format: '0,0.00[000000]' },
-  GUP: { precision: 3, format: '0,0.00[0]'  }
+  GUP: { precision: 3, format: '0,0.00[0]'  },
+  VERI: { precision: 18, format: '0,0.00[0000000000000000]' }
 };
 
 const primaryTokens = ['MKR', 'W-GNT'];
@@ -57,7 +58,7 @@ Dapple.getQuoteTokens = () => ['W-ETH'];
 
 Dapple.getBaseTokens = () => primaryTokens.concat(secondaryTokens);
 
-Dapple.getTokens = () => ['W-ETH', 'MKR', 'DGD', 'GNT', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC', 'TIME', 'GUP'];
+Dapple.getTokens = () => ['W-ETH', 'MKR', 'DGD', 'GNT', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC', 'TIME', 'GUP', 'VERI'];
 
 Dapple.getTokenSpecs = (symbol) => {
   if (typeof (tokenSpecs[symbol]) !== 'undefined') {
