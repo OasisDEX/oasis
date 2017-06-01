@@ -29,8 +29,8 @@ $color-cancel-order: #A8ACB9;
 
 @font-face {
   font-family: Montserrat;
-  src: url("../fonts/Montserrat-Medium.woff"),
-  url("../fonts/Montserrat-Medium.woff2");
+  src: url("../fonts/Montserrat-Medium.woff") format('woff'),
+  url("../fonts/Montserrat-Medium.woff2") format('woff2');
   font-weight: 500;
 }
 
