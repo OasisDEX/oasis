@@ -30,7 +30,8 @@
       "MLN": "0xc3ce96164012ed51c9b1e34a9323fdc38c96ad8a",
       "RHOC": "0x7352c20e00d3c89037a8959699741c341771ed59",
       "TIME": "0xd944954588061c969fbd828d1f00c297c3511dbd",
-      "GUP": "0xa786d73316e43c3361145241755566e72424274c"
+      "GUP": "0xa786d73316e43c3361145241755566e72424274c",
+      "BAT": "0x485bd6f93f3cd63d5da117c8205173b542da8e7e"
     },
     "ropsten": {
       "W-ETH": "0xece9fa304cc965b00afc186f5d0281a00d3dbbfd",
@@ -64,7 +65,8 @@
       "MLN": "0xbeb9ef514a379b997e0798fdcc901ee474b6d9a1",
       "RHOC": "0x168296bb09e24a88805cb9c33356536b980d3fc5",
       "TIME": "0x6531f133e6deebe7f2dce5a0441aa7ef330b4e53",
-      "GUP": "0xf7b098298f7c69fc14610bf71d5e02c60792894c"
+      "GUP": "0xf7b098298f7c69fc14610bf71d5e02c60792894c",
+      "BAT": "0x0d8775f648430679a709e98d2b0cb6250d2887ef"
     }
   }
 }
