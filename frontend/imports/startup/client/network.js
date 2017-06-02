@@ -85,21 +85,21 @@ function checkNetwork() {
       // https://github.com/ethereum/meteor-dapp-wallet/blob/90ad8148d042ef7c28610115e97acfa6449442e3/app/client/lib/ethereum/walletInterface.js#L32-L46
       if (!Session.equals('isConnected', isConnected)) {
         if (isConnected === true) {
-          web3Obj.eth.getBlock(0, (e, res) => {
+          web3Obj.version.getNetwork((e, res) => {
             let network = false;
             if (!e) {
-              switch (res.hash) {
-                case '0xa3c565fc15c7478862d50ccd6561e3c06b24cc509bf388941c25ea985ce32cb9':
-                  network = 'kovan';
-                  Session.set('AVGBlocksPerDay', 21600);
+              switch (res) {
+                case '1':
+                  network = 'main';
+                  Session.set('AVGBlocksPerDay', 5760);
                   break;
-                case '0x41941023680923e0fe4d74a34bdac8141f2540e3ae90623718e47d66d1ca4a2d':
+                case '3':
                   network = 'ropsten';
                   Session.set('AVGBlocksPerDay', 5760);
                   break;
-                case '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3':
-                  network = 'main';
-                  Session.set('AVGBlocksPerDay', 5760);
+                case '42':
+                  network = 'kovan';
+                  Session.set('AVGBlocksPerDay', 21600);
                   break;
                 default:
                   network = 'private';
