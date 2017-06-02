@@ -7,11 +7,11 @@ const ENVs = {
 
 Dapple.init = function init(env) {
   var predefinedEnv = ENVs[env];
-      
+
   if (!predefinedEnv) {
       predefinedEnv = env;
-  }    
-    
+  }
+
   Dapple.env = predefinedEnv;
   Dapple['maker-otc']['environments'][Dapple.env].otc.value = config.market[Dapple.env].address;
   Dapple['maker-otc']['environments'][Dapple.env].otc.blockNumber = config.market[Dapple.env].blockNumber;
@@ -47,17 +47,18 @@ const tokenSpecs = {
   MLN: { precision: 18, format: '0,0.00[0000000000000000]' },
   RHOC: { precision: 8, format: '0,0.00[000000]' },
   TIME: { precision: 8, format: '0,0.00[000000]' },
-  GUP: { precision: 3, format: '0,0.00[0]'  }
+  GUP: { precision: 3, format: '0,0.00[0]'  },
+  BAT: { precision: 18, format: '0,0.00[0000000000000000]' },
 };
 
 const primaryTokens = ['MKR', 'W-GNT'];
-const secondaryTokens = ['DGD', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC', 'TIME', 'GUP'];
+const secondaryTokens = ['DGD', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC', 'TIME', 'GUP', 'BAT'];
 
 Dapple.getQuoteTokens = () => ['W-ETH'];
 
 Dapple.getBaseTokens = () => primaryTokens.concat(secondaryTokens);
 
-Dapple.getTokens = () => ['W-ETH', 'MKR', 'DGD', 'GNT', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC', 'TIME', 'GUP'];
+Dapple.getTokens = () => ['W-ETH', 'MKR', 'DGD', 'GNT', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC', 'TIME', 'GUP', 'BAT'];
 
 Dapple.getTokenSpecs = (symbol) => {
   if (typeof (tokenSpecs[symbol]) !== 'undefined') {
