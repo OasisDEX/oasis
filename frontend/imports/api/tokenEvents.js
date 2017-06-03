@@ -119,7 +119,7 @@ class TokenEventCollection extends Mongo.Collection {
         if (!error) {
           const self = this;
           // TODO: extract duplicated logic for every event in separate abstraction layer
-          token.Transfer({}, {
+          token.Transfer({ from: Session.get('address') }, {
             fromBlock: latestBlock - parseInt(Session.get('AVGBlocksPerDay') / 12, 10), // Last 2 hours
           }).get((err, result) => {
             if (!err) {
@@ -129,7 +129,7 @@ class TokenEventCollection extends Mongo.Collection {
               });
               Session.set('loadingTransferHistory', false);
             }
-            token.Transfer({}, { fromBlock: 'latest' }, (err2, result2) => {
+            token.Transfer({ from: Session.get('address') }, { fromBlock: 'latest' }, (err2, result2) => {
               if (!err2) {
                 this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
                 self.syncEvent(tokenId, result2);
