@@ -30,6 +30,32 @@ Template.neworder.viewmodel({
   autorun() {
     const order = Session.get('selectedOrder');
     if (order) {
+      /*
+       * If we have an existing offer with the given characteristics
+       *  PRICE: 2.00000
+       *  AMOUNT: 2.00000
+       *  TOTAL: 2.0000
+       *
+       *  Click on the existing order and the neworder input fields
+       *  will be populated with the same values.
+       *
+       *  Proceed and create new order with given values.
+       *
+       *  Don't click anywhere else and wait for the new order to appear in orderbook.
+       *
+       *  Click on it or on the previous order that we created the first order from.
+       *  The input fields will be all 0's thought the values of the properties will be popualted.
+       *
+       *  Assuming this is some rendering issue (most likely from meteor) this is the solution.
+       *  Before applying the new values, we clear old ones, forcing everything to rerender.
+       * */
+      this.amount('');
+      this.price('');
+      this.total('');
+      this.offerAmount(0);
+      this.offerPrice(0);
+      this.offerTotal(0);
+
       const actionType = order.type === 'bid' ? 'buy' : 'sell';
       const orderData = Offers.findOne({ _id: order.id });
       if (orderData) {
