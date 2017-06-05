@@ -79,13 +79,15 @@
                   <a href="#ethtokens" {{b "click: showDepositTab"}}>{{sellCurrency}}</a>{{else}}{{sellCurrency}}{{/if}}
                   tokens.</span>
               {{else}}
-                {{#let offer=betterOffer}}
-                  {{#if offer}}
-                    <span class="help-block">There is a better <a href="#offerModal" data-toggle="modal"
-                                                                  data-target="#offerModal" {{b
-                        "click: openOfferModal"}}>offer</a>.</span>
-                  {{/if}}
-                {{/let}}
+                {{#if isBuyEnabled}}
+                  {{#let offer=betterOffer}}
+                    {{#if offer}}
+                      <span class="help-block">There is a better <a href="#offerModal" data-toggle="modal"
+                                                                    data-target="#offerModal" {{b
+                          "click: openOfferModal"}}>offer</a>.</span>
+                    {{/if}}
+                  {{/let}}
+                {{/if}}
               {{/unless}}
               {{#unless equals offerError ''}}
                 <span class="help-block">{{offerError}}</span>
