@@ -417,7 +417,9 @@ Template.offermodal.viewmodel({
         this.offerError(formatError(error));
       }
       // Cleaning inputs
-      $('.row-input-line input[type=number]').val(0);
+      Session.set('selectedOrder', '');
+      $('.row-input-line input[type=number]').val('');
+      $('.row-input-line input[type=number]').trigger('change');
     });
   },
 });
