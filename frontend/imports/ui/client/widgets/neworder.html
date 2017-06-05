@@ -55,7 +55,7 @@
                 </button>
               {{/if}}
               <input type="number" class="input" step="any" min="" placeholder="0"
-                {{b "value: total, input: calcAmount, enable: canChangeAmountAndTotal, attr: { max: maxTo tal }"}}>
+                {{b "value: total, input: calcAmount, enable: canChangeAmountAndTotal, attr: { max: maxTotal }"}}>
             </div>
           </td>
           <td class="dex-currency-cell">
@@ -82,7 +82,7 @@
                 {{#if isBuyEnabled}}
                   {{#let offer=betterOffer}}
                     {{#if offer}}
-                      <span class="help-block">There is a better <a href="#offerModal" data-toggle="modal"
+                      <span class="help-block">There is a  better <a href="#offerModal" data-toggle="modal"
                                                                     data-target="#offerModal" {{b
                           "click: openOfferModal"}}>offer</a>.</span>
                     {{/if}}

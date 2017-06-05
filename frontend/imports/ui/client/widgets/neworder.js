@@ -19,6 +19,32 @@ Template.neworder.viewmodel({
   price: '',
   amount: '',
   shouldShowMaxBtn: false,
+  events: {
+    'input input': function () {
+      const order = Session.get('selectedOrder');
+      if (order) {
+        Session.set('selectedOrder', '');
+      }
+    },
+  },
+  autorun() {
+    const order = Session.get('selectedOrder');
+    if (order) {
+      const actionType = order.type === 'bid' ? 'buy' : 'sell';
+      const orderData = Offers.findOne({ _id: order.id });
+      if (orderData) {
+        this.price(orderData[`${order.type}_price`]);
+
+        if (actionType === this.type()) {
+          this.amount(web3Obj.fromWei(orderData[`${actionType}HowMuch`]));
+        } else {
+          this.amount(0);
+        }
+
+        this.calcTotal();
+      }
+    }
+  },
   type() {
     return this.orderType() ? this.orderType() : '';
   },
