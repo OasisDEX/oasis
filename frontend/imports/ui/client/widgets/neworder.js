@@ -20,7 +20,7 @@ Template.neworder.viewmodel({
   amount: '',
   shouldShowMaxBtn: false,
   events: {
-    'input input': function () {
+    'input input, click .dex-btn-max': function () {
       const order = Session.get('selectedOrder');
       if (order) {
         Session.set('selectedOrder', '');
