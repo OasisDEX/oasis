@@ -948,13 +948,6 @@ table {
   }
 
   table {
-    border-collapse: separate !important;
-    border-spacing: 0;
-    border: solid #EFEFEF 1px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-    border-radius: 6px;
-
     tbody {
       th {
         width: 80px;
@@ -991,7 +984,8 @@ table {
             font-size: 10px;
             color: #68686C; /* #222228;*/
             letter-spacing: 1px;
-            min-width:60px;
+            min-width: 60px;
+            width: 100%;
             display: inline-block;
             vertical-align: middle;
             text-align: left;
@@ -1091,14 +1085,49 @@ table {
   }
 }
 
-.modal .input-section {
-  padding: 0;
-  margin: 16px 0;
-
-  tr {
-    height: inherit;
-    line-height: inherit;
+.modal {
+  button.dex-btn-default.buy, button.dex-btn-default.sell {
+    width: auto;
   }
+
+  .input-section {
+    padding: 0;
+    margin: 16px 0;
+
+    tr {
+      height: inherit;
+      line-height: inherit;
+    }
+
+    table tbody tr.row-input-line th.dex-label-cell {
+      text-align: left;
+      padding-left: 13px;
+      background: #F8F7F5;
+    }
+
+    .available-amount {
+      width: 260px;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .available-label {
+      padding-left: 13px;
+    }
+  }
+}
+
+.bordered {
+  border: solid #EFEFEF 1px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+}
+
+table.bordered {
+  @extend .bordered;
+  border-collapse: separate !important;
+  border-spacing: 0;
 }
 
 button.dex-btn-default {
@@ -1120,6 +1149,10 @@ button.dex-btn-default {
   }
 }
 
+button.dex-btn-default {
+  width: 100px;
+}
+
 button.dex-btn-max {
   @extend button.dex-btn-default;
   padding: 5px;
@@ -1127,12 +1160,8 @@ button.dex-btn-max {
   font-size: 10px;
   border-radius: 5px;
   float: left;
-  width: auto;
+  width: 75px;
   transform: translateY(2.5px);
-}
-
-button.dex-btn-default.buy, button.dex-btn-default.sell {
-  width: 100px;
 }
 
 button.dex-btn-default.buy, button.dex-btn-max.buy {
