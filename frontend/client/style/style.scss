@@ -933,7 +933,7 @@ table {
       text-align: right;
       display: inline-block;
       padding-right: 10px;
-      width: 230px;
+      min-width: 230px;
     }
 
     &-currency {
@@ -941,9 +941,9 @@ table {
       font-weight: 700;
       letter-spacing: 1px;
       text-align: left;
-      padding-left: 7px;
+      padding-left: 10px;
       display: inline-block;
-      width: 50px;
+      min-width: 60px;
     }
   }
 
@@ -981,7 +981,7 @@ table {
         }
 
         td.dex-input-cell {
-          width: 230px;
+          min-width: 230px;
         }
 
         td.dex-currency-cell {
@@ -991,7 +991,7 @@ table {
             font-size: 10px;
             color: #68686C; /* #222228;*/
             letter-spacing: 1px;
-            width: 100%;
+            min-width:60px;
             display: inline-block;
             vertical-align: middle;
             text-align: left;
@@ -1091,7 +1091,15 @@ table {
   }
 }
 
+.modal .input-section {
+  padding: 0;
+  margin: 16px 0;
 
+  tr {
+    height: inherit;
+    line-height: inherit;
+  }
+}
 
 button.dex-btn-default {
   font-family: 'Montserrat', sans-serif;
