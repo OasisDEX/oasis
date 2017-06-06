@@ -135,7 +135,8 @@
         <div class="modal-footer">
           {{#if or (and hasBalance hasAllowance) (not hasBalance)}}
             {{#if offer}}
-              <button type="button" class="btn dex-btn-default {{#if equals offer.type 'bid'}}sell{{else}}buy{{/if}} btn-placement-right"
+              <button type="button" class="btn dex-btn-default {{#if equals offer.type
+                                                                     'bid'}}sell{{else}}buy{{/if}} btn-placement-right"
                       data-dismiss="modal" {{b "enable: canBuy, click: buy"}}>
                 {{#if equals offer.type 'bid'}}SELL{{else}}BUY{{/if}} {{baseCurrency}}
               </button>
@@ -202,26 +203,50 @@
               <th>OWNER</th>
               <td><span class="owner-address">{{address}}</span></td>
             </tr>
-            <tr class="row-input-line">
-              <th>PRICE</th>
-              <td><input type="number" class="input" step="any" min="0" {{b
-                "value: offerPrice, input: calcNewOfferTotal"}}><span
-                class="span-offer-currency">{{quoteCurrency}}</span></td>
-            </tr>
-            <tr class="row-input-line">
-              <th>VOLUME</th>
-              <td><input type="number" class="input" step="any" min="0" max={{maxNewOfferAmount}} {{b
-                "value: offerAmount, input: calcNewOfferTotal"}}><span
-                class="span-offer-currency">{{baseCurrency}}</span></td>
-            </tr>
-            <tr class="row-input-line">
-              <th>TOTAL</th>
-              <td><input type="number" class="input" step="any" min="0" max={{maxNewOfferTotal}} {{b
-                "value: offerTotal, input: calcNewOfferAmount"}}><span
-                class="span-offer-currency">{{quoteCurrency}}</span></td>
-            </tr>
             </tbody>
           </table>
+          <section class="input-section">
+            <table>
+              <tbody>
+              <tr class="row-input-line">
+                <th class="dex-label-cell">
+                  <span>PRICE</span>
+                </th>
+                <td class="dex-input-cell">
+                  <input type="number" class="input" step="any" min="0"
+                    {{b "value: offerPrice, input: calcNewOfferTotal"}}>
+                </td>
+                <td class="dex-currency-cell">
+                  <span>{{quoteCurrency}}</span>
+                </td>
+              </tr>
+              <tr class="row-input-line">
+                <th class="dex-label-cell">
+                  <span>VOLUME</span>
+                </th>
+                <td class="dex-input-cell">
+                  <input type="number" class="input" step="any" min="0" max={{maxNewOfferAmount}}
+                    {{b "value: offerAmount, input: calcNewOfferTotal"}}>
+                </td>
+                <td class="dex-currency-cell">
+                  <span>{{baseCurrency}}</span>
+                </td>
+              </tr>
+              <tr class="row-input-line">
+                <th class="dex-label-cell">
+                  <span>TOTAL</span>
+                </th>
+                <td class="dex-input-cell">
+                  <input type="number" class="input" step="any" min="0" max={{maxNewOfferTotal}}
+                    {{b "value: offerTotal, input: calcNewOfferAmount"}}>
+                </td>
+                <td class="dex-currency-cell">
+                  <span>{{quoteCurrency}}</span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </section>
           <div class="div-modal-text row">
             <div class="col-xs-1">
               <img src="order-warning.svg" class="order-warning">
