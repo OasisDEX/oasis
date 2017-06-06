@@ -40,28 +40,48 @@
                 <td class="td-owner"><span class="span-owner">{{offer.owner}} {{#if equals offer.owner address}}
                   (<span class="text-success">you</span>){{/if}}</span></td>
               </tr>
-              <tr class="row-data-line">
-                <th>PRICE</th>
-                <td>{{{formatNumber offer.price '' true}}} <span class="span-offer-currency">{{quoteCurrency}}</span>
-                </td>
-              </tr>
-              <tr class="row-input-line">
-                <th>VOLUME</th>
-                <td><input type="number" class="input" step="any" min="0" max={{maxVolume}} {{b
-                  "value: volume, input: calcTotal"}}> <span class="span-offer-currency">{{baseCurrency}}</span></td>
-              </tr>
-              <tr class="row-input-line">
-                <th>TOTAL</th>
-                <td><input type="number" class="input" step="any" min="0" max={{maxTotal}} {{b
-                  "value: total, input: calcVolume"}}> <span class="span-offer-currency">{{quoteCurrency}}</span></td>
-              </tr>
-              {{#if offer.helper}}
-                <tr>
-                  <td colspan="2">{{offer.helper}}</td>
-                </tr>
-              {{/if}}
               </tbody>
             </table>
+            <section class="input-section">
+              <div class="available">
+                <span class="available-label">PRICE</span>
+                <span class="available-amount">{{{formatNumber offer.price '' true}}}</span>
+                <span class="available-currency">{{quoteCurrency}}</span>
+              </div>
+              <table class="bordered">
+                <tbody>
+                <tr class="row-input-line">
+                  <th class="dex-label-cell">
+                    <span>VOLUME</span>
+                  </th>
+                  <td class="dex-input-cell">
+                    <input type="number" class="input" step="any" min="0" max={{maxVolume}}
+                      {{b "value: volume, input: calcTotal"}}>
+                  </td>
+                  <td class="dex-currency-cell">
+                    <span>{{baseCurrency}}</span>
+                  </td>
+                </tr>
+                <tr class="row-input-line">
+                  <th class="dex-label-cell">
+                    <span>TOTAL</span>
+                  </th>
+                  <td class="dex-input-cell">
+                    <input type="number" class="input" step="any" min="0" max={{maxTotal}}
+                      {{b "value: total, input: calcVolume"}}>
+                  </td>
+                  <td class="dex-currency-cell">
+                    <span>{{quoteCurrency}}</span>
+                  </td>
+                </tr>
+                {{#if offer.helper}}
+                  <tr>
+                    <td colspan="2">{{offer.helper}}</td>
+                  </tr>
+                {{/if}}
+                </tbody>
+              </table>
+            </section>
             <div class="div-modal-text row">
               <div class="col-xs-1">
                 <img src="order-warning.svg" class="order-warning">
@@ -206,7 +226,7 @@
             </tbody>
           </table>
           <section class="input-section">
-            <table>
+            <table class="bordered">
               <tbody>
               <tr class="row-input-line">
                 <th class="dex-label-cell">
