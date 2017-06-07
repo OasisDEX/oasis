@@ -21,12 +21,14 @@ Template.offermodal.viewmodel({
   share: 'newOffer',
   volume: '',
   total: '',
+  priceInUSD: '',
   gasEstimateInProgress: false,
   gasEstimateMoreThanGasLimit: false,
   gasEstimateResult: null,
   gasEstimateError: null,
   autorun() {
     this.estimateGasUsage();
+    this.fetchCurrentPriceInUSD();
     if (Template.currentData().offer) {
       const buyHowMuch = web3Obj.fromWei(new BigNumber(Template.currentData().offer.buyHowMuch)).toString(10);
       const sellHowMuch = web3Obj.fromWei(new BigNumber(Template.currentData().offer.sellHowMuch)).toString(10);
@@ -257,20 +259,20 @@ Template.offermodal.viewmodel({
 
     if (this.type() === 'bid') {
       bestOffer = Offers.findOne({
-        buyWhichToken: Session.get('baseCurrency'),
-        sellWhichToken: Session.get('quoteCurrency'),
-        sellHowMuch_filter: { $gte: dustLimit },
-      },
+          buyWhichToken: Session.get('baseCurrency'),
+          sellWhichToken: Session.get('quoteCurrency'),
+          sellHowMuch_filter: { $gte: dustLimit },
+        },
         {
           sort: { ask_price_sort: 1 },
         });
       return (new BigNumber(bestOffer.bid_price)).gt(new BigNumber(this.templateInstance.data.offer.bid_price));
     } else if (this.type() === 'ask') {
       bestOffer = Offers.findOne({
-        buyWhichToken: Session.get('quoteCurrency'),
-        sellWhichToken: Session.get('baseCurrency'),
-        buyHowMuch_filter: { $gte: dustLimit },
-      },
+          buyWhichToken: Session.get('quoteCurrency'),
+          sellWhichToken: Session.get('baseCurrency'),
+          buyHowMuch_filter: { $gte: dustLimit },
+        },
         {
           sort: { ask_price_sort: 1 },
         });
@@ -421,6 +423,13 @@ Template.offermodal.viewmodel({
       $('.row-input-line input[type=number]').val('');
       $('.row-input-line input[type=number]').trigger('change');
     });
+  },
+  fetchCurrentPriceInUSD() {
+    if (!this.priceInUSD()) {
+      $.get('https://api.coinmarketcap.com/v1/ticker/ethereum/', (data) => {
+        this.priceInUSD(data[0].price_usd);
+      }).fail((error) => console.debug(error));
+    }
   },
 });
 
