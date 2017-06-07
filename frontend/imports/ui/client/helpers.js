@@ -244,7 +244,11 @@ Template.registerHelper('or', (a, b) => a || b);
 
 Template.registerHelper('and', (a, b) => a && b);
 
+Template.registerHelper('ternary', (logical, yes, no) => (logical ? yes : no));
+
 Template.registerHelper('gt', (a, b) => a > b);
+
+Template.registerHelper('multiply', (a, b) => a * b);
 
 Template.registerHelper('concat', (...args) => Array.prototype.slice.call(args, 0, -1).join(''));
 

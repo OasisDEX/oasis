@@ -1085,6 +1085,79 @@ table {
   }
 }
 
+.info-section {
+  padding: 15px;
+
+  .row {
+    line-height: 1.5;
+  }
+
+  [class*="col-"]{
+    margin-bottom: 10px;
+  }
+
+  .div-modal-text {
+    margin-top: 0;
+  }
+
+  .dex-icon {
+    display: inline-block;
+    width: 18px;
+    height: 20px;
+    margin-right: 5px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    vertical-align: middle;
+    opacity: 1;
+  }
+
+  .dex-icon-add {
+    background-image: url(ic_add_circle_24px.svg);
+    @extend .dex-icon;
+  }
+
+  .dex-icon-subtract {
+    background-image: url(ic_remove_24px.svg);
+    @extend .dex-icon;
+  }
+
+  .dex-currency-label {
+    display: inline-block;
+    font-size: 11px;
+    padding-right: 0;
+    line-height: 1.5;
+
+    &--fiat {
+      padding-left: 4px;
+      border: 1px solid #EFEFEF;
+      border-radius: 5px;
+      background-color: #F9F8F8;
+    }
+  }
+
+  .dex-order-details {
+    font-size: 11px;
+  }
+
+  .dex-order-matching-status {
+    border: 1px solid transparent;
+    border-radius: 5px;
+    display: inline-block;
+    width: 70px;
+    text-align: center;
+
+    &--active {
+      border-color: $color-buy;
+      color: $color-buy;
+    }
+
+    &--inactive {
+      border-color: $color-sell;
+      color: $color-sell;
+    }
+  }
+}
+
 .modal {
   button.dex-btn-default.buy, button.dex-btn-default.sell {
     width: auto;
@@ -1396,7 +1469,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   font-size: 15px;
   font-weight: 500;
   padding: 20px;
-  width: 490px;
+  width: 550px;
   overflow: auto;
 
   h4 {
@@ -1465,11 +1538,14 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   }
 
   .div-modal-text {
-    margin-top: 15px;
-    font-weight: 700;
+    margin-bottom: 15px;
+    font-weight: 500;
     font-size: 14px;
-    color: #222228;
-    opacity: 0.50;
+    color: rgba(22,22,28,0.5);
+  }
+
+  .div-modal-text:last-child {
+    margin-bottom: 0;
   }
 
   .div-actions {
@@ -2379,7 +2455,7 @@ span.right {
 
 .highlighted {
   .text-danger {
-    color: red;
+    color: rgba(255,0,0,0.5);
   }
 }
 
