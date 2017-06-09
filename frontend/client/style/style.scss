@@ -1208,6 +1208,10 @@ table {
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
   border-radius: 6px;
+
+  &--danger {
+    border-color: red;
+  }
 }
 
 table.bordered {
@@ -2468,6 +2472,7 @@ span.right {
 
 .highlighted {
   .text-danger {
+    vertical-align: middle;
     color: rgba(255, 0, 0, 0.5);
   }
 }

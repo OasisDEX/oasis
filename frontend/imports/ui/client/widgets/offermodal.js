@@ -22,6 +22,7 @@ Template.offermodal.viewmodel({
   volume: '',
   total: '',
   priceInUSD: '',
+  gasLimit: '',
   gasEstimateInETH: '',
   gasEstimateInProgress: false,
   gasEstimateMoreThanGasLimit: false,
@@ -392,6 +393,7 @@ Template.offermodal.viewmodel({
       latest(Offers.newOfferGasEstimate)(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken)
         .then((result) => {
           if (this.gasEstimateInProgress()) {
+            this.gasLimit(result[1]);
             this.gasEstimateError(null);
             this.gasEstimateResult(result[0]);
             this.gasEstimateMoreThanGasLimit(result[0] > result[1]);
@@ -400,6 +402,7 @@ Template.offermodal.viewmodel({
         })
         .catch((error) => {
           if (this.gasEstimateInProgress()) {
+            this.gasLimit('');
             this.gasEstimateError(error);
             this.gasEstimateResult(null);
             this.gasEstimateMoreThanGasLimit(false);

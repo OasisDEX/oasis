@@ -389,6 +389,11 @@ Template.registerHelper('formatNumber', (value, decimals, sle) => {
 
 Template.registerHelper('formatGas', (value) => thousandSeparator(value));
 
+Template.registerHelper('formatGasLimit', (gasLimit, size, suffix) => {
+  const formattedGasLimit = gasLimit / size;
+  return `${formattedGasLimit.toPrecision(2)}${suffix}`;
+});
+
 Template.registerHelper('determineOrderType', (order, section) => {
   const baseCurrency = Session.get('baseCurrency');
   const address = Session.get('address');
@@ -427,4 +432,4 @@ Template.registerHelper('volumeSelector', () => Session.get('volumeSelector'));
 Template.registerHelper('isMatchingEnabled', () => Session.get('isMatchingEnabled'));
 
 Template.registerHelper('isBuyEnabled', () => !Session.get('idMatchingEnabled') ||
-                                              (Session.get('isBuyEnabled') && Session.get('isMatchingEnabled')));
+(Session.get('isBuyEnabled') && Session.get('isMatchingEnabled')));
