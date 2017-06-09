@@ -470,13 +470,13 @@ Offers.offerContractParameters = (sellHowMuch, sellWhichToken, buyHowMuch, buyWh
     .fetch()
     .filter((offer) => (offer._id.indexOf('0x') !== 0))
     .filter((offer) => {
-      const offerPrice = new BigNumber(offer.sellHowMuch).div(new BigNumber(offer.buyHowMuch));
-      const specifiedPrice = new BigNumber(sellHowMuch).div(new BigNumber(buyHowMuch));
+      const offerPrice = new BigNumber(`${offer.sellHowMuch}`).div(new BigNumber(`${offer.buyHowMuch}`));
+      const specifiedPrice = new BigNumber(sellHowMuch.toString()).div(new BigNumber(buyHowMuch));
       return offerPrice.comparedTo(specifiedPrice) > 0;
     })
     .sort((offer1, offer2) => {
-      const buyHowMuch1 = new BigNumber(offer1.buyHowMuch);
-      const buyHowMuch2 = new BigNumber(offer2.buyHowMuch);
+      const buyHowMuch1 = new BigNumber(`${offer1.buyHowMuch}`);
+      const buyHowMuch2 = new BigNumber(`${offer2.buyHowMuch}`);
       if (buyHowMuch1.comparedTo(buyHowMuch2) !== 0) return (buyHowMuch2.minus(buyHowMuch1).toNumber());
       return (offer1._id - offer2._id);
     });
