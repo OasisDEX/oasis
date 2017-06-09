@@ -413,12 +413,12 @@ Template.offermodal.viewmodel({
       this.gasEstimateInProgress(false);
     }
   },
-  estimateGasInETH() {
+  estimateGasInETH(gas) {
     web3Obj.eth.getGasPrice((err, priceValue) => {
       if (!err) {
         const price = new BigNumber(priceValue);
-        const gas = new BigNumber(this.gasEstimateResult());
-        this.gasEstimateInETH(web3Obj.fromWei(price.mul(gas)).toString(10));
+        const gasQuantity = new BigNumber(gas);
+        this.gasEstimateInETH(web3Obj.fromWei(price.mul(gasQuantity)).toString(10));
       } else {
         console.debug('Cannot get gas price', err);
       }

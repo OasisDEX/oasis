@@ -373,6 +373,37 @@ Template.registerHelper('formatBalance', (wei, decimals, currency, sle) => {
   return finalValue;
 });
 
+/**
+ * This function provides the highest possible rounding.
+ *
+ *  i.e. 100000 WEI -> 0.000000000000100000 -> 0.0000000000001
+ *  i.e. 100000000000000 WEI -> 0.000100000000000000 -> 0.0001
+ *  i.e. 193459000000000 WEI -> 0.000193459000000000 -> 0.00019
+ *  gives better precision.
+ *  i.e  2000000000000000000 -> 2.000000000000000000 -> 2.00
+ *  i.e  22345000000000000000 -> 22.345000000000000000 -> 22.34
+ *  i.e  2000000000000100000 -> 2.000000000000100000 -> 2.0000000000001
+ */
+Template.registerHelper('formatToHighestPossible', (wei) => {
+  const exactValue = web3Obj.fromWei(wei).toString(10);
+  const parts = exactValue.split('.');
+  const significant = parts[0];
+  let fraction = parts[1] || '00';
+  let newFraction = '';
+  for (const index in fraction) {
+    const idx = parseInt(index, 10);
+    const current = fraction[idx];
+    newFraction += current;
+    if (current > 0) {
+      if (idx < fraction.length - 1) newFraction += fraction[idx + 1];
+      fraction = newFraction;
+      break;
+    }
+  }
+
+  return `${significant}.${fraction}`;
+});
+
 Template.registerHelper('formatNumber', (value, decimals, sle) => {
   let decimalsValue = decimals;
   if (decimalsValue instanceof Spacebars.kw) {

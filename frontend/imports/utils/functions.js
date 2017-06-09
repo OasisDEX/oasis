@@ -134,7 +134,7 @@ export function formatNumber(number, dec) {
   }
   let n = number;
   if (typeof number !== 'object') {
-    n = new BigNumber(number);
+    n = new BigNumber(`${number}`);
   }
   const d = (new BigNumber(10)).pow(decimals);
   n = n.mul(d).trunc().div(d).toFixed(decimals);
