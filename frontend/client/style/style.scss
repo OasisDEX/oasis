@@ -1086,18 +1086,20 @@ table {
 }
 
 .info-section {
-  padding: 15px;
+  padding-top:15px;
+  margin-bottom: 16px;
+  font-size: 12px;
 
   .row {
     line-height: 1.5;
   }
 
-  [class*="col-"]{
+  [class*="col-"] {
     margin-bottom: 10px;
   }
-
   .div-modal-text {
     margin-top: 0;
+    margin-bottom: 0;
   }
 
   .dex-icon {
@@ -1123,23 +1125,33 @@ table {
 
   .dex-currency-label {
     display: inline-block;
-    font-size: 11px;
     padding-right: 0;
     line-height: 1.5;
 
     &--fiat {
-      padding-left: 4px;
+      height: 20px;
+      text-align: center;
+      font-size: 10px;
+      padding: 0 4px;
       border: 1px solid #EFEFEF;
       border-radius: 5px;
       background-color: #F9F8F8;
+
+      > span {
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+        top: 1px;
+      }
     }
   }
 
-  .dex-order-details {
-    font-size: 11px;
+  .dex-order-matching-label {
+    border: 1px solid transparent;
   }
 
   .dex-order-matching-status {
+    height: 20px;
     border: 1px solid transparent;
     border-radius: 5px;
     display: inline-block;
@@ -1179,7 +1191,7 @@ table {
     }
 
     .available-amount {
-      width: 260px;
+      width: 330px;
       font-size: 22px;
       font-weight: 700;
     }
@@ -1541,7 +1553,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
     margin-bottom: 15px;
     font-weight: 500;
     font-size: 14px;
-    color: rgba(22,22,28,0.5);
+    color: rgba(22, 22, 28, 0.5);
   }
 
   .div-modal-text:last-child {
@@ -2360,7 +2372,7 @@ span.right {
     font-size: 12px;
     font-weight: bold;
     color: #68686C;
-    font-family: 'Roboto';
+    font-family: 'Roboto', sans-serif;
     margin-right: 15px;
   }
 }
@@ -2455,7 +2467,7 @@ span.right {
 
 .highlighted {
   .text-danger {
-    color: rgba(255,0,0,0.5);
+    color: rgba(255, 0, 0, 0.5);
   }
 }
 

@@ -82,24 +82,24 @@
                 </tbody>
               </table>
             </section>
-            <section class="info-section bordered">
+            <section>
               <div class="div-modal-text">
                 <div class="row">
                   <div class="col-xs-12">
                     {{#unless isMarketOpen}}
                       <span class="text-danger">
-                    The market has closed.
-                  </span>
+                        The market has closed.
+                      </span>
                     {{/unless}}
                     {{#unless validAmount}}
                       <span class="text-danger">
-                    Amount is invalid because {{baseCurrency}} has no decimals.
-                  </span>
+                        Amount is invalid because {{baseCurrency}} has no decimals.
+                      </span>
                     {{/unless}}
                     {{#unless hasVolume}}
                       <span class="text-danger">
-                    The order doesn't have a high enough {{buyCurrency}} volume.
-                  </span>
+                        The order doesn't have a high enough {{buyCurrency}} volume.
+                      </span>
                     {{else}}
                       {{#unless hasBalance}}
                         <span class="text-danger">
@@ -113,13 +113,13 @@
                       {{else}}
                         {{#unless hasAllowance}}
                           <span class="text-danger">
-                        You are trying to complete a {{offerType}} order above your <strong>defined allowance</strong>.
-                      </span>
+                            You are trying to complete a {{offerType}} order above your <strong>defined allowance</strong>.
+                          </span>
                         {{else}}
-                          <div class="row dex-order-details">
+                          <div class="row-fluid">
                             <div class="col-xs-12">
-                                <div class="row">
-                                  <div class="col-xs-7">
+                              <div class="row info-section bordered">
+                                <div class="col-xs-7">
                                   {{#if equals offer.type 'bid'}}
                                     <div class="row">
                                       <div class="col-xs-6 dex-currency-label">
@@ -128,7 +128,8 @@
                                         {{formatPrice (toWei total) quoteCurrency}}
                                       </div>
                                       <div class="col-xs-6 dex-currency-label dex-currency-label--fiat">
-                                        ~ {{{ formatBalance (toWei (multiply total priceInUSD)) '' '' true}}} USD
+                                        <span>~ {{{ formatBalance (toWei (multiply total priceInUSD)) 2 '' true}}}
+                                          USD</span>
                                       </div>
                                     </div>
                                     <div class="row">
@@ -137,7 +138,8 @@
                                         {{{formatBalance (toWei volume) '' '' true}}} {{baseCurrency}}
                                       </div>
                                       <div class="col-xs-6 dex-currency-label dex-currency-label--fiat">
-                                        ~ {{{ formatBalance (toWei (multiply volume priceInUSD)) '' '' true}}} USD
+                                        <span>~ {{{ formatBalance (toWei (multiply volume priceInUSD)) 2 '' true}}}
+                                          USD</span>
                                       </div>
                                     </div>
                                   {{else}}
@@ -148,7 +150,8 @@
                                         {{formatPrice (toWei volume) baseCurrency}}
                                       </div>
                                       <div class="col-xs-6 dex-currency-label dex-currency-label--fiat">
-                                        ~ {{{ formatBalance (toWei (multiply volume priceInUSD)) '' '' true}}} USD
+                                        <span>~ {{{ formatBalance (toWei (multiply volume priceInUSD)) 2 '' true}}}
+                                          USD</span>
                                       </div>
                                     </div>
                                     <div class="row">
@@ -157,38 +160,37 @@
                                         {{{formatBalance (toWei total) '' '' true}}} {{quoteCurrency}}
                                       </div>
                                       <div class="col-xs-6 dex-currency-label dex-currency-label--fiat">
-                                        ~ {{{ formatBalance (toWei (multiply total priceInUSD)) '' '' true}}} USD
+                                        <span>~ {{{ formatBalance (toWei (multiply total priceInUSD)) 2 '' true}}}
+                                          USD</span>
                                       </div>
                                     </div>
                                   {{/if}}
-                                  </div>
-                                  <div class="col-xs-5">
-                                    <div class="row">
-                                      <div class="col-xs-7" style="padding-right:0">
-                                        <span> Order Matching </span>
-                                      </div>
-                                      <div class="col-xs-5" style="padding-left:0">
+                                </div>
+                                <div class="col-xs-5">
+                                  <div class="row">
+                                    <div class="col-xs-7 dex-order-matching-label" style="padding-right:0">
+                                      <span> Order Matching </span>
+                                    </div>
+                                    <div class="col-xs-5" style="padding-left:0">
                                         <span class="dex-order-matching-status
-                                                     dex-order-matching-status--{{ternary isMatchingEnabled "active" "inactive"}}">
+                                                     dex-order-matching-status--{{ternary isMatchingEnabled "active"
+                                                                                          "inactive"}}">
                                           {{ternary isMatchingEnabled "ACTIVE" "INACTIVE"}}
                                         </span>
-                                      </div>
-                                    </div>
-                                    <div class="row">
-                                      <div class="col-xs-8" style="padding-right:0">
-                                        <span> gas </span>
-                                      </div>
-                                      <div class="col-xs-4">
-
-                                      </div>
                                     </div>
                                   </div>
                                 </div>
+                              </div>
                               <div class="row">
-                                <div class="col-xs-12">
+                                <div class="col-xs-1">
+                                  <img src="order-warning.svg" class="order-warning">
+                                </div>
+                                <div class="col-xs-11">
+                                   <span class="text-clarifications">
                                   If someone (partially) fills this order before you do, your offer may only be
                                   partially filled or even denied, in which case unused funds will be refunded to your
                                   balance and allowance.
+                                   </span>
                                 </div>
                               </div>
                             </div>
@@ -201,7 +203,7 @@
               </div>
               {{#if and alertBetterOffer isBuyEnabled}}
                 <div class="div-modal-text highlighted">
-                  <div class="row">
+                  <div class="row-fluid">
                     <div class="col-xs-1">
                       <img style="opacity: 0.5" src="order-warning-red.svg" fill="red" class="order-warning">
                     </div>
