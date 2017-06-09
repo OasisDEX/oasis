@@ -113,7 +113,8 @@
                       {{else}}
                         {{#unless hasAllowance}}
                           <span class="text-danger">
-                            You are trying to complete a {{offerType}} order above your <strong>defined allowance</strong>.
+                            You are trying to complete a {{offerType}}
+                            order above your <strong>defined allowance</strong>.
                           </span>
                         {{else}}
                           <div class="row-fluid">
@@ -336,66 +337,123 @@
               </tbody>
             </table>
           </section>
-          <div class="div-modal-text row">
-            <div class="col-xs-1">
-              <img src="order-warning.svg" class="order-warning">
-            </div>
-            <div class="col-xs-11">
-              <span class="text-clarifications">
-                {{#unless validNewOrderAmount}}
-                  Amount is invalid because {{baseCurrency}} has no decimals.
-                {{else}}
-                  {{#unless aboveLimit}}
-                    You are trying to create a {{offerType}} order below the minimum <strong>market limit</strong>,
-                    {{#if equals offerType 'buy'}}
-                      which is {{{formatBalance limit '' '' true}}} {{quoteCurrency}}.
+          <section>
+            <div class="div-modal-text">
+              <div class="row">
+                <div class="col-xs-12">
+                  <span class="text-clarifications">
+                    {{#unless validNewOrderAmount}}
+                      Amount is invalid because {{baseCurrency}} has no decimals.
                     {{else}}
-                      which is {{{formatBalance limit '' '' true}}} {{baseCurrency}}.
-                    {{/if}}
-                  {{else}}
-                    {{#unless hasAllowanceNewOrder offerType}}
-                      You are trying to create a {{offerType}} order above your <strong>defined allowance</strong>.
-                    {{else}}
-                      {{#if equals offerType 'buy'}}
-                        This action will remove {{{formatBalance (toWei offerTotal) '' ''
-                                                                 true}}} {{quoteCurrency}} {{formatPrice
-                        (toWei offerTotal) quoteCurrency}} from your token balance and allowance.
+                      {{#unless aboveLimit}}
+                        You are trying to create a {{offerType}} order below the minimum <strong>market limit</strong>,
+                        {{#if equals offerType 'buy'}}
+                          which is {{{formatBalance limit '' '' true}}} {{quoteCurrency}}.
+                        {{else}}
+                          which is {{{formatBalance limit '' '' true}}} {{baseCurrency}}.
+                        {{/if}}
                       {{else}}
-                        This action will remove {{{formatBalance (toWei offerAmount) '' ''
-                                                                 true}}} {{baseCurrency}} {{formatPrice
-                        (toWei offerAmount) baseCurrency}} from your token balance and allowance.
-                      {{/if}}
+                        {{#unless hasAllowanceNewOrder offerType}}
+                          You are trying to create a {{offerType}} order above your <strong>defined allowance</strong>.
+                        {{else}}
+                          <div class="row-fluid">
+                            <div class="col-xs-12">
+                              <div class="row info-section bordered">
+                                <div class="col-xs-7">
+                                  {{#if equals offerType 'buy'}}
+                                    <div class="row">
+                                      <div class="col-xs-6 dex-currency-label">
+                                        <i class="dex-icon-add"></i>
+                                        {{{formatBalance (toWei offerAmount) '' '' true}}} {{baseCurrency}}
+                                        {{formatPrice (toWei offerAmount) baseCurrency}}
+                                      </div>
+                                      <div class="col-xs-6 dex-currency-label dex-currency-label--fiat">
+                                        <span>~ {{{ formatBalance (toWei (multiply offerAmount priceInUSD)) 2 '' true}}}
+                                          USD</span>
+                                      </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="col-xs-6 dex-currency-label">
+                                        <i class="dex-icon-subtract"></i>
+                                        {{{formatBalance (toWei offerTotal) '' '' true}}} {{quoteCurrency}}
+                                      </div>
+                                      <div class="col-xs-6 dex-currency-label dex-currency-label--fiat">
+                                        <span>~ {{{ formatBalance (toWei (multiply offerTotal priceInUSD)) 2 '' true}}}
+                                          USD</span>
+                                      </div>
+                                    </div>
+                                  {{else}}
+                                    <div class="row">
+                                      <div class="col-xs-6 dex-currency-label">
+                                        <i class="dex-icon-add"></i>
+                                        {{{formatBalance (toWei offerTotal) '' '' true}}} {{quoteCurrency}}
+                                        {{formatPrice (toWei offerTotal) quoteCurrency}}
+                                      </div>
+                                      <div class="col-xs-6 dex-currency-label dex-currency-label--fiat">
+                                        <span>~ {{{ formatBalance (toWei (multiply offerTotal priceInUSD)) 2 '' true}}}
+                                          USD</span>
+                                      </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="col-xs-6 dex-currency-label">
+                                        <i class="dex-icon-subtract"></i>
+                                        {{{formatBalance (toWei offerAmount) '' '' true}}} {{baseCurrency}}
+                                      </div>
+                                      <div class="col-xs-6 dex-currency-label dex-currency-label--fiat">
+                                        <span>~ {{{ formatBalance (toWei (multiply offerAmount priceInUSD)) 2 '' true}}}
+                                          USD</span>
+                                      </div>
+                                    </div>
+                                  {{/if}}
+                                </div>
+                                <div class="col-xs-5">
+                                  <div class="row">
+                                    <div class="col-xs-7 dex-order-matching-label" style="padding-right:0">
+                                      <span> Order Matching </span>
+                                    </div>
+                                    <div class="col-xs-5" style="padding-left:0">
+                                      <span class="dex-order-matching-status
+                                        dex-order-matching-status--{{ternary isMatchingEnabled "active" "inactive"}}">
+                                        {{ternary isMatchingEnabled "ACTIVE" "INACTIVE"}}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="col-xs-12">
+                                      {{#if or (gasEstimateInProgress) (or gasEstimateResult gasEstimateError)}}
+                                        {{#if gasEstimateInProgress}}
+                                          Estimating gas... <span class="loading-icon">{{{loadingIcon}}}</span>
+                                        {{else}}
+                                          {{#if gasEstimateResult}}
+                                            {{estimateGasInETH}}
+                                            <span class="dex-currency-label">Gas {{{formatNumber gasEstimateInETH 4 true}}} ETH</span>
+                                            <span class="dex-currency-label dex-currency-label--fiat">
+                                              <span>~ {{{ formatNumber (multiply gasEstimateInETH priceInUSD) 2 true}}} USD</span>
+                                            </span>
+                                            {{#if gasEstimateMoreThanGasLimit}}
+                                              This is more than the block gas limit, so your order will fail. Please try to lower the amount.
+                                            {{/if}}
+                                          {{else}}
+                                            {{#if gasEstimateError}}
+                                              Gas estimation failed.
+                                            {{/if}}
+                                          {{/if}}
+                                        {{/if}}
+                                      {{/if}}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        {{/unless}}
+                      {{/unless}}
                     {{/unless}}
-                  {{/unless}}
-                {{/unless}}
-              </span>
-            </div>
-          </div>
-          {{#if or (gasEstimateInProgress) (or gasEstimateResult gasEstimateError)}}
-            <div class="div-modal-text row">
-              <div class="col-xs-1">
-                <img src="order-warning.svg" class="order-warning">
-              </div>
-              <div class="col-xs-11">
-                <span class="text-clarifications">
-                  {{#if gasEstimateInProgress}}
-                    Calculating estimated gas consumption... <span class="loading-icon">{{{loadingIcon}}}</span>
-                  {{else}}
-                    {{#if gasEstimateResult}}
-                      This action is estimated to use {{formatGas gasEstimateResult}} gas.
-                      {{#if gasEstimateMoreThanGasLimit}}
-                        This is more than the block gas limit, so your order will fail. Please try to lower the amount.
-                      {{/if}}
-                    {{else}}
-                      {{#if gasEstimateError}}
-                        Gas estimation failed.
-                      {{/if}}
-                    {{/if}}
-                  {{/if}}
-                </span>
+                  </span>
+                </div>
               </div>
             </div>
-          {{/if}}
+          </section>
         </div>
         <div class="modal-footer">
           {{#unless hasAllowanceNewOrder offerType}}

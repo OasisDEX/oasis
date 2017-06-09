@@ -22,6 +22,7 @@ Template.offermodal.viewmodel({
   volume: '',
   total: '',
   priceInUSD: '',
+  gasEstimateInETH: '',
   gasEstimateInProgress: false,
   gasEstimateMoreThanGasLimit: false,
   gasEstimateResult: null,
@@ -408,6 +409,17 @@ Template.offermodal.viewmodel({
     } else {
       this.gasEstimateInProgress(false);
     }
+  },
+  estimateGasInETH() {
+    web3Obj.eth.getGasPrice((err, priceValue) => {
+      if (!err) {
+        const price = new BigNumber(priceValue);
+        const gas = new BigNumber(this.gasEstimateResult());
+        this.gasEstimateInETH(web3Obj.fromWei(price.mul(gas)).toString(10));
+      } else {
+        console.debug('Cannot get gas price', err);
+      }
+    });
   },
   confirmOffer(event) {
     event.preventDefault();
