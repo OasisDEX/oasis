@@ -32,7 +32,7 @@ Template.history.viewmodel({
     const address = Session.get('address');
     return TokenEvents.find({
       type: { $in: ['transfer'] },
-      from: address, //this triggers reactiveness when the user switches between addresses
+      $or: [{ to: address }, { from: address }], //this triggers reactiveness when the user switches between addresses
     }, { sort: { blockNumber: -1 } });
   },
   transferHistoryCount() {

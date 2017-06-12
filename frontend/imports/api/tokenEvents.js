@@ -7,6 +7,7 @@ class TokenEventCollection extends Mongo.Collection {
   fromLabel() {
     return this.from;
   }
+
   toLabel() {
     return super.to;
   }
@@ -28,6 +29,7 @@ class TokenEventCollection extends Mongo.Collection {
       });
     });
   }
+
   prepareRow(tokenId, event) {
     const row = {
       blockNumber: event.blockNumber,
@@ -117,9 +119,10 @@ class TokenEventCollection extends Mongo.Collection {
       Dapple.getToken(tokenId, (error, token) => {
         // console.log(tokenId);
         if (!error) {
+          const address = Session.get('address');
           const self = this;
           // TODO: extract duplicated logic for every event in separate abstraction layer
-          token.Transfer({ from: Session.get('address') }, {
+          token.Transfer({ from: address }, {
             fromBlock: latestBlock - parseInt(Session.get('AVGBlocksPerDay') / 12, 10), // Last 2 hours
           }).get((err, result) => {
             if (!err) {
@@ -129,7 +132,7 @@ class TokenEventCollection extends Mongo.Collection {
               });
               Session.set('loadingTransferHistory', false);
             }
-            token.Transfer({ from: Session.get('address') }, { fromBlock: 'latest' }, (err2, result2) => {
+            token.Transfer({ from: address }, { fromBlock: 'latest' }, (err2, result2) => {
               if (!err2) {
                 this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
                 self.syncEvent(tokenId, result2);
@@ -137,6 +140,23 @@ class TokenEventCollection extends Mongo.Collection {
             });
           });
 
+          token.Transfer({ to: address }, {
+            fromBlock: latestBlock - parseInt(Session.get('AVGBlocksPerDay') / 12, 10), // Last 2 hours
+          }).get((err, result) => {
+            if (!err) {
+              self.syncEvents(tokenId, result);
+              result.forEach((transferEvent) => {
+                this.setEventLoadingIndicatorStatus(transferEvent.transactionHash, true);
+              });
+              Session.set('loadingTransferHistory', false);
+            }
+            token.Transfer({ to: address }, { fromBlock: 'latest' }, (err2, result2) => {
+              if (!err2) {
+                this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
+                self.syncEvent(tokenId, result2);
+              }
+            });
+          });
           if (tokenId === 'W-ETH') {
             token.Deposit({}, {
               fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
