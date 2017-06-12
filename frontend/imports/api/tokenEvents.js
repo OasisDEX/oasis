@@ -123,7 +123,7 @@ class TokenEventCollection extends Mongo.Collection {
           const self = this;
           // TODO: extract duplicated logic for every event in separate abstraction layer
           token.Transfer({ from: address }, {
-            fromBlock: latestBlock - parseInt(Session.get('AVGBlocksPerDay') / 12, 10), // Last 2 hours
+            fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
           }).get((err, result) => {
             if (!err) {
               self.syncEvents(tokenId, result);
@@ -141,7 +141,7 @@ class TokenEventCollection extends Mongo.Collection {
           });
 
           token.Transfer({ to: address }, {
-            fromBlock: latestBlock - parseInt(Session.get('AVGBlocksPerDay') / 12, 10), // Last 2 hours
+            fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
           }).get((err, result) => {
             if (!err) {
               self.syncEvents(tokenId, result);
