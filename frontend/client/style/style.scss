@@ -1086,7 +1086,7 @@ table {
 }
 
 .info-section {
-  padding-top:15px;
+  padding-top: 15px;
   margin-bottom: 16px;
   font-size: 12px;
 
@@ -1169,6 +1169,11 @@ table {
       color: $color-sell;
     }
   }
+}
+
+.warning-section {
+  display: block;
+  padding: 10px 0;
 }
 
 .modal {
@@ -1559,10 +1564,6 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
     font-weight: 500;
     font-size: 14px;
     color: rgba(22, 22, 28, 0.5);
-  }
-
-  .div-modal-text:last-child {
-    margin-bottom: 0;
   }
 
   .div-actions {
@@ -2504,10 +2505,21 @@ a.logo:hover {
   .warning {
     color: red;
   }
+}
 
-  img.order-warning {
-    position: relative;
-    top: 7.5px;
+.order-warning {
+  &-icon {
+    width: 40px;
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 16px;
+  }
+
+  &-text {
+    width: 430px;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 16px;
   }
 }
 
