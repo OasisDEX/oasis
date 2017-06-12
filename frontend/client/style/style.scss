@@ -1749,11 +1749,15 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
         &:first-child, &:last-child {
           width: 10px !important;
         }
+        &.th-action {
+          max-width: 50px !important;
+        }
         &.th-date {
           max-width: 80px !important;
         }
         &.th-recipient {
-          max-width: 130px !important;
+          max-width: 100px !important;
+          text-align: center;
         }
         &.th-amount {
           max-width: 130px !important;
@@ -1771,9 +1775,14 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
         &.timestamp {
           max-width: 80px !important;
         }
-        &.transaction-hash {
-          max-width: 130px !important;
+        &.transaction-hash-recipient {
+          max-width: 100px !important;
           padding-left: 10px;
+          text-align: left;
+        }
+        &.action {
+          max-width: 50px !important;
+          text-align: center;
         }
         &.transfer {
           max-width: 130px !important;
@@ -1824,8 +1833,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
         &.th-date {
           max-width: 90px !important;
         }
-        &.th-type,
-        &.th-recipient {
+        &.th-type {
           max-width: 115px !important;
           padding-left: 10px;
           text-align: center;
@@ -1855,8 +1863,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
           max-width: 90px !important;
         }
         &.type,
-        &.transaction-hash,
-        &.transaction-hash-recipient {
+        &.transaction-hash {
           max-width: 115px !important;
           padding-left: 10px;
           text-align: center;
