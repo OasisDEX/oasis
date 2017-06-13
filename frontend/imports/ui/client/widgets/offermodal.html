@@ -317,11 +317,12 @@
                   class="allowance-currency">{{baseToken._id}}</span></td>
               {{/if}}
             </tr>
-            <!--TODO: wrap this based on the market type. Display only if sniping is enabled-->
-            <tr class="row-data-line owner">
-              <th>OWNER</th>
-              <td><span class="owner-address">{{address}}</span></td>
-            </tr>
+            {{#if isBuyEnabled}}
+              <tr class="row-data-line owner">
+                <th>OWNER</th>
+                <td><span class="owner-address">{{address}}</span></td>
+              </tr>
+            {{/if}}
             </tbody>
           </table>
           <section class="input-section">

@@ -12,9 +12,6 @@ import { Offers, Status } from '/imports/api/offers';
 
 import './offermodal.html';
 
-// TODO: DELETE THIS, TESTING PURPOSE
-window.Tokens = Tokens;
-
 const latest = require('promise-latest');
 
 Template.offermodal.viewmodel({
