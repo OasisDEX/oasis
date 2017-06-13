@@ -100,9 +100,8 @@ Template.markets.viewmodel({
     });
   },
   baseChange(newBaseCurrency) {
-    // TODO: related when to display some panels. Again scenarios for Matching Market and not to be considered
-    // Session.set('balanceLoaded', false);
-    // Session.set('allowanceLoaded', false);
+    Session.set('balanceLoaded', false);
+    Session.set('allowanceLoaded', false);
     this.baseCurrency(newBaseCurrency);
     // XXX EIP20
     Dapple.getToken(this.baseCurrency(), (error, token) => {
