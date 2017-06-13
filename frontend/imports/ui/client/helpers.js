@@ -251,7 +251,7 @@ Template.registerHelper('timestampToString', (ts, inSeconds, short) => {
   if (ts) {
     const momentFromTimestamp = (inSeconds === true) ? moment.unix(ts) : moment.unix(ts / 1000);
     if (short === true) {
-      timestampStr = momentFromTimestamp.format('DD-MMM-HH:mm');
+      timestampStr = momentFromTimestamp.format('DD-MM-HH:mm');
     } else {
       timestampStr = momentFromTimestamp.format();
     }
@@ -276,16 +276,9 @@ Template.registerHelper('fromWei', (s) => web3Obj.fromWei(s));
 
 Template.registerHelper('toWei', (s) => web3Obj.toWei(s));
 
-Template.registerHelper('friendlyAddress', (address) => {
-  /* eslint-disable no-underscore-dangle */
-  if (address === Blaze._globalHelpers.contractAddress()) {
-    return 'market';
-  } else if (address === Blaze._globalHelpers.address()) {
-    return 'me';
-  }
-  return `${address.substr(0, 9)}...`;
-  /* eslint-enable no-underscore-dangle */
-});
+Template.registerHelper('friendlyAddress', (address) => `${address.substr(0, 9)}...`);
+
+Template.registerHelper('isMyAddress', (address) => address === Session.get('address'));
 
 Template.registerHelper('fromPrecision', (value, precision) => {
   let displayValue = value;

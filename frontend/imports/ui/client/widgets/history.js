@@ -29,10 +29,10 @@ Template.history.viewmodel({
     }, { sort: { blockNumber: -1 } });
   },
   transferHistory() {
-    // const address = Session.get('address');
+    const address = Session.get('address');
     return TokenEvents.find({
       type: { $in: ['transfer'] },
-      /* $or: [{ to: address }, { from: address }], */
+      $or: [{ to: address }, { from: address }], //this triggers reactiveness when the user switches between addresses
     }, { sort: { blockNumber: -1 } });
   },
   transferHistoryCount() {

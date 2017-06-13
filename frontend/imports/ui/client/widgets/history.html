@@ -7,6 +7,9 @@
         <tr>
           <th></th>
           <th class="th-date">DATE</th>
+          {{#if equals historyType 'transferHistory'}}
+            <th class="th-action">ACTION</th>
+          {{/if}}
           {{#if equals historyType 'depositHistory'}}
             <th class="th-type">TYPE</th>
             <th class="th-coin">COIN</th>
@@ -66,6 +69,15 @@
                     {{timestampToString this.timestamp true true}}
                   {{/if}}
                 </td>
+                {{#if equals historyType 'transferHistory'}}
+                  <td class="action">
+                    {{#if (isMyAddress this.to)}}
+                      IN
+                    {{else}}
+                      OUT
+                    {{/if}}
+                  </td>
+                {{/if}}
                 {{#if equals historyType 'depositHistory'}}
                   <td class="transaction-hash">{{ friendlyAddress(this.to) }}</td>
                 {{else}}
