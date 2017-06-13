@@ -462,5 +462,5 @@ Template.registerHelper('volumeSelector', () => Session.get('volumeSelector'));
 
 Template.registerHelper('isMatchingEnabled', () => Session.get('isMatchingEnabled'));
 
-Template.registerHelper('isBuyEnabled', () => !Session.get('idMatchingEnabled') ||
+Template.registerHelper('isBuyEnabled', () => !Session.get('isMatchingEnabled') ||
 (Session.get('isBuyEnabled') && Session.get('isMatchingEnabled')));
