@@ -148,9 +148,9 @@
                             </div>
                           </div>
                         {{else}}
-                          <div class="row-fluid">
+                          <div class="row-fluid div-modal-text ">
                             <div class="col-xs-12">
-                              <div class="row div-modal-text info-section bordered">
+                              <div class="row info-section bordered">
                                 <div class="col-xs-7">
                                   {{#if equals offer.type 'bid'}}
                                     <div class="row">
@@ -234,7 +234,7 @@
               {{#if and alertBetterOffer isBuyEnabled}}
                 <div class="row-fluid">
                   <div class="col-xs-12">
-                    <div class="row div-modal-text highlighted warning-section bordered">
+                    <div class="row div-modal-text highlighted warning-section bordered bordered--danger">
                       <span class="order-warning-icon">
                         <img style="opacity: 0.5" src="order-warning-red.svg" fill="red">
                       </span>
@@ -377,33 +377,42 @@
                       {{#unless aboveLimit}}
                         <div class="row-fluid">
                           <div class="col-xs-12">
-                            <div class="row bordered bordered--danger">
-                             <div class="col-xs-1">
-                               <img style="opacity: 0.5" src="order-warning-red.svg" fill="red" class="order-warning">
-                             </div>
-                             <div class="col-xs-11">
-                               <span class="text-danger highlighted">
-                                 You are trying to create a {{offerType}}
-                                 order below the minimum <strong>market limit</strong>,
-                                 {{#if equals offerType 'buy'}}
-                                   which is {{formatToHighestPossible limit}} {{quoteCurrency}}.
-                                 {{else}}
-                                   which is {{{formatToHighestPossible limit}}} {{baseCurrency}}.
-                                 {{/if}}
-                               </span>
-                             </div>
-                           </div>
+                            <div class="row div-modal-text warning-section highlighted bordered bordered--danger">
+                                <span class="order-warning-icon">
+                                  <img style="opacity: 0.5" src="order-warning-red.svg" fill="red">
+                                </span>
+                                <span class="order-warning-text text-clarifications text-danger">
+                                   You are trying to create a {{offerType}}
+                                  order below the minimum <strong>market limit</strong>,
+                                  {{#if equals offerType 'buy'}}
+                                    which is {{formatToHighestPossible limit}} {{quoteCurrency}}.
+                                  {{else}}
+                                    which is {{{formatToHighestPossible limit}}} {{baseCurrency}}.
+                                  {{/if}}
+                                </span>
+                              </div>
                           </div>
                         </div>
                       {{else}}
                         {{#unless hasAllowanceNewOrder offerType}}
-                          You are trying to create a {{offerType}} order above your <strong>defined allowance</strong>.
+                          <div class="row-fluid">
+                            <div class="col-xs-12">
+                              <div class="row div-modal-text warning-section bordered">
+                                <span class="order-warning-icon">
+                                  <img src="order-warning.svg">
+                                </span>
+                                <span class="order-warning-text text-clarifications">
+                                   You are trying to create a {{offerType}}
+                                  order above your <strong>defined allowance</strong>.
+                                </span>
+                              </div>
+                            </div>
+                          </div>
                         {{else}}
                           <div class="row-fluid">
                             <div class="col-xs-12">
-                              <div class="row info-section bordered
-                                   {{ternary gasEstimateMoreThanGasLimit 'bordered--danger' ''}}">
-                                {{#if (not gasEstimateMoreThanGasLimit) }}
+                              {{#if (not gasEstimateMoreThanGasLimit) }}
+                                <div class="row info-section bordered">
                                   <div class="col-xs-7">
                                     {{#if equals offerType 'buy'}}
                                       <div class="row">
@@ -487,27 +496,23 @@
                                     </div>
                                   </div>
                                 </div>
-                                {{else}}
-                                  <div class="div-modal-text highlighted">
-                                    <div class="row-fluid">
-                                      <div class="col-xs-1">
-                                        <img style="opacity: 0.5" src="order-warning-red.svg" fill="red"
-                                             class="order-warning">
-                                      </div>
-                                      <div class="col-xs-11">
-                                        <span class="text-danger">
-                                           Your {{offerType}} exceeds the gas limit of <strong>{{formatGasLimit gasLimit
-                                                                                                                1000000
-                                                                                                                'M'}}</strong>.
-                                           <br>
-                                           To get a working order use the
-                                           <strong>{{ternary (equals offerType 'buy') 'Buy' 'Sell'}} Max Button</strong> .
-                                        </span>
-                                      </div>
-                                    </div>
+                                 </div>
+                              {{else}}
+                                <div class="row div-modal-text highlighted warning-section bordered bordered--danger">
+                                  <div class="order-warning-icon">
+                                    <img style="opacity: 0.5" src="order-warning-red.svg" fill="red">
                                   </div>
-                                {{/if}}
-                              </div>
+                                  <div class="order-warning-text text-clarifications text-danger">
+                                    <span class="text-danger">
+                                      Your {{offerType}} exceeds the gas limit of
+                                      <strong> {{formatGasLimit gasLimit 1000000 'M'}}</strong>.
+                                      <br>
+                                      To get a working order use the
+                                      <strong>{{ternary (equals offerType 'buy') 'Buy' 'Sell'}} Max Button</strong> .
+                                    </span>
+                                  </div>
+                                </div>
+                              {{/if}}
                             </div>
                           </div>
                         {{/unless}}
