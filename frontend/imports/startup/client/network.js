@@ -3,7 +3,6 @@ import { Session } from 'meteor/session';
 import { Dapple, web3Obj } from 'meteor/makerotc:dapple';
 import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
-// TODO: verify with others if we will have limits if the order matching is not enabled
 import Limits from '/imports/api/limits';
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
@@ -189,9 +188,6 @@ function initSession() {
   if (!Session.get('volumeSelector')) {
     Session.set('volumeSelector', 'quote');
   }
-
-  // TODO: any conditions for dust limit?
-  Session.set('orderBookDustLimit', { 'W-ETH': 1 });
 }
 
 /**
