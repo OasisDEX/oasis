@@ -1515,7 +1515,6 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
     border: 1px solid;
     text-align: right;
     padding-right: 10px;
-    width: 50%;
   }
 
   input[type=number]::-webkit-inner-spin-button,
@@ -2447,6 +2446,18 @@ span.right {
   }
   span.set-total-allowance {
     cursor: pointer;
+  }
+
+  button.dex-btn-max {
+    transform: translateY(5px);
+  }
+
+  td.dex-input-cell {
+    width: 330px;
+
+    input {
+      max-width: 230px;
+    }
   }
 }
 
