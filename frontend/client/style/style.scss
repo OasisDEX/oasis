@@ -1663,7 +1663,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
     display: block;
     margin-top: 10px;
     &.tbody-scrolling {
-      width: 95%;
+      width: 98%;
     }
     &.tbody-not-scrolling {
       width: 100%;
@@ -1840,7 +1840,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
         }
         &.th-coin,
         &.transfer {
-          max-width: 60px !important;
+          max-width: 50px !important;
           text-align: center !important;
           margin-left: 10px !important;
         }
@@ -1852,7 +1852,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   }
   tbody {
     /*width: 100%;*/
-    width: 95%;
+    width: 98%;
     tr {
       td {
         &:first-child, &:last-child {
@@ -1870,11 +1870,11 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
         }
         &.coin {
           text-align: center;
-          max-width: 60px !important;
+          max-width: 50px !important;
           margin-left: 10px;
           &.deposit {
             text-align: center;
-            max-width: 60px !important;
+            max-width: 50px !important;
             margin-left: 10px;
           }
         }
