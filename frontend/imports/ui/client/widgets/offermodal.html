@@ -51,7 +51,7 @@
                 <tbody>
                 <tr class="row-input-line">
                   <th class="dex-label-cell">
-                    <span>VOLUME</span>
+                    <span>AMOUNT</span>
                   </th>
                   <td class="dex-input-cell">
                     <input type="number" class="input" step="any" min="0" max={{maxVolume}}
@@ -341,7 +341,7 @@
               </tr>
               <tr class="row-input-line">
                 <th class="dex-label-cell">
-                  <span>VOLUME</span>
+                  <span>AMOUNT</span>
                 </th>
                 <td class="dex-input-cell">
                   <input type="number" class="input" step="any" min="0" max={{maxNewOfferAmount}}
@@ -356,8 +356,15 @@
                   <span>TOTAL</span>
                 </th>
                 <td class="dex-input-cell">
-                  <input type="number" class="input" step="any" min="0" max={{maxNewOfferTotal}}
-                    {{b "value: offerTotal, input: calcNewOfferAmount"}}>
+                  <div {{b "focusin: onFocus, focusout: onBlur"}}>
+                    {{#if and canAutofill shouldShowMaxBtn  }}
+                      <button type="button" class="btn btn-sm btn-default dex-btn-max {{offerType}}"
+                        {{b "click: autofill"}}>{{offerType}} MAX
+                      </button>
+                    {{/if}}
+                    <input type="number" class="input" step="any" min="" placeholder="0"  max={{maxNewOfferTotal}}
+                      {{b "value: offerTotal, input: calcNewOfferAmount"}}>
+                  </div>
                 </td>
                 <td class="dex-currency-cell">
                   <span>{{quoteCurrency}}</span>

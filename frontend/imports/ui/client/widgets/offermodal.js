@@ -25,6 +25,7 @@ Template.offermodal.viewmodel({
   gasEstimateMoreThanGasLimit: false,
   gasEstimateResult: null,
   gasEstimateError: null,
+  shouldShowMaxBtn: false,
   autorun() {
     this.estimateGasUsage();
     this.fetchCurrentPriceInUSD();
@@ -63,6 +64,20 @@ Template.offermodal.viewmodel({
   },
   baseToken() {
     return Tokens.findOne(Session.get('baseCurrency'));
+  },
+  baseAvailable() {
+    const token = Tokens.findOne(Session.get('baseCurrency'));
+    if (token) {
+      return token.balance;
+    }
+    return 0;
+  },
+  quoteAvailable() {
+    const token = Tokens.findOne(Session.get('quoteCurrency'));
+    if (token) {
+      return token.balance;
+    }
+    return 0;
   },
   hasBalance() {
     try {
@@ -234,7 +249,7 @@ Template.offermodal.viewmodel({
     }
     try {
       const price = new BigNumber(this.offerPrice());
-      let amount = new BigNumber(this.offerAmount());
+      let amount = new BigNumber(this.offerAmount() || 0);
       const total = new BigNumber(this.offerTotal());
       if (total.isZero() && price.isZero() && (amount.isNaN() || amount.isNegative())) {
         this.offerAmount('0');
@@ -256,22 +271,38 @@ Template.offermodal.viewmodel({
 
     if (this.type() === 'bid') {
       bestOffer = Offers.findOne({
-          buyWhichToken: Session.get('baseCurrency'),
-          sellWhichToken: Session.get('quoteCurrency'),
-        },
+        buyWhichToken: Session.get('baseCurrency'),
+        sellWhichToken: Session.get('quoteCurrency'),
+      },
         {
           sort: { ask_price_sort: 1 },
         });
       return (new BigNumber(bestOffer.bid_price)).gt(new BigNumber(this.templateInstance.data.offer.bid_price));
     } else if (this.type() === 'ask') {
       bestOffer = Offers.findOne({
-          buyWhichToken: Session.get('quoteCurrency'),
-          sellWhichToken: Session.get('baseCurrency'),
-        },
+        buyWhichToken: Session.get('quoteCurrency'),
+        sellWhichToken: Session.get('baseCurrency'),
+      },
         {
           sort: { ask_price_sort: 1 },
         });
       return (new BigNumber(bestOffer.ask_price)).lt(new BigNumber(this.templateInstance.data.offer.ask_price));
+    }
+    return false;
+  },
+  autofill(event) {
+    event.preventDefault();
+    const marketOpen = Session.get('market_open');
+    let available = 0;
+    if (!marketOpen) return false;
+    if (this.offerType() === 'buy') {
+      available = web3Obj.fromWei(this.quoteAvailable()).toString(10);
+      this.offerTotal(available);
+      this.calcNewOfferAmount();
+    } else if (this.offerType() === 'sell') {
+      available = web3Obj.fromWei(this.baseAvailable()).toString(10);
+      this.offerAmount(available);
+      this.calcNewOfferTotal();
     }
     return false;
   },
@@ -438,6 +469,15 @@ Template.offermodal.viewmodel({
         this.priceInUSD(data[0].price_usd);
       }).fail((error) => console.debug(error));
     }
+  },
+  canAutofill() {
+    return Session.get('market_open');
+  },
+  onFocus() {
+    this.shouldShowMaxBtn(true);
+  },
+  onBlur() {
+    this.shouldShowMaxBtn(false);
   },
 });
 
