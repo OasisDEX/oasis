@@ -326,9 +326,6 @@ Template.neworder.viewmodel({
     this.offerTotal(this.total());
     this.offerType(this.type());
   },
-  showDepositTab() {
-    $('#wrap').tab('show');
-  },
   showAllowanceModal(token) {
     $(`#allowanceModal${token}`).modal('show');
   },

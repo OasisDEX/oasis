@@ -306,6 +306,23 @@ Template.offermodal.viewmodel({
     }
     return false;
   },
+ // this is nonsense but since someone decided to use same js and html , but different offer object, this is the way.
+  autofillOrder(event) {
+    event.preventDefault();
+    const marketOpen = Session.get('market_open');
+    let available = 0;
+    if (!marketOpen) return false;
+    if (this.offer().type() === 'ask') {
+      available = web3Obj.fromWei(this.quoteAvailable()).toString(10);
+      this.total(available);
+      this.calcVolume();
+    } else if (this.offer().type() === 'bid') {
+      available = web3Obj.fromWei(this.baseAvailable()).toString(10);
+      this.volume(available);
+      this.calcTotal();
+    }
+    return false;
+  },
   dismiss(event) {
     $(event.target).closest('.modal').modal('hide');
   },

@@ -76,7 +76,7 @@
               {{/unless}}
               {{#unless hasBalance sellCurrency}}
                 <span class="help-block">You don't have enough {{#if equals sellCurrency 'W-ETH'}}
-                  <a href="#ethtokens" {{b "click: showDepositTab"}}>{{sellCurrency}}</a>{{else}}{{sellCurrency}}{{/if}}
+                  <a href="#wrap">{{sellCurrency}}</a>{{else}}{{sellCurrency}}{{/if}}
                   tokens.</span>
               {{else}}
                 {{#if isBuyEnabled}}

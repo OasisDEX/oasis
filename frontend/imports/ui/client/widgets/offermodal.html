@@ -66,8 +66,16 @@
                     <span>TOTAL</span>
                   </th>
                   <td class="dex-input-cell">
-                    <input type="number" class="input" step="any" min="0" max={{maxTotal}}
-                      {{b "value: total, input: calcVolume"}}>
+                    <div {{b "focusin: onFocus, focusout: onBlur"}}>
+                      {{#if and canAutofill shouldShowMaxBtn  }}
+                        <button type="button" class="btn btn-sm btn-default dex-btn-max
+                          {{#if equals offer.type 'bid'}}sell{{else}}buy{{/if}}"
+                          {{b "click: autofillOrder"}}>{{#if equals offer.type 'bid'}}SELL{{else}}BUY{{/if}} MAX
+                        </button>
+                      {{/if}}
+                      <input type="number" class="input" step="any" min="" placeholder="0" max={{maxTotal}}
+                        {{b "value: total, input: calcVolume"}}>
+                    </div>
                   </td>
                   <td class="dex-currency-cell">
                     <span>{{quoteCurrency}}</span>
@@ -123,7 +131,7 @@
                               <span class="order-warning-text text-clarifications">
                                 You don't have enough
                                 {{#if equals sellCurrency 'W-ETH'}}
-                                  <a href="#ethtokens" {{b  "click: dismiss"}}>{{sellCurrency}}</a>
+                                  <a href="#wrap" {{b  "click: dismiss"}}>{{sellCurrency}}</a>
                                 {{else}}
                                   {{sellCurrency}}
                                 {{/if}} tokens.
@@ -362,7 +370,7 @@
                         {{b "click: autofill"}}>{{offerType}} MAX
                       </button>
                     {{/if}}
-                    <input type="number" class="input" step="any" min="" placeholder="0"  max={{maxNewOfferTotal}}
+                    <input type="number" class="input" step="any" min="" placeholder="0" max={{maxNewOfferTotal}}
                       {{b "value: offerTotal, input: calcNewOfferAmount"}}>
                   </div>
                 </td>
@@ -481,28 +489,29 @@
                                   </div>
                                   <div class="row">
                                     {{#if or (gasEstimateInProgress) (or gasEstimateResult gasEstimateError)}}
-                                        {{#if gasEstimateInProgress}}
-                                          <span class="col-xs-12">
+                                      {{#if gasEstimateInProgress}}
+                                        <span class="col-xs-12">
                                             Estimating gas... <span class="loading-icon">{{{loadingIcon}}}</span>
                                           </span>
-                                        {{else}}
-                                          {{#if gasEstimateResult}}
-                                            {{estimateGasInETH gasEstimateResult}}
-                                            <span class="col-xs-7 dex-currency-label">
+                                      {{else}}
+                                        {{#if gasEstimateResult}}
+                                          {{estimateGasInETH gasEstimateResult}}
+                                          <span class="col-xs-7 dex-currency-label">
                                               Gas {{{formatNumber gasEstimateInETH 4 true}}} ETH
                                             </span>
-                                            <span style="width: 70px" class="col-xs-5 dex-currency-label dex-currency-label--fiat">
+                                            <span style="width: 70px"
+                                                  class="col-xs-5 dex-currency-label dex-currency-label--fiat">
                                               <span>
                                                 ~ {{{ formatNumber (multiply gasEstimateInETH priceInUSD) 2 true}}} USD
                                               </span>
                                             </span>
-                                          {{else}}
-                                            {{#if gasEstimateError}}
-                                              Gas estimation failed.
-                                            {{/if}}
+                                        {{else}}
+                                          {{#if gasEstimateError}}
+                                            Gas estimation failed.
                                           {{/if}}
                                         {{/if}}
                                       {{/if}}
+                                    {{/if}}
                                   </div>
                                 </div>
                                  </div>
