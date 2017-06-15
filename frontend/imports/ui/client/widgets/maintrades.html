@@ -1,16 +1,16 @@
 <template name="maintrades">
   {{#if loadedCurrencies}}
-  <div class="row balance-row">
-    <section class="col-md-4">
-      {{> balance currency=quoteCurrency currencyType='quote-currency' }}
-    </section>
-    <section class="col-md-4">
-      {{> currencySelector }}
-    </section>
-    <section class="col-md-4">
-      {{> balance currency=baseCurrency currencyType='base-currency' }}
-    </section>
-  </div>
+  <!--<div class="row balance-row">-->
+    <!--<section class="col-md-4">-->
+      <!--{{> balance currency=quoteCurrency currencyType='quote-currency' }}-->
+    <!--</section>-->
+    <!--<section class="col-md-4">-->
+      <!--{{> currencySelector }}-->
+    <!--</section>-->
+    <!--<section class="col-md-4">-->
+      <!--{{> balance currency=baseCurrency currencyType='base-currency' }}-->
+    <!--</section>-->
+  <!--</div>-->
   <div class="row">
     <div class="order-center">
       <section class="order-section col-md-6 markets">
@@ -46,7 +46,7 @@
   <div class="row">
     <div class="order-center">
       <section class="order-section col-md-6">
-        {{> mytrades}}
+        {{> myorders}}
       </section>
       <section class="order-section col-md-6">
         {{> lasttrades}}
