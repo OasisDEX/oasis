@@ -43,7 +43,7 @@ function checkIfOrderMatchingEnabled(marketType) {
     const addr = Dapple['maker-otc'].environments[Dapple.env].otc.value;
 
     const contract = web3Obj.eth.contract(abi).at(addr);
-    contract.ema((error, result) => {
+    contract.isMatchingEnabled((error, result) => {
       Session.set('isMatchingEnabled', result);
     });
   }

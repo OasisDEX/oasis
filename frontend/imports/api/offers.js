@@ -273,7 +273,7 @@ Offers.syncOffers = () => {
   }
 
   // Sync all past offers TODO: check if order matching is enabled and if not apply it.(applied) . Verify and understand the condition
-  const isMatchingEnabled = Session.get('IsMatchingEnabled');
+  const isMatchingEnabled = Session.get('isMatchingEnabled');
   if (isMatchingEnabled) {
     Session.set('loading', true);
     Session.set('loadingCounter', 0);
