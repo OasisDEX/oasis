@@ -681,7 +681,7 @@ table {
   margin-left: 17px;
 }
 
-#myorders-container {
+#mytrades-container {
   h2 {
     padding-right: 30px;
   }
@@ -1086,17 +1086,15 @@ table {
 }
 
 .info-section {
-  padding-top: 15px;
-  margin-bottom: 16px;
+  margin: 15px -15px;
+  padding: 15px 0 15px 0;
   font-size: 12px;
+  font-weight: normal;
 
   .row {
     line-height: 1.5;
   }
 
-  [class*="col-"] {
-    margin-bottom: 10px;
-  }
   .div-modal-text {
     margin-top: 0;
     margin-bottom: 0;
@@ -1129,11 +1127,12 @@ table {
     padding-right: 0;
     line-height: 1.5;
 
+
     &--fiat {
       height: 20px;
       text-align: center;
-      font-size: 10px;
-      padding: 0 4px;
+      font-size: 11px;
+      padding: 0;
       border: 1px solid #EFEFEF;
       border-radius: 5px;
       background-color: #F9F8F8;
@@ -1142,14 +1141,36 @@ table {
         display: inline-block;
         vertical-align: middle;
         position: relative;
-        top: 1px;
       }
     }
   }
 
+
+  .dex-gas-label {
+    padding-left: 0;
+  }
+
+
+
+  .dex-currency-add {
+    padding-right: 15px;
+  }
+
+  .dex-currency-subtract {
+    padding-right: 15px;
+    padding-top: 10px;
+  }
+
+  .dex-gas-estimate {
+    padding-top: 10px;
+  }
+
+
   .dex-order-matching-label {
     border: 1px solid transparent;
+    padding-left: 0;
   }
+
 
   .dex-order-matching-status {
     height: 20px;
@@ -1174,6 +1195,7 @@ table {
 .warning-section {
   display: block;
   padding: 10px 0;
+  margin-bottom: 15px;
 }
 
 .modal {
@@ -1183,7 +1205,7 @@ table {
 
   .input-section {
     padding: 0;
-    margin: 16px 0;
+    margin-top: 20px;
 
     tr {
       height: inherit;
@@ -1458,6 +1480,8 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
 
 .btn-placement-left {
   float: left;
+  margin-left: 0px !important;
+
 }
 
 .btn-place-order {
@@ -1486,7 +1510,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   font-family: 'Montserrat', sans-serif;
   font-size: 15px;
   font-weight: 500;
-  padding: 20px;
+  padding: 30px 30px 20px 30px;
   width: 550px;
   overflow: auto;
 
@@ -1500,7 +1524,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
     opacity: 0.68;
     font-weight: 500;
     font-size: 15px;
-    padding-left: 13px;
+    padding-left: 10px;
   }
 
   td {
@@ -1515,6 +1539,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
     border: 1px solid;
     text-align: right;
     padding-right: 10px;
+    width: 50%;
   }
 
   input[type=number]::-webkit-inner-spin-button,
@@ -1555,10 +1580,9 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   }
 
   .div-modal-text {
-    margin-bottom: 15px;
     font-weight: 500;
     font-size: 14px;
-    color: rgba(22, 22, 28, 0.5);
+    color: #989899;
   }
 
   .div-actions {
@@ -2364,7 +2388,6 @@ span.right {
   }
   .text-clarifications {
     font-size: 14px;
-    color: rgba(0, 0, 0, 0.4);
     b {
       color: #222228;
     }
@@ -2380,7 +2403,7 @@ span.right {
 
 .modal-header {
   border: none;
-  padding: 5px 15px;
+  padding: 0px 5px 5px 5px;
 }
 
 .modal-title {
@@ -2447,18 +2470,6 @@ span.right {
   span.set-total-allowance {
     cursor: pointer;
   }
-
-  button.dex-btn-max {
-    transform: translateY(5px);
-  }
-
-  td.dex-input-cell {
-    width: 330px;
-
-    input {
-      max-width: 230px;
-    }
-  }
 }
 
 .market-history {
@@ -2469,7 +2480,12 @@ span.right {
   }
 }
 
+.modal-body {
+  padding: 0;
+}
+
 .modal-footer {
+  padding: 0;
   border-top: none;
 }
 

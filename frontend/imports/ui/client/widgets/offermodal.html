@@ -51,7 +51,7 @@
                 <tbody>
                 <tr class="row-input-line">
                   <th class="dex-label-cell">
-                    <span>AMOUNT</span>
+                    <span>VOLUME</span>
                   </th>
                   <td class="dex-input-cell">
                     <input type="number" class="input" step="any" min="0" max={{maxVolume}}
@@ -66,16 +66,8 @@
                     <span>TOTAL</span>
                   </th>
                   <td class="dex-input-cell">
-                    <div {{b "focusin: onFocus, focusout: onBlur"}}>
-                      {{#if and canAutofill shouldShowMaxBtn  }}
-                        <button type="button" class="btn btn-sm btn-default dex-btn-max
-                          {{#if equals offer.type 'bid'}}sell{{else}}buy{{/if}}"
-                          {{b "click: autofillOrder"}}>{{#if equals offer.type 'bid'}}SELL{{else}}BUY{{/if}} MAX
-                        </button>
-                      {{/if}}
-                      <input type="number" class="input" step="any" min="" placeholder="0" max={{maxTotal}}
-                        {{b "value: total, input: calcVolume"}}>
-                    </div>
+                    <input type="number" class="input" step="any" min="0" max={{maxTotal}}
+                      {{b "value: total, input: calcVolume"}}>
                   </td>
                   <td class="dex-currency-cell">
                     <span>{{quoteCurrency}}</span>
@@ -131,7 +123,7 @@
                               <span class="order-warning-text text-clarifications">
                                 You don't have enough
                                 {{#if equals sellCurrency 'W-ETH'}}
-                                  <a href="#wrap" {{b  "click: dismiss"}}>{{sellCurrency}}</a>
+                                  <a href="#ethtokens" {{b  "click: dismiss"}}>{{sellCurrency}}</a>
                                 {{else}}
                                   {{sellCurrency}}
                                 {{/if}} tokens.
@@ -160,45 +152,45 @@
                               <div class="row info-section bordered">
                                 <div class="col-xs-7">
                                   {{#if equals offer.type 'bid'}}
-                                    <div class="row">
-                                      <div class="col-xs-6 dex-currency-label">
+                                    <div class="row dex-currency-add">
+                                      <div class="col-xs-7 dex-currency-label">
                                         <i class="dex-icon-add"></i>
                                         {{{formatBalance (toWei total) '' '' true}}} {{quoteCurrency}}
                                         {{formatPrice (toWei total) quoteCurrency}}
                                       </div>
-                                      <div class="col-xs-6 dex-currency-label dex-currency-label--fiat">
+                                      <div class="col-xs-5 dex-currency-label dex-currency-label--fiat">
                                         <span>~ {{{ formatBalance (toWei (multiply total priceInUSD)) 2 '' true}}}
                                           USD</span>
                                       </div>
                                     </div>
-                                    <div class="row">
-                                      <div class="col-xs-6 dex-currency-label">
+                                    <div class="row dex-currency-subtract">
+                                      <div class="col-xs-7 dex-currency-label">
                                         <i class="dex-icon-subtract"></i>
                                         {{{formatBalance (toWei volume) '' '' true}}} {{baseCurrency}}
                                       </div>
-                                      <div class="col-xs-6 dex-currency-label dex-currency-label--fiat">
+                                      <div class="col-xs-5 dex-currency-label dex-currency-label--fiat">
                                         <span>~ {{{ formatBalance (toWei (multiply volume priceInUSD)) 2 '' true}}}
                                           USD</span>
                                       </div>
                                     </div>
                                   {{else}}
-                                    <div class="row">
-                                      <div class="col-xs-6 dex-currency-label">
+                                    <div class="row dex-currency-add">
+                                      <div class="col-xs-7 dex-currency-label">
                                         <i class="dex-icon-add"></i>
                                         {{{formatBalance (toWei volume) '' '' true}}} {{baseCurrency}}
                                         {{formatPrice (toWei volume) baseCurrency}}
                                       </div>
-                                      <div class="col-xs-6 dex-currency-label dex-currency-label--fiat">
+                                      <div class="col-xs-5 dex-currency-label dex-currency-label--fiat">
                                         <span>~ {{{ formatBalance (toWei (multiply volume priceInUSD)) 2 '' true}}}
                                           USD</span>
                                       </div>
                                     </div>
-                                    <div class="row">
-                                      <div class="col-xs-6 dex-currency-label">
+                                    <div class="row dex-currency-subtract">
+                                      <div class="col-xs-7 dex-currency-label">
                                         <i class="dex-icon-subtract"></i>
                                         {{{formatBalance (toWei total) '' '' true}}} {{quoteCurrency}}
                                       </div>
-                                      <div class="col-xs-6 dex-currency-label dex-currency-label--fiat">
+                                      <div class="col-xs-5 dex-currency-label dex-currency-label--fiat">
                                         <span>~ {{{ formatBalance (toWei (multiply total priceInUSD)) 2 '' true}}}
                                           USD</span>
                                       </div>
@@ -349,7 +341,7 @@
               </tr>
               <tr class="row-input-line">
                 <th class="dex-label-cell">
-                  <span>AMOUNT</span>
+                  <span>VOLUME</span>
                 </th>
                 <td class="dex-input-cell">
                   <input type="number" class="input" step="any" min="0" max={{maxNewOfferAmount}}
@@ -364,15 +356,8 @@
                   <span>TOTAL</span>
                 </th>
                 <td class="dex-input-cell">
-                  <div {{b "focusin: onFocus, focusout: onBlur"}}>
-                    {{#if and canAutofill shouldShowMaxBtn  }}
-                      <button type="button" class="btn btn-sm btn-default dex-btn-max {{offerType}}"
-                        {{b "click: autofill"}}>{{offerType}} MAX
-                      </button>
-                    {{/if}}
-                    <input type="number" class="input" step="any" min="" placeholder="0" max={{maxNewOfferTotal}}
-                      {{b "value: offerTotal, input: calcNewOfferAmount"}}>
-                  </div>
+                  <input type="number" class="input" step="any" min="0" max={{maxNewOfferTotal}}
+                    {{b "value: offerTotal, input: calcNewOfferAmount"}}>
                 </td>
                 <td class="dex-currency-cell">
                   <span>{{quoteCurrency}}</span>
@@ -430,18 +415,17 @@
                                 <div class="row info-section bordered">
                                   <div class="col-xs-7">
                                     {{#if equals offerType 'buy'}}
-                                      <div class="row">
+                                      <div class="row currency balance">
                                       <div class="col-xs-6 dex-currency-label">
                                         <i class="dex-icon-add"></i>
                                         {{{formatBalance (toWei offerAmount) '' '' true}}} {{baseCurrency}}
-                                        {{formatPrice (toWei offerAmount) baseCurrency}}
                                       </div>
                                       <div class="col-xs-6 dex-currency-label dex-currency-label--fiat">
                                         <span>~ {{{ formatBalance (toWei (multiply offerAmount priceInUSD)) 2 '' true}}}
                                           USD</span>
                                       </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row currency-add">
                                       <div class="col-xs-6 dex-currency-label">
                                         <i class="dex-icon-subtract"></i>
                                         {{{formatBalance (toWei offerTotal) '' '' true}}} {{quoteCurrency}}
@@ -452,23 +436,22 @@
                                       </div>
                                     </div>
                                     {{else}}
-                                      <div class="row">
-                                      <div class="col-xs-6 dex-currency-label">
+                                      <div class="row dex-currency-add">
+                                      <div class="col-xs-7 dex-currency-label">
                                         <i class="dex-icon-add"></i>
                                         {{{formatBalance (toWei offerTotal) '' '' true}}} {{quoteCurrency}}
-                                        {{formatPrice (toWei offerTotal) quoteCurrency}}
                                       </div>
-                                      <div class="col-xs-6 dex-currency-label dex-currency-label--fiat">
+                                      <div class="col-xs-5 dex-currency-label dex-currency-label--fiat">
                                         <span>~ {{{ formatBalance (toWei (multiply offerTotal priceInUSD)) 2 '' true}}}
                                           USD</span>
                                       </div>
                                     </div>
-                                    <div class="row">
-                                      <div class="col-xs-6 dex-currency-label">
+                                    <div class="row dex-currency-subtract">
+                                      <div class="col-xs-7 dex-currency-label">
                                         <i class="dex-icon-subtract"></i>
                                         {{{formatBalance (toWei offerAmount) '' '' true}}} {{baseCurrency}}
                                       </div>
-                                      <div class="col-xs-6 dex-currency-label dex-currency-label--fiat">
+                                      <div class="col-xs-5 dex-currency-label dex-currency-label--fiat">
                                         <span>~ {{{ formatBalance (toWei (multiply offerAmount priceInUSD)) 2 '' true}}}
                                           USD</span>
                                       </div>
@@ -487,7 +470,7 @@
                                       </span>
                                     </div>
                                   </div>
-                                  <div class="row">
+                                  <div class="row dex-gas-estimate">
                                     {{#if or (gasEstimateInProgress) (or gasEstimateResult gasEstimateError)}}
                                       {{#if gasEstimateInProgress}}
                                         <span class="col-xs-12">
@@ -496,11 +479,10 @@
                                       {{else}}
                                         {{#if gasEstimateResult}}
                                           {{estimateGasInETH gasEstimateResult}}
-                                          <span class="col-xs-7 dex-currency-label">
+                                          <span class="col-xs-7 dex-currency-label dex-gas-label">
                                               Gas {{{formatNumber gasEstimateInETH 4 true}}} ETH
                                             </span>
-                                            <span style="width: 70px"
-                                                  class="col-xs-5 dex-currency-label dex-currency-label--fiat">
+                                            <span style="width: 70px" class="col-xs-5 dex-currency-label dex-currency-label--fiat">
                                               <span>
                                                 ~ {{{ formatNumber (multiply gasEstimateInETH priceInUSD) 2 true}}} USD
                                               </span>
@@ -545,9 +527,7 @@
         <div class="modal-footer">
           {{#unless hasAllowanceNewOrder offerType}}
             {{#if equals offerType 'buy'}}
-              <button type="button" data-refer="newOrder" data-link={{quoteCurrency}} class="btn btn-allowance-modal
-                      btn-default btn-submit-order-allowance btn-placement-right
-              " data-dismiss="modal">Change Allowance</button>
+              <button type="button" data-refer="newOrder" data-link={{quoteCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order-allowance btn-placement-right" data-dismiss="modal">Change Allowance</button>
             {{else}}
               <button type="button" data-refer="newOrder" data-link={{baseCurrency}} class="btn btn-allowance-modal
                       btn-default btn-submit-order-allowance btn-placement-right
