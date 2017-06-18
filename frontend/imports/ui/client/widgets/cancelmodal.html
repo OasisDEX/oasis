@@ -6,37 +6,40 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title">Cancel Offer</h4>
         </div>
-        <div class="modal-body row">
-          <div class="col-xs-1">
-            <img src="order-warning.svg" class="order-warning">
-          </div>
-          <div class="col-xs-11">
-            {{#if offer}}
-              <span class="text-danger">
+        <div class="row modal-body info-section-order-cancel">
+         <div class="col-xs-12">
+          <div class="row div-modal-text highlighted warning-section bordered bordered--danger">
+            <div class="order-warning-icon">
+              <img style="opacity: 0.5" src="order-warning-red.svg" fill="red">
+            </div>
+            <div class="order-warning-text text-clarifications text-danger">
+
+              {{#if offer}}
+                <span class="text-danger">
                 {{#if equals offer.type 'bid'}}
                   This action will return {{{formatBalance (offer.volume quoteCurrency) '' '' true}}} {{quoteCurrency}} {{formatPrice (offer.volume quoteCurrency) quoteCurrency}}
                 {{else}}
                   This action will return {{{formatBalance (offer.volume baseCurrency) '' '' true}}} {{baseCurrency}} {{formatPrice (offer.volume baseCurrency) baseCurrency}}
                 {{/if}}
-                to
-                {{#if offer.isOurs}}
-                  your token balance.
-                {{else}}
-                  the token balance of its owner.
-                {{/if}}
-                {{#if isMarketOpen}}
-                  <br>
-                  <br>
+                  to
+                  {{#if offer.isOurs}}
+                    your token balance.
+                  {{else}}
+                    the token balance of its owner.
+                  {{/if}}
+                  {{#if isMarketOpen}}
                   If someone (partially) fills this order before you cancel it, your order may not or only be partially cancelled.
-                {{/if}}
+                  {{/if}}
               </span>
-            {{/if}}
+              {{/if}}
+            </div>
           </div>
+         </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default btn-submit-order btn-placement-left" data-dismiss="modal">Close</button>
+          <button type="button" class="btn dex-btn-default btn-submit-order btn-placement-left" data-dismiss="modal">Close</button>
           {{#if offer}}
-            <button type="button" class="btn btn-default btn-submit-order-sell sell btn-placement-right" data-dismiss="modal" disabled={{not offer.canCancel}} {{b "click: cancel"}}>Cancel Offer</button>
+            <button type="button" data-dismiss="modal" class="btn dex-btn-default btn-submit-order btn-placement-right sell"  disabled={{not offer.canCancel}} {{b "click: cancel"}}>Cancel Offer</button>
           {{/if}}
         </div>
       </div>

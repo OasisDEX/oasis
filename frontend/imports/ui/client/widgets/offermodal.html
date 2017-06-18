@@ -415,21 +415,21 @@
                                   <div class="col-xs-7">
                                     {{#if equals offerType 'buy'}}
                                       <div class="row dex-currency-add">
-                                      <div class="col-xs-6 dex-currency-label">
+                                      <div class="col-xs-7 dex-currency-label">
                                         <i class="dex-icon-add"></i>
                                         {{{formatBalance (toWei offerAmount) '' '' true}}} {{baseCurrency}}
                                       </div>
-                                      <div class="col-xs-6 dex-currency-label dex-currency-label--fiat">
+                                      <div class="col-xs-5 dex-currency-label dex-currency-label--fiat">
                                         <span>~ {{{ formatBalance (toWei (multiply offerAmount priceInUSD)) 2 '' true}}}
                                           USD</span>
                                       </div>
                                     </div>
                                     <div class="row dex-currency-subtract">
-                                      <div class="col-xs-6 dex-currency-label">
+                                      <div class="col-xs-7 dex-currency-label">
                                         <i class="dex-icon-subtract"></i>
                                         {{{formatBalance (toWei offerTotal) '' '' true}}} {{quoteCurrency}}
                                       </div>
-                                      <div class="col-xs-6 dex-currency-label dex-currency-label--fiat">
+                                      <div class="col-xs-5 dex-currency-label dex-currency-label--fiat">
                                         <span>~ {{{ formatBalance (toWei (multiply offerTotal priceInUSD)) 2 '' true}}}
                                           USD</span>
                                       </div>
@@ -526,10 +526,10 @@
         <div class="modal-footer">
           {{#unless hasAllowanceNewOrder offerType}}
             {{#if equals offerType 'buy'}}
-              <button type="button" data-refer="newOrder" data-link={{quoteCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order-allowance btn-placement-right" data-dismiss="modal">Change Allowance</button>
+              <button type="button" data-refer="newOrder" data-link={{quoteCurrency}} class="btn btn-allowance-modal dex-btn-default btn-submit-order-allowance btn-placement-right" data-dismiss="modal">Change Allowance</button>
             {{else}}
               <button type="button" data-refer="newOrder" data-link={{baseCurrency}} class="btn btn-allowance-modal
-                      btn-default btn-submit-order-allowance btn-placement-right
+                      dex-btn-default btn-submit-order-allowance btn-placement-right
               " data-dismiss="modal">Change Allowance</button>
             {{/if}}
           {{else}}

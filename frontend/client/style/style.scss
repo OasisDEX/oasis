@@ -1085,8 +1085,15 @@ table {
   }
 }
 
+.allowance-input-table {
+  margin-bottom: 20px;
+}
+.info-section-order-cancel {
+  padding: 20px 15px 5px 15px !important;
+}
+
 .info-section {
-  margin: 15px -15px;
+  margin-bottom: 15px;
   padding: 15px 0 15px 0;
   font-size: 12px;
   font-weight: normal;
@@ -1206,6 +1213,7 @@ table {
   .input-section {
     padding: 0;
     margin-top: 20px;
+    margin-bottom: 15px;
 
     tr {
       height: inherit;
@@ -2387,6 +2395,7 @@ span.right {
   }
   .text-clarifications {
     font-size: 14px;
+    font-weight: normal;
     b {
       color: #222228;
     }
