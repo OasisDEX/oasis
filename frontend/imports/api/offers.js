@@ -272,37 +272,59 @@ Offers.syncOffers = () => {
     return Promise.resolve(0);
   }
 
-  // Sync all past offers TODO: check if order matching is enabled and if not apply it.(applied) . Verify and understand the condition
-  const isMatchingEnabled = Session.get('isMatchingEnabled');
-  if (isMatchingEnabled) {
-    Session.set('loading', true);
-    Session.set('loadingCounter', 0);
-
-    const currencyPairs = cartesianProduct([Dapple.getQuoteTokens(), Dapple.getBaseTokens()]);
-    const promisesLowestOfferId = flatten(currencyPairs.map((pair) => [Offers.getLowestOfferId(pair[0], pair[1]),
-      Offers.getLowestOfferId(pair[1], pair[0])]));
-    const promisesSync = promisesLowestOfferId.map((promise) => promise.then(syncOfferAndAllHigherOnes));
-    Promise.all(promisesSync).then(() => {
-      Session.set('loading', false);
-    });
-  } else {
-    Dapple['maker-otc'].objects.otc.last_offer_id((error, n) => {
-      if (!error) {
-        const lastOfferId = n.toNumber();
-        console.log('last_offer_id', lastOfferId);
-        if (lastOfferId > 0) {
-          Session.set('loading', true);
-          Session.set('loadingProgress', 0);
-          for (let i = lastOfferId; i >= 1; i--) {
-            Offers.syncOffer(i, lastOfferId);
-          }
-        } else {
-          Session.set('loading', false);
-          Session.set('loadingProgress', 100);
+  const getNextOffer = (id, error) => {
+    if (!error) {
+      Offers.syncOffer(id);
+      Session.set('loadingCounter', Session.get('loadingCounter') + 1);
+      Dapple['maker-otc'].objects.otc.getWorseOffer(id, (err, nextId) => {
+        if (!err && !nextId.eq(0)) {
+          Offers.syncOffer(nextId);
+          getNextOffer(nextId);
         }
+      });
+    }
+  };
+
+  Dapple['maker-otc'].objects.otc.isMatchingEnabled((error, result) => {
+    if (!error) {
+      if (result) {
+        Session.set('loading', true);
+        Session.set('loadingCounter', 0);
+
+        const quoteToken = Session.get('quoteCurrency');
+        const baseToken = Session.get('baseCurrency');
+
+        Offers.getBestOffer(quoteToken, baseToken).then(getNextOffer);
+        Offers.getBestOffer(baseToken, quoteToken).then(getNextOffer);
+        // const currencyPairs = cartesianProduct([, Dapple.getBaseTokens()]);
+        // const promisesLowestOfferId = flatten(currencyPairs.map((pair) => [
+        //   Offers.getLowestOfferId(pair[0], pair[1]),
+        //   Offers.getLowestOfferId(pair[1], pair[0]),
+        // ]));
+        // const promisesSync = promisesLowestOfferId.map((promise) => promise.then(syncOfferAndAllHigherOnes));
+        // Promise.all(promisesSync).then(() => {
+        //   Session.set('loading', false);
+        // });
+      } else {
+        Dapple['maker-otc'].objects.otc.last_offer_id((err, n) => {
+          if (!error) {
+            const lastOfferId = n.toNumber();
+            console.log('last_offer_id', lastOfferId);
+            if (lastOfferId > 0) {
+              Session.set('loading', true);
+              Session.set('loadingProgress', 0);
+              for (let i = lastOfferId; i >= 1; i--) {
+                Offers.syncOffer(i, lastOfferId);
+              }
+            } else {
+              Session.set('loading', false);
+              Session.set('loadingProgress', 100);
+            }
+          }
+        });
       }
-    });
-  }
+    }
+  });
 };
 
 Offers.syncIndividualTrades = () => {
@@ -360,12 +382,12 @@ Offers.getBlock = function getBlock(blockNumber) {
   });
 };
 
-Offers.getLowestOfferId = function getLowestOfferId(sellToken, buyToken) {
+Offers.getBestOffer = (sellToken, buyToken) => {
   const sellTokenAddress = Dapple.getTokenAddress(sellToken);
   const buyTokenAddress = Dapple.getTokenAddress(buyToken);
 
   return new Promise((resolve, reject) => {
-    Dapple['maker-otc'].objects.otc.getLowestOffer(sellTokenAddress, buyTokenAddress, (error, id) => {
+    Dapple['maker-otc'].objects.otc.getBestOffer(sellTokenAddress, buyTokenAddress, (error, id) => {
       if (!error) {
         resolve(id);
       } else {
