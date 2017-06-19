@@ -37,13 +37,9 @@ function checkAccounts() {
 
 function checkIfOrderMatchingEnabled(marketType) {
   if (marketType !== 'MatchingMarket') {
-    Session.set('isOrderMatchingEnabled', false);
+    Session.set('isMatchingEnabled', false);
   } else {
-    const abi = Dapple['maker-otc'].objects.otc.abi;
-    const addr = Dapple['maker-otc'].environments[Dapple.env].otc.value;
-
-    const contract = web3Obj.eth.contract(abi).at(addr);
-    contract.isMatchingEnabled((error, result) => {
+    Dapple['maker-otc'].objects.otc.isMatchingEnabled((error, result) => {
       Session.set('isMatchingEnabled', result);
     });
   }
