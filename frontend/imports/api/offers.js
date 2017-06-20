@@ -274,28 +274,59 @@ Offers.syncOffers = () => {
 
   const getNextOffer = (id, error) => {
     if (!error) {
-      Offers.syncOffer(id);
-      Session.set('loadingCounter', Session.get('loadingCounter') + 1);
+      const loaded = Session.get('loadingCounter') + 1;
+      const total = Session.get('offersCount');
+      Session.set('loadingCounter', loaded);
+
+      if (loaded === total) {
+        Offers.syncOffer(id);
+      } else {
+        Offers.syncOffer(id, total);
+      }
       Dapple['maker-otc'].objects.otc.getWorseOffer(id, (err, nextId) => {
         if (!err && !nextId.eq(0)) {
-          Offers.syncOffer(nextId);
           getNextOffer(nextId);
         }
       });
     }
   };
 
+  const getOffersCount = (quote, base) => {
+    const quoteAddress = Dapple.getTokenAddress(quote);
+    const baseAddress = Dapple.getTokenAddress(base);
+
+    function requestOffersFor(firstCurrency, secondCurrency) {
+      return new Promise((resolve, reject) => {
+        Dapple['maker-otc'].objects.otc.getOfferCount(firstCurrency, secondCurrency, (err, count) => {
+          if (!err) {
+            resolve(count);
+          } else {
+            reject(err);
+          }
+        });
+      });
+    }
+
+    const bidOffersRequest = requestOffersFor(quoteAddress, baseAddress);
+    const askOffersRequest = requestOffersFor(baseAddress, quoteAddress);
+
+    return Promise.all([bidOffersRequest, askOffersRequest]);
+  };
+
   Dapple['maker-otc'].objects.otc.isMatchingEnabled((error, result) => {
     if (!error) {
       if (result) {
         Session.set('loading', true);
-        Session.set('loadingCounter', 0);
+        Session.set('loadingProgress', 0);
 
         const quoteToken = Session.get('quoteCurrency');
         const baseToken = Session.get('baseCurrency');
+        getOffersCount(quoteToken, baseToken).then((count) => {
+          Session.set('offersCount', parseInt(count[0], 10) + parseInt(count[1], 10)); // combining both ask and bid offers for a given pair
+          Offers.getBestOffer(quoteToken, baseToken).then(getNextOffer);
+          Offers.getBestOffer(baseToken, quoteToken).then(getNextOffer);
+        });
 
-        Offers.getBestOffer(quoteToken, baseToken).then(getNextOffer);
-        Offers.getBestOffer(baseToken, quoteToken).then(getNextOffer);
         // const currencyPairs = cartesianProduct([, Dapple.getBaseTokens()]);
         // const promisesLowestOfferId = flatten(currencyPairs.map((pair) => [
         //   Offers.getLowestOfferId(pair[0], pair[1]),
@@ -428,17 +459,16 @@ Offers.syncOffer = (id, max = 0) => {
           $('#offerModal').modal('hide');
         }
       }
-      // TODO check when this condition will be executed
-      if (!isMatchingEnabled) {
-        Offers.syncedOffers.push(id);
-
-        if (max > 0 && id > 1) {
-          Session.set('loadingProgress', Math.round(100 * (Offers.syncedOffers.length / max)));
-        } else {
-          Session.set('loading', false);
-          Session.set('loadingProgress', 100);
-        }
+      Offers.syncedOffers.push(id);
+      if (max > 0 && id > 1) {
+        Session.set('loadingProgress', Math.round(100 * (Offers.syncedOffers.length / max)));
+      } else {
+        Session.set('loading', false);
+        Session.set('loadingProgress', 100);
       }
+    } else {
+      Session.set('loading', false);
+      Session.set('loadingProgress', 100);
     }
   });
 };
