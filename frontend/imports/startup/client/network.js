@@ -39,8 +39,18 @@ function checkIfOrderMatchingEnabled(marketType) {
   if (marketType !== 'MatchingMarket') {
     Session.set('isMatchingEnabled', false);
   } else {
-    Dapple['maker-otc'].objects.otc.isMatchingEnabled((error, result) => {
-      Session.set('isMatchingEnabled', result);
+    Dapple['maker-otc'].objects.otc.isMatchingEnabled((error, status) => {
+      if (!error) {
+        Session.set('isMatchingEnabled', status);
+      } else {
+        console.debug('Cannot identify order matching status. ', error);
+      }
+    });
+
+    Dapple['maker-otc'].objects.otc.LogMatchingEnabled({}, { fromBlock: 'latest' }, (err, status) => {
+      if (!err) {
+        Session.set('isMatchingEnabled', status.args['']);
+      }
     });
   }
 }
@@ -55,6 +65,12 @@ function checkIfBuyEnabled(marketType) {
     const contract = web3Obj.eth.contract(abi).at(addr);
     contract.isBuyEnabled((error, result) => {
       Session.set('isBuyEnabled', result);
+    });
+
+    Dapple['maker-otc'].objects.otc.LogBuyEnabled({}, { fromBlock: 'latest' }, (err, status) => {
+      if (!err) {
+        Session.set('isBuyEnabled', status.args['']);
+      }
     });
   }
 }
