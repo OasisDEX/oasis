@@ -324,6 +324,8 @@ Offers.syncOffers = () => {
     if (!error) {
       if (result) {
         Session.set('loading', true);
+        Session.set('loadingBuyOrders', true);
+        Session.set('loadingSellOrders', true);
         Session.set('loadingProgress', 0);
 
         const quoteToken = Session.get('quoteCurrency');
@@ -428,9 +430,15 @@ Offers.getBestOffer = (sellToken, buyToken) => {
   const sellTokenAddress = Dapple.getTokenAddress(sellToken);
   const buyTokenAddress = Dapple.getTokenAddress(buyToken);
 
+  const base = Session.get('baseCurrency');
   return new Promise((resolve, reject) => {
     Dapple['maker-otc'].objects.otc.getBestOffer(sellTokenAddress, buyTokenAddress, (error, id) => {
       if (!error) {
+        if (sellToken === base) {
+          Session.set('loadingBuyOrders', false);
+        } else {
+          Session.set('loadingSellOrders', false);
+        }
         resolve(id);
       } else {
         reject(error);
