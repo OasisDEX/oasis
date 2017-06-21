@@ -286,6 +286,7 @@ Offers.syncOffers = () => {
       Session.set('loadingCounter', loaded);
 
       if (loaded === total) {
+        Session.set('loadingCounter', 0);
         Offers.syncOffer(id);
       } else {
         Offers.syncOffer(id, total);
@@ -320,55 +321,55 @@ Offers.syncOffers = () => {
     return Promise.all([bidOffersRequest, askOffersRequest]);
   };
 
-  Dapple['maker-otc'].objects.otc.isMatchingEnabled((error, result) => {
-    if (!error) {
-      if (result) {
-        Session.set('loading', true);
-        Session.set('loadingBuyOrders', true);
-        Session.set('loadingSellOrders', true);
-        Session.set('loadingProgress', 0);
+  const isMatchingEnabled = Session.get('isMatchingEnabled');
 
-        const quoteToken = Session.get('quoteCurrency');
-        const baseToken = Session.get('baseCurrency');
-        getOffersCount(quoteToken, baseToken).then((count) => {
-          Session.set('offersCount', parseInt(count[0], 10) + parseInt(count[1], 10)); // combining both ask and bid offers for a given pair
-          Offers.getBestOffer(quoteToken, baseToken).then(getNextOffer);
-          Offers.getBestOffer(baseToken, quoteToken).then(getNextOffer);
-        });
+  Session.set('loadingBuyOrders', true);
+  Session.set('loadingSellOrders', true);
 
-        listenForNewSortedOrders();
-        listenForFilledOrCancelledOrders();
-      } else {
-        Dapple['maker-otc'].objects.otc.ItemUpdate((err, result) => {
-          if (!err) {
-            const id = result.args.id.toNumber();
-            Offers.syncOffer(id);
-            Offers.remove(result.transactionHash);
-            if (Session.equals('selectedOffer', result.transactionHash)) {
-              Session.set('selectedOffer', id.toString());
-            }
-          }
-        });
+  if (isMatchingEnabled) {
+    Session.set('loading', true);
+    Session.set('loadingProgress', 0);
+    Offers.syncedOffers = [];
+    const quoteToken = Session.get('quoteCurrency');
+    const baseToken = Session.get('baseCurrency');
+    console.log(quoteToken, baseToken);
+    getOffersCount(quoteToken, baseToken).then((count) => {
+      Session.set('offersCount', parseInt(count[0], 10) + parseInt(count[1], 10)); // combining both ask and bid offers for a given pair
+      Offers.getBestOffer(quoteToken, baseToken).then(getNextOffer);
+      Offers.getBestOffer(baseToken, quoteToken).then(getNextOffer);
+    });
 
-        Dapple['maker-otc'].objects.otc.last_offer_id((err, n) => {
-          if (!error) {
-            const lastOfferId = n.toNumber();
-            console.log('last_offer_id', lastOfferId);
-            if (lastOfferId > 0) {
-              Session.set('loading', true);
-              Session.set('loadingProgress', 0);
-              for (let i = lastOfferId; i >= 1; i--) {
-                Offers.syncOffer(i, lastOfferId);
-              }
-            } else {
-              Session.set('loading', false);
-              Session.set('loadingProgress', 100);
-            }
-          }
-        });
+    listenForNewSortedOrders();
+    listenForFilledOrCancelledOrders();
+  } else {
+    Dapple['maker-otc'].objects.otc.ItemUpdate((err, result) => {
+      if (!err) {
+        const id = result.args.id.toNumber();
+        Offers.syncOffer(id);
+        Offers.remove(result.transactionHash);
+        if (Session.equals('selectedOffer', result.transactionHash)) {
+          Session.set('selectedOffer', id.toString());
+        }
       }
-    }
-  });
+    });
+
+    Dapple['maker-otc'].objects.otc.last_offer_id((err, n) => {
+      if (!err) {
+        const lastOfferId = n.toNumber();
+        console.log('last_offer_id', lastOfferId);
+        if (lastOfferId > 0) {
+          Session.set('loading', true);
+          Session.set('loadingProgress', 0);
+          for (let i = lastOfferId; i >= 1; i--) {
+            Offers.syncOffer(i, lastOfferId);
+          }
+        } else {
+          Session.set('loading', false);
+          Session.set('loadingProgress', 100);
+        }
+      }
+    });
+  }
 };
 
 Offers.syncIndividualTrades = () => {
@@ -430,15 +431,9 @@ Offers.getBestOffer = (sellToken, buyToken) => {
   const sellTokenAddress = Dapple.getTokenAddress(sellToken);
   const buyTokenAddress = Dapple.getTokenAddress(buyToken);
 
-  const base = Session.get('baseCurrency');
   return new Promise((resolve, reject) => {
     Dapple['maker-otc'].objects.otc.getBestOffer(sellTokenAddress, buyTokenAddress, (error, id) => {
       if (!error) {
-        if (sellToken === base) {
-          Session.set('loadingBuyOrders', false);
-        } else {
-          Session.set('loadingSellOrders', false);
-        }
         resolve(id);
       } else {
         reject(error);
@@ -464,10 +459,17 @@ Offers.getHigherOfferId = function getHigherOfferId(existingId) {
  */
 Offers.syncOffer = (id, max = 0) => {
   const isBuyEnabled = Session.get('isBuyEnabled');
+  const base = Session.get('baseCurrency');
   Dapple['maker-otc'].objects.otc.offers(id, (error, data) => {
     if (!error) {
       const idx = id.toString();
       const [sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress, owner, active] = data;
+      const sellToken = Dapple.getTokenByAddress(sellWhichTokenAddress);
+      if (sellToken === base && Session.get('loadingBuyOrders')) {
+        Session.set('loadingBuyOrders', false);
+      } else if (Session.get('loadingSellOrders')) {
+        Session.set('loadingSellOrders', false);
+      }
       if (active) {
         Offers.updateOffer(idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress,
           owner, Status.CONFIRMED);
@@ -482,10 +484,14 @@ Offers.syncOffer = (id, max = 0) => {
         Session.set('loadingProgress', Math.round(100 * (Offers.syncedOffers.length / max)));
       } else {
         Session.set('loading', false);
+        Session.set('loadingBuyOrders', false);
+        Session.set('loadingSellOrders', false);
         Session.set('loadingProgress', 100);
       }
     } else {
       Session.set('loading', false);
+      Session.set('loadingBuyOrders', false);
+      Session.set('loadingSellOrders', false);
       Session.set('loadingProgress', 100);
     }
   });

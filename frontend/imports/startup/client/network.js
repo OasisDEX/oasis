@@ -36,43 +36,56 @@ function checkAccounts() {
 }
 
 function checkIfOrderMatchingEnabled(marketType) {
-  if (marketType !== 'MatchingMarket') {
-    Session.set('isMatchingEnabled', false);
-  } else {
-    Dapple['maker-otc'].objects.otc.isMatchingEnabled((error, status) => {
-      if (!error) {
-        Session.set('isMatchingEnabled', status);
-      } else {
-        console.debug('Cannot identify order matching status. ', error);
-      }
-    });
+  return new Promise((resolve, reject) => {
+    if (marketType !== 'MatchingMarket') {
+      Session.set('isMatchingEnabled', false);
+      resolve();
+    } else {
+      Dapple['maker-otc'].objects.otc.isMatchingEnabled((error, status) => {
+        if (!error) {
+          Session.set('isMatchingEnabled', status);
+          resolve();
+        } else {
+          console.debug('Cannot identify order matching status. ', error);
+          reject(error);
+        }
+      });
 
-    Dapple['maker-otc'].objects.otc.LogMatchingEnabled({}, { fromBlock: 'latest' }, (err, status) => {
-      if (!err) {
-        Session.set('isMatchingEnabled', status.args['']);
-      }
-    });
-  }
+      Dapple['maker-otc'].objects.otc.LogMatchingEnabled({}, { fromBlock: 'latest' }, (err, status) => {
+        if (!err) {
+          Session.set('isMatchingEnabled', status.args['']);
+        }
+      });
+    }
+  });
 }
 
 function checkIfBuyEnabled(marketType) {
-  if (marketType !== 'MatchingMarket') {
-    Session.set('isBuyEnabled', true);
-  } else {
-    const abi = Dapple['maker-otc'].objects.otc.abi;
-    const addr = Dapple['maker-otc'].environments[Dapple.env].otc.value;
+  return new Promise((resolve, reject) => {
+    if (marketType !== 'MatchingMarket') {
+      Session.set('isBuyEnabled', true);
+      resolve();
+    } else {
+      const abi = Dapple['maker-otc'].objects.otc.abi;
+      const addr = Dapple['maker-otc'].environments[Dapple.env].otc.value;
 
-    const contract = web3Obj.eth.contract(abi).at(addr);
-    contract.isBuyEnabled((error, result) => {
-      Session.set('isBuyEnabled', result);
-    });
+      const contract = web3Obj.eth.contract(abi).at(addr);
+      contract.isBuyEnabled((error, result) => {
+        if (!error) {
+          Session.set('isBuyEnabled', result);
+          resolve();
+        } else {
+          reject();
+        }
+      });
 
-    Dapple['maker-otc'].objects.otc.LogBuyEnabled({}, { fromBlock: 'latest' }, (err, status) => {
-      if (!err) {
-        Session.set('isBuyEnabled', status.args['']);
-      }
-    });
-  }
+      Dapple['maker-otc'].objects.otc.LogBuyEnabled({}, { fromBlock: 'latest' }, (err, status) => {
+        if (!err) {
+          Session.set('isBuyEnabled', status.args['']);
+        }
+      });
+    }
+  });
 }
 
 // Initialize everything on new network
@@ -80,16 +93,18 @@ function initNetwork(newNetwork) {
   Dapple.init(newNetwork);
   const market = Dapple['maker-otc'].environments.kovan.otc;
   checkAccounts();
-  checkIfOrderMatchingEnabled(market.type);
-  checkIfBuyEnabled(market.type);
-  Session.set('network', newNetwork);
-  Session.set('isConnected', true);
-  Session.set('latestBlock', 0);
-  Session.set('startBlock', 0);
-  doHashChange();
-  Tokens.sync();
-  Limits.sync();
-  Offers.sync();
+  const isMatchingEnabled = checkIfOrderMatchingEnabled(market.type);
+  const isBuyEnabled = checkIfBuyEnabled(market.type);
+  Promise.all([isMatchingEnabled, isBuyEnabled]).then(() => {
+    Session.set('network', newNetwork);
+    Session.set('isConnected', true);
+    Session.set('latestBlock', 0);
+    Session.set('startBlock', 0);
+    doHashChange();
+    Tokens.sync();
+    Limits.sync();
+    Offers.sync();
+  });
 }
 
 // Check the closing time of the market and if it's open now
