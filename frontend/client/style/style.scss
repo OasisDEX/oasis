@@ -2483,6 +2483,18 @@ span.right {
       max-width: 230px;
     }
   }
+
+  td.dex-input-cell {
+    .read-only {
+      font-family: 'Roboto';
+      font-weight: bolder;
+      font-size: 24px;
+      text-align: right;
+      padding-right: 10px;
+      max-width: 170px;
+      background: none;
+    }
+  }
 }
 
 .market-history {
