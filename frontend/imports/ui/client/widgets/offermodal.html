@@ -15,6 +15,10 @@
           {{#if offer}}
             <table>
               <tbody>
+              <tr class="row-data-line owner">
+                <th class="th-owner">OWNER</th>
+                <td class="td-owner"><span class="span-owner">{{offer.owner}}</span></td>
+              </tr>
               <tr class="row-data-line">
                 <th>ALLOWANCE</th>
                 {{#if equals offer.type 'bid'}}
@@ -35,20 +39,22 @@
                     class="allowance-currency">{{quoteToken._id}}</span></td>
                 {{/if}}
               </tr>
-              <tr class="row-data-line owner">
-                <th class="th-owner">OWNER</th>
-                <td class="td-owner"><span class="span-owner">{{offer.owner}}</span></td>
-              </tr>
               </tbody>
             </table>
             <section class="input-section">
-              <div class="available">
-                <span class="available-label">PRICE</span>
-                <span class="available-amount">{{{formatNumber offer.price '' true}}}</span>
-                <span class="available-currency">{{quoteCurrency}}</span>
-              </div>
               <table class="bordered">
                 <tbody>
+                <tr class="row-input-line">
+                  <th class="dex-label-cell">
+                    <span>PRICE</span>
+                  </th>
+                  <td class="dex-input-cell">
+                    <span class="read-only">{{{formatNumber offer.price '' true}}}</span>
+                  </td>
+                  <td class="dex-currency-cell">
+                    <span>{{quoteCurrency}}</span>
+                  </td>
+                </tr>
                 <tr class="row-input-line">
                   <th class="dex-label-cell">
                     <span>VOLUME</span>
@@ -315,12 +321,6 @@
                   class="allowance-currency">{{baseToken._id}}</span></td>
               {{/if}}
             </tr>
-            {{#if isBuyEnabled}}
-              <tr class="row-data-line owner">
-                <th>OWNER</th>
-                <td><span class="owner-address">{{address}}</span></td>
-              </tr>
-            {{/if}}
             </tbody>
           </table>
           <section class="input-section">
@@ -481,7 +481,8 @@
                                           <span class="col-xs-7 dex-currency-label dex-gas-label">
                                               Gas {{{formatNumber gasEstimateInETH 4 true}}} ETH
                                             </span>
-                                            <span style="width: 70px" class="col-xs-5 dex-currency-label dex-currency-label--fiat">
+                                            <span style="width: 70px"
+                                                  class="col-xs-5 dex-currency-label dex-currency-label--fiat">
                                               <span>
                                                 ~ {{{ formatNumber (multiply gasEstimateInETH priceInUSD) 2 true}}} USD
                                               </span>
@@ -526,7 +527,9 @@
         <div class="modal-footer">
           {{#unless hasAllowanceNewOrder offerType}}
             {{#if equals offerType 'buy'}}
-              <button type="button" data-refer="newOrder" data-link={{quoteCurrency}} class="btn btn-allowance-modal dex-btn-default btn-submit-order-allowance btn-placement-right" data-dismiss="modal">Change Allowance</button>
+              <button type="button" data-refer="newOrder" data-link={{quoteCurrency}} class="btn btn-allowance-modal
+                      dex-btn-default btn-submit-order-allowance btn-placement-right
+              " data-dismiss="modal">Change Allowance</button>
             {{else}}
               <button type="button" data-refer="newOrder" data-link={{baseCurrency}} class="btn btn-allowance-modal
                       dex-btn-default btn-submit-order-allowance btn-placement-right
