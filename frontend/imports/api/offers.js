@@ -332,7 +332,6 @@ Offers.syncOffers = () => {
     Offers.syncedOffers = [];
     const quoteToken = Session.get('quoteCurrency');
     const baseToken = Session.get('baseCurrency');
-    console.log(quoteToken, baseToken);
     getOffersCount(quoteToken, baseToken).then((count) => {
       Session.set('offersCount', parseInt(count[0], 10) + parseInt(count[1], 10)); // combining both ask and bid offers for a given pair
       Offers.getBestOffer(quoteToken, baseToken).then(getNextOffer);
@@ -460,6 +459,14 @@ Offers.getHigherOfferId = function getHigherOfferId(existingId) {
 Offers.syncOffer = (id, max = 0) => {
   const isBuyEnabled = Session.get('isBuyEnabled');
   const base = Session.get('baseCurrency');
+
+  const clearLoadingIndicators = () => {
+    Session.set('loading', false);
+    Session.set('loadingBuyOrders', false);
+    Session.set('loadingSellOrders', false);
+    Session.set('loadingCounter', 0);
+    Session.set('loadingProgress', 100);
+  };
   Dapple['maker-otc'].objects.otc.offers(id, (error, data) => {
     if (!error) {
       const idx = id.toString();
@@ -483,16 +490,10 @@ Offers.syncOffer = (id, max = 0) => {
       if (max > 0 && id > 1) {
         Session.set('loadingProgress', Math.round(100 * (Offers.syncedOffers.length / max)));
       } else {
-        Session.set('loading', false);
-        Session.set('loadingBuyOrders', false);
-        Session.set('loadingSellOrders', false);
-        Session.set('loadingProgress', 100);
+        clearLoadingIndicators();
       }
     } else {
-      Session.set('loading', false);
-      Session.set('loadingBuyOrders', false);
-      Session.set('loadingSellOrders', false);
-      Session.set('loadingProgress', 100);
+      clearLoadingIndicators();
     }
   });
 };
