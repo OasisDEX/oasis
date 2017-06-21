@@ -173,6 +173,32 @@ function listenForAcceptedTradesOf(address) {
       });
   });
 }
+function listenForNewSortedOrders() {
+  Dapple['maker-otc'].objects.otc.LogSortedOffer((err, result) => {
+    if (!err) {
+      const id = result.args.mid.toNumber();
+      Offers.syncOffer(id);
+      Offers.remove(result.transactionHash);
+    }
+  });
+}
+function listenForFilledOrCancelledOrders() {
+  /** When the order matching is activated we are using ItemUpdate only to listen for events
+   * where a given order is getting cancelled or filled in ( in case of `buy` being enabled.*/
+  Dapple['maker-otc'].objects.otc.ItemUpdate((err, result) => {
+    if (!err) {
+      const idx = result.args.id;
+      Dapple['maker-otc'].objects.otc.offers(idx, (error, data) => {
+        if (!error) {
+          const [, , , , , active] = data;
+          if (!active) {
+            Offers.remove(idx.toString());
+          }
+        }
+      });
+    }
+  });
+}
 
 Offers.syncedOffers = [];
 
@@ -239,16 +265,6 @@ Offers.syncOffers = () => {
 
   // Watch ItemUpdate Event
   /* eslint new-cap: ["error", { "capIsNewExceptions": ["ItemUpdate", "Trade", "LogTake"] }] */
-  Dapple['maker-otc'].objects.otc.ItemUpdate((error, result) => {
-    if (!error) {
-      const id = result.args.id.toNumber();
-      Offers.syncOffer(id);
-      Offers.remove(result.transactionHash);
-      if (Session.equals('selectedOffer', result.transactionHash)) {
-        Session.set('selectedOffer', id.toString());
-      }
-    }
-  });
 
   function cartesianProduct(arr) {
     return arr.reduce((a, b) => a.map((x) => b.map((y) => x.concat(y))).reduce((a, b) => a.concat(b), []), [[]]);
@@ -261,15 +277,6 @@ Offers.syncOffers = () => {
       }
       return a.concat(b);
     }, []);
-  }
-
-  function syncOfferAndAllHigherOnes(id) {
-    if (id !== 0) {
-      Session.set('loadingCounter', Session.get('loadingCounter') + 1);
-      Offers.syncOffer(id);
-      return Offers.getHigherOfferId(id).then(syncOfferAndAllHigherOnes);
-    }
-    return Promise.resolve(0);
   }
 
   const getNextOffer = (id, error) => {
@@ -327,16 +334,20 @@ Offers.syncOffers = () => {
           Offers.getBestOffer(baseToken, quoteToken).then(getNextOffer);
         });
 
-        // const currencyPairs = cartesianProduct([, Dapple.getBaseTokens()]);
-        // const promisesLowestOfferId = flatten(currencyPairs.map((pair) => [
-        //   Offers.getLowestOfferId(pair[0], pair[1]),
-        //   Offers.getLowestOfferId(pair[1], pair[0]),
-        // ]));
-        // const promisesSync = promisesLowestOfferId.map((promise) => promise.then(syncOfferAndAllHigherOnes));
-        // Promise.all(promisesSync).then(() => {
-        //   Session.set('loading', false);
-        // });
+        listenForNewSortedOrders();
+        listenForFilledOrCancelledOrders();
       } else {
+        Dapple['maker-otc'].objects.otc.ItemUpdate((err, result) => {
+          if (!err) {
+            const id = result.args.id.toNumber();
+            Offers.syncOffer(id);
+            Offers.remove(result.transactionHash);
+            if (Session.equals('selectedOffer', result.transactionHash)) {
+              Session.set('selectedOffer', id.toString());
+            }
+          }
+        });
+
         Dapple['maker-otc'].objects.otc.last_offer_id((err, n) => {
           if (!error) {
             const lastOfferId = n.toNumber();
@@ -445,17 +456,19 @@ Offers.getHigherOfferId = function getHigherOfferId(existingId) {
  */
 Offers.syncOffer = (id, max = 0) => {
   const isMatchingEnabled = Session.get('isMatchingEnabled');
+  const isBuyEnabled = Session.get('isBuyEnabled');
   Dapple['maker-otc'].objects.otc.offers(id, (error, data) => {
     if (!error) {
       const idx = id.toString();
       const [sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress, owner, active] = data;
 
+      // console.log(id, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress);
       if (active) {
         Offers.updateOffer(idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress,
           owner, Status.CONFIRMED);
       } else {
         Offers.remove(idx);
-        if (!isMatchingEnabled && Session.equals('selectedOffer', idx)) {
+        if (isBuyEnabled && Session.equals('selectedOffer', idx)) {
           $('#offerModal').modal('hide');
         }
       }
@@ -567,6 +580,9 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
       const { sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId } =
         Offers.offerContractParameters(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken);
 
+      console.log(sellHowMuchAbsolute, sellWhichTokenAddress,
+        buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId);
+
       Dapple['maker-otc'].objects.otc.offer(sellHowMuchAbsolute, sellWhichTokenAddress,
         buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId,
         { gas: Math.min(gasEstimate[0] + 500000, gasEstimate[1]) }, (error, tx) => {
@@ -602,9 +618,11 @@ Offers.buyOffer = (_id, type, _quantity, _token) => {
 };
 
 Offers.cancelOffer = (idx) => {
+  console.log('Cancelling...');
   const id = parseInt(idx, 10);
   Offers.update(idx, { $unset: { helper: '' } });
   Dapple['maker-otc'].objects.otc.cancel(id, { gas: CANCEL_GAS }, (error, tx) => {
+    console.log(error, tx);
     if (!error) {
       Transactions.add('offer', tx, { id: idx, status: Status.CANCELLED });
       Offers.update(idx, { $set: { tx, status: Status.CANCELLED, helper: 'The order is being cancelled...' } });
