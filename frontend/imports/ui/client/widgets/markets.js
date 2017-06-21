@@ -103,8 +103,6 @@ Template.markets.viewmodel({
     });
   },
   baseChange(newBaseCurrency) {
-    Session.set('balanceLoaded', false);
-    Session.set('allowanceLoaded', false);
     this.baseCurrency(newBaseCurrency);
     // XXX EIP20
     Dapple.getToken(this.baseCurrency(), (error, token) => {
