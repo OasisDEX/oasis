@@ -164,7 +164,17 @@ function checkNetwork() {
 }
 
 $(window).on('hashchange', () => {
+  const baseBeforeChange = Session.get('baseCurrency');
+  const quoteBeforeChange = Session.get('quoteCurrency');
   doHashChange();
+  const baseAfterChange = Session.get('baseCurrency');
+  const quoteAfterChange = Session.get('quoteCurrency');
+
+  if (Session.get('isMatchingEnabled')) {
+    if (baseAfterChange !== baseBeforeChange || quoteAfterChange !== quoteBeforeChange) {
+      Offers.sync();
+    }
+  }
 });
 
 function initSession() {

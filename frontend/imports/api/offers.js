@@ -455,14 +455,11 @@ Offers.getHigherOfferId = function getHigherOfferId(existingId) {
  * Syncs up a single offer
  */
 Offers.syncOffer = (id, max = 0) => {
-  const isMatchingEnabled = Session.get('isMatchingEnabled');
   const isBuyEnabled = Session.get('isBuyEnabled');
   Dapple['maker-otc'].objects.otc.offers(id, (error, data) => {
     if (!error) {
       const idx = id.toString();
       const [sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress, owner, active] = data;
-
-      // console.log(id, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress);
       if (active) {
         Offers.updateOffer(idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress,
           owner, Status.CONFIRMED);
@@ -579,10 +576,6 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
     .then((gasEstimate) => {
       const { sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId } =
         Offers.offerContractParameters(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken);
-
-      console.log(sellHowMuchAbsolute, sellWhichTokenAddress,
-        buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId);
-
       Dapple['maker-otc'].objects.otc.offer(sellHowMuchAbsolute, sellWhichTokenAddress,
         buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId,
         { gas: Math.min(gasEstimate[0] + 500000, gasEstimate[1]) }, (error, tx) => {
@@ -618,11 +611,9 @@ Offers.buyOffer = (_id, type, _quantity, _token) => {
 };
 
 Offers.cancelOffer = (idx) => {
-  console.log('Cancelling...');
   const id = parseInt(idx, 10);
   Offers.update(idx, { $unset: { helper: '' } });
   Dapple['maker-otc'].objects.otc.cancel(id, { gas: CANCEL_GAS }, (error, tx) => {
-    console.log(error, tx);
     if (!error) {
       Transactions.add('offer', tx, { id: idx, status: Status.CANCELLED });
       Offers.update(idx, { $set: { tx, status: Status.CANCELLED, helper: 'The order is being cancelled...' } });
