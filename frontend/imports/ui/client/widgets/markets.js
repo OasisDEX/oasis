@@ -90,9 +90,6 @@ Template.markets.viewmodel({
               location.hash = `#trade/${this.quoteCurrency()}/${this.baseCurrency()}`;
             }
             Tokens.sync();
-            if (Session.get('isMatchingEnabled')) {
-              Offers.sync();
-            }
           } else {
             this.quoteHelper('Token not found');
           }
