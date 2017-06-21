@@ -5,7 +5,18 @@
       <!--<span>{{subtitle}}</span>-->
       {{> whatisthis section="orderbook"}}
     </h2>
-    <div>  
+    <div>
+      {{#if equals priceClass 'bid'}}
+        {{#if loadingBuyOrders}}
+          <div class="loading-market-history">{{{loadingIcon}}} Loading buy orders...</div>
+        {{/if}}
+      {{/if}}
+
+      {{#if equals priceClass 'ask'}}
+        {{#if loadingSellOrders}}
+          <div class="loading-market-history">{{{loadingIcon}}} Loading sell orders...</div>
+        {{/if}}
+      {{/if}}
       {{> orders orders=orders type=priceClass priceLabel=priceLabel priceClass=priceClass canAccept=(isMarketOpen) showCancel=(not isMarketOpen)}}
     </div>
   </div>
