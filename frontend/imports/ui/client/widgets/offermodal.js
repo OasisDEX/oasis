@@ -20,14 +20,13 @@ Template.offermodal.viewmodel({
   total: '',
   priceInUSD: '',
   gasLimit: '',
-  gasEstimateInETH: '',
+  gasEstimateInETH: 0,
   gasEstimateInProgress: false,
   gasEstimateMoreThanGasLimit: false,
   gasEstimateResult: null,
   gasEstimateError: null,
   shouldShowMaxBtn: false,
   autorun() {
-    this.estimateGasUsage();
     this.fetchCurrentPriceInUSD();
     if (Template.currentData().offer) {
       const buyHowMuch = web3Obj.fromWei(new BigNumber(Template.currentData().offer.buyHowMuch)).toString(10);
@@ -271,18 +270,18 @@ Template.offermodal.viewmodel({
 
     if (this.type() === 'bid') {
       bestOffer = Offers.findOne({
-        buyWhichToken: Session.get('baseCurrency'),
-        sellWhichToken: Session.get('quoteCurrency'),
-      },
+          buyWhichToken: Session.get('baseCurrency'),
+          sellWhichToken: Session.get('quoteCurrency'),
+        },
         {
           sort: { ask_price_sort: 1 },
         });
       return (new BigNumber(bestOffer.bid_price)).gt(new BigNumber(this.templateInstance.data.offer.bid_price));
     } else if (this.type() === 'ask') {
       bestOffer = Offers.findOne({
-        buyWhichToken: Session.get('quoteCurrency'),
-        sellWhichToken: Session.get('baseCurrency'),
-      },
+          buyWhichToken: Session.get('quoteCurrency'),
+          sellWhichToken: Session.get('baseCurrency'),
+        },
         {
           sort: { ask_price_sort: 1 },
         });
@@ -306,7 +305,7 @@ Template.offermodal.viewmodel({
     }
     return false;
   },
- // this is nonsense but since someone decided to use same js and html , but different offer object, this is the way.
+  // this is nonsense but since someone decided to use same js and html , but different offer object, this is the way.
   autofillOrder(event) {
     event.preventDefault();
     const marketOpen = Session.get('market_open');
@@ -423,6 +422,24 @@ Template.offermodal.viewmodel({
     }
     return { sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken };
   },
+  onSuccessfulGasEstimation(gas) {
+    if (this.gasEstimateInProgress()) {
+      this.gasLimit(gas.limit);
+      this.gasEstimateError(null);
+      this.gasEstimateResult(gas.quantity);
+      this.gasEstimateMoreThanGasLimit(gas.quantity > gas.limit);
+      this.gasEstimateInProgress(false);
+    }
+  },
+  onFailedGasEstimation(error) {
+    if (this.gasEstimateInProgress()) {
+      this.gasLimit('');
+      this.gasEstimateError(error);
+      this.gasEstimateResult(null);
+      this.gasEstimateMoreThanGasLimit(false);
+      this.gasEstimateInProgress(false);
+    }
+  },
   estimateGasUsage() {
     this.gasEstimateResult(null);
     this.gasEstimateMoreThanGasLimit(false);
@@ -454,6 +471,30 @@ Template.offermodal.viewmodel({
       this.gasEstimateInProgress(false);
     }
   },
+  estimateFillingGasUsage() {
+    this.gasEstimateResult(null);
+    this.gasEstimateMoreThanGasLimit(false);
+    this.gasEstimateError(null);
+    const offerId = this.templateInstance.data.offer ? this.templateInstance.data.offer._id : '';
+    const type = this.templateInstance.data.offer ? this.templateInstance.data.offer.type() : '';
+    const offer = Offers.findOne(offerId);
+
+    if (offer) {
+      let quantity = new BigNumber(this.volume());
+
+      if (type === 'bid') {
+        quantity = new BigNumber(this.total());
+      }
+
+      quantity = convertToTokenPrecision(quantity, offer.sellWhichToken);
+
+      this.gasEstimateInProgress(true);
+      latest(Offers.fillOfferGasEstimate)(offerId, quantity)
+        .then((estimatedGas) => { this.onSuccessfulGasEstimation(estimatedGas); })
+        .catch((error) => { this.onFailedGasEstimation(error); });
+    }
+  },
+
   estimateGasInETH(gas) {
     web3Obj.eth.getGasPrice((err, priceValue) => {
       if (!err) {
