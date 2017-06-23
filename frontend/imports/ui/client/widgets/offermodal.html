@@ -149,6 +149,7 @@
                             </div>
                           </div>
                         {{else}}
+                          {{estimateFillingGasUsage}}
                           <div class="row-fluid div-modal-text ">
                             <div class="col-xs-12">
                               <div class="row info-section bordered">
@@ -210,6 +211,32 @@
                                           {{ternary isMatchingEnabled "ACTIVE" "INACTIVE"}}
                                         </span>
                                     </div>
+                                  </div>
+                                  <div class="row dex-gas-estimate">
+                                    {{#if or (gasEstimateInProgress) (or gasEstimateResult gasEstimateError)}}
+                                      {{#if gasEstimateInProgress}}
+                                        <span class="col-xs-12">
+                                            Estimating gas... <span class="loading-icon">{{{loadingIcon}}}</span>
+                                          </span>
+                                      {{else}}
+                                        {{#if gasEstimateResult}}
+                                          {{estimateGasInETH gasEstimateResult}}
+                                          <span class="col-xs-7 dex-currency-label dex-gas-label">
+                                              Gas {{{formatNumber gasEstimateInETH 4 true}}} ETH
+                                            </span>
+                                          <span style="width: 70px"
+                                                class="col-xs-5 dex-currency-label dex-currency-label--fiat">
+                                              <span>
+                                                ~ {{{ formatNumber (multiply gasEstimateInETH priceInUSD) 2 true}}} USD
+                                              </span>
+                                            </span>
+                                        {{else}}
+                                          {{#if gasEstimateError}}
+                                            Gas estimation failed.
+                                          {{/if}}
+                                        {{/if}}
+                                      {{/if}}
+                                    {{/if}}
                                   </div>
                                 </div>
                               </div>
@@ -404,6 +431,7 @@
                             </div>
                           </div>
                         {{else}}
+                          {{ estimateGasUsage }}
                           <div class="row-fluid">
                             <div class="col-xs-12">
                               {{#if (not gasEstimateMoreThanGasLimit) }}

@@ -586,6 +586,25 @@ Offers.newOfferGasEstimate = async (sellHowMuch, sellWhichToken, buyHowMuch, buy
   return Promise.all([estimateGasPromise, latestBlockPromise]).then((results) => [results[0], results[1].gasLimit]);
 };
 
+Offers.fillOfferGasEstimate = (id, quantity) => {
+  const data = Dapple['maker-otc'].objects.otc.buy.getData(id, quantity);
+
+  const latestBlock = Offers.getBlock('latest');
+  const estimation = new Promise((resolve, reject) => {
+    web3Obj.eth.estimateGas({ to: Dapple['maker-otc'].environments[Dapple.env].otc.value, data }, (error, result) => {
+      if (!error) {
+        resolve(result);
+      } else {
+        reject(error);
+      }
+    });
+  });
+
+  return Promise.all([estimation, latestBlock]).then((results) =>
+    ({ quantity: results[0], limit: results[1].gasLimit })
+  );
+};
+
 Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callback) => {
   Offers.newOfferGasEstimate(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken)
     .then((gasEstimate) => {
@@ -606,22 +625,23 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
 };
 
 Offers.buyOffer = (_id, type, _quantity, _token) => {
-  const id = parseInt(_id, 10);
-
   const quantityAbsolute = convertToTokenPrecision(_quantity, _token);
 
-  Offers.update(_id, { $unset: { helper: '' } });
-  Dapple['maker-otc'].objects.otc.buy(id.toString(10), quantityAbsolute, { gas: BUY_GAS }, (error, tx) => {
-    if (!error) {
-      Transactions.add('offer', tx, { id: _id, status: Status.BOUGHT });
-      Offers.update(_id, {
-        $set: {
-          tx, status: Status.BOUGHT, helper: `Your ${type} order is being processed...`,
-        },
-      });
-    } else {
-      Offers.update(_id, { $set: { helper: formatError(error) } });
-    }
+  Offers.fillOfferGasEstimate(_id, quantityAbsolute).then((estimated) => {
+    Offers.update(_id, { $unset: { helper: '' } });
+    const estimatedGas = Math.min(estimated.quantity + 500000, estimated.limit);
+    Dapple['maker-otc'].objects.otc.buy(_id, quantityAbsolute, { gas: estimatedGas }, (error, tx) => {
+      if (!error) {
+        Transactions.add('offer', tx, { id: _id, status: Status.BOUGHT });
+        Offers.update(_id, {
+          $set: {
+            tx, status: Status.BOUGHT, helper: `Your ${type} order is being processed...`,
+          },
+        });
+      } else {
+        Offers.update(_id, { $set: { helper: formatError(error) } });
+      }
+    });
   });
 };
 
