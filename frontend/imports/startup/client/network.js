@@ -15,22 +15,47 @@ import { doHashChange } from '/imports/utils/functions';
 // Check which accounts are available and if defaultAccount is still available,
 // Otherwise set it to localStorage, Session, or first element in accounts
 function checkAccounts() {
-  web3Obj.eth.getAccounts((error, accounts) => {
-    if (!error) {
-      if (!_.contains(accounts, web3Obj.eth.defaultAccount)) {
-        if (_.contains(accounts, localStorage.getItem('address'))) {
-          web3Obj.eth.defaultAccount = localStorage.getItem('address');
-        } else if (_.contains(accounts, Session.get('address'))) {
-          web3Obj.eth.defaultAccount = Session.get('address');
-        } else if (accounts.length > 0) {
-          web3Obj.eth.defaultAccount = accounts[0];
-        } else {
-          web3Obj.eth.defaultAccount = undefined;
+  return new Promise((resolve, reject) => {
+    web3Obj.eth.getAccounts((error, accounts) => {
+      if (!error) {
+        if (!_.contains(accounts, web3Obj.eth.defaultAccount)) {
+          if (_.contains(accounts, localStorage.getItem('address'))) {
+            web3Obj.eth.defaultAccount = localStorage.getItem('address');
+          } else if (_.contains(accounts, Session.get('address'))) {
+            web3Obj.eth.defaultAccount = Session.get('address');
+          } else if (accounts.length > 0) {
+            web3Obj.eth.defaultAccount = accounts[0];
+          } else {
+            web3Obj.eth.defaultAccount = undefined;
+          }
         }
+        localStorage.setItem('address', web3Obj.eth.defaultAccount);
+        Session.set('address', web3Obj.eth.defaultAccount);
+        Session.set('accounts', accounts);
+        resolve(web3Obj.eth.defaultAccount);
+      } else {
+        reject();
       }
-      localStorage.setItem('address', web3Obj.eth.defaultAccount);
-      Session.set('address', web3Obj.eth.defaultAccount);
-      Session.set('accounts', accounts);
+    });
+  });
+}
+
+function checkIfUserHasOldWETHBalance(address) {
+  Dapple.getToken('W-ETH', (error, token) => {
+    if (!error) {
+      if (token) {
+        token.balanceOf(address, (err, balance) => {
+          if (!error) {
+            if (balance.toString() > 0) {
+              $('#balanceInOldWrapperWarning').modal('show');
+            }
+          } else {
+            console.debug(`Couldn't get balance for ${address}.`, error);
+          }
+        });
+      }
+    } else {
+      console.debug(`Cannot extract information for ${token} `, error);
     }
   });
 }
@@ -92,7 +117,7 @@ function checkIfBuyEnabled(marketType) {
 function initNetwork(newNetwork) {
   Dapple.init(newNetwork);
   const market = Dapple['maker-otc'].environments.kovan.otc;
-  checkAccounts();
+  checkAccounts().then(checkIfUserHasOldWETHBalance);
   const isMatchingEnabled = checkIfOrderMatchingEnabled(market.type);
   const isBuyEnabled = checkIfBuyEnabled(market.type);
   Promise.all([isMatchingEnabled, isBuyEnabled]).then(() => {
@@ -227,6 +252,7 @@ function initSession() {
   if (!Session.get('volumeSelector')) {
     Session.set('volumeSelector', 'quote');
   }
+
 }
 
 /**

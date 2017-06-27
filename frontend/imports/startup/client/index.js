@@ -18,6 +18,7 @@ import '../../ui/client/widgets/offermodal.js';
 import '../../ui/client/widgets/orders.js';
 import '../../ui/client/widgets/orderbook.html';
 import '../../ui/client/widgets/sendtokens.js';
+import '../../ui/client/widgets/balance-in-old-wrapper';
 
 import '../../ui/client/headers/accountselector.js';
 import '../../ui/client/headers/balance.js';
