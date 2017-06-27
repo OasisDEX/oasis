@@ -393,9 +393,13 @@ Offers.syncTrades = (historicalTradesRange) => {
   }).get((error, logTakes) => {
     if (!error) {
       for (let i = 0; i < logTakes.length; i++) {
+        // Since we have the transactionHash the same for 2 LogTake events because two orders were filled automatically
+        // We use each log event index to create unique ids for the log entry in the db.
+        const eventLogIndex = logTakes[i].logIndex;
         const trade = logTakeToTrade(logTakes[i]);
         if (trade && (trade.timestamp * 1000 >= historicalTradesRange.startTimestamp)) {
-          Trades.upsert(trade.transactionHash, trade);
+          const uniqueId = trade.transactionHash + eventLogIndex;
+          Trades.upsert(uniqueId, trade);
         }
       }
       Session.set('loadingTradeHistory', false);
