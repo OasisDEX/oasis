@@ -436,7 +436,8 @@ Offers.syncTrades = (historicalTradesRange) => {
       if (!error) {
         const trade = logTakeToTrade(logTake);
         if (trade) {
-          Trades.upsert(trade.transactionHash, trade);
+          const uniqueId = trade.transactionHash + logTake.logIndex;
+          Trades.upsert(uniqueId, trade);
         }
       }
     });
