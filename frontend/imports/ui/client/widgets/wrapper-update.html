@@ -1,0 +1,51 @@
+<template name="wrapperUpdate">
+  <div class="modal fade" id="wrapperUpdate" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content modal-wrapper-update">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">WRAPPER UPDATE</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="row-fluid">
+                <div class="col-xs-12">
+                  <div class="row text-holder bordered">
+                    <div class="col-xs-12">
+                      We have updated the wrapper contract.<br>
+                      Please unwrap your W-ETH to use the upgraded wrapper.
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="currency-box bordered">
+                      <span class="dex-icon-ethereum dex-icon-ethereum--wrapped"></span>
+                      <span class="value"><span class="amount"></span><span class="token">W-ETH</span></span>
+                    </div>
+                    <div class="transition">
+                      <span class="glyphicon glyphicon-arrow-right"></span>
+                    </div>
+                    <div class="currency-box bordered">
+                      <span class="dex-icon-ethereum dex-icon-ethereum--unwrapped"></span>
+                      <span class="value"><span class="amount"></span><span class="token">ETH</span></span>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn dex-btn-default btn-placement-left" data-dismiss="modal">Cancel
+          </button>
+          <button type="button" class="btn dex-btn-default dex-btn-danger btn-placement-right"
+                  data-dismiss="modal" {{b "click:unwrap"}}>
+            UNWRAP ALL
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

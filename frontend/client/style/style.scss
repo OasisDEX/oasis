@@ -1088,6 +1088,7 @@ table {
 .allowance-input-table {
   margin-bottom: 20px;
 }
+
 .info-section-order-cancel {
   padding: 20px 15px 5px 15px !important;
 }
@@ -1134,7 +1135,6 @@ table {
     padding-right: 0;
     line-height: 1.5;
 
-
     &--fiat {
       height: 20px;
       text-align: center;
@@ -1152,12 +1152,9 @@ table {
     }
   }
 
-
   .dex-gas-label {
     padding-left: 0;
   }
-
-
 
   .dex-currency-add {
     padding-right: 15px;
@@ -1172,12 +1169,10 @@ table {
     padding-top: 10px;
   }
 
-
   .dex-order-matching-label {
     border: 1px solid transparent;
     padding-left: 0;
   }
-
 
   .dex-order-matching-status {
     height: 20px;
@@ -1199,10 +1194,18 @@ table {
   }
 }
 
-.warning-section {
+.text-holder {
   display: block;
-  padding: 10px 0;
-  margin-bottom: 15px;
+  padding: 15px 0;
+  margin-bottom: 20px;
+
+  &--danger {
+    color: rgba(255, 0, 0, 0.5);;
+  }
+}
+
+.warning-section {
+  @extend .text-holder;
 }
 
 .modal {
@@ -1277,6 +1280,10 @@ button.dex-btn-default {
 button.dex-btn-default {
   min-width: 100px;
   width: auto;
+}
+
+button.dex-btn-danger {
+  @extend button.dex-btn-default.sell;
 }
 
 button.dex-btn-max {
@@ -1595,6 +1602,68 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   .div-actions {
     float: right;
     margin-top: 5px;
+  }
+}
+
+.modal-wrapper-update {
+  @extend .modal-order;
+
+  .modal-header, .modal-body {
+    margin-bottom: 32px;
+  }
+
+  .modal-body {
+    color: rgba(34, 34, 40, 0.7);
+  }
+
+  .modal-title {
+    letter-spacing: 4px;
+  }
+
+  .dex-icon-ethereum {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+
+  .currency-box {
+    width: 215px;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 10px;
+    font-size: 13px;
+
+    .value {
+      letter-spacing: 1.45px;
+      width: 156px;
+      display: inline-block;
+      vertical-align: middle;
+      color: rgba(34, 34, 40, 0.7);
+      font-size: 13px;
+      line-height: 18px;
+      float: none;
+      text-align: right;
+
+      .amount {
+        display: inline-block;
+        margin-right: 5px;
+      }
+
+      .token {
+        font-weight: 700;
+      }
+    }
+  }
+
+  .glyphicon {
+    top: 4px;
+    transform: scale(0.75, 0.5);
+  }
+
+  .transition {
+    width: 50px;
+    display: inline-block;
+    text-align: center;
   }
 }
 
@@ -2121,6 +2190,21 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
 span.loading-icon {
   img {
     transform: translate(0px, -3px);
+  }
+}
+
+.dex-icon-ethereum {
+  height: 24px;
+  width: 24px;
+
+  &--wrapped {
+    background: url('eth_circle_icon.svg') no-repeat;
+    background-size: 100% 100%;
+  }
+
+  &--unwrapped {
+    background: url('eth_circle_icon_full.svg') no-repeat;
+    background-size: 100% 100%;
   }
 }
 

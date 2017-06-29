@@ -32,6 +32,7 @@ const tokens = config.tokens;
 
 // http://numeraljs.com/ for formats
 const tokenSpecs = {
+  'OW-ETH': { precision: 18, format: '0,0.00[0000000000000000]' },
   'W-ETH': { precision: 18, format: '0,0.00[0000000000000000]' },
   DAI: { precision: 18, format: '0,0.00[0000000000000000]' },
   MKR: { precision: 18, format: '0,0.00[0000000000000000]' },
@@ -47,7 +48,7 @@ const tokenSpecs = {
   MLN: { precision: 18, format: '0,0.00[0000000000000000]' },
   RHOC: { precision: 8, format: '0,0.00[000000]' },
   TIME: { precision: 8, format: '0,0.00[000000]' },
-  GUP: { precision: 3, format: '0,0.00[0]'  },
+  GUP: { precision: 3, format: '0,0.00[0]' },
   BAT: { precision: 18, format: '0,0.00[0000000000000000]' },
   NMR: { precision: 18, format: '0,0.00[0000000000000000]' },
 };
@@ -86,7 +87,7 @@ Dapple.getToken = (symbol, callback) => {
   let tokenClass = 'DSTokenBase';
   let that = Dapple['ds-eth-token'];
 
-  if (symbol === 'W-ETH') {
+  if (symbol === 'W-ETH' || symbol === 'OW-ETH') {
     tokenClass = 'DSEthToken';
   } else if (symbol === 'W-GNT') {
     tokenClass = 'TokenWrapper';

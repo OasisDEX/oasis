@@ -40,17 +40,22 @@ function checkAccounts() {
   });
 }
 
-function checkIfUserHasOldWETHBalance(address) {
-  Dapple.getToken('W-ETH', (error, token) => {
+function checkIfUserHasBalanceInOldWrapper(userAddress) {
+  // Named the old wrapper - OW-ETH
+  Dapple.getToken('OW-ETH', (error, token) => {
     if (!error) {
       if (token) {
-        token.balanceOf(address, (err, balance) => {
+        token.balanceOf(userAddress, (err, balance) => {
           if (!error) {
-            if (balance.toString() > 0) {
-              $('#balanceInOldWrapperWarning').modal('show');
+            if (balance.toString(10) > 0) {
+              $('#wrapperUpdate').modal('show');
+              $('#wrapperUpdate').on('shown.bs.modal', () => {
+                $('.amount').text(Blaze._globalHelpers.formatBalance(balance, 3, '', false));
+                Session.set('oldWrapperBalance', balance.toString(10));
+              });
             }
           } else {
-            console.debug(`Couldn't get balance for ${address}.`, error);
+            console.debug(`Couldn't get balance for ${userAddress}.`, error);
           }
         });
       }
@@ -117,7 +122,7 @@ function checkIfBuyEnabled(marketType) {
 function initNetwork(newNetwork) {
   Dapple.init(newNetwork);
   const market = Dapple['maker-otc'].environments.kovan.otc;
-  checkAccounts().then(checkIfUserHasOldWETHBalance);
+  checkAccounts().then(checkIfUserHasBalanceInOldWrapper);
   const isMatchingEnabled = checkIfOrderMatchingEnabled(market.type);
   const isBuyEnabled = checkIfBuyEnabled(market.type);
   Promise.all([isMatchingEnabled, isBuyEnabled]).then(() => {
