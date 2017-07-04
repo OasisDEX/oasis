@@ -359,6 +359,4 @@ Meteor.autorun(() => {
   WGNT.watchBrokerTransfer();
   WGNT.watchBrokerClear();
   WGNT.watchWithdraw();
-  WETH.watchDeposit();
-  WETH.watchWithdraw();
 });
