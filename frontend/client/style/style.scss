@@ -1608,11 +1608,12 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
 .modal-wrapper-update {
   @extend .modal-order;
 
-  .modal-header, .modal-body {
+  .modal-header {
     margin-bottom: 32px;
   }
 
   .modal-body {
+    margin-bottom: 20px;
     color: rgba(34, 34, 40, 0.7);
   }
 
@@ -1653,6 +1654,10 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
         font-weight: 700;
       }
     }
+  }
+
+  .dex-progress-bar {
+    margin-top: 20px;
   }
 
   .glyphicon {
@@ -2670,4 +2675,32 @@ a.logo:hover {
   }
 }
 
+.dex-progress-bar {
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #C4C6CC;
+  border-radius: 10px;
+}
 
+.dex-progress {
+  width: 0;
+  -webkit-transition: width linear .5s;
+  -moz-transition: width linear .5s;
+  -ms-transition: width linear .5s;
+  -o-transition: width linear .5s;
+  transition: width linear .5s;
+  height: 30px;
+  background-color: #EEEEF0;
+}
+
+.dex-progress-message {
+  position: absolute;
+  text-transform: uppercase;
+  color: #49494A;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  text-align: center;
+  padding: 6px;
+  width: 100%;
+}

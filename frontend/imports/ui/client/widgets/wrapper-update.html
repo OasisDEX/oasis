@@ -29,19 +29,24 @@
                     <div class="currency-box bordered">
                       <span class="dex-icon-ethereum dex-icon-ethereum--unwrapped"></span>
                       <span class="value"><span class="amount"></span><span class="token">ETH</span></span>
-
                     </div>
                   </div>
                 </div>
               </div>
+              {{#if inProgress}}
+                <div class="row">
+                  <div class="col-xs-12">
+                    {{> progressbar message=message value=current max=100}}
+                  </div>
+                </div>
+              {{/if}}
             </div>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn dex-btn-default btn-placement-left" data-dismiss="modal">Cancel
           </button>
-          <button type="button" class="btn dex-btn-default dex-btn-danger btn-placement-right"
-                  data-dismiss="modal" {{b "click:unwrap"}}>
+          <button type="button" class="btn dex-btn-default dex-btn-danger btn-placement-right" {{b "click:unwrap"}}>
             UNWRAP ALL
           </button>
         </div>
