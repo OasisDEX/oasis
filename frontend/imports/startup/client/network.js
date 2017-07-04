@@ -48,7 +48,11 @@ function checkIfUserHasBalanceInOldWrapper(userAddress) {
         token.balanceOf(userAddress, (err, balance) => {
           if (!error) {
             if (balance.toString(10) > 0) {
-              $('#wrapperUpdate').modal('show');
+              $('#wrapperUpdate').modal({
+                keyboard: false,
+                show: true,
+                backdrop: false,
+              });
               $('#wrapperUpdate').on('shown.bs.modal', () => {
                 $('.amount').text(Blaze._globalHelpers.formatBalance(balance, 3, '', false));
                 Session.set('oldWrapperBalance', balance.toString(10));
