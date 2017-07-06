@@ -311,15 +311,17 @@ Offers.syncOffers = () => {
 
       if (loaded === total) {
         Session.set('loadingCounter', 0);
-        Offers.syncOffer(id);
+        Offers.syncOffer(id.toString(10));
       } else {
-        Offers.syncOffer(id, total);
+        Offers.syncOffer(id.toString(10), total);
       }
-      Dapple['maker-otc'].objects.otc.getWorseOffer(id, (err, nextId) => {
+      Dapple['maker-otc'].objects.otc.getWorseOffer(id.toString(10), (err, nextId) => {
         if (!err && !nextId.eq(0)) {
           getNextOffer(nextId);
         }
       });
+    } else {
+      console.debug('Trouble getting next offer: ', error);
     }
   };
 
