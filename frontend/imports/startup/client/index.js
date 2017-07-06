@@ -11,7 +11,7 @@ import '../../ui/client/widgets/maintrades.html';
 import '../../ui/client/widgets/maindeposit.js';
 import '../../ui/client/widgets/maintransfer.js';
 import '../../ui/client/widgets/markets.js';
-import '../../ui/client/widgets/mytrades.js';
+import '../../ui/client/widgets/myorders.js';
 import '../../ui/client/widgets/newallowance.js';
 import '../../ui/client/widgets/neworder.js';
 import '../../ui/client/widgets/offermodal.js';
@@ -20,7 +20,7 @@ import '../../ui/client/widgets/orderbook.html';
 import '../../ui/client/widgets/sendtokens.js';
 
 import '../../ui/client/headers/accountselector.js';
-import '../../ui/client/headers/balance.html';
+import '../../ui/client/headers/balance.js';
 import '../../ui/client/headers/currencyselector.js';
 import '../../ui/client/headers/marketdetails.html';
 import '../../ui/client/headers/messages.js';

@@ -75,7 +75,13 @@ Template.registerHelper('syncingPercentage', () => {
 
 Template.registerHelper('loading', () => Session.get('loading'));
 
+Template.registerHelper('loadingBuyOrders', () => Session.get('loadingBuyOrders'));
+
+Template.registerHelper('loadingSellOrders', () => Session.get('loadingSellOrders'));
+
 Template.registerHelper('loadingProgress', () => Session.get('loadingProgress'));
+
+Template.registerHelper('loadingCounter', () => Session.get('loadingCounter'));
 
 Template.registerHelper('loadingTransferHistory', () => Session.get('loadingTransferHistory'));
 
@@ -86,7 +92,7 @@ Template.registerHelper('loadingTradeHistory', () => Session.get('loadingTradeHi
 Template.registerHelper('loadingIndividualTradeHistory', () => Session.get('loadingIndividualTradeHistory'));
 
 Template.registerHelper('loadedCurrencies', () => Session.get('balanceLoaded') === true
-&& Session.get('allowanceLoaded') === true);
+&& Session.get('allowanceLoaded') === true && Session.get('limitsLoaded') === true);
 
 Template.registerHelper('loadingTokenEvents', (txHash) => {
   const currentlyLoading = Session.get('loadingTokenEvents');
@@ -142,20 +148,16 @@ Template.registerHelper('lastTrades', () => {
 Template.registerHelper('countOffers', (type) => {
   const quoteCurrency = Session.get('quoteCurrency');
   const baseCurrency = Session.get('baseCurrency');
-  const dustLimitMap = Session.get('orderBookDustLimit');
-  const dustLimit = dustLimitMap[quoteCurrency] ? dustLimitMap[quoteCurrency] : 0;
 
   if (type === 'ask') {
     return Offers.find({
       buyWhichToken: quoteCurrency,
       sellWhichToken: baseCurrency,
-      buyHowMuch_filter: { $gte: dustLimit },
     }).count();
   } else if (type === 'bid') {
     return Offers.find({
       buyWhichToken: baseCurrency,
       sellWhichToken: quoteCurrency,
-      sellHowMuch_filter: { $gte: dustLimit },
     }).count();
   }
   return 0;
@@ -165,8 +167,6 @@ Template.registerHelper('findOffers', (type) => {
   const quoteCurrency = Session.get('quoteCurrency');
   const baseCurrency = Session.get('baseCurrency');
   const limit = Session.get('orderBookLimit');
-  const dustLimitMap = Session.get('orderBookDustLimit');
-  const dustLimit = dustLimitMap[quoteCurrency] ? dustLimitMap[quoteCurrency] : 0;
 
   const options = {};
   options.sort = { ask_price_sort: 1, _id: -1 };
@@ -178,13 +178,11 @@ Template.registerHelper('findOffers', (type) => {
     return Offers.find({
       buyWhichToken: quoteCurrency,
       sellWhichToken: baseCurrency,
-      buyHowMuch_filter: { $gte: dustLimit },
     }, options);
   } else if (type === 'bid') {
     return Offers.find({
       buyWhichToken: baseCurrency,
       sellWhichToken: quoteCurrency,
-      sellHowMuch_filter: { $gte: dustLimit },
     }, options);
   }
   return [];
@@ -242,7 +240,11 @@ Template.registerHelper('or', (a, b) => a || b);
 
 Template.registerHelper('and', (a, b) => a && b);
 
+Template.registerHelper('ternary', (logical, yes, no) => (logical ? yes : no));
+
 Template.registerHelper('gt', (a, b) => a > b);
+
+Template.registerHelper('multiply', (a, b) => a * b);
 
 Template.registerHelper('concat', (...args) => Array.prototype.slice.call(args, 0, -1).join(''));
 
@@ -360,6 +362,37 @@ Template.registerHelper('formatBalance', (wei, decimals, currency, sle) => {
   return finalValue;
 });
 
+/**
+ * This function provides the highest possible rounding.
+ *
+ *  i.e. 100000 WEI -> 0.000000000000100000 -> 0.0000000000001
+ *  i.e. 100000000000000 WEI -> 0.000100000000000000 -> 0.0001
+ *  i.e. 193459000000000 WEI -> 0.000193459000000000 -> 0.00019
+ *  gives better precision.
+ *  i.e  2000000000000000000 -> 2.000000000000000000 -> 2.00
+ *  i.e  22345000000000000000 -> 22.345000000000000000 -> 22.34
+ *  i.e  2000000000000100000 -> 2.000000000000100000 -> 2.0000000000001
+ */
+Template.registerHelper('formatToHighestPossible', (wei) => {
+  const exactValue = web3Obj.fromWei(wei).toString(10);
+  const parts = exactValue.split('.');
+  const significant = parts[0];
+  let fraction = parts[1] || '00';
+  let newFraction = '';
+  for (const index in fraction) {
+    const idx = parseInt(index, 10);
+    const current = fraction[idx];
+    newFraction += current;
+    if (current > 0) {
+      if (idx < fraction.length - 1) newFraction += fraction[idx + 1];
+      fraction = newFraction;
+      break;
+    }
+  }
+
+  return `${significant}.${fraction}`;
+});
+
 Template.registerHelper('formatNumber', (value, decimals, sle) => {
   let decimalsValue = decimals;
   if (decimalsValue instanceof Spacebars.kw) {
@@ -381,6 +414,13 @@ Template.registerHelper('formatNumber', (value, decimals, sle) => {
   return finalValue;
 });
 
+Template.registerHelper('formatGas', (value) => thousandSeparator(value));
+
+Template.registerHelper('formatGasLimit', (gasLimit, size, suffix) => {
+  const formattedGasLimit = gasLimit / size;
+  return `${formattedGasLimit.toPrecision(2)}${suffix}`;
+});
+
 Template.registerHelper('determineOrderType', (order, section) => {
   const baseCurrency = Session.get('baseCurrency');
   const address = Session.get('address');
@@ -391,7 +431,7 @@ Template.registerHelper('determineOrderType', (order, section) => {
     } else if (order.sellWhichToken === baseCurrency) {
       type = 'bid';
     }
-  } else if (section === 'myTrades' && order.counterParty) { // this reflects only trades which are closed ( has a counterparty)
+  } else if (section === 'myOrders' && order.counterParty) { // this reflects only trades which are closed ( has a counterparty)
     if (address === order.issuer && order.buyWhichToken === baseCurrency) {
       type = 'bid';
     } else if (address === order.issuer && order.sellWhichToken === baseCurrency) {
@@ -415,3 +455,8 @@ Template.registerHelper('loadingIcon', (size) => {
 });
 
 Template.registerHelper('volumeSelector', () => Session.get('volumeSelector'));
+
+Template.registerHelper('isMatchingEnabled', () => Session.get('isMatchingEnabled'));
+
+Template.registerHelper('isBuyEnabled', () => !Session.get('isMatchingEnabled') ||
+(Session.get('isBuyEnabled') && Session.get('isMatchingEnabled')));

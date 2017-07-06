@@ -3,7 +3,7 @@ import { Session } from 'meteor/session';
 import { Dapple, web3Obj } from 'meteor/makerotc:dapple';
 import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
-
+import Limits from '/imports/api/limits';
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
 import TokenEvents from '/imports/api/tokenEvents';
@@ -35,17 +35,76 @@ function checkAccounts() {
   });
 }
 
+function checkIfOrderMatchingEnabled(marketType) {
+  return new Promise((resolve, reject) => {
+    if (marketType !== 'MatchingMarket') {
+      Session.set('isMatchingEnabled', false);
+      resolve();
+    } else {
+      Dapple['maker-otc'].objects.otc.isMatchingEnabled((error, status) => {
+        if (!error) {
+          Session.set('isMatchingEnabled', status);
+          resolve();
+        } else {
+          console.debug('Cannot identify order matching status. ', error);
+          reject(error);
+        }
+      });
+
+      Dapple['maker-otc'].objects.otc.LogMatchingEnabled({}, { fromBlock: 'latest' }, (err, status) => {
+        if (!err) {
+          Session.set('isMatchingEnabled', status.args['']);
+        }
+      });
+    }
+  });
+}
+
+function checkIfBuyEnabled(marketType) {
+  return new Promise((resolve, reject) => {
+    if (marketType !== 'MatchingMarket') {
+      Session.set('isBuyEnabled', true);
+      resolve();
+    } else {
+      const abi = Dapple['maker-otc'].objects.otc.abi;
+      const addr = Dapple['maker-otc'].environments[Dapple.env].otc.value;
+
+      const contract = web3Obj.eth.contract(abi).at(addr);
+      contract.isBuyEnabled((error, result) => {
+        if (!error) {
+          Session.set('isBuyEnabled', result);
+          resolve();
+        } else {
+          reject();
+        }
+      });
+
+      Dapple['maker-otc'].objects.otc.LogBuyEnabled({}, { fromBlock: 'latest' }, (err, status) => {
+        if (!err) {
+          Session.set('isBuyEnabled', status.args['']);
+        }
+      });
+    }
+  });
+}
+
 // Initialize everything on new network
 function initNetwork(newNetwork) {
   Dapple.init(newNetwork);
+  const market = Dapple['maker-otc'].environments.kovan.otc;
   checkAccounts();
-  Session.set('network', newNetwork);
-  Session.set('isConnected', true);
-  Session.set('latestBlock', 0);
-  Session.set('startBlock', 0);
-  doHashChange();
-  Tokens.sync();
-  Offers.sync();
+  const isMatchingEnabled = checkIfOrderMatchingEnabled(market.type);
+  const isBuyEnabled = checkIfBuyEnabled(market.type);
+  Promise.all([isMatchingEnabled, isBuyEnabled]).then(() => {
+    Session.set('network', newNetwork);
+    Session.set('isConnected', true);
+    Session.set('latestBlock', 0);
+    Session.set('startBlock', 0);
+    doHashChange();
+    Tokens.sync();
+    Limits.sync();
+    Offers.sync();
+  });
 }
 
 // Check the closing time of the market and if it's open now
@@ -120,13 +179,26 @@ function checkNetwork() {
 }
 
 $(window).on('hashchange', () => {
+  const baseBeforeChange = Session.get('baseCurrency');
+  const quoteBeforeChange = Session.get('quoteCurrency');
   doHashChange();
+  const baseAfterChange = Session.get('baseCurrency');
+  const quoteAfterChange = Session.get('quoteCurrency');
+
+  if (Session.get('isMatchingEnabled')) {
+    if (baseAfterChange !== baseBeforeChange || quoteAfterChange !== quoteBeforeChange) {
+      Offers.sync();
+    }
+  }
 });
 
 function initSession() {
   Session.set('network', false);
   Session.set('loading', false);
+  Session.set('loadingBuyOrders', true);
+  Session.set('loadingSellOrders', true);
   Session.set('loadingProgress', 0);
+  Session.set('loadingCounter', 0);
   Session.set('outOfSync', false);
   Session.set('syncing', false);
   Session.set('isConnected', false);
@@ -134,6 +206,7 @@ function initSession() {
 
   Session.set('balanceLoaded', false);
   Session.set('allowanceLoaded', false);
+  Session.set('limitsLoaded', false);
 
   Session.set('ETHDepositProgress', 0);
   Session.set('ETHDepositProgressMessage', '');
@@ -154,8 +227,6 @@ function initSession() {
   if (!Session.get('volumeSelector')) {
     Session.set('volumeSelector', 'quote');
   }
-
-  Session.set('orderBookDustLimit', { 'W-ETH': 1000000000000000 });
 }
 
 /**
@@ -171,6 +242,7 @@ Meteor.startup(() => {
 
         web3Obj.eth.filter('latest', () => {
           Tokens.sync();
+          Limits.sync();
           Transactions.sync();
           TokenEvents.syncTimestamps();
         });
@@ -184,7 +256,7 @@ Meteor.startup(() => {
               // We use `true`, so it stops all filters, but not the web3Obj.eth.syncing polling
               web3Obj.reset(true);
               checkNetwork();
-            // show sync info
+              // show sync info
             } else if (sync) {
               Session.set('startingBlock', sync.startingBlock);
               Session.set('currentBlock', sync.currentBlock);
@@ -194,6 +266,7 @@ Meteor.startup(() => {
               Offers.sync();
               web3Obj.eth.filter('latest', () => {
                 Tokens.sync();
+                Limits.sync();
                 Transactions.sync();
               });
             }
@@ -201,26 +274,27 @@ Meteor.startup(() => {
         });
         clearInterval(syncingInterval);
       }
-    }, 350
+    }, 350,
   );
 
   // Session.set('web3Interval', web3Interval);
 
   function syncAndSetMessageOnError(document) {
     Offers.syncOffer(document.object.id);
-    let helperMsg = '';
     if (document.receipt.logs.length === 0) {
-      helperMsg = `${document.object.status.toUpperCase()}: Error during Contract Execution`;
+      const helperMsg = `${document.object.status.toUpperCase()}: Error during Contract Execution`;
+      Offers.update(document.object.id, { $set: { helper: helperMsg } });
     }
-    Offers.update(document.object.id, { $set: { helper: helperMsg } });
   }
 
-  function setMessageAndScheduleRemoval(document) {
-    // The ItemUpdate event will be triggered on successful generation, which will delete the object; otherwise set helper
-    Offers.update(document.object.id, { $set: { helper: 'Error during Contract Execution' } });
-    Meteor.setTimeout(() => {
-      Offers.remove(document.object.id);
-    }, 5000);
+  function setMessageAndScheduleRemovalOnError(document) {
+    // The ItemUpdate event will be triggered on successful generation, otherwise set helper
+    if (document.receipt.logs.length === 0) {
+      Offers.update(document.object.id, { $set: { helper: 'Error during Contract Execution' } });
+      Meteor.setTimeout(() => {
+        Offers.remove(document.object.id);
+      }, 5000);
+    }
   }
 
   Transactions.observeRemoved('offer', (document) => {
@@ -232,7 +306,7 @@ Meteor.startup(() => {
         syncAndSetMessageOnError(document);
         break;
       case Status.PENDING:
-        setMessageAndScheduleRemoval(document);
+        setMessageAndScheduleRemovalOnError(document);
         break;
       default:
         break;

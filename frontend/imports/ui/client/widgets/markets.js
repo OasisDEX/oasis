@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 import { BigNumber } from 'meteor/ethereum:web3';
 
 import Tokens from '/imports/api/tokens';
-import { Trades } from '/imports/api/offers';
+import { Offers, Trades } from '/imports/api/offers';
 import { $ } from 'meteor/jquery';
 
 import './markets.html';
@@ -100,8 +100,6 @@ Template.markets.viewmodel({
     });
   },
   baseChange(newBaseCurrency) {
-    Session.set('balanceLoaded', false);
-    Session.set('allowanceLoaded', false);
     this.baseCurrency(newBaseCurrency);
     // XXX EIP20
     Dapple.getToken(this.baseCurrency(), (error, token) => {
@@ -118,6 +116,9 @@ Template.markets.viewmodel({
               location.hash = `#trade/${this.quoteCurrency()}/${this.baseCurrency()}`;
             }
             Tokens.sync();
+            if (Session.get('isMatchingEnabled')) {
+              Offers.sync();
+            }
           } else {
             this.baseHelper('Token not found');
           }

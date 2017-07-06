@@ -29,8 +29,8 @@ $color-cancel-order: #A8ACB9;
 
 @font-face {
   font-family: Montserrat;
-  src: url("../fonts/Montserrat-Medium.woff"),
-  url("../fonts/Montserrat-Medium.woff2");
+  src: url("../fonts/Montserrat-Medium.woff") format('woff'),
+  url("../fonts/Montserrat-Medium.woff2") format('woff2');
   font-weight: 500;
 }
 
@@ -681,7 +681,7 @@ table {
   margin-left: 17px;
 }
 
-#mytrades-container {
+#myorders-container {
   h2 {
     padding-right: 30px;
   }
@@ -933,7 +933,7 @@ table {
       text-align: right;
       display: inline-block;
       padding-right: 10px;
-      width: 230px;
+      min-width: 230px;
     }
 
     &-currency {
@@ -941,20 +941,13 @@ table {
       font-weight: 700;
       letter-spacing: 1px;
       text-align: left;
-      padding-left: 7px;
+      padding-left: 10px;
       display: inline-block;
-      width: 50px;
+      min-width: 60px;
     }
   }
 
   table {
-    border-collapse: separate !important;
-    border-spacing: 0;
-    border: solid #EFEFEF 1px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-    border-radius: 6px;
-
     tbody {
       th {
         width: 80px;
@@ -981,7 +974,7 @@ table {
         }
 
         td.dex-input-cell {
-          width: 230px;
+          min-width: 230px;
         }
 
         td.dex-currency-cell {
@@ -991,6 +984,7 @@ table {
             font-size: 10px;
             color: #68686C; /* #222228;*/
             letter-spacing: 1px;
+            min-width: 60px;
             width: 100%;
             display: inline-block;
             vertical-align: middle;
@@ -1091,7 +1085,175 @@ table {
   }
 }
 
+.allowance-input-table {
+  margin-bottom: 20px;
+}
+.info-section-order-cancel {
+  padding: 20px 15px 5px 15px !important;
+}
 
+.info-section {
+  margin-bottom: 15px;
+  padding: 15px 0 15px 0;
+  font-size: 12px;
+  font-weight: normal;
+
+  .row {
+    line-height: 1.5;
+  }
+
+  .div-modal-text {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .dex-icon {
+    display: inline-block;
+    width: 18px;
+    height: 20px;
+    margin-right: 5px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    vertical-align: middle;
+    opacity: 1;
+  }
+
+  .dex-icon-add {
+    background-image: url(ic_add_circle_24px.svg);
+    @extend .dex-icon;
+  }
+
+  .dex-icon-subtract {
+    background-image: url(ic_remove_24px.svg);
+    @extend .dex-icon;
+  }
+
+  .dex-currency-label {
+    display: inline-block;
+    vertical-align: middle;
+    padding-right: 0;
+    line-height: 1.5;
+
+
+    &--fiat {
+      height: 20px;
+      text-align: center;
+      font-size: 11px;
+      padding: 0;
+      border: 1px solid #EFEFEF;
+      border-radius: 5px;
+      background-color: #F9F8F8;
+
+      > span {
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+      }
+    }
+  }
+
+
+  .dex-gas-label {
+    padding-left: 0;
+  }
+
+
+
+  .dex-currency-add {
+    padding-right: 15px;
+  }
+
+  .dex-currency-subtract {
+    padding-right: 15px;
+    padding-top: 10px;
+  }
+
+  .dex-gas-estimate {
+    padding-top: 10px;
+  }
+
+
+  .dex-order-matching-label {
+    border: 1px solid transparent;
+    padding-left: 0;
+  }
+
+
+  .dex-order-matching-status {
+    height: 20px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    display: inline-block;
+    width: 70px;
+    text-align: center;
+
+    &--active {
+      border-color: $color-buy;
+      color: $color-buy;
+    }
+
+    &--inactive {
+      border-color: $color-sell;
+      color: $color-sell;
+    }
+  }
+}
+
+.warning-section {
+  display: block;
+  padding: 10px 0;
+  margin-bottom: 15px;
+}
+
+.modal {
+  button.dex-btn-default.buy, button.dex-btn-default.sell {
+    width: auto;
+  }
+
+  .input-section {
+    padding: 0;
+    margin-top: 20px;
+    margin-bottom: 15px;
+
+    tr {
+      height: inherit;
+      line-height: inherit;
+    }
+
+    table tbody tr.row-input-line th.dex-label-cell {
+      text-align: left;
+      padding-left: 13px;
+      background: #F8F7F5;
+    }
+
+    .available-amount {
+      width: 330px;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .available-label {
+      padding-left: 13px;
+    }
+  }
+}
+
+.bordered {
+  border: solid #EFEFEF 1px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+
+  &--danger {
+    border-color: rgba(255, 0, 0, 0.5);
+  }
+}
+
+table.bordered {
+  @extend .bordered;
+  border-collapse: separate !important;
+  border-spacing: 0;
+}
 
 button.dex-btn-default {
   font-family: 'Montserrat', sans-serif;
@@ -1112,6 +1274,11 @@ button.dex-btn-default {
   }
 }
 
+button.dex-btn-default {
+  min-width: 100px;
+  width: auto;
+}
+
 button.dex-btn-max {
   @extend button.dex-btn-default;
   padding: 5px;
@@ -1119,12 +1286,9 @@ button.dex-btn-max {
   font-size: 10px;
   border-radius: 5px;
   float: left;
+  min-width: inherit;
   width: auto;
   transform: translateY(2.5px);
-}
-
-button.dex-btn-default.buy, button.dex-btn-default.sell {
-  width: 100px;
 }
 
 button.dex-btn-default.buy, button.dex-btn-max.buy {
@@ -1318,18 +1482,14 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   color: $color-allowance;
 }
 
-.btn-submit-order-cancel {
-  @extend .btn-submit-order;
-  border-color: $color-cancel;
-  color: $color-cancel;
-}
-
 .btn-placement-right {
   float: right;
 }
 
 .btn-placement-left {
   float: left;
+  margin-left: 0px !important;
+
 }
 
 .btn-place-order {
@@ -1358,8 +1518,8 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   font-family: 'Montserrat', sans-serif;
   font-size: 15px;
   font-weight: 500;
-  padding: 20px;
-  width: 490px;
+  padding: 30px 30px 20px 30px;
+  width: 550px;
   overflow: auto;
 
   h4 {
@@ -1372,7 +1532,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
     opacity: 0.68;
     font-weight: 500;
     font-size: 15px;
-    padding-left: 13px;
+    padding-left: 10px;
   }
 
   td {
@@ -1387,7 +1547,6 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
     border: 1px solid;
     text-align: right;
     padding-right: 10px;
-    width: 50%;
   }
 
   input[type=number]::-webkit-inner-spin-button,
@@ -1413,7 +1572,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   }
 
   .span-owner {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .span-offer-currency {
@@ -1428,11 +1587,9 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   }
 
   .div-modal-text {
-    margin-top: 15px;
-    font-weight: 700;
+    font-weight: 500;
     font-size: 14px;
-    color: #222228;
-    opacity: 0.50;
+    color: #989899;
   }
 
   .div-actions {
@@ -2234,26 +2391,27 @@ span.right {
   .allowance-currency, .base-currency, .quote-currency {
     @extend .currency;
     float: right;
-    transform: translateY(5px);
+    transform: translateY(4px);
   }
   .text-clarifications {
     font-size: 14px;
-    color: rgba(0, 0, 0, 0.4);
+    font-weight: normal;
     b {
       color: #222228;
     }
   }
   .owner-address {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
     color: #68686C;
-    font-family: 'Roboto';
+    font-family: 'Roboto', sans-serif;
     margin-right: 15px;
   }
 }
 
 .modal-header {
   border: none;
+  padding: 0px 5px 5px 5px;
 }
 
 .modal-title {
@@ -2320,6 +2478,30 @@ span.right {
   span.set-total-allowance {
     cursor: pointer;
   }
+
+  button.dex-btn-max {
+    transform: translateY(5px);
+  }
+
+  td.dex-input-cell {
+    width: 330px;
+
+    input {
+      max-width: 230px;
+    }
+  }
+
+  td.dex-input-cell {
+    .read-only {
+      font-family: 'Roboto';
+      font-weight: bolder;
+      font-size: 24px;
+      text-align: right;
+      padding-right: 10px;
+      max-width: 170px;
+      background: none;
+    }
+  }
 }
 
 .market-history {
@@ -2330,7 +2512,12 @@ span.right {
   }
 }
 
+.modal-body {
+  padding: 0;
+}
+
 .modal-footer {
+  padding: 0;
   border-top: none;
 }
 
@@ -2342,7 +2529,8 @@ span.right {
 
 .highlighted {
   .text-danger {
-    color: red;
+    vertical-align: middle;
+    color: rgba(255, 0, 0, 0.5);
   }
 }
 
@@ -2380,10 +2568,21 @@ a.logo:hover {
   .warning {
     color: red;
   }
+}
 
-  img.order-warning {
-    position: relative;
-    top: 7.5px;
+.order-warning {
+  &-icon {
+    width: 40px;
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 16px;
+  }
+
+  &-text {
+    width: 430px;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 16px;
   }
 }
 

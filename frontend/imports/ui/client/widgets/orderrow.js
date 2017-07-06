@@ -1,4 +1,5 @@
 import { Session } from 'meteor/session';
+import { Blaze } from 'meteor/blaze';
 import { Template } from 'meteor/templating';
 import { $ } from 'meteor/jquery';
 
@@ -18,8 +19,17 @@ Template.orderRow.events({
     event.preventDefault();
     if (templateInstance.data.canAccept) {
       const orderId = templateInstance.data.order._id;
-      Session.set('selectedOffer', orderId);
-      $('#offerModal').modal('show');
+      /* eslint-disable no-underscore-dangle */
+      if (Blaze._globalHelpers.isBuyEnabled()) {
+        $('#offerModal').modal('show');
+        Session.set('selectedOffer', orderId);
+      } else {
+        const order = {
+          id: orderId,
+          type: templateInstance.data.section,
+        };
+        Session.set('selectedOrder', order);
+      }
     }
     if (templateInstance.data.canOpenTxLink) {
       window.open(txHref(templateInstance.data.order.transactionHash), '_blank');
