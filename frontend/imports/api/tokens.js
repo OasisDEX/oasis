@@ -60,7 +60,18 @@ class TokensCollection extends Mongo.Collection {
                   } });
                   Session.set('balanceLoaded', true);
                   if (tokenId === 'W-GNT') {
-                    token.getBroker.call((e, broker) => {
+                    /**
+                     * https://github.com/makerdao/token-wrapper/blob/master/src/wrapper.sol#L63
+                     *
+                     * Basically the argument is not used but since some changes in web3
+                     * https://github.com/ethereum/web3.js/pull/866/commits/77da88a6718cf6eeb45e470104f95b8832f30e34
+                     *
+                     * which enforces you to use all arguments of a given method,
+                     * we pass arbitrary address in order to circumvent the issue.
+                     *
+                     * Usage of Session.get('address') has NO MEANING whatsoever.
+                     */
+                    token.getBroker.call(Session.get('address'), (e, broker) => {
                       if (!e) {
                         super.upsert('W-GNT', { $set: { broker } });
                         Session.set('GNTBroker', broker);
