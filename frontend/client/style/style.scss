@@ -1605,6 +1605,14 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   }
 }
 
+#wrapperUpdate {
+  .modal-dialog {
+    margin-top: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
 .modal-wrapper-update {
   @extend .modal-order;
 
