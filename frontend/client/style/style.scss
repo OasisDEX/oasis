@@ -1674,7 +1674,9 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   }
 
   .transition {
+    background: url('ic_compare_arrows_black_24px.svg') no-repeat 50% 50%;
     width: 50px;
+    height: 10px;
     display: inline-block;
     text-align: center;
   }
