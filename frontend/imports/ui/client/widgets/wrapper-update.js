@@ -46,7 +46,14 @@ Template.wrapperUpdate.viewmodel({
                 this.message('Unwrapping Done!');
                 setTimeout(() => {
                   this.inProgress(false);
-                  $('#wrapperUpdate').modal('hide');
+                  /**
+                   * Nasty workaround because $('#wrapperUpdate').modal('hide') not working on surge.
+                   * Even invoked within dev console it's still  not closing the modal.
+                   * @type {*}
+                   */
+                  const modal = $('#wrapperUpdate');
+                  modal.removeClass('in');
+                  modal.css('display', 'none');
                 }, 1000);
               }
             });
