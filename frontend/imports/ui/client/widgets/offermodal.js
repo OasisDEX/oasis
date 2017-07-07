@@ -30,14 +30,13 @@ Template.offermodal.viewmodel({
     this.fetchCurrentPriceInUSD();
     if (Template.currentData().offer) {
       const buyHowMuch = web3Obj.fromWei(new BigNumber(Template.currentData().offer.buyHowMuch)).toString(10);
-      const sellHowMuch = web3Obj.fromWei(new BigNumber(Template.currentData().offer.sellHowMuch)).toString(10);
       const baseCurrency = Session.get('baseCurrency');
       if (baseCurrency === Template.currentData().offer.buyWhichToken) {
-        this.volume(buyHowMuch);
-        this.total(sellHowMuch);
+        this.fillOrderPartiallyOrFully(this.volume, this.baseAvailable(), web3Obj.toWei(buyHowMuch));
+        this.calcTotal();
       } else {
-        this.volume(sellHowMuch);
-        this.total(buyHowMuch);
+        this.fillOrderPartiallyOrFully(this.total, this.quoteAvailable(), web3Obj.toWei(buyHowMuch));
+        this.calcVolume();
       }
     }
   },
@@ -106,6 +105,13 @@ Template.offermodal.viewmodel({
           ? this.offerTotal() : this.offerAmount())));
     } catch (e) {
       return false;
+    }
+  },
+  fillOrderPartiallyOrFully(amount, available, buyHowMuch) {
+    if (new BigNumber(available).lessThan(new BigNumber(buyHowMuch))) {
+      amount(web3Obj.fromWei(available));
+    } else {
+      amount(web3Obj.fromWei(buyHowMuch));
     }
   },
   limit() {
