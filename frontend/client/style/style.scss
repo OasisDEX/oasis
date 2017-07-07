@@ -1286,6 +1286,10 @@ button.dex-btn-danger {
   @extend button.dex-btn-default.sell;
 }
 
+button.dex-btn-success {
+  @extend button.dex-btn-default.buy;
+}
+
 button.dex-btn-max {
   @extend button.dex-btn-default;
   padding: 5px;
