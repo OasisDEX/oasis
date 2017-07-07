@@ -1,66 +1,77 @@
 <template name="markets">
-  <div id="container-market"  class="order-section-content">
+  <div id="container-market" class="order-section-content">
     <div class="row">
       <div class="col-xs-6">
         <h2>
           MARKETS
         </h2>
       </div>
-      <div class="col-xs-6">
-        <span class="select-market-container">
-            <select class="select-market-graph" {{b "options: quoteCurrencies, value: quoteCurrency, change: quoteChange"}}>
-            </select>
-            <span class="glyphicon glyphicon-chevron-down select-glyph" aria-hidden="true"></span>
-        </span>
-      </div>
     </div>
     <div>
       <table class="t-markets">
         <thead>
-          <tr>
-            <th></th>
-            <th class="th-coin">COIN</th>
-            <th class="th-price">PRICE</th>
-            <th class="th-volume">DAILY VOLUME</th>
-            <th></th>
-          </tr>
+        <tr>
+          <th></th>
+          <th class="th-pair">PAIR</th>
+          <th class="th-price">PRICE</th>
+          <th class="th-volume">DAILY VOLUME</th>
+          <th></th>
+        </tr>
         </thead>
         <tbody class="tbody-scrolling">
-          {{#each baseCurrencies}}
-          <tr class="clickable {{selected(this)}}" {{b "click: baseChange(this)"}}>
-            <td></td>
-            <td class="td-coin">{{this}}</td>
-            <td class="td-price">
-              {{#if loadingTradeHistory}}
-                <span class="loading-icon">
-                  {{{loadingIcon}}}
-                </span>
-              {{else}}
-                {{#if equals (price this) 'N/A'}}
-                  N/A
+        {{#each tradingPairs}}
+          {{#if or showAll this.isVisible }}
+            <tr class="clickable {{ selected(this) }}" {{b "click: select(this)"}}>
+              <td></td>
+              <td class="td-pair">
+                <span class="base">{{this.base}}</span> / <span class="quote">{{this.quote}}</span>
+              </td>
+              <td class="td-price">
+                {{#if loadingTradeHistory}}
+                  <span class="loading-icon">
+                    {{{loadingIcon}}}
+                  </span>
                 {{else}}
-                  {{{formatNumber (price this) '' true}}}
+                  {{#if equals (price this) 'N/A'}}
+                    N/A
+                  {{else}}
+                    {{{formatNumber (price this) '' true}}}
+                  {{/if}}
                 {{/if}}
-              {{/if}}
+              </td>
+              <td class="td-volume">
+                {{#if loadingTradeHistory}}
+                  <span class="loading-icon">
+                    {{{loadingIcon}}}
+                  </span>
+                {{else}}
+                  {{{formatBalance (volume this) 2 '' true}}}
+                {{/if}}
+              </td>
+              <td></td>
+            </tr>
+          {{/if }}
+        {{/each}}
+        {{#unless showAll}}
+          <tr class="dex-show-more-row" {{b 'click: showMore'}}>
+            <td colspan="3" class="more">
+              <span> SHOW MORE </span>
             </td>
-            <td class="td-volume">
-              {{#if loadingTradeHistory}}
-                <span class="loading-icon">
-                  {{{loadingIcon}}}
-                </span>
-              {{else}}
-                {{{formatBalance (volume this) 2 '' true}}}
-              {{/if}}
-            </td>
-            <td></td>
           </tr>
-          {{/each}}
-          {{sort}}
+        {{else}}
+          <tr class="dex-show-less-row" {{b 'click: showLess'}}>
+            <td colspan="3" class="more">
+              <span> SHOW LESS </span>
+            </td>
+          </tr>
+        {{/unless}}
+        <!--{{sort}}-->
         </tbody>
         <tfoot>
 
         </tfoot>
       </table>
+
     </div>
   </div>
 </template>

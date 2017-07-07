@@ -261,7 +261,6 @@ function initSession() {
   if (!Session.get('volumeSelector')) {
     Session.set('volumeSelector', 'quote');
   }
-
 }
 
 /**

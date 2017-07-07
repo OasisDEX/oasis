@@ -10,9 +10,15 @@ import './markets.html';
 
 Template.markets.viewmodel({
   autorun() {
+    const pair = Session.get('newPairSelected');
+    if (!pair.isVisible && !this.showAll()) {
+      this.showAll(true);
+    }
+
     this.quoteCurrency(Session.get('quoteCurrency'));
     this.baseCurrency(Session.get('baseCurrency'));
   },
+  tradingPairs: Dapple.generatePairs(),
   quoteCurrencies: Dapple.getQuoteTokens(),
   baseCurrencies: Dapple.getBaseTokens(),
   showDropdownQuoteCurrencies() {
@@ -21,17 +27,26 @@ Template.markets.viewmodel({
   showDropdownBaseCurrencies() {
     return this.baseCurrencies().length > 1;
   },
+  showMore() {
+    this.showAll(true);
+  },
+  showLess() {
+    this.showAll(false);
+  },
   quoteCurrency: '',
   baseCurrency: '',
   quoteHelper: '',
   baseHelper: '',
+  showAll: false,
   price(token) {
     const trade = Trades.findOne(
-      { $or: [
-        { buyWhichToken: token, sellWhichToken: this.quoteCurrency() },
-        { buyWhichToken: this.quoteCurrency(), sellWhichToken: token },
-      ] },
-      { sort: { timestamp: -1 } }
+      {
+        $or: [
+          { buyWhichToken: token.base, sellWhichToken: token.quote },
+          { buyWhichToken: token.quote, sellWhichToken: token.base },
+        ],
+      },
+      { sort: { timestamp: -1 } },
     );
 
     if (typeof trade === 'undefined') {
@@ -45,23 +60,35 @@ Template.markets.viewmodel({
     return new BigNumber(trade.sellHowMuch).div(new BigNumber(trade.buyHowMuch));
   },
   volume(token) {
-    const volumeCurrency = Session.get(`${Session.get('volumeSelector')}Currency`);
+    // const volumeCurrency = Session.get(`${Session.get('volumeSelector')}Currency`);
     let vol = new BigNumber(0);
 
-    const trades = Trades.find({ $or: [
-      { buyWhichToken: token, sellWhichToken: this.quoteCurrency() },
-      { buyWhichToken: this.quoteCurrency(), sellWhichToken: token },
-    ],
-      timestamp: { $gte: (Date.now() / 1000) - (60 * 60 * 24) },
+    /**
+     * Since the records in the Trades collection are within a week period,
+     * there is no need to sort them by timestamp.
+     *
+     * If shorter period of time is required please add the following criteria after `or`
+     * `timestamp: { $gte: (Date.now() / 1000) - (60 * 60 * 24 ) }` - i.e. for a day
+     */
+    const trades = Trades.find({
+      $or: [
+        { buyWhichToken: token.base, sellWhichToken: token.quote },
+        { buyWhichToken: token.quote, sellWhichToken: token.base },
+      ],
     });
 
     trades.forEach((trade) => {
-      if (trade.buyWhichToken === volumeCurrency) {
+      if (trade.buyWhichToken === this.quoteCurrency()) {
         vol = vol.add(new BigNumber(trade.buyHowMuch));
       } else {
         vol = vol.add(new BigNumber(trade.sellHowMuch));
       }
     });
+
+    if (vol.gt(new BigNumber(0))) {
+      token.isVisible = true;
+    }
+
     Session.set('lastVolumeUpdated', Date.now());
     return vol;
   },
@@ -72,8 +99,25 @@ Template.markets.viewmodel({
     Session.set('volumeSelector', value);
   },
   selected(token) {
-    return token === this.baseCurrency() ? 'selected' : '';
+    return token.base === this.baseCurrency() && token.quote === this.quoteCurrency() ? 'selected' : '';
   },
+  select(pair) {
+    this.quoteCurrency(pair.quote);
+    localStorage.setItem('quoteCurrency', this.quoteCurrency());
+    Session.set('quoteCurrency', this.quoteCurrency());
+    this.baseCurrency(pair.base);
+    localStorage.setItem('baseCurrency', this.baseCurrency());
+    Session.set('baseCurrency', this.baseCurrency());
+
+    if (location.hash.indexOf('#trade') !== -1) {
+      location.hash = `#trade/${this.baseCurrency()}/${this.quoteCurrency()}`;
+    }
+    Tokens.sync();
+    if (Session.get('isMatchingEnabled')) {
+      Offers.sync();
+    }
+  },
+  // not used in current impl - investigate to remove
   quoteChange() {
     // XXX EIP20
     Dapple.getToken(this.quoteCurrency(), (error, token) => {
@@ -87,7 +131,7 @@ Template.markets.viewmodel({
               this.baseHelper('Tokens are the same');
             }
             if (location.hash.indexOf('#trade') !== -1) {
-              location.hash = `#trade/${this.quoteCurrency()}/${this.baseCurrency()}`;
+              location.hash = `#trade/${this.baseCurrency()}/${this.quoteCurrency()}`;
             }
             Tokens.sync();
           } else {
@@ -99,6 +143,7 @@ Template.markets.viewmodel({
       }
     });
   },
+  // not used in current impl - investigate to remove
   baseChange(newBaseCurrency) {
     this.baseCurrency(newBaseCurrency);
     // XXX EIP20
@@ -113,7 +158,7 @@ Template.markets.viewmodel({
               this.baseHelper('Tokens are the same');
             }
             if (location.hash.indexOf('#trade') !== -1) {
-              location.hash = `#trade/${this.quoteCurrency()}/${this.baseCurrency()}`;
+              location.hash = `#trade/${this.baseCurrency()}/${this.quoteCurrency()}`;
             }
             Tokens.sync();
             if (Session.get('isMatchingEnabled')) {
@@ -133,9 +178,9 @@ Template.markets.viewmodel({
       const rows = $('.t-markets tbody  tr').get();
       rows.sort((a, b) => {
         const A = parseFloat($(a).children('td').eq(3).text()
-              .replace(/,/g, ''));
+          .replace(/,/g, ''));
         const B = parseFloat($(b).children('td').eq(3).text()
-              .replace(/,/g, ''));
+          .replace(/,/g, ''));
         if (A < B) {
           return 1;
         }

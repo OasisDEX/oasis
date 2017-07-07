@@ -13,7 +13,7 @@ Template.tabs.viewmodel({
       if (tab !== '#trade') {
         location.hash = tab;
       } else {
-        location.hash = `#trade/${Session.get('quoteCurrency')}/${Session.get('baseCurrency')}`;
+        location.hash = `#trade/${Session.get('baseCurrency')}/${Session.get('quoteCurrency')}`;
       }
       doHashChange();
     }
