@@ -54,6 +54,10 @@ Template.wrapperUpdate.viewmodel({
                   const modal = $('#wrapperUpdate');
                   modal.removeClass('in');
                   modal.css('display', 'none');
+
+                  const body = $('body');
+                  body.removeClass('modal-open');
+                  body.css('padding-right', '0');
                 }, 1000);
               }
             });
