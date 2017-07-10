@@ -26,19 +26,25 @@ Template.offermodal.viewmodel({
   gasEstimateResult: null,
   gasEstimateError: null,
   shouldShowMaxBtn: false,
-  autorun() {
-    this.fetchCurrentPriceInUSD();
-    if (Template.currentData().offer) {
-      const buyHowMuch = web3Obj.fromWei(new BigNumber(Template.currentData().offer.buyHowMuch)).toString(10);
-      const baseCurrency = Session.get('baseCurrency');
-      if (baseCurrency === Template.currentData().offer.buyWhichToken) {
-        this.fillOrderPartiallyOrFully(this.volume, this.baseAvailable(), web3Obj.toWei(buyHowMuch));
-        this.calcTotal();
-      } else {
-        this.fillOrderPartiallyOrFully(this.total, this.quoteAvailable(), web3Obj.toWei(buyHowMuch));
-        this.calcVolume();
+  onRendered() {
+    $('#offerModal').on('shown.bs.modal', () => {
+      this.fetchCurrentPriceInUSD();
+      const offer = this.templateInstance.data.offer;
+      if (offer) {
+        const buyHowMuch = web3Obj.fromWei(new BigNumber(offer.buyHowMuch)).toString(10);
+        const baseCurrency = Session.get('baseCurrency');
+        if (baseCurrency === offer.buyWhichToken) {
+          this.fillOrderPartiallyOrFully(this.volume, this.baseAvailable(), web3Obj.toWei(buyHowMuch));
+          this.calcTotal();
+        } else {
+          this.fillOrderPartiallyOrFully(this.total, this.quoteAvailable(), web3Obj.toWei(buyHowMuch));
+          this.calcVolume();
+        }
       }
-    }
+    });
+  },
+  autorun() {
+
   },
   precision() {
     return Dapple.getTokenSpecs(Session.get('baseCurrency')).precision;
