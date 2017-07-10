@@ -18,7 +18,7 @@
           <th></th>
         </tr>
         </thead>
-        <tbody class="tbody-scrolling">
+        <tbody class="{{#if showScroll}}tbody-scrolling{{else}}tbody-not-scrolling{{/if}}">
         {{#each tradingPairs}}
           {{#if or showAll this.isVisible }}
             <tr class="clickable {{ selected(this) }}" {{b "click: select(this)"}}>

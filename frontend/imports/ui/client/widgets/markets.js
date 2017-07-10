@@ -8,19 +8,24 @@ import { $ } from 'meteor/jquery';
 
 import './markets.html';
 
+Template.markets.helpers({
+
+});
+
 Template.markets.viewmodel({
   autorun() {
-    const pair = Session.get('newPairSelected');
-    if (!pair.isVisible && !this.showAll()) {
-      this.showAll(true);
-    }
-
     this.quoteCurrency(Session.get('quoteCurrency'));
     this.baseCurrency(Session.get('baseCurrency'));
+    const pairs = Dapple.generatePairs();
+
+    pairs.forEach((givenPair) => {
+      this.volume(givenPair);
+    });
+    this.tradingPairs(pairs);
   },
-  tradingPairs: Dapple.generatePairs(),
   quoteCurrencies: Dapple.getQuoteTokens(),
   baseCurrencies: Dapple.getBaseTokens(),
+  tradingPairs: [],
   showDropdownQuoteCurrencies() {
     return this.quoteCurrencies().length > 1;
   },
@@ -59,7 +64,7 @@ Template.markets.viewmodel({
 
     return new BigNumber(trade.sellHowMuch).div(new BigNumber(trade.buyHowMuch));
   },
-  volume(token) {
+  volume(pair) {
     // const volumeCurrency = Session.get(`${Session.get('volumeSelector')}Currency`);
     let vol = new BigNumber(0);
 
@@ -72,8 +77,8 @@ Template.markets.viewmodel({
      */
     const trades = Trades.find({
       $or: [
-        { buyWhichToken: token.base, sellWhichToken: token.quote },
-        { buyWhichToken: token.quote, sellWhichToken: token.base },
+        { buyWhichToken: pair.base, sellWhichToken: pair.quote },
+        { buyWhichToken: pair.quote, sellWhichToken: pair.base },
       ],
     });
 
@@ -86,7 +91,7 @@ Template.markets.viewmodel({
     });
 
     if (vol.gt(new BigNumber(0))) {
-      token.isVisible = true;
+      pair.isVisible = true;
     }
 
     Session.set('lastVolumeUpdated', Date.now());
@@ -194,5 +199,8 @@ Template.markets.viewmodel({
         $('.t-markets').children('tbody').append(row);
       });
     }
+  },
+  showScroll() {
+    return this.tradingPairs().filter((pair) => pair.isVisible).length > 5 || this.showAll();
   },
 });
