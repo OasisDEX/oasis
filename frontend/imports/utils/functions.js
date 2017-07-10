@@ -14,24 +14,27 @@ import { Spacebars } from 'meteor/spacebars';
  *
  * @param token - of type <any>
  * @param defaultToken - of type <string> - used as value if token is invalid value
- *  (not an address, not an address known to the market, not a symbol, not a symbol known to market.
+ *  (not an address, not an address known to the market, not a symbol, not a symbol known to market. (mandatory)
  *
  * @return string
  *
  * @throws error if the method is invoked with missing attributes or the types of the attributes are different than expected
  */
 function toTokenIfTokenAddress(token, defaultToken) {
-  const isAnAddress = web3Obj.isAddress(token);
   const allTokens = Dapple.getTokens();
-  let currency = defaultToken.toUpperCase();
-  let asToken = token.toUpperCase();
 
-  if (!token || !defaultToken
-    || typeof token !== 'string'
+  if (!defaultToken
     || typeof defaultToken !== 'string'
     || !allTokens.includes(defaultToken)) {
     throw Error('Wrong usage of the API. Read documentation');
   }
+
+  if (!token || typeof token !== 'string') {
+    return defaultToken;
+  }
+  const isAnAddress = web3Obj.isAddress(token);
+  let currency = defaultToken.toUpperCase();
+  let asToken = token.toUpperCase();
 
   if (isAnAddress) {
     asToken = Dapple.getTokenByAddress(token).toUpperCase();
