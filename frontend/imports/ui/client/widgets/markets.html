@@ -19,53 +19,57 @@
         </tr>
         </thead>
         <tbody class="{{#if showScroll}}tbody-scrolling{{else}}tbody-not-scrolling{{/if}}">
-        {{#each tradingPairs}}
-          {{#if or showAll this.isVisible }}
-            <tr class="clickable {{ selected(this) }}" {{b "click: select(this)"}}>
-              <td></td>
-              <td class="td-pair">
-                <span class="base">{{this.base}}</span> / <span class="quote">{{this.quote}}</span>
-              </td>
-              <td class="td-price">
-                {{#if loadingTradeHistory}}
-                  <span class="loading-icon">
-                    {{{loadingIcon}}}
-                  </span>
-                {{else}}
-                  {{#if equals (price this) 'N/A'}}
-                    N/A
+        {{#unless loadingTradeHistory}}
+          {{#each tradingPairs}}
+            {{#if or showAll this.isVisible }}
+              <tr class="clickable {{ selected(this) }}" {{b "click: select(this)"}}>
+                <td></td>
+                <td class="td-pair">
+                  <span class="base">{{this.base}}</span> / <span class="quote">{{this.quote}}</span>
+                </td>
+                <td class="td-price">
+                  {{#if loadingTradeHistory}}
+                    <span class="loading-icon">
+                      {{{loadingIcon}}}
+                    </span>
                   {{else}}
-                    {{{formatNumber (price this) '' true}}}
+                    {{#if equals (price this) 'N/A'}}
+                      N/A
+                    {{else}}
+                      {{{formatNumber (price this) '' true}}}
+                    {{/if}}
                   {{/if}}
-                {{/if}}
+                </td>
+                <td class="td-volume">
+                  {{#if loadingTradeHistory}}
+                    <span class="loading-icon">
+                      {{{loadingIcon}}}
+                    </span>
+                  {{else}}
+                    {{{formatBalance (volume this) 2 '' true}}}
+                  {{/if}}
+                </td>
+                <td></td>
+              </tr>
+            {{/if }}
+          {{/each}}
+          {{#unless showAll}}
+            <tr class="dex-show-more-row" {{b 'click: showMore'}}>
+              <td colspan="3" class="more">
+                <span> SHOW MORE </span>
               </td>
-              <td class="td-volume">
-                {{#if loadingTradeHistory}}
-                  <span class="loading-icon">
-                    {{{loadingIcon}}}
-                  </span>
-                {{else}}
-                  {{{formatBalance (volume this) 2 '' true}}}
-                {{/if}}
-              </td>
-              <td></td>
             </tr>
-          {{/if }}
-        {{/each}}
-        {{#unless showAll}}
-          <tr class="dex-show-more-row" {{b 'click: showMore'}}>
-            <td colspan="3" class="more">
-              <span> SHOW MORE </span>
-            </td>
-          </tr>
+          {{else}}
+            <tr class="dex-show-less-row" {{b 'click: showLess'}}>
+              <td colspan="3" class="more">
+                <span> SHOW LESS </span>
+              </td>
+            </tr>
+          {{/unless}}
+          <!--{{sort}}-->
         {{else}}
-          <tr class="dex-show-less-row" {{b 'click: showLess'}}>
-            <td colspan="3" class="more">
-              <span> SHOW LESS </span>
-            </td>
-          </tr>
+          <div class="loading-market-history">{{{loadingIcon}}} Loading trading history...</div>
         {{/unless}}
-        <!--{{sort}}-->
         </tbody>
         <tfoot>
 
