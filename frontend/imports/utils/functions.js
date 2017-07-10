@@ -12,7 +12,7 @@ import { Spacebars } from 'meteor/spacebars';
  *  If the token is a valid address but not known to the market, default value will be returned
  *  If the token is not known, default value is returned
  *
- * @param token - of type <any>
+ * @param addressOrToken - of type <any>
  * @param defaultToken - of type <string> - used as value if token is invalid value
  *  (not an address, not an address known to the market, not a symbol, not a symbol known to market. (mandatory)
  *
@@ -20,7 +20,7 @@ import { Spacebars } from 'meteor/spacebars';
  *
  * @throws error if the method is invoked with missing attributes or the types of the attributes are different than expected
  */
-function toTokenIfTokenAddress(token, defaultToken) {
+function asToken(addressOrToken, defaultToken) {
   const allTokens = Dapple.getTokens();
 
   if (!defaultToken
@@ -29,19 +29,19 @@ function toTokenIfTokenAddress(token, defaultToken) {
     throw Error('Wrong usage of the API. Read documentation');
   }
 
-  if (!token || typeof token !== 'string') {
+  if (!addressOrToken || typeof addressOrToken !== 'string') {
     return defaultToken;
   }
-  const isAnAddress = web3Obj.isAddress(token);
+  const isAnAddress = web3Obj.isAddress(addressOrToken);
   let currency = defaultToken.toUpperCase();
-  let asToken = token.toUpperCase();
+  let token = addressOrToken.toUpperCase();
 
   if (isAnAddress) {
-    asToken = Dapple.getTokenByAddress(token).toUpperCase();
+    token = Dapple.getTokenByAddress(addressOrToken).toUpperCase();
   }
 
-  if (asToken && allTokens.includes(asToken)) {
-    currency = asToken;
+  if (token && allTokens.includes(token)) {
+    currency = token;
   }
 
   return currency;
@@ -87,10 +87,10 @@ export function doHashChange() {
      * because those are the main currencies that MAKER is dealing with.
      */
     const base = coins[0];
-    baseCurrency = toTokenIfTokenAddress(base, 'MKR');
+    baseCurrency = asToken(base, 'MKR');
 
     const quote = coins[1];
-    quoteCurrency = toTokenIfTokenAddress(quote, 'W-ETH');
+    quoteCurrency = asToken(quote, 'W-ETH');
 
     if (baseCurrency === quoteCurrency) {
       quoteCurrency = 'W-ETH';
