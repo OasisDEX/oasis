@@ -43,12 +43,12 @@ Template.markets.viewmodel({
   quoteHelper: '',
   baseHelper: '',
   showAll: false,
-  price(token) {
+  price(pair) {
     const trade = Trades.findOne(
       {
         $or: [
-          { buyWhichToken: token.base, sellWhichToken: token.quote },
-          { buyWhichToken: token.quote, sellWhichToken: token.base },
+          { buyWhichToken: pair.base, sellWhichToken: pair.quote },
+          { buyWhichToken: pair.quote, sellWhichToken: pair.base },
         ],
       },
       { sort: { timestamp: -1 } },
@@ -58,7 +58,7 @@ Template.markets.viewmodel({
       return 'N/A';
     }
 
-    if (trade.buyWhichToken === this.quoteCurrency()) {
+    if (trade.buyWhichToken === pair.quote) {
       return new BigNumber(trade.buyHowMuch).div(new BigNumber(trade.sellHowMuch));
     }
 
@@ -83,7 +83,7 @@ Template.markets.viewmodel({
     });
 
     trades.forEach((trade) => {
-      if (trade.buyWhichToken === this.quoteCurrency()) {
+      if (trade.buyWhichToken === pair.quote) {
         vol = vol.add(new BigNumber(trade.buyHowMuch));
       } else {
         vol = vol.add(new BigNumber(trade.sellHowMuch));
