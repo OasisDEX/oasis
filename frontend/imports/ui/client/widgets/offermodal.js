@@ -199,9 +199,9 @@ Template.offermodal.viewmodel({
       const buyHowMuch = new BigNumber(this.templateInstance.data.offer.buyHowMuch);
       const sellHowMuch = new BigNumber(this.templateInstance.data.offer.sellHowMuch);
       if (this.templateInstance.data.offer.buyWhichToken === baseCurrency) {
-        this.volume(buyHowMuch.div(sellHowMuch).times(total).toString(10));
+        this.volume(buyHowMuch.times(total).div(sellHowMuch).toString(10));
       } else {
-        this.volume(sellHowMuch.div(buyHowMuch).times(total).toString(10));
+        this.volume(sellHowMuch.times(total).div(buyHowMuch).toString(10));
       }
     } catch (e) {
       this.volume('0');
@@ -220,9 +220,9 @@ Template.offermodal.viewmodel({
       const buyHowMuch = new BigNumber(this.templateInstance.data.offer.buyHowMuch);
       const sellHowMuch = new BigNumber(this.templateInstance.data.offer.sellHowMuch);
       if (this.templateInstance.data.offer.buyWhichToken === baseCurrency) {
-        this.total(sellHowMuch.div(buyHowMuch).times(volume).toString(10));
+        this.total(sellHowMuch.times(volume).div(buyHowMuch).toString(10));
       } else {
-        this.total(buyHowMuch.div(sellHowMuch).times(volume).toString(10));
+        this.total(buyHowMuch.times(volume).div(sellHowMuch).toString(10));
       }
     } catch (e) {
       this.total('0');
