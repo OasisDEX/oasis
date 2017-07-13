@@ -190,7 +190,7 @@ function listenForFilledOrCancelledOrders() {
   Dapple['maker-otc'].objects.otc.ItemUpdate((err, result) => {
     if (!err) {
       const idx = result.args.id;
-      Dapple['maker-otc'].objects.otc.offers(idx, (error, data) => {
+      Dapple['maker-otc'].objects.otc.offers(idx.toNumber(), (error, data) => {
         if (!error) {
           const offer = Offers.findOne({ _id: idx.toString() });
 
