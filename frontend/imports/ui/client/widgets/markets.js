@@ -2,6 +2,8 @@ import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
 import { BigNumber } from 'meteor/ethereum:web3';
 
+import { web3Obj } from 'meteor/makerotc:dapple';
+
 import Tokens from '/imports/api/tokens';
 import { Offers, Trades } from '/imports/api/offers';
 import { $ } from 'meteor/jquery';
@@ -200,13 +202,9 @@ Template.markets.viewmodel({
     }
   },
   sortByPriorityAndThenByVolume(pairs) {
-    return pairs.sort((previous, current) => {
-      if (previous.priority > current.priority) return -1;
-      if (previous.priority < current.priority) return 1;
-      if (previous.priority === current.priority) {
-        if (previous.volume > current.volume) return -1;
-        if (previous.volume < current.volume) return 1;
-      }
+    return pairs.sort((a, b) => {
+      if (a.priority !== b.priority) return b.priority - a.priority;
+      if (a.volume !== b.volume) return b.volume - a.volume;
       return 0;
     });
   },
