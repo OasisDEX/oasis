@@ -27,6 +27,9 @@ Template.offermodal.viewmodel({
   gasEstimateError: null,
   shouldShowMaxBtn: false,
   onRendered() {
+    $('#newOrderModal').on('shown.bs.modal', () => {
+      this.fetchCurrentPriceInUSD();
+    });
     $('#offerModal').on('shown.bs.modal', () => {
       this.fetchCurrentPriceInUSD();
       const offer = this.templateInstance.data.offer;
@@ -42,9 +45,6 @@ Template.offermodal.viewmodel({
         }
       }
     });
-  },
-  autorun() {
-
   },
   precision() {
     return Dapple.getTokenSpecs(Session.get('baseCurrency')).precision;
