@@ -36,7 +36,8 @@ class LimitsCollection extends Mongo.Collection {
   }
 
   limitForToken(token) {
-    return new BigNumber(super.findOne(token).limit);
+    const record = super.findOne(token);
+    return record ? new BigNumber(record.limit) : new BigNumber(0);
   }
 }
 

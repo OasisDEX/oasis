@@ -362,9 +362,9 @@ Template.registerHelper('formatBalance', (wei, decimals, currency, sle) => {
   return finalValue;
 });
 
-Template.registerHelper('formatLimit', (limit, token) => {
-  const precision = Dapple.getTokenSpecs(token).precision;
-  const tokenLimit = new BigNumber(limit);
+Template.registerHelper('formatLimit', (limitReport) => {
+  const precision = Dapple.getTokenSpecs(limitReport.token).precision;
+  const tokenLimit = new BigNumber(limitReport.limit);
   return tokenLimit.div(new BigNumber(10).pow(precision));
 });
 

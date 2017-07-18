@@ -396,28 +396,25 @@
                     {{#unless validNewOrderAmount}}
                       Amount is invalid because {{baseCurrency}} has no decimals.
                     {{else}}
-                      {{#unless aboveLimit}}
-                        <div class="row-fluid">
+                      {{#let limitReport = limit}}
+                        {{#if limitReport.hasShortage}}
+                          <div class="row-fluid">
                           <div class="col-xs-12">
                             <div class="row div-modal-text warning-section highlighted bordered bordered--danger">
-                                <span class="order-warning-icon">
-                                  <img style="opacity: 0.5" src="order-warning-red.svg" fill="red">
-                                </span>
-                                <span class="order-warning-text text-clarifications text-danger">
-                                   You are trying to create a {{offerType}}
-                                  order below the minimum <strong>market limit</strong>,
-                                  {{#if equals offerType 'buy'}}
-                                    which is {{formatLimit limit quoteCurrency}} {{quoteCurrency}}.
-                                  {{else}}
-                                    which is {{{formatLimit limit baseCurrency}}} {{baseCurrency}}.
-                                  {{/if}}
-                                </span>
+                              <span class="order-warning-icon">
+                                <img style="opacity: 0.5" src="order-warning-red.svg" fill="red">
+                              </span>
+                              <span class="order-warning-text text-clarifications text-danger">
+                                You are trying to create a {{offerType}}
+                                order below the minimum <strong>market limit</strong>,
+                                which is {{formatLimit limitReport}} {{limitReport.token}}.
+                              </span>
                               </div>
                           </div>
                         </div>
-                      {{else}}
-                        {{#unless hasAllowanceNewOrder offerType}}
-                          <div class="row-fluid">
+                        {{else}}
+                          {{#unless hasAllowanceNewOrder offerType}}
+                            <div class="row-fluid">
                             <div class="col-xs-12">
                               <div class="row div-modal-text warning-section bordered">
                                 <span class="order-warning-icon">
@@ -430,9 +427,9 @@
                               </div>
                             </div>
                           </div>
-                        {{else}}
-                          {{ estimateGasUsage }}
-                          <div class="row-fluid">
+                          {{else}}
+                            {{ estimateGasUsage }}
+                            <div class="row-fluid">
                             <div class="col-xs-12">
                               {{#if (not gasEstimateMoreThanGasLimit) }}
                                 <div class="row info-section bordered">
@@ -539,8 +536,9 @@
                               {{/if}}
                             </div>
                           </div>
-                        {{/unless}}
-                      {{/unless}}
+                          {{/unless}}
+                        {{/if}}
+                      {{/let}}
                     {{/unless}}
                   </span>
                 </div>

@@ -11,7 +11,6 @@ import Limits from '/imports/api/limits';
 import { Offers, Status } from '/imports/api/offers';
 
 import './offermodal.html';
-import { convertTo18Precision } from '../../../utils/conversion';
 
 const latest = require('promise-latest');
 
@@ -121,19 +120,22 @@ Template.offermodal.viewmodel({
       amount(web3Obj.fromWei(buyHowMuch));
     }
   },
-  limit() {
-    const sellToken = this.offerType() === 'buy' ? Session.get('quoteCurrency') : Session.get('baseCurrency');
-    return Limits.limitForToken(sellToken);
+  isAmountEnough(amount = 0, token) {
+    if (!amount || !token) return { hasShortage: false };
+
+    const tokenAmount = new BigNumber(convertToTokenPrecision(amount, token));
+    const limit = Limits.limitForToken(token);
+    const hasShortage = tokenAmount.lessThan(limit);
+    return { token, limit, hasShortage };
   },
-  aboveLimit() {
-    try {
-      const sellToken = this.offerType() === 'buy' ? Session.get('quoteCurrency') : Session.get('baseCurrency');
-      const sellAmount = this.offerType() === 'buy' ? this.offerTotal() : this.offerAmount();
-      const sellAmountAbsolute = new BigNumber(convertToTokenPrecision(sellAmount, sellToken));
-      return sellAmountAbsolute.greaterThanOrEqualTo(Limits.limitForToken(sellToken));
-    } catch (e) {
-      return true;
-    }
+  limit() {
+    const noShortage = { hasShortage: false };
+    const quoteReport = this.isAmountEnough(this.offerTotal(), Session.get('quoteCurrency'));
+    const baseReport = this.isAmountEnough(this.offerAmount(), Session.get('baseCurrency'));
+
+    if (quoteReport.hasShortage) return quoteReport;
+    if (baseReport.hasShortage) return baseReport;
+    return noShortage;
   },
   hasVolume() {
     try {
@@ -409,9 +411,9 @@ Template.offermodal.viewmodel({
       const total = new BigNumber(this.offerTotal());
       const maxTotal = new BigNumber(this.maxNewOfferTotal());
       const marketOpen = Session.get('market_open');
-      const aboveLimit = this.aboveLimit();
+      const limitReport = this.limit();
       const validTokenPair = Session.get('quoteCurrency') !== Session.get('baseCurrency');
-      return marketOpen && price.gt(0) && amount.gt(0) && total.gt(0) && validTokenPair && aboveLimit &&
+      return marketOpen && price.gt(0) && amount.gt(0) && total.gt(0) && validTokenPair && !limitReport.hasShortage &&
         (type !== 'buy' || total.lte(maxTotal)) && (type !== 'sell' || amount.lte(maxAmount));
     } catch (e) {
       return false;
