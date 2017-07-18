@@ -11,6 +11,7 @@ import Limits from '/imports/api/limits';
 import { Offers, Status } from '/imports/api/offers';
 
 import './offermodal.html';
+import { convertTo18Precision } from '../../../utils/conversion';
 
 const latest = require('promise-latest');
 

@@ -407,9 +407,9 @@
                                    You are trying to create a {{offerType}}
                                   order below the minimum <strong>market limit</strong>,
                                   {{#if equals offerType 'buy'}}
-                                    which is {{formatToHighestPossible limit}} {{quoteCurrency}}.
+                                    which is {{formatLimit limit quoteCurrency}} {{quoteCurrency}}.
                                   {{else}}
-                                    which is {{{formatToHighestPossible limit}}} {{baseCurrency}}.
+                                    which is {{{formatLimit limit baseCurrency}}} {{baseCurrency}}.
                                   {{/if}}
                                 </span>
                               </div>
