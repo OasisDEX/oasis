@@ -1907,12 +1907,6 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
     overflow-x: hidden;
     display: block;
     margin-top: 10px;
-    &.tbody-scrolling {
-      width: 98%;
-    }
-    &.tbody-not-scrolling {
-      width: 100%;
-    }
     tr {
       height: 30px;
       display: block;
