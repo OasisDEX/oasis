@@ -75,8 +75,8 @@
                           {{b "click: autofillOrder"}}>{{#if equals offer.type 'bid'}}SELL{{else}}BUY{{/if}} MAX
                         </button>
                       {{/if}}
-                      <input type="number" class="input with-max-btn" step="any" min="" placeholder="0" max={{maxTotal}}{{b
-                        "value: total, input: calcVolume"}}>
+                      <input type="number" class="input with-max-btn" step="any" min="" placeholder="0" max={{maxTotal}}
+                        {{b "value: total, input: calcVolume"}}>
                     </div>
                   </td>
                   <td class="dex-currency-cell">
