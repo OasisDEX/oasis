@@ -67,9 +67,17 @@
                   <th class="dex-label-cell">
                     <span>TOTAL</span>
                   </th>
-                  <td class="dex-input-cell">
-                    <input type="number" class="input" step="any" min="0" max={{maxTotal}}
-                      {{b "value: total, input: calcVolume"}}>
+                  <td class="dex-input-cell" {{b "click:focusOnInput"}}>
+                    <div {{b "focusin: onFocus, focusout: onBlur"}}>
+                      {{#if and canAutofill shouldShowMaxBtn  }}
+                        <button type="button" class="btn btn-sm btn-default dex-btn-max
+                           {{#if equals offer.type 'bid'}}sell{{else}}buy{{/if}}"
+                          {{b "click: autofillOrder"}}>{{#if equals offer.type 'bid'}}SELL{{else}}BUY{{/if}} MAX
+                        </button>
+                      {{/if}}
+                      <input type="number" class="input with-max-btn" step="any" min="" placeholder="0" max={{maxTotal}}{{b
+                        "value: total, input: calcVolume"}}>
+                    </div>
                   </td>
                   <td class="dex-currency-cell">
                     <span>{{quoteCurrency}}</span>
@@ -377,9 +385,16 @@
                 <th class="dex-label-cell">
                   <span>TOTAL</span>
                 </th>
-                <td class="dex-input-cell">
-                  <input type="number" class="input" step="any" min="0" max={{maxNewOfferTotal}}
-                    {{b "value: offerTotal, input: calcNewOfferAmount"}}>
+                <td class="dex-input-cell" {{b "click:focusOnInput"}}>
+                  <div {{b "focusin: onFocus, focusout: onBlur"}}>
+                    {{#if and canAutofill shouldShowMaxBtn  }}
+                      <button type="button" class="btn btn-sm btn-default dex-btn-max {{offerType}}"
+                        {{b "click: autofill"}}>{{offerType}} MAX
+                      </button>
+                    {{/if}}
+                    <input type="number" class="input with-max-btn" step="any" min="" placeholder="0" max={{maxNewOfferTotal}}
+                      {{b "value: offerTotal, input: calcNewOfferAmount"}}>
+                  </div>
                 </td>
                 <td class="dex-currency-cell">
                   <span>{{quoteCurrency}}</span>

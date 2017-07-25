@@ -44,6 +44,9 @@ Template.ethtokens.viewmodel({
   onBlur() {
     this.shouldShowMaxBtn(false);
   },
+  focusOnInput(event) {
+    $(event.target).find('input.with-max-btn').focus();
+  },
   progress() {
     return Session.get(`ETH${uppercaseFirstLetter(this.type())}Progress`);
   },

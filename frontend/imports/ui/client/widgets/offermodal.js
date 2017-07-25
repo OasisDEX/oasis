@@ -552,6 +552,9 @@ Template.offermodal.viewmodel({
   onBlur() {
     this.shouldShowMaxBtn(false);
   },
+  focusOnInput(event) {
+    $(event.target).find('input.with-max-btn').focus();
+  },
 });
 
 Template.offermodal.events({

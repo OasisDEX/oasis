@@ -37,14 +37,14 @@
           <th class="dex-label-cell">
             <span>AMOUNT</span>
           </th>
-          <td class="dex-input-cell">
+          <td class="dex-input-cell" {{b "click:focusOnInput"}}>
             <div {{b "focusin: onFocus, focusout: onBlur"}}>
               {{#if shouldShowMaxBtn}}
                 <button type="button" class="btn btn-sm dex-btn-default dex-btn-max"
                   {{b "click: fillAmount"}}>TRANSFER MAX
                 </button>
               {{/if}}
-            <input type="number" class="input" step="any" min="0" placeholder="0"
+            <input type="number" class="input with-max-btn" step="any" min="0" placeholder="0"
               {{b "value: amount, attr: { max: maxAmount }"}}>
             </div>
           </td>

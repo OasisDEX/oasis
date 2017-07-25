@@ -89,6 +89,9 @@ Template.neworder.viewmodel({
   onBlur() {
     this.shouldShowMaxBtn(false);
   },
+  focusOnInput(event) {
+    $(event.target).find('input.with-max-btn').focus();
+  },
   canAutofill() {
     return Session.get('market_open');
   },

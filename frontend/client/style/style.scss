@@ -933,7 +933,7 @@ table {
       text-align: right;
       display: inline-block;
       padding-right: 10px;
-      min-width: 230px;
+      width: 230px;
     }
 
     &-currency {
@@ -943,7 +943,7 @@ table {
       text-align: left;
       padding-left: 10px;
       display: inline-block;
-      min-width: 60px;
+      width: 60px;
     }
   }
 
@@ -974,7 +974,7 @@ table {
         }
 
         td.dex-input-cell {
-          min-width: 230px;
+          max-width: 230px;
         }
 
         td.dex-currency-cell {
@@ -984,8 +984,7 @@ table {
             font-size: 10px;
             color: #68686C; /* #222228;*/
             letter-spacing: 1px;
-            min-width: 60px;
-            width: 100%;
+            width: 60px;
             display: inline-block;
             vertical-align: middle;
             text-align: left;
@@ -1070,7 +1069,7 @@ table {
     float: right;
     text-align: right;
     padding-right: 10px;
-    max-width: 120px;
+    max-width: 100%;
     background: none;
     &[disabled] {
       border: none;
@@ -1293,7 +1292,7 @@ button.dex-btn-success {
 button.dex-btn-max {
   @extend button.dex-btn-default;
   padding: 5px;
-  margin-left: 5px;
+  margin: 0 5px;
   font-size: 10px;
   border-radius: 5px;
   float: left;
@@ -1351,12 +1350,8 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
     padding-left: 15px;
   }
 
-  .dex-input-cell .input {
-    max-width: 100px;
-  }
-
   .dex-input-cell input.recipient {
-    max-width: 250px;
+    max-width: 280px;
   }
 
   .btn-transfer {
@@ -2191,7 +2186,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
 
           .quote {
             color: #ABABAD;
-            color: rgba(74,74,74,0.60);
+            color: rgba(74, 74, 74, 0.60);
           }
 
           .base, .quote {
@@ -2591,7 +2586,6 @@ span.right {
     border: none;
     text-align: right;
     padding-right: 10px;
-    max-width: 170px;
     background: none;
 
     &[disabled] {
@@ -2613,10 +2607,6 @@ span.right {
 
   td.dex-input-cell {
     width: 330px;
-
-    input {
-      max-width: 230px;
-    }
   }
 
   td.dex-input-cell {
@@ -2626,7 +2616,6 @@ span.right {
       font-size: 24px;
       text-align: right;
       padding-right: 10px;
-      max-width: 170px;
       background: none;
     }
   }
@@ -2743,3 +2732,45 @@ a.logo:hover {
   padding: 6px;
   width: 100%;
 }
+
+#neworder {
+  .dex-btn-max {
+    width: 75px;
+  }
+
+  input.with-max-btn {
+    max-width: 145px;
+  }
+}
+
+#gnttokens, #ethtokens {
+  .dex-btn-max {
+    width: 100px;
+  }
+
+  input.with-max-btn {
+    max-width: 120px;
+  }
+}
+
+#sendtokens {
+  .dex-btn-max {
+    width: 108px;
+  }
+
+  input.with-max-btn {
+    max-width: 110px;
+  }
+}
+
+#newOrderModal, #offerModal {
+  .dex-btn-max {
+    width: 75px;
+  }
+
+  input.with-max-btn {
+    max-width: 240px;
+  }
+}
+
+

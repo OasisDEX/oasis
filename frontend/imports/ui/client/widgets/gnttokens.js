@@ -42,6 +42,9 @@ Template.gnttokens.viewmodel({
   onBlur() {
     this.shouldShowMaxBtn(false);
   },
+  focusOnInput(event) {
+    $(event.target).find('input.with-max-btn').focus();
+  },
   broker() {
     return Session.get('GNTBroker');
   },
