@@ -24,7 +24,7 @@
             <span>PRICE</span>
           </th>
           <td class="dex-input-cell">
-            <input type="number" class="input" step="any" min="" placeholder="0"
+            <input data-requires-precision type="number" class="input" step="any" min="" placeholder="0"
               {{b "value: price, input: calcTotal, enable: canChangePrice"}}>
           </td>
           <td class="dex-currency-cell">
@@ -36,7 +36,7 @@
             <span>AMOUNT</span>
           </th>
           <td class="dex-input-cell">
-            <input type="number" class="input" step="any" min="" placeholder="0"
+            <input data-requires-precision type="number" class="input" step="any" min="" placeholder="0"
               {{b "value: amount, input: calcTotal, enable: canChangeAmountAndTotal, attr: { max: maxAmount }"}}>
           </td>
           <td class="dex-currency-cell">
@@ -55,7 +55,7 @@
                   {{b "click: autofill"}}>{{title}} MAX
                 </button>
               {{/if}}
-              <input type="number" class="input with-max-btn" step="any" min="" placeholder="0"
+              <input data-requires-precision type="number" class="input with-max-btn" step="any" min="" placeholder="0"
                 {{b "value: total, input: calcAmount, enable: canChangeAmountAndTotal, attr: { max: maxTotal }"}}>
             </div>
           </td>

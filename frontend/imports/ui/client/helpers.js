@@ -369,6 +369,7 @@ Template.registerHelper('formatLimit', (limitReport) => {
 });
 
 Template.registerHelper('formatNumber', (value, decimals, sle) => {
+  const precision = Session.get('precision');
   let decimalsValue = decimals;
   if (decimalsValue instanceof Spacebars.kw) {
     decimalsValue = null;
@@ -377,7 +378,7 @@ Template.registerHelper('formatNumber', (value, decimals, sle) => {
   if (showLabelExact instanceof Spacebars.kw) {
     showLabelExact = null;
   }
-  decimalsValue = decimalsValue || 5;
+  decimalsValue = decimalsValue || ((precision && precision < 5) ? precision : 5);
 
   const exactValue = thousandSeparator(value);
   const finalValue = formatNumber(value, decimalsValue);
@@ -388,8 +389,6 @@ Template.registerHelper('formatNumber', (value, decimals, sle) => {
 
   return finalValue;
 });
-
-Template.registerHelper('formatGas', (value) => thousandSeparator(value));
 
 Template.registerHelper('formatGasLimit', (gasLimit, size, suffix) => {
   const formattedGasLimit = gasLimit / size;

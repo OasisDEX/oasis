@@ -2,7 +2,6 @@ import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
 import { BigNumber } from 'meteor/ethereum:web3';
 import { web3Obj } from 'meteor/makerotc:dapple';
-
 import Tokens from '/imports/api/tokens';
 import { Offers } from '/imports/api/offers';
 import { $ } from 'meteor/jquery';
@@ -24,6 +23,19 @@ Template.neworder.viewmodel({
       const order = Session.get('selectedOrder');
       if (order) {
         Session.set('selectedOrder', '');
+      }
+    },
+    'keyup input[data-requires-precision]'(event) {
+      const precision = Session.get('precision');
+      const value = event.target.value;
+      try {
+        const amount = new BigNumber(value || 0);
+        if (amount.decimalPlaces() > precision) {
+          $(event.target).val(amount.toFixed(precision), 6);
+          $(event.target).trigger('change');
+        }
+      } catch (exception) {
+        console.debug('Provided value in the input field is not a number!', exception);
       }
     },
   },
@@ -75,7 +87,7 @@ Template.neworder.viewmodel({
     return this.orderType() ? this.orderType() : '';
   },
   precision() {
-    return Dapple.getTokenSpecs(Session.get('baseCurrency')).precision;
+    return Session.get('precision');
   },
   sellCurrency() {
     if (this.type() === 'buy') {
@@ -116,9 +128,9 @@ Template.neworder.viewmodel({
       return;
     }
     try {
-      const price = new BigNumber(this.price());
-      const amount = new BigNumber(this.amount());
-      const total = price.times(amount);
+      const price = new BigNumber(new BigNumber(this.price(), 10).toFixed(this.precision(), 6));
+      const amount = new BigNumber(new BigNumber(this.amount(), 10).toFixed(this.precision(), 6));
+      const total = new BigNumber(price.times(amount).toFixed(this.precision(), 6), 10);
       if (total.isNaN()) {
         this.total('0');
       } else {
@@ -136,12 +148,12 @@ Template.neworder.viewmodel({
       return;
     }
     try {
-      const price = new BigNumber(this.price());
-      const total = new BigNumber(this.total());
+      const price = new BigNumber(new BigNumber(this.price(), 10).toFixed(this.precision(), 6));
+      const total = new BigNumber(new BigNumber(this.total(), 10).toFixed(this.precision(), 6));
       if (total.isZero() && price.isZero()) {
         this.amount('0');
       } else {
-        const amount = total.div(price);
+        const amount = new BigNumber(total.div(price).toFixed(this.precision(), 6), 10);
         if (amount.isNaN()) {
           this.amount('0');
         } else {

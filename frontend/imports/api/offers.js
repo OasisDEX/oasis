@@ -532,15 +532,16 @@ Offers.syncOffer = (id, max = 0) => {
 Offers.updateOffer = (idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress, owner, status) => {
   const sellToken = Dapple.getTokenByAddress(sellWhichTokenAddress);
   const buyToken = Dapple.getTokenByAddress(buyWhichTokenAddress);
+  const precision = Session.get('precision');
 
   if (sellToken && buyToken) {
     let sellHowMuchValue = convertTo18Precision(sellHowMuch, sellToken);
     let buyHowMuchValue = convertTo18Precision(buyHowMuch, buyToken);
     if (!(sellHowMuchValue instanceof BigNumber)) {
-      sellHowMuchValue = new BigNumber(sellHowMuchValue);
+      sellHowMuchValue = new BigNumber(sellHowMuchValue, 10);
     }
     if (!(buyHowMuchValue instanceof BigNumber)) {
-      buyHowMuchValue = new BigNumber(buyHowMuchValue);
+      buyHowMuchValue = new BigNumber(buyHowMuchValue, 10);
     }
 
     const offer = {
@@ -557,8 +558,8 @@ Offers.updateOffer = (idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWh
       sellHowMuch_filter: sellHowMuchValue.toNumber(),
       ask_price: buyHowMuchValue.div(sellHowMuchValue).valueOf(),
       bid_price: sellHowMuchValue.div(buyHowMuchValue).valueOf(),
-      ask_price_sort: new BigNumber(buyHowMuchValue.div(sellHowMuchValue).toFixed(5)).toNumber(),
-      bid_price_sort: new BigNumber(sellHowMuchValue.div(buyHowMuchValue).toFixed(5)).toNumber(),
+      ask_price_sort: new BigNumber(buyHowMuchValue.div(sellHowMuchValue).toFixed(precision < 5 ? precision : 5, 6), 10).toNumber(),
+      bid_price_sort: new BigNumber(sellHowMuchValue.div(buyHowMuchValue).toFixed(precision < 5 ? precision : 5, 6), 10).toNumber(),
     };
 
     Offers.upsert(idx, { $set: offer });

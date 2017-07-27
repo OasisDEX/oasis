@@ -164,7 +164,7 @@ export function formatNumber(number, dec) {
     n = new BigNumber(`${number}`);
   }
   const d = (new BigNumber(10)).pow(decimals);
-  n = n.mul(d).trunc().div(d).toFixed(decimals);
+  n = n.mul(d).trunc().div(d).toFixed(decimals, 6);
   return thousandSeparator(n);
 }
 

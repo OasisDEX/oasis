@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
+import { BigNumber } from 'meteor/ethereum:web3';
 import { Dapple, web3Obj } from 'meteor/makerotc:dapple';
 import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
@@ -7,7 +8,6 @@ import Limits from '/imports/api/limits';
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
 import TokenEvents from '/imports/api/tokenEvents';
-import WETH from '/imports/api/weth';
 import WGNT from '/imports/api/wgnt';
 import { Offers, Status } from '/imports/api/offers';
 import { doHashChange } from '/imports/utils/functions';
@@ -122,6 +122,16 @@ function checkIfBuyEnabled(marketType) {
   });
 }
 
+function denotePrecision() {
+  const basePrecision = Dapple.getTokenSpecs(Session.get('baseCurrency')).precision;
+  const quotePrecision = Dapple.getTokenSpecs(Session.get('quoteCurrency')).precision;
+  const precision = basePrecision < quotePrecision ? basePrecision : quotePrecision;
+  Session.set('precision', precision);
+  // TODO: find away to place ROUNDING_MODE in here.
+  // Right now no matter where It is put , it's overridden with ROUNDING_MODE: 1 from web3 package config.
+  BigNumber.config({ DECIMAL_PLACES: precision });
+}
+
 // Initialize everything on new network
 function initNetwork(newNetwork) {
   Dapple.init(newNetwork);
@@ -135,6 +145,7 @@ function initNetwork(newNetwork) {
     Session.set('latestBlock', 0);
     Session.set('startBlock', 0);
     doHashChange();
+    denotePrecision();
     Tokens.sync();
     Limits.sync();
     Offers.sync();
@@ -224,6 +235,8 @@ $(window).on('hashchange', () => {
       Offers.sync();
     }
   }
+
+  denotePrecision();
 });
 
 function initSession() {

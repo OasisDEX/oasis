@@ -46,8 +46,24 @@ Template.offermodal.viewmodel({
       }
     });
   },
+  events : {
+    'keyup input[data-requires-precision]'(event) {
+      const precision = Session.get('precision');
+      const value = event.target.value;
+
+      try {
+        const amount = new BigNumber(value || 0);
+        if (amount.decimalPlaces() > precision) {
+          $(event.target).val(amount.toFixed(precision), 6);
+          $(event.target).trigger('change');
+        }
+      } catch (exception) {
+        console.debug('Provided value in the input field is not a number!', exception);
+      }
+    },
+  },
   precision() {
-    return Dapple.getTokenSpecs(Session.get('baseCurrency')).precision;
+    return Session.get('precision');
   },
   validAmount: true,
   validNewOrderAmount: true,
@@ -114,7 +130,7 @@ Template.offermodal.viewmodel({
     }
   },
   fillOrderPartiallyOrFully(amount, available, buyHowMuch) {
-    if (new BigNumber(available).lessThan(new BigNumber(buyHowMuch))) {
+    if (new BigNumber(available, 10).lessThan(new BigNumber(buyHowMuch, 10))) {
       amount(web3Obj.fromWei(available));
     } else {
       amount(web3Obj.fromWei(buyHowMuch));
@@ -198,13 +214,13 @@ Template.offermodal.viewmodel({
     }
     try {
       const baseCurrency = Session.get('baseCurrency');
-      const total = new BigNumber(this.total());
-      const buyHowMuch = new BigNumber(this.templateInstance.data.offer.buyHowMuch);
-      const sellHowMuch = new BigNumber(this.templateInstance.data.offer.sellHowMuch);
+      const total = new BigNumber(this.total(), 10).toFixed(this.precision(), 6);
+      const buyHowMuch = new BigNumber(new BigNumber(this.templateInstance.data.offer.buyHowMuch, 10).toFixed(this.precision(), 6), 10);
+      const sellHowMuch = new BigNumber(new BigNumber(this.templateInstance.data.offer.sellHowMuch, 10).toFixed(this.precision(), 6), 10);
       if (this.templateInstance.data.offer.buyWhichToken === baseCurrency) {
-        this.volume(buyHowMuch.times(total).div(sellHowMuch).toString(10));
+        this.volume(buyHowMuch.times(total).div(sellHowMuch).toFixed(this.precision(), 6));
       } else {
-        this.volume(sellHowMuch.times(total).div(buyHowMuch).toString(10));
+        this.volume(sellHowMuch.times(total).div(buyHowMuch).toFixed(this.precision(), 6));
       }
     } catch (e) {
       this.volume('0');
@@ -219,15 +235,16 @@ Template.offermodal.viewmodel({
     }
     try {
       const baseCurrency = Session.get('baseCurrency');
-      const volume = new BigNumber(this.volume());
-      const buyHowMuch = new BigNumber(this.templateInstance.data.offer.buyHowMuch);
-      const sellHowMuch = new BigNumber(this.templateInstance.data.offer.sellHowMuch);
+      const volume = new BigNumber(this.volume(), 10).toFixed(this.precision(), 6);
+      const buyHowMuch = new BigNumber(new BigNumber(this.templateInstance.data.offer.buyHowMuch, 10).toFixed(this.precision(), 6), 10);
+      const sellHowMuch = new BigNumber(new BigNumber(this.templateInstance.data.offer.sellHowMuch, 10).toFixed(this.precision(), 6), 10);
       if (this.templateInstance.data.offer.buyWhichToken === baseCurrency) {
-        this.total(sellHowMuch.times(volume).div(buyHowMuch).toString(10));
+        this.total(sellHowMuch.times(volume).div(buyHowMuch).toFixed(this.precision(), 6));
       } else {
-        this.total(buyHowMuch.times(volume).div(sellHowMuch).toString(10));
+        this.total(buyHowMuch.times(volume).div(sellHowMuch).toFixed(this.precision(), 6));
       }
     } catch (e) {
+      console.log(e);
       this.total('0');
     }
   },
@@ -240,9 +257,9 @@ Template.offermodal.viewmodel({
       return;
     }
     try {
-      const price = new BigNumber(this.offerPrice());
-      const amount = new BigNumber(this.offerAmount());
-      const total = price.times(amount);
+      const price = new BigNumber(new BigNumber(this.offerPrice(), 10).toFixed(this.precision(), 6), 10);
+      const amount = new BigNumber(new BigNumber(this.offerAmount(), 10).toFixed(this.precision(), 6), 10);
+      const total = new BigNumber(price.times(amount), 10);
       if (total.isNaN()) {
         this.offerTotal('0');
       } else {
@@ -262,13 +279,13 @@ Template.offermodal.viewmodel({
       return;
     }
     try {
-      const price = new BigNumber(this.offerPrice());
-      let amount = new BigNumber(this.offerAmount() || 0);
-      const total = new BigNumber(this.offerTotal());
+      const price = new BigNumber(new BigNumber(this.offerPrice(), 10).toFixed(this.precision(), 6), 10);
+      const total = new BigNumber(new BigNumber(this.offerTotal(), 10).toFixed(this.precision(), 6), 10);
+      let amount = new BigNumber(this.offerAmount() || 0, 10);
       if (total.isZero() && price.isZero() && (amount.isNaN() || amount.isNegative())) {
         this.offerAmount('0');
       } else if (!total.isZero() || !price.isZero()) {
-        amount = total.div(price);
+        amount = new BigNumber(total.div(price).toFixed(this.precision(), 6), 10);
         if (amount.isNaN()) {
           this.offerAmount('0');
         } else {
