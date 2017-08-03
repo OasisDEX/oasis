@@ -1,8 +1,8 @@
 {
   "market": {
     "kovan": {
-      "address": "0x4b6fedd08547E43F38b50D128F4165Fa7ca4F44C",
-      "blockNumber": 2553361
+      "address": "0xb6cd0D20c952d0dfDb76fA432Ed4BC96eEE6a37F",
+      "blockNumber": 2970863
     },
     "ropsten": {
       "address": "0xb996fff774d37b900872609bf8b11e31f51bd19e",
