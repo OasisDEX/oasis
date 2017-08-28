@@ -1,13 +1,14 @@
 const SimpleMarketABI = {
   interface: [{
     constant: false,
-    inputs: [{ name: 'haveToken', type: 'address' }, { name: 'wantToken', type: 'address' }, {
-      name: 'haveAmount',
+    inputs: [{ name: 'pay_gem', type: 'address' }, { name: 'buy_gem', type: 'address' }, {
+      name: 'pay_amt',
       type: 'uint128',
-    }, { name: 'wantAmount', type: 'uint128' }],
+    }, { name: 'buy_amt', type: 'uint128' }],
     name: 'make',
     outputs: [{ name: 'id', type: 'bytes32' }],
     payable: false,
+    stateMutability: 'nonpayable',
     type: 'function',
   }, {
     constant: true,
@@ -15,6 +16,7 @@ const SimpleMarketABI = {
     name: 'last_offer_id',
     outputs: [{ name: '', type: 'uint256' }],
     payable: false,
+    stateMutability: 'view',
     type: 'function',
   }, {
     constant: false,
@@ -22,16 +24,18 @@ const SimpleMarketABI = {
     name: 'cancel',
     outputs: [{ name: 'success', type: 'bool' }],
     payable: false,
+    stateMutability: 'nonpayable',
     type: 'function',
   }, {
     constant: true,
     inputs: [{ name: 'id', type: 'uint256' }],
     name: 'getOffer',
-    outputs: [{ name: '', type: 'uint256' }, { name: '', type: 'address' }, { name: '', type: 'uint256' }, {
+    outputs: [{ name: '', type: 'uint256' }, { name: '', type: 'address' }, {
       name: '',
-      type: 'address',
-    }],
+      type: 'uint256',
+    }, { name: '', type: 'address' }],
     payable: false,
+    stateMutability: 'view',
     type: 'function',
   }, {
     constant: false,
@@ -39,6 +43,7 @@ const SimpleMarketABI = {
     name: 'take',
     outputs: [],
     payable: false,
+    stateMutability: 'nonpayable',
     type: 'function',
   }, {
     constant: false,
@@ -46,6 +51,7 @@ const SimpleMarketABI = {
     name: 'bump',
     outputs: [],
     payable: false,
+    stateMutability: 'nonpayable',
     type: 'function',
   }, {
     constant: true,
@@ -53,19 +59,21 @@ const SimpleMarketABI = {
     name: 'isActive',
     outputs: [{ name: 'active', type: 'bool' }],
     payable: false,
+    stateMutability: 'view',
     type: 'function',
   }, {
     constant: true,
     inputs: [{ name: '', type: 'uint256' }],
     name: 'offers',
-    outputs: [{ name: 'sell_how_much', type: 'uint256' }, {
-      name: 'sell_which_token',
-      type: 'address',
-    }, { name: 'buy_how_much', type: 'uint256' }, { name: 'buy_which_token', type: 'address' }, {
-      name: 'owner',
-      type: 'address',
-    }, { name: 'active', type: 'bool' }, { name: 'timestamp', type: 'uint64' }],
+    outputs: [{ name: 'pay_amt', type: 'uint256' }, { name: 'pay_gem', type: 'address' }, {
+      name: 'buy_amt',
+      type: 'uint256',
+    }, { name: 'buy_gem', type: 'address' }, { name: 'owner', type: 'address' }, {
+      name: 'active',
+      type: 'bool',
+    }, { name: 'timestamp', type: 'uint64' }],
     payable: false,
+    stateMutability: 'view',
     type: 'function',
   }, {
     constant: false,
@@ -73,6 +81,7 @@ const SimpleMarketABI = {
     name: 'kill',
     outputs: [],
     payable: false,
+    stateMutability: 'nonpayable',
     type: 'function',
   }, {
     constant: true,
@@ -80,41 +89,44 @@ const SimpleMarketABI = {
     name: 'getOwner',
     outputs: [{ name: 'owner', type: 'address' }],
     payable: false,
+    stateMutability: 'view',
     type: 'function',
   }, {
     constant: false,
     inputs: [{ name: 'id', type: 'uint256' }, { name: 'quantity', type: 'uint256' }],
     name: 'buy',
-    outputs: [{ name: 'success', type: 'bool' }],
+    outputs: [{ name: '', type: 'bool' }],
     payable: false,
+    stateMutability: 'nonpayable',
     type: 'function',
   }, {
     constant: false,
-    inputs: [{ name: 'sell_how_much', type: 'uint256' }, {
-      name: 'sell_which_token',
-      type: 'address',
-    }, { name: 'buy_how_much', type: 'uint256' }, { name: 'buy_which_token', type: 'address' }],
+    inputs: [{ name: 'pay_amt', type: 'uint256' }, { name: 'pay_gem', type: 'address' }, {
+      name: 'buy_amt',
+      type: 'uint256',
+    }, { name: 'buy_gem', type: 'address' }],
     name: 'offer',
     outputs: [{ name: 'id', type: 'uint256' }],
     payable: false,
+    stateMutability: 'nonpayable',
     type: 'function',
   }, {
     anonymous: false,
     inputs: [{ indexed: false, name: 'id', type: 'uint256' }],
-    name: 'ItemUpdate',
+    name: 'LogItemUpdate',
     type: 'event',
   }, {
     anonymous: false,
-    inputs: [{ indexed: false, name: 'sell_how_much', type: 'uint256' }, {
+    inputs: [{ indexed: false, name: 'pay_amt', type: 'uint256' }, {
       indexed: true,
-      name: 'sell_which_token',
+      name: 'pay_gem',
       type: 'address',
-    }, { indexed: false, name: 'buy_how_much', type: 'uint256' }, {
+    }, { indexed: false, name: 'buy_amt', type: 'uint256' }, {
       indexed: true,
-      name: 'buy_which_token',
+      name: 'buy_gem',
       type: 'address',
     }],
-    name: 'Trade',
+    name: 'LogTrade',
     type: 'event',
   }, {
     anonymous: false,
@@ -124,13 +136,17 @@ const SimpleMarketABI = {
       type: 'bytes32',
     }, { indexed: true, name: 'maker', type: 'address' }, {
       indexed: false,
-      name: 'haveToken',
+      name: 'pay_gem',
       type: 'address',
-    }, { indexed: false, name: 'wantToken', type: 'address' }, {
+    }, { indexed: false, name: 'buy_gem', type: 'address' }, {
       indexed: false,
-      name: 'haveAmount',
+      name: 'pay_amt',
       type: 'uint128',
-    }, { indexed: false, name: 'wantAmount', type: 'uint128' }, { indexed: false, name: 'timestamp', type: 'uint64' }],
+    }, { indexed: false, name: 'buy_amt', type: 'uint128' }, {
+      indexed: false,
+      name: 'timestamp',
+      type: 'uint64',
+    }],
     name: 'LogMake',
     type: 'event',
   }, {
@@ -141,13 +157,17 @@ const SimpleMarketABI = {
       type: 'bytes32',
     }, { indexed: true, name: 'maker', type: 'address' }, {
       indexed: false,
-      name: 'haveToken',
+      name: 'pay_gem',
       type: 'address',
-    }, { indexed: false, name: 'wantToken', type: 'address' }, {
+    }, { indexed: false, name: 'buy_gem', type: 'address' }, {
       indexed: false,
-      name: 'haveAmount',
+      name: 'pay_amt',
       type: 'uint128',
-    }, { indexed: false, name: 'wantAmount', type: 'uint128' }, { indexed: false, name: 'timestamp', type: 'uint64' }],
+    }, { indexed: false, name: 'buy_amt', type: 'uint128' }, {
+      indexed: false,
+      name: 'timestamp',
+      type: 'uint64',
+    }],
     name: 'LogBump',
     type: 'event',
   }, {
@@ -158,15 +178,15 @@ const SimpleMarketABI = {
       type: 'bytes32',
     }, { indexed: true, name: 'maker', type: 'address' }, {
       indexed: false,
-      name: 'haveToken',
+      name: 'pay_gem',
       type: 'address',
-    }, { indexed: false, name: 'wantToken', type: 'address' }, {
+    }, { indexed: false, name: 'buy_gem', type: 'address' }, {
       indexed: true,
       name: 'taker',
       type: 'address',
-    }, { indexed: false, name: 'takeAmount', type: 'uint128' }, {
+    }, { indexed: false, name: 'take_amt', type: 'uint128' }, {
       indexed: false,
-      name: 'giveAmount',
+      name: 'give_amt',
       type: 'uint128',
     }, { indexed: false, name: 'timestamp', type: 'uint64' }],
     name: 'LogTake',
@@ -179,13 +199,17 @@ const SimpleMarketABI = {
       type: 'bytes32',
     }, { indexed: true, name: 'maker', type: 'address' }, {
       indexed: false,
-      name: 'haveToken',
+      name: 'pay_gem',
       type: 'address',
-    }, { indexed: false, name: 'wantToken', type: 'address' }, {
+    }, { indexed: false, name: 'buy_gem', type: 'address' }, {
       indexed: false,
-      name: 'haveAmount',
+      name: 'pay_amt',
       type: 'uint128',
-    }, { indexed: false, name: 'wantAmount', type: 'uint128' }, { indexed: false, name: 'timestamp', type: 'uint64' }],
+    }, { indexed: false, name: 'buy_amt', type: 'uint128' }, {
+      indexed: false,
+      name: 'timestamp',
+      type: 'uint64',
+    }],
     name: 'LogKill',
     type: 'event',
   }],

@@ -75,7 +75,7 @@ function checkIfOrderMatchingEnabled(marketType) {
       Session.set('isMatchingEnabled', false);
       resolve();
     } else {
-      Dapple['maker-otc'].objects.otc.isMatchingEnabled((error, status) => {
+      Dapple['maker-otc'].objects.otc.matchingEnabled((error, status) => {
         if (!error) {
           Session.set('isMatchingEnabled', status);
           resolve();
@@ -104,7 +104,7 @@ function checkIfBuyEnabled(marketType) {
       const addr = Dapple['maker-otc'].environments[Dapple.env].otc.value;
 
       const contract = web3Obj.eth.contract(abi).at(addr);
-      contract.isBuyEnabled((error, result) => {
+      contract.buyEnabled((error, result) => {
         if (!error) {
           Session.set('isBuyEnabled', result);
           resolve();

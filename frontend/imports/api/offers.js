@@ -67,17 +67,17 @@ const helpers = {
 };
 
 function logTakeToTrade(logTake) {
-  const buyWhichToken = Dapple.getTokenByAddress(logTake.args.wantToken);
-  const sellWhichToken = Dapple.getTokenByAddress(logTake.args.haveToken);
+  const buyWhichToken = Dapple.getTokenByAddress(logTake.args.buy_gem);
+  const sellWhichToken = Dapple.getTokenByAddress(logTake.args.pay_gem);
 
   if (buyWhichToken && sellWhichToken && !logTake.removed) {
     return {
-      buyWhichToken_address: logTake.args.wantToken,
+      buyWhichToken_address: logTake.args.buy_gem,
       buyWhichToken,
-      sellWhichToken_address: logTake.args.haveToken,
+      sellWhichToken_address: logTake.args.pay_gem,
       sellWhichToken,
-      buyHowMuch: convertTo18Precision(logTake.args.giveAmount.toString(10), buyWhichToken),
-      sellHowMuch: convertTo18Precision(logTake.args.takeAmount.toString(10), sellWhichToken),
+      buyHowMuch: convertTo18Precision(logTake.args.give_amt.toString(10), buyWhichToken),
+      sellHowMuch: convertTo18Precision(logTake.args.take_amt.toString(10), sellWhichToken),
       timestamp: logTake.args.timestamp.toNumber(),
       transactionHash: logTake.transactionHash,
       issuer: logTake.args.maker,
@@ -176,7 +176,7 @@ function listenForAcceptedTradesOf(address) {
 function listenForNewSortedOrders() {
   Dapple['maker-otc'].objects.otc.LogSortedOffer((err, result) => {
     if (!err) {
-      const id = result.args.mid.toNumber();
+      const id = result.args.id.toNumber();
       Offers.syncOffer(id);
       Offers.remove(result.transactionHash);
     } else {
@@ -187,7 +187,7 @@ function listenForNewSortedOrders() {
 function listenForFilledOrCancelledOrders() {
   /** When the order matching is activated we are using ItemUpdate only to listen for events
    * where a given order is getting cancelled or filled in ( in case of `buy` being enabled.*/
-  Dapple['maker-otc'].objects.otc.ItemUpdate((err, result) => {
+  Dapple['maker-otc'].objects.otc.LogItemUpdate((err, result) => {
     if (!err) {
       const idx = result.args.id;
       Dapple['maker-otc'].objects.otc.offers(idx.toNumber(), (error, data) => {
@@ -367,7 +367,7 @@ Offers.syncOffers = () => {
     listenForNewSortedOrders();
     listenForFilledOrCancelledOrders();
   } else {
-    Dapple['maker-otc'].objects.otc.ItemUpdate((err, result) => {
+    Dapple['maker-otc'].objects.otc.LogItemUpdate((err, result) => {
       if (!err) {
         const id = result.args.id.toNumber();
         Offers.syncOffer(id);
@@ -391,6 +391,8 @@ Offers.syncOffers = () => {
         } else {
           Session.set('loading', false);
           Session.set('loadingProgress', 100);
+          Session.set('loadingBuyOrders', false);
+          Session.set('loadingSellOrders', false);
         }
       }
     });

@@ -5,16 +5,18 @@ const ExpiringMarketABI = {
     name: 'stop',
     outputs: [],
     payable: false,
+    stateMutability: 'nonpayable',
     type: 'function',
   }, {
     constant: false,
-    inputs: [{ name: 'haveToken', type: 'address' }, {
-      name: 'wantToken',
-      type: 'address',
-    }, { name: 'haveAmount', type: 'uint128' }, { name: 'wantAmount', type: 'uint128' }],
+    inputs: [{ name: 'pay_gem', type: 'address' }, { name: 'buy_gem', type: 'address' }, {
+      name: 'pay_amt',
+      type: 'uint128',
+    }, { name: 'buy_amt', type: 'uint128' }],
     name: 'make',
     outputs: [{ name: 'id', type: 'bytes32' }],
     payable: false,
+    stateMutability: 'nonpayable',
     type: 'function',
   }, {
     constant: false,
@@ -22,6 +24,15 @@ const ExpiringMarketABI = {
     name: 'setOwner',
     outputs: [],
     payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  }, {
+    constant: true,
+    inputs: [],
+    name: 'era',
+    outputs: [{ name: '', type: 'uint64' }],
+    payable: false,
+    stateMutability: 'view',
     type: 'function',
   }, {
     constant: true,
@@ -29,6 +40,7 @@ const ExpiringMarketABI = {
     name: 'last_offer_id',
     outputs: [{ name: '', type: 'uint256' }],
     payable: false,
+    stateMutability: 'view',
     type: 'function',
   }, {
     constant: false,
@@ -36,6 +48,7 @@ const ExpiringMarketABI = {
     name: 'cancel',
     outputs: [{ name: 'success', type: 'bool' }],
     payable: false,
+    stateMutability: 'nonpayable',
     type: 'function',
   }, {
     constant: true,
@@ -46,6 +59,7 @@ const ExpiringMarketABI = {
       type: 'uint256',
     }, { name: '', type: 'address' }],
     payable: false,
+    stateMutability: 'view',
     type: 'function',
   }, {
     constant: false,
@@ -53,27 +67,23 @@ const ExpiringMarketABI = {
     name: 'take',
     outputs: [],
     payable: false,
-    type: 'function',
-  }, {
-    constant: true,
-    inputs: [],
-    name: 'getTime',
-    outputs: [{ name: '', type: 'uint256' }],
-    payable: false,
+    stateMutability: 'nonpayable',
     type: 'function',
   }, {
     constant: true,
     inputs: [],
     name: 'close_time',
-    outputs: [{ name: '', type: 'uint256' }],
+    outputs: [{ name: '', type: 'uint64' }],
     payable: false,
+    stateMutability: 'view',
     type: 'function',
   }, {
     constant: true,
     inputs: [],
     name: 'lifetime',
-    outputs: [{ name: '', type: 'uint256' }],
+    outputs: [{ name: '', type: 'uint64' }],
     payable: false,
+    stateMutability: 'view',
     type: 'function',
   }, {
     constant: true,
@@ -81,6 +91,7 @@ const ExpiringMarketABI = {
     name: 'stopped',
     outputs: [{ name: '', type: 'bool' }],
     payable: false,
+    stateMutability: 'view',
     type: 'function',
   }, {
     constant: false,
@@ -88,6 +99,7 @@ const ExpiringMarketABI = {
     name: 'bump',
     outputs: [],
     payable: false,
+    stateMutability: 'nonpayable',
     type: 'function',
   }, {
     constant: false,
@@ -95,6 +107,7 @@ const ExpiringMarketABI = {
     name: 'setAuthority',
     outputs: [],
     payable: false,
+    stateMutability: 'nonpayable',
     type: 'function',
   }, {
     constant: true,
@@ -102,22 +115,21 @@ const ExpiringMarketABI = {
     name: 'isActive',
     outputs: [{ name: 'active', type: 'bool' }],
     payable: false,
+    stateMutability: 'view',
     type: 'function',
   }, {
     constant: true,
     inputs: [{ name: '', type: 'uint256' }],
     name: 'offers',
-    outputs: [{ name: 'sell_how_much', type: 'uint256' }, {
-      name: 'sell_which_token',
-      type: 'address',
-    }, { name: 'buy_how_much', type: 'uint256' }, {
-      name: 'buy_which_token',
-      type: 'address',
-    }, { name: 'owner', type: 'address' }, { name: 'active', type: 'bool' }, {
-      name: 'timestamp',
-      type: 'uint64',
-    }],
+    outputs: [{ name: 'pay_amt', type: 'uint256' }, { name: 'pay_gem', type: 'address' }, {
+      name: 'buy_amt',
+      type: 'uint256',
+    }, { name: 'buy_gem', type: 'address' }, { name: 'owner', type: 'address' }, {
+      name: 'active',
+      type: 'bool',
+    }, { name: 'timestamp', type: 'uint64' }],
     payable: false,
+    stateMutability: 'view',
     type: 'function',
   }, {
     constant: true,
@@ -125,6 +137,7 @@ const ExpiringMarketABI = {
     name: 'owner',
     outputs: [{ name: '', type: 'address' }],
     payable: false,
+    stateMutability: 'view',
     type: 'function',
   }, {
     constant: false,
@@ -132,6 +145,7 @@ const ExpiringMarketABI = {
     name: 'kill',
     outputs: [],
     payable: false,
+    stateMutability: 'nonpayable',
     type: 'function',
   }, {
     constant: true,
@@ -139,6 +153,7 @@ const ExpiringMarketABI = {
     name: 'authority',
     outputs: [{ name: '', type: 'address' }],
     payable: false,
+    stateMutability: 'view',
     type: 'function',
   }, {
     constant: true,
@@ -146,6 +161,7 @@ const ExpiringMarketABI = {
     name: 'isClosed',
     outputs: [{ name: 'closed', type: 'bool' }],
     payable: false,
+    stateMutability: 'view',
     type: 'function',
   }, {
     constant: true,
@@ -153,45 +169,70 @@ const ExpiringMarketABI = {
     name: 'getOwner',
     outputs: [{ name: 'owner', type: 'address' }],
     payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  }, {
+    constant: false,
+    inputs: [{ name: 'age', type: 'uint64' }],
+    name: 'warp',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
     type: 'function',
   }, {
     constant: false,
     inputs: [{ name: 'id', type: 'uint256' }, { name: 'quantity', type: 'uint256' }],
     name: 'buy',
-    outputs: [{ name: 'success', type: 'bool' }],
+    outputs: [{ name: '', type: 'bool' }],
     payable: false,
+    stateMutability: 'nonpayable',
     type: 'function',
   }, {
     constant: false,
-    inputs: [{ name: 'sell_how_much', type: 'uint256' }, {
-      name: 'sell_which_token',
-      type: 'address',
-    }, { name: 'buy_how_much', type: 'uint256' }, { name: 'buy_which_token', type: 'address' }],
+    inputs: [{ name: 'pay_amt', type: 'uint256' }, { name: 'pay_gem', type: 'address' }, {
+      name: 'buy_amt',
+      type: 'uint256',
+    }, { name: 'buy_gem', type: 'address' }],
     name: 'offer',
     outputs: [{ name: 'id', type: 'uint256' }],
     payable: false,
+    stateMutability: 'nonpayable',
     type: 'function',
   }, {
-    inputs: [{ name: 'lifetime_', type: 'uint256' }],
+    inputs: [{ name: 'lifetime_', type: 'uint64' }, { name: 'era_', type: 'uint64' }],
     payable: false,
+    stateMutability: 'nonpayable',
     type: 'constructor',
   }, {
-    anonymous: false,
-    inputs: [{ indexed: false, name: 'id', type: 'uint256' }],
-    name: 'ItemUpdate',
+    anonymous: true,
+    inputs: [{ indexed: true, name: 'sig', type: 'bytes4' }, {
+      indexed: true,
+      name: 'guy',
+      type: 'address',
+    }, { indexed: true, name: 'foo', type: 'bytes32' }, {
+      indexed: true,
+      name: 'bar',
+      type: 'bytes32',
+    }, { indexed: false, name: 'wad', type: 'uint256' }, { indexed: false, name: 'fax', type: 'bytes' }],
+    name: 'LogNote',
     type: 'event',
   }, {
     anonymous: false,
-    inputs: [{ indexed: false, name: 'sell_how_much', type: 'uint256' }, {
+    inputs: [{ indexed: false, name: 'id', type: 'uint256' }],
+    name: 'LogItemUpdate',
+    type: 'event',
+  }, {
+    anonymous: false,
+    inputs: [{ indexed: false, name: 'pay_amt', type: 'uint256' }, {
       indexed: true,
-      name: 'sell_which_token',
+      name: 'pay_gem',
       type: 'address',
-    }, { indexed: false, name: 'buy_how_much', type: 'uint256' }, {
+    }, { indexed: false, name: 'buy_amt', type: 'uint256' }, {
       indexed: true,
-      name: 'buy_which_token',
+      name: 'buy_gem',
       type: 'address',
     }],
-    name: 'Trade',
+    name: 'LogTrade',
     type: 'event',
   }, {
     anonymous: false,
@@ -201,13 +242,13 @@ const ExpiringMarketABI = {
       type: 'bytes32',
     }, { indexed: true, name: 'maker', type: 'address' }, {
       indexed: false,
-      name: 'haveToken',
+      name: 'pay_gem',
       type: 'address',
-    }, { indexed: false, name: 'wantToken', type: 'address' }, {
+    }, { indexed: false, name: 'buy_gem', type: 'address' }, {
       indexed: false,
-      name: 'haveAmount',
+      name: 'pay_amt',
       type: 'uint128',
-    }, { indexed: false, name: 'wantAmount', type: 'uint128' }, {
+    }, { indexed: false, name: 'buy_amt', type: 'uint128' }, {
       indexed: false,
       name: 'timestamp',
       type: 'uint64',
@@ -222,13 +263,13 @@ const ExpiringMarketABI = {
       type: 'bytes32',
     }, { indexed: true, name: 'maker', type: 'address' }, {
       indexed: false,
-      name: 'haveToken',
+      name: 'pay_gem',
       type: 'address',
-    }, { indexed: false, name: 'wantToken', type: 'address' }, {
+    }, { indexed: false, name: 'buy_gem', type: 'address' }, {
       indexed: false,
-      name: 'haveAmount',
+      name: 'pay_amt',
       type: 'uint128',
-    }, { indexed: false, name: 'wantAmount', type: 'uint128' }, {
+    }, { indexed: false, name: 'buy_amt', type: 'uint128' }, {
       indexed: false,
       name: 'timestamp',
       type: 'uint64',
@@ -243,15 +284,15 @@ const ExpiringMarketABI = {
       type: 'bytes32',
     }, { indexed: true, name: 'maker', type: 'address' }, {
       indexed: false,
-      name: 'haveToken',
+      name: 'pay_gem',
       type: 'address',
-    }, { indexed: false, name: 'wantToken', type: 'address' }, {
+    }, { indexed: false, name: 'buy_gem', type: 'address' }, {
       indexed: true,
       name: 'taker',
       type: 'address',
-    }, { indexed: false, name: 'takeAmount', type: 'uint128' }, {
+    }, { indexed: false, name: 'take_amt', type: 'uint128' }, {
       indexed: false,
-      name: 'giveAmount',
+      name: 'give_amt',
       type: 'uint128',
     }, { indexed: false, name: 'timestamp', type: 'uint64' }],
     name: 'LogTake',
@@ -264,13 +305,13 @@ const ExpiringMarketABI = {
       type: 'bytes32',
     }, { indexed: true, name: 'maker', type: 'address' }, {
       indexed: false,
-      name: 'haveToken',
+      name: 'pay_gem',
       type: 'address',
-    }, { indexed: false, name: 'wantToken', type: 'address' }, {
+    }, { indexed: false, name: 'buy_gem', type: 'address' }, {
       indexed: false,
-      name: 'haveAmount',
+      name: 'pay_amt',
       type: 'uint128',
-    }, { indexed: false, name: 'wantAmount', type: 'uint128' }, {
+    }, { indexed: false, name: 'buy_amt', type: 'uint128' }, {
       indexed: false,
       name: 'timestamp',
       type: 'uint64',
