@@ -941,7 +941,7 @@ table {
       font-weight: 700;
       letter-spacing: 1px;
       text-align: left;
-      padding-left: 10px;
+      padding-left: 13px;
       display: inline-block;
       width: 60px;
     }
@@ -978,13 +978,14 @@ table {
         }
 
         td.dex-currency-cell {
+          width: 60px;
           font-family: 'Montserrat', sans-serif;
+
           span {
             font-weight: 700;
             font-size: 10px;
             color: #68686C; /* #222228;*/
             letter-spacing: 1px;
-            width: 60px;
             display: inline-block;
             vertical-align: middle;
             text-align: left;
@@ -1889,7 +1890,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
         max-width: 90px !important;
       }
       &.th-amount {
-        max-width: 110px !important;
+        max-width: 105px !important;
       }
       &:last-of-type {
         width: 30px;
@@ -1967,7 +1968,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
           max-width: 90px !important;
         }
         &.transfer {
-          max-width: 110px !important;
+          max-width: 105px !important;
         }
       }
     }
@@ -2749,7 +2750,7 @@ a.logo:hover {
   }
 
   input.with-max-btn {
-    max-width: 120px;
+    max-width: 125px;
   }
 }
 
@@ -2759,7 +2760,7 @@ a.logo:hover {
   }
 
   input.with-max-btn {
-    max-width: 110px;
+    max-width: 105px;
   }
 }
 
@@ -2773,4 +2774,7 @@ a.logo:hover {
   }
 }
 
+tbody.tbody-scrolling {
+  width: 98% !important;
+}
 

@@ -169,17 +169,17 @@ Template.registerHelper('findOffers', (type) => {
   const limit = Session.get('orderBookLimit');
 
   const options = {};
-  options.sort = { ask_price_sort: 1, _id: -1 };
   if (limit) {
     options.limit = limit;
   }
-
   if (type === 'ask') {
+    options.sort = { ask_price_sort: 1, _id: 1 };
     return Offers.find({
       buyWhichToken: quoteCurrency,
       sellWhichToken: baseCurrency,
     }, options);
   } else if (type === 'bid') {
+    options.sort = { bid_price_sort: -1, _id: 1 };
     return Offers.find({
       buyWhichToken: baseCurrency,
       sellWhichToken: quoteCurrency,

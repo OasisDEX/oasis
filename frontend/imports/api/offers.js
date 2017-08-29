@@ -560,8 +560,8 @@ Offers.updateOffer = (idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWh
       sellHowMuch_filter: sellHowMuchValue.toNumber(),
       ask_price: buyHowMuchValue.div(sellHowMuchValue).valueOf(),
       bid_price: sellHowMuchValue.div(buyHowMuchValue).valueOf(),
-      ask_price_sort: new BigNumber(buyHowMuchValue.div(sellHowMuchValue).toFixed(precision < 5 ? precision : 5, 6), 10).toNumber(),
-      bid_price_sort: new BigNumber(sellHowMuchValue.div(buyHowMuchValue).toFixed(precision < 5 ? precision : 5, 6), 10).toNumber(),
+      ask_price_sort: new BigNumber(buyHowMuchValue.div(sellHowMuchValue).toFixed(precision < 5 ? 5 : precision, 6), 10).toNumber(),
+      bid_price_sort: new BigNumber(sellHowMuchValue.div(buyHowMuchValue).toFixed(precision < 5 ? 5 : precision, 6), 10).toNumber(),
     };
 
     Offers.upsert(idx, { $set: offer });
@@ -583,7 +583,7 @@ Offers.offerContractParameters = (sellHowMuch, sellWhichToken, buyHowMuch, buyWh
     .filter((offer) => {
       const offerPrice = new BigNumber(`${offer.sellHowMuch}`).div(new BigNumber(`${offer.buyHowMuch}`));
       const specifiedPrice = new BigNumber(sellHowMuch.toString()).div(new BigNumber(buyHowMuch));
-      return offerPrice.comparedTo(specifiedPrice) > 0;
+      return offerPrice.comparedTo(specifiedPrice) >= 0;
     })
     .sort((offer1, offer2) => {
       const buyHowMuch1 = new BigNumber(`${offer1.buyHowMuch}`);

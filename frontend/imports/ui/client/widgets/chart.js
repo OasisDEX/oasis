@@ -259,16 +259,16 @@ Template.chart.viewmodel({
 
           if (askAmounts.quote.length > 0) {
             // If there is a lower price we need to sum the amount of the previous price (to make a cumulative graph)
-            askAmounts.quote.push(askAmounts.quote[askAmounts.quote.length - 1].add(new BigNumber(ask.buyHowMuch)));
-            askAmounts.base.push(askAmounts.base[askAmounts.base.length - 1].add(new BigNumber(ask.sellHowMuch)));
+            askAmounts.quote.push(askAmounts.quote[askAmounts.quote.length - 1].add(new BigNumber(ask.buyHowMuch.toString())));
+            askAmounts.base.push(askAmounts.base[askAmounts.base.length - 1].add(new BigNumber(ask.sellHowMuch.toString())));
           } else {
-            askAmounts.quote.push(new BigNumber(ask.buyHowMuch));
-            askAmounts.base.push(new BigNumber(ask.sellHowMuch));
+            askAmounts.quote.push(new BigNumber(ask.buyHowMuch.toString()));
+            askAmounts.base.push(new BigNumber(ask.sellHowMuch.toString()));
           }
         } else {
           // If there was already another offer for the same price we add the new amount
-          askAmounts.quote[index] = askAmounts.quote[index].add(new BigNumber(ask.buyHowMuch));
-          askAmounts.base[index] = askAmounts.base[index].add(new BigNumber(ask.sellHowMuch));
+          askAmounts.quote[index] = askAmounts.quote[index].add(new BigNumber(ask.buyHowMuch.toString()));
+          askAmounts.base[index] = askAmounts.base[index].add(new BigNumber(ask.sellHowMuch.toString()));
         }
       });
 
@@ -279,11 +279,11 @@ Template.chart.viewmodel({
 
           // Keep track of new price index and value
           bidPrices.push(bid.bid_price_sort);
-          bidAmounts.quote.push(new BigNumber(bid.sellHowMuch));
-          bidAmounts.base.push(new BigNumber(bid.buyHowMuch));
+          bidAmounts.quote.push(new BigNumber(bid.sellHowMuch.toString()));
+          bidAmounts.base.push(new BigNumber(bid.buyHowMuch.toString()));
         } else {
-          bidAmounts.quote[index] = bidAmounts.quote[index].add(new BigNumber(bid.sellHowMuch));
-          bidAmounts.base[index] = bidAmounts.base[index].add(new BigNumber(bid.buyHowMuch));
+          bidAmounts.quote[index] = bidAmounts.quote[index].add(new BigNumber(bid.sellHowMuch.toString()));
+          bidAmounts.base[index] = bidAmounts.base[index].add(new BigNumber(bid.buyHowMuch.toString()));
         }
 
         // It is necessary to update all the previous prices adding the actual amount (to make a cumulative graph)
@@ -295,8 +295,8 @@ Template.chart.viewmodel({
 
       // All price values (bids & asks)
       const vals = _.uniq(bidPrices.concat(askPrices).sort((a, b) => {
-        const val1 = new BigNumber(a);
-        const val2 = new BigNumber(b);
+        const val1 = new BigNumber(a.toString(10));
+        const val2 = new BigNumber(b.toString(10));
         if (val1.lt(val2)) {
           return -1;
         }
@@ -319,8 +319,8 @@ Template.chart.viewmodel({
           amountTool.quote = askAmounts.quote[index];
           amountTool.base = askAmounts.base[index];
         } else if (askPrices.length === 0 ||
-          (new BigNumber(vals[i])).lt((new BigNumber(askPrices[0]))) ||
-          (new BigNumber(vals[i])).gt((new BigNumber(askPrices[askPrices.length - 1])))) {
+          (new BigNumber(vals[i].toString(10))).lt((new BigNumber(askPrices[0].toString(10)))) ||
+          (new BigNumber(vals[i].toString(10))).gt((new BigNumber(askPrices[askPrices.length - 1].toString(10))))) {
           // If the price is lower or higher than the asks range there is not value to print in the graph
           amount = null;
           amountTool.quote = amountTool.base = null;
@@ -339,8 +339,8 @@ Template.chart.viewmodel({
           amountTool.quote = bidAmounts.quote[index];
           amountTool.base = bidAmounts.base[index];
         } else if (bidPrices.length === 0 ||
-          (new BigNumber(vals[i])).lt((new BigNumber(bidPrices[0]))) ||
-          (new BigNumber(vals[i])).gt((new BigNumber(bidPrices[bidPrices.length - 1])))) {
+          (new BigNumber(vals[i].toString(10))).lt((new BigNumber(bidPrices[0].toString(10)))) ||
+          (new BigNumber(vals[i].toString(10))).gt((new BigNumber(bidPrices[bidPrices.length - 1].toString(10))))) {
           // If the price is lower or higher than the bids range there is not value to print in the graph
           amount = null;
           amountTool.quote = amountTool.base = null;
