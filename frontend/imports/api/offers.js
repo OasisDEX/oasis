@@ -100,9 +100,10 @@ function fetchIssuedTradesFor(address) {
       if (!error) {
         for (let i = 0; i < logTakes.length; i++) {
           const trade = logTakeToTrade(logTakes[i]);
-
+          const eventLogIndex = logTakes[i].logIndex;
           if (trade) {
-            IndividualTrades.upsert(trade.transactionHash, trade);
+            const uniqueId = trade.transactionHash + eventLogIndex;
+            IndividualTrades.upsert(uniqueId, trade);
           }
         }
         resolve();
@@ -127,9 +128,10 @@ function fetchAcceptedTradesFor(address) {
           // We handle those scenario when we are filtering events base on maker property
           if (currentTrade.maker !== currentTrade.taker) {
             const trade = logTakeToTrade(logTakes[i]);
-
+            const eventLogIndex = logTakes[i].logIndex;
             if (trade) {
-              IndividualTrades.upsert(trade.transactionHash, trade);
+              const uniqueId = trade.transactionHash + eventLogIndex;
+              IndividualTrades.upsert(uniqueId, trade);
             }
           }
         }
@@ -629,6 +631,7 @@ Offers.fillOfferGasEstimate = (id, quantity) => {
       if (!error) {
         resolve(result);
       } else {
+        console.log(error);
         reject(error);
       }
     });
