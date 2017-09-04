@@ -87,7 +87,7 @@ function checkIfOrderMatchingEnabled(marketType) {
 
       Dapple['maker-otc'].objects.otc.LogMatchingEnabled({}, { fromBlock: 'latest' }, (err, status) => {
         if (!err) {
-          Session.set('isMatchingEnabled', status.args['']);
+          Session.set('isMatchingEnabled', status.args.isEnabled);
         }
       });
     }
@@ -115,7 +115,7 @@ function checkIfBuyEnabled(marketType) {
 
       Dapple['maker-otc'].objects.otc.LogBuyEnabled({}, { fromBlock: 'latest' }, (err, status) => {
         if (!err) {
-          Session.set('isBuyEnabled', status.args['']);
+          Session.set('isBuyEnabled', status.args.isEnabled);
         }
       });
     }
