@@ -1583,7 +1583,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
       }
     }
     td:last-child {
-      text-align: right;
+      text-align: left;
     }
   }
 
@@ -2616,7 +2616,7 @@ span.right {
   }
 
   td.dex-input-cell {
-    width: 330px;
+    width: 280px;
   }
 
   td.dex-input-cell {
@@ -2779,7 +2779,7 @@ a.logo:hover {
   }
 
   input.with-max-btn {
-    max-width: 240px;
+    max-width: 195px;
   }
 }
 
