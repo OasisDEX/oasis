@@ -22,9 +22,7 @@ Template.markets.viewmodel({
       const pair = givenPair;
       pair.volume = this.volume(givenPair);
       pair.price = this.price(givenPair);
-      pair.isVisible = function () {
-        return this.volume.gt(new BigNumber(0)) || this.priority > 0;
-      };
+      pair.isVisible = () => pair.volume.gt(new BigNumber(0)) || pair.priority > 0;
     });
     this.tradingPairs(this.sortByPriorityAndThenByVolume(pairs));
   },
@@ -209,6 +207,6 @@ Template.markets.viewmodel({
     });
   },
   showScroll() {
-    return this.tradingPairs().filter((pair) => pair.isVisible).length > 5 || this.showAll();
+    return this.tradingPairs().filter((pair) => pair.isVisible()).length > 5 || this.showAll();
   },
 });
