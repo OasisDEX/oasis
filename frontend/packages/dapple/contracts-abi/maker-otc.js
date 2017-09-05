@@ -14,7 +14,7 @@ Dapple['maker-otc'] = (function builder() {
     'live': {
       'otc': {
         'value': '',
-        'type': 'ExpiringMarket',
+        'type': 'MatchingMarket',
       },
     },
     'ropsten': {
