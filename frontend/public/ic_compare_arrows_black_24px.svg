@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="11px" height="8px" viewBox="0 0 11 8" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 45.1 (43504) - http://www.bohemiancoding.com/sketch -->
+    <title>ic_compare_arrows_black_24px</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0 0 24 0 24 24 0 24"></polygon>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="wrap" transform="translate(-332.000000, -292.000000)">
+            <g id="offer" transform="translate(92.000000, 86.000000)">
+                <g id="Group-11" transform="translate(30.000000, 186.000000)">
+                    <g id="ic_compare_arrows_black_24px" transform="translate(203.000000, 12.000000)">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <g id="a"></g>
+                        <polygon id="Path" fill="#49494A" mask="url(#mask-2)" points="14.01 11 7 11 7 13 14.01 13 14.01 16 18 12 14.01 8"></polygon>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

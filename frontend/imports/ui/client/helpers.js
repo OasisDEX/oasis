@@ -75,7 +75,13 @@ Template.registerHelper('syncingPercentage', () => {
 
 Template.registerHelper('loading', () => Session.get('loading'));
 
+Template.registerHelper('loadingBuyOrders', () => Session.get('loadingBuyOrders'));
+
+Template.registerHelper('loadingSellOrders', () => Session.get('loadingSellOrders'));
+
 Template.registerHelper('loadingProgress', () => Session.get('loadingProgress'));
+
+Template.registerHelper('loadingCounter', () => Session.get('loadingCounter'));
 
 Template.registerHelper('loadingTransferHistory', () => Session.get('loadingTransferHistory'));
 
@@ -86,7 +92,7 @@ Template.registerHelper('loadingTradeHistory', () => Session.get('loadingTradeHi
 Template.registerHelper('loadingIndividualTradeHistory', () => Session.get('loadingIndividualTradeHistory'));
 
 Template.registerHelper('loadedCurrencies', () => Session.get('balanceLoaded') === true
-&& Session.get('allowanceLoaded') === true);
+&& Session.get('allowanceLoaded') === true && Session.get('limitsLoaded') === true);
 
 Template.registerHelper('loadingTokenEvents', (txHash) => {
   const currentlyLoading = Session.get('loadingTokenEvents');
@@ -142,20 +148,16 @@ Template.registerHelper('lastTrades', () => {
 Template.registerHelper('countOffers', (type) => {
   const quoteCurrency = Session.get('quoteCurrency');
   const baseCurrency = Session.get('baseCurrency');
-  const dustLimitMap = Session.get('orderBookDustLimit');
-  const dustLimit = dustLimitMap[quoteCurrency] ? dustLimitMap[quoteCurrency] : 0;
 
   if (type === 'ask') {
     return Offers.find({
       buyWhichToken: quoteCurrency,
       sellWhichToken: baseCurrency,
-      buyHowMuch_filter: { $gte: dustLimit },
     }).count();
   } else if (type === 'bid') {
     return Offers.find({
       buyWhichToken: baseCurrency,
       sellWhichToken: quoteCurrency,
-      sellHowMuch_filter: { $gte: dustLimit },
     }).count();
   }
   return 0;
@@ -165,26 +167,22 @@ Template.registerHelper('findOffers', (type) => {
   const quoteCurrency = Session.get('quoteCurrency');
   const baseCurrency = Session.get('baseCurrency');
   const limit = Session.get('orderBookLimit');
-  const dustLimitMap = Session.get('orderBookDustLimit');
-  const dustLimit = dustLimitMap[quoteCurrency] ? dustLimitMap[quoteCurrency] : 0;
 
   const options = {};
-  options.sort = { ask_price_sort: 1, _id: -1 };
   if (limit) {
     options.limit = limit;
   }
-
   if (type === 'ask') {
+    options.sort = { ask_price_sort: 1, _id: 1 };
     return Offers.find({
       buyWhichToken: quoteCurrency,
       sellWhichToken: baseCurrency,
-      buyHowMuch_filter: { $gte: dustLimit },
     }, options);
   } else if (type === 'bid') {
+    options.sort = { bid_price_sort: -1, _id: 1 };
     return Offers.find({
       buyWhichToken: baseCurrency,
       sellWhichToken: quoteCurrency,
-      sellHowMuch_filter: { $gte: dustLimit },
     }, options);
   }
   return [];
@@ -242,7 +240,11 @@ Template.registerHelper('or', (a, b) => a || b);
 
 Template.registerHelper('and', (a, b) => a && b);
 
+Template.registerHelper('ternary', (logical, yes, no) => (logical ? yes : no));
+
 Template.registerHelper('gt', (a, b) => a > b);
+
+Template.registerHelper('multiply', (a, b) => a * b);
 
 Template.registerHelper('concat', (...args) => Array.prototype.slice.call(args, 0, -1).join(''));
 
@@ -360,7 +362,14 @@ Template.registerHelper('formatBalance', (wei, decimals, currency, sle) => {
   return finalValue;
 });
 
+Template.registerHelper('formatLimit', (limitReport) => {
+  const precision = Dapple.getTokenSpecs(limitReport.token).precision;
+  const tokenLimit = new BigNumber(limitReport.limit);
+  return tokenLimit.div(new BigNumber(10).pow(precision));
+});
+
 Template.registerHelper('formatNumber', (value, decimals, sle) => {
+  const precision = Session.get('precision');
   let decimalsValue = decimals;
   if (decimalsValue instanceof Spacebars.kw) {
     decimalsValue = null;
@@ -369,7 +378,7 @@ Template.registerHelper('formatNumber', (value, decimals, sle) => {
   if (showLabelExact instanceof Spacebars.kw) {
     showLabelExact = null;
   }
-  decimalsValue = decimalsValue || 5;
+  decimalsValue = decimalsValue || ((precision && precision < 5) ? precision : 5);
 
   const exactValue = thousandSeparator(value);
   const finalValue = formatNumber(value, decimalsValue);
@@ -379,6 +388,11 @@ Template.registerHelper('formatNumber', (value, decimals, sle) => {
   }
 
   return finalValue;
+});
+
+Template.registerHelper('formatGasLimit', (gasLimit, size, suffix) => {
+  const formattedGasLimit = gasLimit / size;
+  return `${formattedGasLimit.toPrecision(2)}${suffix}`;
 });
 
 Template.registerHelper('determineOrderType', (order, section) => {
@@ -391,7 +405,7 @@ Template.registerHelper('determineOrderType', (order, section) => {
     } else if (order.sellWhichToken === baseCurrency) {
       type = 'bid';
     }
-  } else if (section === 'myTrades' && order.counterParty) { // this reflects only trades which are closed ( has a counterparty)
+  } else if (section === 'myOrders' && order.counterParty) { // this reflects only trades which are closed ( has a counterparty)
     if (address === order.issuer && order.buyWhichToken === baseCurrency) {
       type = 'bid';
     } else if (address === order.issuer && order.sellWhichToken === baseCurrency) {
@@ -415,3 +429,8 @@ Template.registerHelper('loadingIcon', (size) => {
 });
 
 Template.registerHelper('volumeSelector', () => Session.get('volumeSelector'));
+
+Template.registerHelper('isMatchingEnabled', () => Session.get('isMatchingEnabled'));
+
+Template.registerHelper('isBuyEnabled', () => !Session.get('isMatchingEnabled') ||
+(Session.get('isBuyEnabled') && Session.get('isMatchingEnabled')));

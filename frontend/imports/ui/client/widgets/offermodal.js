@@ -4,35 +4,66 @@ import { $ } from 'meteor/jquery';
 import { BigNumber } from 'meteor/ethereum:web3';
 import { web3Obj } from 'meteor/makerotc:dapple';
 import { formatError } from '/imports/utils/functions';
+import { convertToTokenPrecision } from '/imports/utils/conversion';
 
 import Tokens from '/imports/api/tokens';
+import Limits from '/imports/api/limits';
 import { Offers, Status } from '/imports/api/offers';
 
 import './offermodal.html';
 
-// TODO: DELETE THIS, TESTING PURPOSE
-window.Tokens = Tokens;
+const latest = require('promise-latest');
 
 Template.offermodal.viewmodel({
   share: 'newOffer',
   volume: '',
   total: '',
-  autorun() {
-    if (Template.currentData().offer) {
-      const buyHowMuch = web3Obj.fromWei(new BigNumber(Template.currentData().offer.buyHowMuch)).toString(10);
-      const sellHowMuch = web3Obj.fromWei(new BigNumber(Template.currentData().offer.sellHowMuch)).toString(10);
-      const baseCurrency = Session.get('baseCurrency');
-      if (baseCurrency === Template.currentData().offer.buyWhichToken) {
-        this.volume(buyHowMuch);
-        this.total(sellHowMuch);
-      } else {
-        this.volume(sellHowMuch);
-        this.total(buyHowMuch);
+  priceInUSD: '',
+  gasLimit: '',
+  gasEstimateInETH: 0,
+  gasEstimateInProgress: false,
+  gasEstimateMoreThanGasLimit: false,
+  gasEstimateResult: null,
+  gasEstimateError: null,
+  shouldShowMaxBtn: false,
+  onRendered() {
+    $('#newOrderModal').on('shown.bs.modal', () => {
+      this.fetchCurrentPriceInUSD();
+    });
+    $('#offerModal').on('shown.bs.modal', () => {
+      this.fetchCurrentPriceInUSD();
+      const offer = this.templateInstance.data.offer;
+      if (offer) {
+        const buyHowMuch = web3Obj.fromWei(new BigNumber(offer.buyHowMuch)).toString(10);
+        const baseCurrency = Session.get('baseCurrency');
+        if (baseCurrency === offer.buyWhichToken) {
+          this.fillOrderPartiallyOrFully(this.volume, this.baseAvailable(), web3Obj.toWei(buyHowMuch));
+          this.calcTotal();
+        } else {
+          this.fillOrderPartiallyOrFully(this.total, this.quoteAvailable(), web3Obj.toWei(buyHowMuch));
+          this.calcVolume();
+        }
       }
-    }
+    });
+  },
+  events : {
+    'keyup input[data-requires-precision]'(event) {
+      const precision = Session.get('precision');
+      const value = event.target.value;
+
+      try {
+        const amount = new BigNumber(value || 0);
+        if (amount.decimalPlaces() > precision) {
+          $(event.target).val(amount.toFixed(precision), 6);
+          $(event.target).trigger('change');
+        }
+      } catch (exception) {
+        console.debug('Provided value in the input field is not a number!', exception);
+      }
+    },
   },
   precision() {
-    return Dapple.getTokenSpecs(Session.get('baseCurrency')).precision;
+    return Session.get('precision');
   },
   validAmount: true,
   validNewOrderAmount: true,
@@ -53,6 +84,20 @@ Template.offermodal.viewmodel({
   },
   baseToken() {
     return Tokens.findOne(Session.get('baseCurrency'));
+  },
+  baseAvailable() {
+    const token = Tokens.findOne(Session.get('baseCurrency'));
+    if (token) {
+      return token.balance;
+    }
+    return 0;
+  },
+  quoteAvailable() {
+    const token = Tokens.findOne(Session.get('quoteCurrency'));
+    if (token) {
+      return token.balance;
+    }
+    return 0;
   },
   hasBalance() {
     try {
@@ -83,6 +128,30 @@ Template.offermodal.viewmodel({
     } catch (e) {
       return false;
     }
+  },
+  fillOrderPartiallyOrFully(amount, available, buyHowMuch) {
+    if (new BigNumber(available, 10).lessThan(new BigNumber(buyHowMuch, 10))) {
+      amount(web3Obj.fromWei(available));
+    } else {
+      amount(web3Obj.fromWei(buyHowMuch));
+    }
+  },
+  isAmountEnough(amount = 0, token) {
+    if (!amount || !token) return { hasShortage: false };
+
+    const tokenAmount = new BigNumber(convertToTokenPrecision(amount, token));
+    const limit = Limits.limitForToken(token);
+    const hasShortage = tokenAmount.lessThan(limit);
+    return { token, limit, hasShortage };
+  },
+  limit() {
+    const noShortage = { hasShortage: false };
+    const quoteReport = this.isAmountEnough(this.offerTotal(), Session.get('quoteCurrency'));
+    const baseReport = this.isAmountEnough(this.offerAmount(), Session.get('baseCurrency'));
+
+    if (quoteReport.hasShortage) return quoteReport;
+    if (baseReport.hasShortage) return baseReport;
+    return noShortage;
   },
   hasVolume() {
     try {
@@ -145,13 +214,13 @@ Template.offermodal.viewmodel({
     }
     try {
       const baseCurrency = Session.get('baseCurrency');
-      const total = new BigNumber(this.total());
-      const buyHowMuch = new BigNumber(this.templateInstance.data.offer.buyHowMuch);
-      const sellHowMuch = new BigNumber(this.templateInstance.data.offer.sellHowMuch);
+      const total = new BigNumber(this.total(), 10).toFixed(this.precision(), 6);
+      const buyHowMuch = new BigNumber(new BigNumber(this.templateInstance.data.offer.buyHowMuch, 10).toFixed(this.precision(), 6), 10);
+      const sellHowMuch = new BigNumber(new BigNumber(this.templateInstance.data.offer.sellHowMuch, 10).toFixed(this.precision(), 6), 10);
       if (this.templateInstance.data.offer.buyWhichToken === baseCurrency) {
-        this.volume(buyHowMuch.div(sellHowMuch).times(total).toString(10));
+        this.volume(buyHowMuch.times(total).div(sellHowMuch).toFixed(this.precision(), 6));
       } else {
-        this.volume(sellHowMuch.div(buyHowMuch).times(total).toString(10));
+        this.volume(sellHowMuch.times(total).div(buyHowMuch).toFixed(this.precision(), 6));
       }
     } catch (e) {
       this.volume('0');
@@ -166,15 +235,16 @@ Template.offermodal.viewmodel({
     }
     try {
       const baseCurrency = Session.get('baseCurrency');
-      const volume = new BigNumber(this.volume());
-      const buyHowMuch = new BigNumber(this.templateInstance.data.offer.buyHowMuch);
-      const sellHowMuch = new BigNumber(this.templateInstance.data.offer.sellHowMuch);
+      const volume = new BigNumber(this.volume(), 10).toFixed(this.precision(), 6);
+      const buyHowMuch = new BigNumber(new BigNumber(this.templateInstance.data.offer.buyHowMuch, 10).toFixed(this.precision(), 6), 10);
+      const sellHowMuch = new BigNumber(new BigNumber(this.templateInstance.data.offer.sellHowMuch, 10).toFixed(this.precision(), 6), 10);
       if (this.templateInstance.data.offer.buyWhichToken === baseCurrency) {
-        this.total(sellHowMuch.div(buyHowMuch).times(volume).toString(10));
+        this.total(sellHowMuch.times(volume).div(buyHowMuch).toFixed(this.precision(), 6));
       } else {
-        this.total(buyHowMuch.div(sellHowMuch).times(volume).toString(10));
+        this.total(buyHowMuch.times(volume).div(sellHowMuch).toFixed(this.precision(), 6));
       }
     } catch (e) {
+      console.log(e);
       this.total('0');
     }
   },
@@ -183,12 +253,13 @@ Template.offermodal.viewmodel({
     if (this.precision() === 0 && this.offerAmount() % 1 !== 0) {
       this.validNewOrderAmount(false);
       this.offerTotal('0');
+      this.estimateGasUsage();
       return;
     }
     try {
-      const price = new BigNumber(this.offerPrice());
-      const amount = new BigNumber(this.offerAmount());
-      const total = price.times(amount);
+      const price = new BigNumber(new BigNumber(this.offerPrice(), 10).toFixed(this.precision(), 6), 10);
+      const amount = new BigNumber(new BigNumber(this.offerAmount(), 10).toFixed(this.precision(), 6), 10);
+      const total = new BigNumber(price.times(amount), 10);
       if (total.isNaN()) {
         this.offerTotal('0');
       } else {
@@ -197,22 +268,24 @@ Template.offermodal.viewmodel({
     } catch (e) {
       this.offerTotal('0');
     }
+    this.estimateGasUsage();
   },
   calcNewOfferAmount() {
     this.validNewOrderAmount(true);
     if (this.precision() === 0 && this.offerTotal() % 1 !== 0) {
       this.validNewOrderAmount(false);
       this.offerAmount('0');
+      this.estimateGasUsage();
       return;
     }
     try {
-      const price = new BigNumber(this.offerPrice());
-      let amount = new BigNumber(this.offerAmount());
-      const total = new BigNumber(this.offerTotal());
+      const price = new BigNumber(new BigNumber(this.offerPrice(), 10).toFixed(this.precision(), 6), 10);
+      const total = new BigNumber(new BigNumber(this.offerTotal(), 10).toFixed(this.precision(), 6), 10);
+      let amount = new BigNumber(this.offerAmount() || 0, 10);
       if (total.isZero() && price.isZero() && (amount.isNaN() || amount.isNegative())) {
         this.offerAmount('0');
       } else if (!total.isZero() || !price.isZero()) {
-        amount = total.div(price);
+        amount = new BigNumber(total.div(price).toFixed(this.precision(), 6), 10);
         if (amount.isNaN()) {
           this.offerAmount('0');
         } else {
@@ -222,32 +295,62 @@ Template.offermodal.viewmodel({
     } catch (e) {
       this.offerAmount('0');
     }
+    this.estimateGasUsage();
   },
   alertBetterOffer() {
     let bestOffer = null;
-    const dustLimitMap = Session.get('orderBookDustLimit');
-    const dustLimit = dustLimitMap[Session.get('quoteCurrency')] ? dustLimitMap[Session.get('quoteCurrency')] : 0;
 
     if (this.type() === 'bid') {
       bestOffer = Offers.findOne({
-        buyWhichToken: Session.get('baseCurrency'),
-        sellWhichToken: Session.get('quoteCurrency'),
-        sellHowMuch_filter: { $gte: dustLimit },
-      },
+          buyWhichToken: Session.get('baseCurrency'),
+          sellWhichToken: Session.get('quoteCurrency'),
+        },
         {
           sort: { ask_price_sort: 1 },
         });
       return (new BigNumber(bestOffer.bid_price)).gt(new BigNumber(this.templateInstance.data.offer.bid_price));
     } else if (this.type() === 'ask') {
       bestOffer = Offers.findOne({
-        buyWhichToken: Session.get('quoteCurrency'),
-        sellWhichToken: Session.get('baseCurrency'),
-        buyHowMuch_filter: { $gte: dustLimit },
-      },
+          buyWhichToken: Session.get('quoteCurrency'),
+          sellWhichToken: Session.get('baseCurrency'),
+        },
         {
           sort: { ask_price_sort: 1 },
         });
       return (new BigNumber(bestOffer.ask_price)).lt(new BigNumber(this.templateInstance.data.offer.ask_price));
+    }
+    return false;
+  },
+  autofill(event) {
+    event.preventDefault();
+    const marketOpen = Session.get('market_open');
+    let available = 0;
+    if (!marketOpen) return false;
+    if (this.offerType() === 'buy') {
+      available = web3Obj.fromWei(this.quoteAvailable()).toString(10);
+      this.offerTotal(available);
+      this.calcNewOfferAmount();
+    } else if (this.offerType() === 'sell') {
+      available = web3Obj.fromWei(this.baseAvailable()).toString(10);
+      this.offerAmount(available);
+      this.calcNewOfferTotal();
+    }
+    return false;
+  },
+  // this is nonsense but since someone decided to use same js and html , but different offer object, this is the way.
+  autofillOrder(event) {
+    event.preventDefault();
+    const marketOpen = Session.get('market_open');
+    let available = 0;
+    if (!marketOpen) return false;
+    if (this.offer().type() === 'ask') {
+      available = web3Obj.fromWei(this.quoteAvailable()).toString(10);
+      this.total(available);
+      this.calcVolume();
+    } else if (this.offer().type() === 'bid') {
+      available = web3Obj.fromWei(this.baseAvailable()).toString(10);
+      this.volume(available);
+      this.calcTotal();
     }
     return false;
   },
@@ -325,17 +428,15 @@ Template.offermodal.viewmodel({
       const total = new BigNumber(this.offerTotal());
       const maxTotal = new BigNumber(this.maxNewOfferTotal());
       const marketOpen = Session.get('market_open');
+      const limitReport = this.limit();
       const validTokenPair = Session.get('quoteCurrency') !== Session.get('baseCurrency');
-      return marketOpen && price.gt(0) && amount.gt(0) && total.gt(0) && validTokenPair &&
+      return marketOpen && price.gt(0) && amount.gt(0) && total.gt(0) && validTokenPair && !limitReport.hasShortage &&
         (type !== 'buy' || total.lte(maxTotal)) && (type !== 'sell' || amount.lte(maxAmount));
     } catch (e) {
       return false;
     }
   },
-  confirmOffer(event) {
-    event.preventDefault();
-
-    this.offerError('');
+  newOfferParameters() {
     let sellHowMuch;
     let sellWhichToken;
     let buyHowMuch;
@@ -351,13 +452,125 @@ Template.offermodal.viewmodel({
       buyWhichToken = Session.get('quoteCurrency');
       buyHowMuch = this.offerTotal();
     }
+    return { sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken };
+  },
+  onSuccessfulGasEstimation(gas) {
+    if (this.gasEstimateInProgress()) {
+      this.gasLimit(gas.limit);
+      this.gasEstimateError(null);
+      this.gasEstimateResult(gas.quantity);
+      this.gasEstimateMoreThanGasLimit(gas.quantity > gas.limit);
+      this.gasEstimateInProgress(false);
+    }
+  },
+  onFailedGasEstimation(error) {
+    if (this.gasEstimateInProgress()) {
+      this.gasLimit('');
+      this.gasEstimateError(error);
+      this.gasEstimateResult(null);
+      this.gasEstimateMoreThanGasLimit(false);
+      this.gasEstimateInProgress(false);
+    }
+  },
+  estimateGasUsage() {
+    this.gasEstimateResult(null);
+    this.gasEstimateMoreThanGasLimit(false);
+    this.gasEstimateError(null);
+    if (this.canSubmit()) {
+      this.gasEstimateInProgress(true);
+
+      const { sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken } = this.newOfferParameters();
+      latest(Offers.newOfferGasEstimate)(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken)
+        .then((result) => {
+          if (this.gasEstimateInProgress()) {
+            this.gasLimit(result[1]);
+            this.gasEstimateError(null);
+            this.gasEstimateResult(result[0]);
+            this.gasEstimateMoreThanGasLimit(result[0] > result[1]);
+            this.gasEstimateInProgress(false);
+          }
+        })
+        .catch((error) => {
+          if (this.gasEstimateInProgress()) {
+            this.gasLimit('');
+            this.gasEstimateError(error);
+            this.gasEstimateResult(null);
+            this.gasEstimateMoreThanGasLimit(false);
+            this.gasEstimateInProgress(false);
+          }
+        });
+    } else {
+      this.gasEstimateInProgress(false);
+    }
+  },
+  estimateFillingGasUsage() {
+    this.gasEstimateResult(null);
+    this.gasEstimateMoreThanGasLimit(false);
+    this.gasEstimateError(null);
+    const offerId = this.templateInstance.data.offer ? this.templateInstance.data.offer._id : '';
+    const type = this.templateInstance.data.offer ? this.templateInstance.data.offer.type() : '';
+    const offer = Offers.findOne(offerId);
+
+    if (offer) {
+      let quantity = new BigNumber(this.volume());
+
+      if (type === 'bid') {
+        quantity = new BigNumber(this.total());
+      }
+
+      quantity = convertToTokenPrecision(quantity, offer.sellWhichToken);
+
+      this.gasEstimateInProgress(true);
+      latest(Offers.fillOfferGasEstimate)(offerId, quantity)
+        .then((estimatedGas) => { this.onSuccessfulGasEstimation(estimatedGas); })
+        .catch((error) => { this.onFailedGasEstimation(error); });
+    }
+  },
+
+  estimateGasInETH(gas) {
+    web3Obj.eth.getGasPrice((err, priceValue) => {
+      if (!err) {
+        const price = new BigNumber(priceValue);
+        const gasQuantity = new BigNumber(gas);
+        this.gasEstimateInETH(web3Obj.fromWei(price.mul(gasQuantity)).toString(10));
+      } else {
+        console.debug('Cannot get gas price', err);
+      }
+    });
+  },
+  confirmOffer(event) {
+    event.preventDefault();
+    this.offerError('');
+
+    const { sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken } = this.newOfferParameters();
     Offers.newOffer(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, (error) => {
       if (error != null) {
         this.offerError(formatError(error));
       }
       // Cleaning inputs
-      $('.row-input-line input[type=number]').val(0);
+      Session.set('selectedOrder', '');
+      $('.row-input-line input[type=number]').val('');
+      $('.row-input-line input[type=number]').trigger('change');
     });
+  },
+  fetchCurrentPriceInUSD() {
+    if (!this.priceInUSD()) {
+      $.get('https://api.coinmarketcap.com/v1/ticker/ethereum/', (data) => {
+        this.priceInUSD(data[0].price_usd);
+      }).fail((error) => console.debug(error));
+    }
+  },
+  canAutofill() {
+    return Session.get('market_open');
+  },
+  onFocus() {
+    this.shouldShowMaxBtn(true);
+  },
+  onBlur() {
+    this.shouldShowMaxBtn(false);
+  },
+  focusOnInput(event) {
+    $(event.target).find('input.with-max-btn').focus();
   },
 });
 

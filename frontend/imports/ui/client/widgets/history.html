@@ -11,7 +11,7 @@
             <th class="th-action">ACTION</th>
           {{/if}}
           {{#if equals historyType 'depositHistory'}}
-            <th class="th-type">TYPE</th>
+            <th class="th-type">ACTION</th>
             <th class="th-coin">COIN</th>
           {{else}}
             <th class="th-recipient">RECIPIENT</th>
@@ -40,9 +40,9 @@
                 </td>
                 <td class="type">
                   {{#if equals this.type 'deposit'}}
-                    wrap
+                    WRAP
                   {{else}}
-                    unwrap
+                    UNWRAP
                   {{/if}}
                 </td>
                 <td class="coin">{{this.token}}</td>

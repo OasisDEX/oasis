@@ -28,6 +28,9 @@ Template.sendtokens.viewmodel({
   onBlur() {
     this.shouldShowMaxBtn(false);
   },
+  focusOnInput(event) {
+    $(event.target).find('input.with-max-btn').focus();
+  },
   precision() {
     return Dapple.getTokenSpecs(this.currency()).precision;
   },

@@ -7,10 +7,10 @@
         </section>
         <section class="col-xs-0">
           {{> volumes }}
-        </section>        
-        <section class="col-xs-6">        
+        </section>
+        <section class="col-xs-6">
           {{> accountSelector }}
-        </section>        
+        </section>
       </div>
       <div class="row row-header row-messages">
         {{> messages}}
@@ -18,7 +18,7 @@
       {{#if ready}}
         {{#if contractExists}}
           <div class="row row-tabs">
-            {{> tabs }}        
+            {{> tabs }}
           </div>
           <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="trade">{{> maintrades}}</div>
@@ -28,6 +28,7 @@
         {{/if}}
       {{/if}}
     {{/if}}
+    {{> wrapperUpdate }}
     {{#unless isConnected}}
       {{> noEthereum}}
     {{else}}

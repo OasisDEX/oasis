@@ -1,15 +1,15 @@
 const config = require('./config.json');
 const ENVs = {
-    "test":"kovan",
-    "main":"live",
-    "private":"default"
-}
+  'test': 'kovan',
+  'main': 'live',
+  'private': 'default',
+};
 
 Dapple.init = function init(env) {
   var predefinedEnv = ENVs[env];
 
   if (!predefinedEnv) {
-      predefinedEnv = env;
+    predefinedEnv = env;
   }
 
   Dapple.env = predefinedEnv;
@@ -32,8 +32,10 @@ const tokens = config.tokens;
 
 // http://numeraljs.com/ for formats
 const tokenSpecs = {
+  'OW-ETH': { precision: 18, format: '0,0.00[0000000000000000]' },
   'W-ETH': { precision: 18, format: '0,0.00[0000000000000000]' },
   DAI: { precision: 18, format: '0,0.00[0000000000000000]' },
+  SAI: { precision: 18, format: '0,0.00[0000000000000000]' },
   MKR: { precision: 18, format: '0,0.00[0000000000000000]' },
   DGD: { precision: 9, format: '0,0.00[0000000]' },
   GNT: { precision: 18, format: '0,0.00[0000000000000000]' },
@@ -47,19 +49,47 @@ const tokenSpecs = {
   MLN: { precision: 18, format: '0,0.00[0000000000000000]' },
   RHOC: { precision: 8, format: '0,0.00[000000]' },
   TIME: { precision: 8, format: '0,0.00[000000]' },
-  GUP: { precision: 3, format: '0,0.00[0]'  },
+  GUP: { precision: 3, format: '0,0.00[0]' },
   BAT: { precision: 18, format: '0,0.00[0000000000000000]' },
   NMR: { precision: 18, format: '0,0.00[0000000000000000]' },
 };
 
-const primaryTokens = ['MKR', 'W-GNT'];
-const secondaryTokens = ['DGD', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC', 'TIME', 'GUP', 'BAT', 'NMR'];
-
 Dapple.getQuoteTokens = () => ['W-ETH'];
 
-Dapple.getBaseTokens = () => primaryTokens.concat(secondaryTokens);
+Dapple.getBaseTokens = () => ['W-GNT', 'DGD', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'TIME', 'GUP', 'BAT', 'NMR'];
 
-Dapple.getTokens = () => ['W-ETH', 'MKR', 'DGD', 'GNT', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC', 'TIME', 'GUP', 'BAT', 'NMR'];
+Dapple.getTokens = () => ['W-ETH', 'MKR', 'DGD', 'GNT', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'TIME', 'GUP', 'BAT', 'NMR', 'SAI'];
+
+Dapple.generatePairs = () => {
+  const TradingPairs = [
+    {
+      base: 'MKR',
+      quote: 'W-ETH',
+      priority: 10,
+    },
+    {
+      base: 'W-ETH',
+      quote: 'SAI',
+      priority: 9,
+    },
+    {
+      base: 'MKR',
+      quote: 'SAI',
+      priority: 8,
+    },
+  ];
+
+  Dapple.getBaseTokens().forEach((base) => {
+    Dapple.getQuoteTokens().forEach((quote) => {
+      TradingPairs.push({
+        base,
+        quote,
+        priority: 0,
+      });
+    });
+  });
+  return TradingPairs;
+};
 
 Dapple.getTokenSpecs = (symbol) => {
   if (typeof (tokenSpecs[symbol]) !== 'undefined') {
@@ -86,7 +116,7 @@ Dapple.getToken = (symbol, callback) => {
   let tokenClass = 'DSTokenBase';
   let that = Dapple['ds-eth-token'];
 
-  if (symbol === 'W-ETH') {
+  if (symbol === 'W-ETH' || symbol === 'OW-ETH') {
     tokenClass = 'DSEthToken';
   } else if (symbol === 'W-GNT') {
     tokenClass = 'TokenWrapper';

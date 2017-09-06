@@ -3,7 +3,8 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content modal-order">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
           {{#if equals offer.type 'bid'}}
             <h4 class="modal-title">BUY OFFER</h4>
           {{else}}
@@ -14,120 +15,288 @@
           {{#if offer}}
             <table>
               <tbody>
-                <tr class="row-data-line">
-                  <th>ALLOWANCE</th>
-                  {{#if equals offer.type 'bid'}}
-                    <td>{{{formatBalance baseToken.allowance '' '' true}}} <span class="allowance-currency">{{baseToken._id}}</span></td>
-                  {{else}}
-                    <td>{{{formatBalance quoteToken.allowance '' '' true}}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
-                  {{/if}}
-                </tr>
-                <tr class="row-data-line">
-                  <th>AVAILABLE</th>
-                  {{#if equals offer.type 'bid'}}
-                    <td>{{{formatBalance baseToken.balance '' '' true}}} <span class="allowance-currency">{{baseToken._id}}</span></td>
-                  {{else}}
-                    <td>{{{formatBalance quoteToken.balance '' '' true}}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
-                  {{/if}}
-                </tr>
-                <tr class="row-data-line owner">
-                  <th class="th-owner">OWNER</th>
-                  <td class="td-owner"><span class="span-owner">{{offer.owner}} {{#if equals offer.owner address}}(<span class="text-success">you</span>){{/if}}</span></td>
-                </tr>
-                <tr class="row-data-line">
-                  <th>PRICE</th>
-                  <td>{{{formatNumber offer.price '' true}}} <span class="span-offer-currency">{{quoteCurrency}}</span></td>
+              <tr class="row-data-line">
+                <th>ALLOWANCE</th>
+                {{#if equals offer.type 'bid'}}
+                  <td>{{{formatBalance baseToken.allowance '' '' true}}} <span
+                    class="allowance-currency">{{baseToken._id}}</span></td>
+                {{else}}
+                  <td>{{{formatBalance quoteToken.allowance '' '' true}}} <span
+                    class="allowance-currency">{{quoteToken._id}}</span></td>
+                {{/if}}
+              </tr>
+              <tr class="row-data-line">
+                <th>AVAILABLE</th>
+                {{#if equals offer.type 'bid'}}
+                  <td>{{{formatBalance baseToken.balance '' '' true}}} <span
+                    class="allowance-currency">{{baseToken._id}}</span></td>
+                {{else}}
+                  <td>{{{formatBalance quoteToken.balance '' '' true}}} <span
+                    class="allowance-currency">{{quoteToken._id}}</span></td>
+                {{/if}}
+              </tr>
+              </tbody>
+            </table>
+            <section class="input-section">
+              <table class="bordered">
+                <tbody>
+                <tr class="row-input-line">
+                  <th class="dex-label-cell">
+                    <span>PRICE</span>
+                  </th>
+                  <td class="dex-input-cell">
+                    <span class="read-only">{{{formatNumber offer.price '' true}}}</span>
+                  </td>
+                  <td class="dex-currency-cell">
+                    <span>{{quoteCurrency}}</span>
+                  </td>
                 </tr>
                 <tr class="row-input-line">
-                  <th>VOLUME</th>
-                  <td><input type="number" class="input" step="any" min="0" max={{maxVolume}} {{b "value: volume, input: calcTotal"}}> <span class="span-offer-currency">{{baseCurrency}}</span></td>
+                  <th class="dex-label-cell">
+                    <span>VOLUME</span>
+                  </th>
+                  <td class="dex-input-cell">
+                    <input data-requires-precision type="number" class="input" step="any" min="0" max={{maxVolume}}
+                      {{b "value: volume, input: calcTotal"}}>
+                  </td>
+                  <td class="dex-currency-cell">
+                    <span>{{baseCurrency}}</span>
+                  </td>
                 </tr>
                 <tr class="row-input-line">
-                  <th>TOTAL</th>
-                  <td><input type="number" class="input" step="any" min="0" max={{maxTotal}} {{b "value: total, input: calcVolume"}}> <span class="span-offer-currency">{{quoteCurrency}}</span></td>
+                  <th class="dex-label-cell">
+                    <span>TOTAL</span>
+                  </th>
+                  <td class="dex-input-cell" {{b "click:focusOnInput"}}>
+                    <div {{b "focusin: onFocus, focusout: onBlur"}}>
+                      {{#if and canAutofill shouldShowMaxBtn  }}
+                        <button type="button" class="btn btn-sm btn-default dex-btn-max
+                           {{#if equals offer.type 'bid'}}sell{{else}}buy{{/if}}"
+                          {{b "click: autofillOrder"}}>{{#if equals offer.type 'bid'}}SELL{{else}}BUY{{/if}} MAX
+                        </button>
+                      {{/if}}
+                      <input data-requires-precision type="number" class="input with-max-btn" step="any" min=""
+                             placeholder="0" max={{maxTotal}}
+                        {{b "value: total, input: calcVolume"}}>
+                    </div>
+                  </td>
+                  <td class="dex-currency-cell">
+                    <span>{{quoteCurrency}}</span>
+                  </td>
                 </tr>
                 {{#if offer.helper}}
                   <tr>
                     <td colspan="2">{{offer.helper}}</td>
                   </tr>
                 {{/if}}
-              </tbody>
-            </table>
-            <div class="div-modal-text row">
-              <div class="col-xs-1">
-                <img src="order-warning.svg" class="order-warning">
-              </div>
-              <div class="col-xs-11">
-                {{#unless isMarketOpen}}
-                  <span class="text-danger">
-                    The market has closed.
-                  </span>
-                {{/unless}}
-                {{#unless validAmount}}
-                  <span class="text-danger">
-                    Amount is invalid because {{baseCurrency}} has no decimals.
-                  </span>
-                {{/unless}}
-                {{#unless hasVolume}}
-                  <span class="text-danger">
-                    The order doesn't have a high enough {{buyCurrency}} volume.
-                  </span>
-                {{else}}
-                  {{#unless hasBalance}}
-                    <span class="text-danger">
-                      You don't have enough {{#if equals sellCurrency 'W-ETH'}}<a href="#ethtokens" {{b "click: dismiss"}}>{{sellCurrency}}</a>{{else}}{{sellCurrency}}{{/if}} tokens.
-                    </span>
-                  {{else}}
-                    {{#unless hasAllowance}}
-                      <span class="text-danger">
-                        You are trying to complete a {{offerType}} order above your <strong>defined allowance</strong>.
-                      </span>
-                    {{else}}
-                      <span class="text-danger">
-                        {{#if equals offer.type 'bid'}}
-                          This action will remove {{{formatBalance (toWei volume) '' '' true}}} {{baseCurrency}} {{formatPrice (toWei volume) baseCurrency}} from your token balance and allowance,
-                          and add {{{formatBalance (toWei total) '' '' true}}} {{quoteCurrency}} {{formatPrice (toWei total) quoteCurrency}} to your token balance.
-                        {{else}}
-                          This action will remove {{{formatBalance (toWei total) '' '' true}}} {{quoteCurrency}} {{formatPrice (toWei total) quoteCurrency}} from your token balance and allowance,
-                          and add {{{formatBalance (toWei volume) '' '' true}}} {{baseCurrency}} {{formatPrice (toWei volume) baseCurrency}} to your token balance.
-                        {{/if}}
-                        <br>
-                        If someone (partially) fills this order before you do, your offer may only be partially filled or even denied, in which case unused funds will be refunded to your balance and allowance.
-                      </span>
+                </tbody>
+              </table>
+            </section>
+            <section>
+              <div class="row-fluid">
+                <div class="row">
+                  <div class="col-xs-12">
+                    {{#unless validAmount}}
+                      <div class="row-fluid">
+                        <div class="col-xs-12">
+                          <div class="row div-modal-text warning-section bordered">
+                            <span class="order-warning-icon">
+                              <img src="order-warning.svg">
+                            </span>
+                            <span class="order-warning-text text-clarifications">
+                              Amount is invalid because {{baseCurrency}} has no decimals.
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     {{/unless}}
-                  {{/unless}}
-                {{/unless}}
-              </div>
-            </div>
-            {{#if alertBetterOffer}}
-              <div class="div-modal-text row highlighted">
-                <div class="col-xs-1">
-                  <img src="order-warning-red.svg" fill="red" class="order-warning">
+                    {{#unless hasVolume}}
+                      <div class="row-fluid">
+                        <div class="col-xs-12">
+                          <div class="row div-modal-text warning-section bordered">
+                            <span class="order-warning-icon">
+                              <img src="order-warning.svg">
+                            </span>
+                            <span class="order-warning-text text-clarifications">
+                              The order doesn't have a high enough {{buyCurrency}} volume.
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    {{else}}
+                      {{#unless hasBalance}}
+                        <div class="row-fluid">
+                          <div class="col-xs-12">
+                            <div class="row div-modal-text warning-section bordered">
+                            <span class="order-warning-icon">
+                              <img src="order-warning.svg">
+                            </span>
+                              <span class="order-warning-text text-clarifications">
+                                You don't have enough
+                                {{#if equals sellCurrency 'W-ETH'}}
+                                  <a href="#ethtokens" {{b  "click: dismiss"}}>{{sellCurrency}}</a>
+                                {{else}}
+                                  {{sellCurrency}}
+                                {{/if}} tokens.
+                            </span>
+                            </div>
+                          </div>
+                        </div>
+                      {{else}}
+                        {{#unless hasAllowance}}
+                          <div class="row-fluid">
+                            <div class="col-xs-12">
+                              <div class="row div-modal-text warning-section bordered">
+                                <span class="order-warning-icon">
+                                  <img src="order-warning.svg">
+                                </span>
+                                <span class="order-warning-text text-clarifications">
+                                  You are trying to complete a {{offerType}}
+                                  order above your <strong>defined allowance</strong>.
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        {{else}}
+                          {{estimateFillingGasUsage}}
+                          <div class="row-fluid div-modal-text ">
+                            <div class="col-xs-12">
+                              <div class="row info-section bordered">
+                                <div class="col-xs-5">
+                                  {{#if equals offer.type 'bid'}}
+                                    <div class="row dex-currency-add">
+                                      <div class="col-xs-12 dex-currency-label">
+                                        <i class="dex-icon-add"></i>
+                                        {{{formatBalance (toWei total) '' '' true}}} {{quoteCurrency}}
+                                      </div>
+                                    </div>
+                                    <div class="row dex-currency-subtract">
+                                      <div class="col-xs-12 dex-currency-label">
+                                        <i class="dex-icon-subtract"></i>
+                                        {{{formatBalance (toWei volume) '' '' true}}} {{baseCurrency}}
+                                      </div>
+                                    </div>
+                                  {{else}}
+                                    <div class="row dex-currency-add">
+                                      <div class="col-xs-12 dex-currency-label">
+                                        <i class="dex-icon-add"></i>
+                                        {{{formatBalance (toWei volume) '' '' true}}} {{baseCurrency}}
+                                        {{formatPrice (toWei volume) baseCurrency}}
+                                      </div>
+                                    </div>
+                                    <div class="row dex-currency-subtract">
+                                      <div class="col-xs-12 dex-currency-label">
+                                        <i class="dex-icon-subtract"></i>
+                                        {{{formatBalance (toWei total) '' '' true}}} {{quoteCurrency}}
+                                      </div>
+                                    </div>
+                                  {{/if}}
+                                </div>
+                                <div class="col-xs-7">
+                                  <div class="row">
+                                    <div class="col-xs-6 no-padding dex-order-matching-label">
+                                      <span> Order Matching </span>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <span class="dex-order-matching-status
+                                                     dex-order-matching-status--{{ternary isMatchingEnabled "active"
+                                                                                          "inactive"}}">
+                                          {{ternary isMatchingEnabled "ACTIVE" "INACTIVE"}}
+                                        </span>
+                                    </div>
+                                  </div>
+                                  <div class="row dex-gas-estimate">
+                                    {{#if or (gasEstimateInProgress) (or gasEstimateResult gasEstimateError)}}
+                                      {{#if gasEstimateInProgress}}
+                                        <span class="col-xs-12">
+                                            Estimating gas... <span class="loading-icon">{{{loadingIcon}}}</span>
+                                          </span>
+                                      {{else}}
+                                        {{#if gasEstimateResult}}
+                                          {{estimateGasInETH gasEstimateResult}}
+                                          <div class="col-xs-6 no-padding ">
+                                            <span class="dex-currency-label dex-gas-label">
+                                              Gas {{{formatNumber gasEstimateInETH 4 true}}} ETH
+                                            </span>
+                                          </div>
+                                        <div class="col-xs-6">
+                                          <span style="width: 90px" class="dex-currency-label dex-currency-label--fiat">
+                                            <span>
+                                              ~ {{{ formatNumber (multiply gasEstimateInETH priceInUSD) 2 true}}} USD
+                                            </span>
+                                          </span>
+                                        </div>
+                                        {{else}}
+                                          {{#if gasEstimateError}}
+                                            Gas estimation failed.
+                                          {{/if}}
+                                        {{/if}}
+                                      {{/if}}
+                                    {{/if}}
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row div-modal-text warning-section bordered">
+                                <span class="order-warning-icon">
+                                  <img src="order-warning.svg">
+                                </span>
+                                <span class="order-warning-text text-clarifications">
+                                  If someone (partially) fills this order before you do, your offer may only be
+                                  partially filled or even denied, in which case unused funds will be refunded to your
+                                  balance and allowance.
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        {{/unless}}
+                      {{/unless}}
+                    {{/unless}}
+                  </div>
                 </div>
-                <div class="col-xs-11">
-                  <span class="text-danger">
-                    WARNING: You have not chosen the best price available. Review the order book to find a better trade.
-                  </span>
-                </div>
               </div>
-            {{/if}}
+              {{#if and alertBetterOffer isBuyEnabled}}
+                <div class="row-fluid">
+                  <div class="col-xs-12">
+                    <div class="row div-modal-text highlighted warning-section bordered bordered--danger">
+                      <span class="order-warning-icon">
+                        <img style="opacity: 0.5" src="order-warning-red.svg" fill="red">
+                      </span>
+                      <span class="order-warning-text text-danger">
+                        WARNING: You have not chosen the best price available. Review the order book to find a better trade.
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              {{/if}}
+            </section>
           {{/if}}
         </div>
         <div class="modal-footer">
           {{#if or (and hasBalance hasAllowance) (not hasBalance)}}
             {{#if offer}}
-              <button type="button" class="btn dex-btn-default {{#if equals offer.type 'bid'}}sell{{else}}buy{{/if}} btn-placement-right" data-dismiss="modal" {{b "enable: canBuy, click: buy"}}>
+              <button type="button"
+                      class="btn dex-btn-default {{#if equals offer.type
+                                                       'bid'}}sell{{else}}buy{{/if}} btn-placement-right"
+                      data-dismiss="modal" {{b "enable: canBuy, click: buy"}}>
                 {{#if equals offer.type 'bid'}}SELL{{else}}BUY{{/if}} {{baseCurrency}}
               </button>
             {{/if}}
           {{else}}
             {{#if equals offer.type 'bid'}}
-              <button type="button" data-refer="existingOrder" data-link={{baseCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order-allowance btn-placement-right" data-dismiss="modal">Change Allowance</button>
+              <button type="button" data-refer="existingOrder" data-link="{{baseCurrency}}" data-dismiss="modal"
+                      class="btn btn-allowance-modal btn-default btn-submit-order-allowance btn-placement-right">
+                Change Allowance
+              </button>
             {{else}}
-              <button type="button" data-refer="existingOrder" data-link={{quoteCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order-allowance {{offerType}} btn-placement-right" data-dismiss="modal">Change Allowance</button>
+              <button type="button" data-refer="existingOrder" data-link="{{quoteCurrency}}" data-dismiss="modal"
+                      class="btn btn-allowance-modal btn-default btn-submit-order-allowance {{offerType}} btn-placement-right">
+                Change Allowance
+              </button>
             {{/if}}
           {{/if}}
-          <button type="button" class="btn btn-default btn-placement-left btn-submit-order-cancel" data-dismiss="modal">CANCEL</button>
+          <button type="button" class=" btn dex-btn-default btn-placement-left" data-dismiss="modal">
+            CANCEL
+          </button>
         </div>
       </div>
     </div>
@@ -140,84 +309,259 @@
     {{> newallowance token=baseToken}}
   {{/if}}
 
-   <div class="modal fade" id="newOrderModal" tabindex="-1" role="dialog" data-backdrop="false">
+  <div class="modal fade" id="newOrderModal" tabindex="-1" role="dialog" data-backdrop="false">
     <div class="modal-dialog">
       <div class="modal-content modal-order">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">{{offerType}} OFFER</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">{{offerType}} OFFER</h4>
         </div>
         <div class="modal-body">
           <table>
             <tbody>
-              <tr class="row-data-line">
-                <th>ALLOWANCE</th>
-                {{#if equals offerType 'buy'}}
-                  <td>{{{formatBalance quoteToken.allowance '' '' true}}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
-                {{else}}
-                  <td>{{{formatBalance baseToken.allowance '' '' true}}} <span class="allowance-currency">{{baseToken._id}}</span></td>
-                {{/if}}
-              </tr>
-              <tr class="row-data-line">
-                <th>AVAILABLE</th>
-                {{#if equals offerType 'buy'}}
-                  <td>{{{formatBalance quoteToken.balance '' '' true}}} <span class="allowance-currency">{{quoteToken._id}}</span></td>
-                {{else}}
-                  <td>{{{formatBalance baseToken.balance '' '' true}}} <span class="allowance-currency">{{baseToken._id}}</span></td>
-                {{/if}}
-              </tr>
-              <tr class="row-data-line owner">
-                <th>OWNER</th>
-                <td><span class="owner-address">{{address}}</span></td>
-              </tr>
-              <tr class="row-input-line">
-                <th>PRICE</th>
-                <td><input type="number" class="input" step="any" min="0" {{b "value: offerPrice, input: calcNewOfferTotal"}}><span class="span-offer-currency">{{quoteCurrency}}</span></td>
-              </tr>
-              <tr class="row-input-line">
-                <th>VOLUME</th>
-                <td><input type="number" class="input" step="any" min="0" max={{maxNewOfferAmount}} {{b "value: offerAmount, input: calcNewOfferTotal"}}><span class="span-offer-currency">{{baseCurrency}}</span></td>
-              </tr>
-              <tr class="row-input-line">
-                <th>TOTAL</th>
-                <td><input type="number" class="input" step="any" min="0" max={{maxNewOfferTotal}} {{b "value: offerTotal, input: calcNewOfferAmount"}}><span class="span-offer-currency">{{quoteCurrency}}</span></td>
-              </tr>
+            <tr class="row-data-line">
+              <th>ALLOWANCE</th>
+              {{#if equals offerType 'buy'}}
+                <td>{{{formatBalance quoteToken.allowance '' '' true}}} <span
+                  class="allowance-currency">{{quoteToken._id}}</span></td>
+              {{else}}
+                <td>{{{formatBalance baseToken.allowance '' '' true}}} <span
+                  class="allowance-currency">{{baseToken._id}}</span></td>
+              {{/if}}
+            </tr>
+            <tr class="row-data-line">
+              <th>AVAILABLE</th>
+              {{#if equals offerType 'buy'}}
+                <td>{{{formatBalance quoteToken.balance '' '' true}}} <span
+                  class="allowance-currency">{{quoteToken._id}}</span></td>
+              {{else}}
+                <td>{{{formatBalance baseToken.balance '' '' true}}} <span
+                  class="allowance-currency">{{baseToken._id}}</span></td>
+              {{/if}}
+            </tr>
             </tbody>
           </table>
-          <div class="div-modal-text row">
-            <div class="col-xs-1">
-              <img src="order-warning.svg" class="order-warning">
-            </div>
-            <div class="col-xs-11">
-              <span class="text-clarifications">
-                {{#unless validNewOrderAmount}}
-                  Amount is invalid because {{baseCurrency}} has no decimals.
-                {{else}}
-                  {{#unless hasAllowanceNewOrder offerType}}
-                    You are trying to create a {{offerType}} order above your <strong>defined allowance</strong>.
-                  {{else}}
-                    {{#if equals offerType 'buy'}}
-                      This action will remove {{{formatBalance (toWei offerTotal) '' '' true}}} {{quoteCurrency}} {{formatPrice (toWei offerTotal) quoteCurrency}} from your token balance and allowance.
-                    {{else}}
-                      This action will remove {{{formatBalance (toWei offerAmount) '' '' true}}} {{baseCurrency}} {{formatPrice (toWei offerAmount) baseCurrency}} from your token balance and allowance.
+          <section class="input-section">
+            <table class="bordered">
+              <tbody>
+              <tr class="row-input-line">
+                <th class="dex-label-cell">
+                  <span>PRICE</span>
+                </th>
+                <td class="dex-input-cell">
+                  <input data-requires-precision type="number" class="input" step="any" min="0"
+                    {{b "value:offerPrice, input: calcNewOfferTotal"}}>
+                </td>
+                <td class="dex-currency-cell">
+                  <span>{{quoteCurrency}}</span>
+                </td>
+              </tr>
+              <tr class="row-input-line">
+                <th class="dex-label-cell">
+                  <span>VOLUME</span>
+                </th>
+                <td class="dex-input-cell">
+                  <input data-requires-precision type="number" class="input" step="any" min="0"
+                         max={{maxNewOfferAmount}}
+                    {{b "value: offerAmount, input: calcNewOfferTotal"}}>
+                </td>
+                <td class="dex-currency-cell">
+                  <span>{{baseCurrency}}</span>
+                </td>
+              </tr>
+              <tr class="row-input-line">
+                <th class="dex-label-cell">
+                  <span>TOTAL</span>
+                </th>
+                <td class="dex-input-cell" {{b "click:focusOnInput"}}>
+                  <div {{b "focusin: onFocus, focusout: onBlur"}}>
+                    {{#if and canAutofill shouldShowMaxBtn  }}
+                      <button type="button" class="btn btn-sm btn-default dex-btn-max {{offerType}}"
+                        {{b "click: autofill"}}>{{offerType}} MAX
+                      </button>
                     {{/if}}
-                  {{/unless}}
-                {{/unless}}
-              </span>
+                    <input data-requires-precision type="number" class="input with-max-btn" step="any" min=""
+                           placeholder="0" max={{maxNewOfferTotal}}
+                      {{b "value: offerTotal, input: calcNewOfferAmount"}}>
+                  </div>
+                </td>
+                <td class="dex-currency-cell">
+                  <span>{{quoteCurrency}}</span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </section>
+          <section>
+            <div class="div-modal-text">
+              <div class="row">
+                <div class="col-xs-12">
+                  <span class="text-clarifications">
+                    {{#unless validNewOrderAmount}}
+                      Amount is invalid because {{baseCurrency}} has no decimals.
+                    {{else}}
+                      {{#let limitReport = limit}}
+                        {{#if limitReport.hasShortage}}
+                          <div class="row-fluid">
+                          <div class="col-xs-12">
+                            <div class="row div-modal-text warning-section highlighted bordered bordered--danger">
+                              <span class="order-warning-icon">
+                                <img style="opacity: 0.5" src="order-warning-red.svg" fill="red">
+                              </span>
+                              <span class="order-warning-text text-clarifications text-danger">
+                                You are trying to create a {{offerType}}
+                                order below the minimum <strong>market limit</strong>,
+                                which is {{formatLimit limitReport}} {{limitReport.token}}.
+                              </span>
+                              </div>
+                          </div>
+                        </div>
+                        {{else}}
+                          {{#unless hasAllowanceNewOrder offerType}}
+                            <div class="row-fluid">
+                            <div class="col-xs-12">
+                              <div class="row div-modal-text warning-section bordered">
+                                <span class="order-warning-icon">
+                                  <img src="order-warning.svg">
+                                </span>
+                                <span class="order-warning-text text-clarifications">
+                                   You are trying to create a {{offerType}}
+                                  order above your <strong>defined allowance</strong>.
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          {{else}}
+                            {{ estimateGasUsage }}
+                            <div class="row-fluid">
+                            <div class="col-xs-12">
+                              {{#if (not gasEstimateMoreThanGasLimit) }}
+                                <div class="row info-section bordered">
+                                  <div class="col-xs-5">
+                                    {{#if equals offerType 'buy'}}
+                                      <div class="row dex-currency-add">
+                                      <div class="col-xs-12 dex-currency-label">
+                                        <i class="dex-icon-add"></i>
+                                        {{{formatBalance (toWei offerAmount) '' '' true}}}
+                                        <span class="highlighted">{{baseCurrency}}</span>
+                                      </div>
+                                    </div>
+                                      <div class="row dex-currency-subtract">
+                                      <div class="col-xs-12 dex-currency-label">
+                                        <i class="dex-icon-subtract"></i>
+                                        {{{formatBalance (toWei offerTotal) '' '' true}}}
+                                        <span class="highlighted">{{quoteCurrency}}</span>
+                                      </div>
+                                    </div>
+                                    {{else}}
+                                      <div class="row dex-currency-add">
+                                      <div class="col-xs-12 dex-currency-label">
+                                        <i class="dex-icon-add"></i>
+                                        {{{formatBalance (toWei offerTotal) '' '' true}}}
+                                        <span class="highlighted">{{quoteCurrency}}</span>
+                                      </div>
+                                    </div>
+                                      <div class="row dex-currency-subtract">
+                                      <div class="col-xs-12 dex-currency-label">
+                                        <i class="dex-icon-subtract"></i>
+                                        {{{formatBalance (toWei offerAmount) '' '' true}}}
+                                        <span class="highlighted">{{baseCurrency}}</span>
+                                      </div>
+                                    </div>
+                                    {{/if}}
+                                  </div>
+                                  <div class="col-xs-7">
+                                  <div class="row">
+                                    <div class="col-xs-6 no-padding dex-order-matching-label">
+                                      <span> Order Matching </span>
+                                    </div>
+                                    <div class="col-xs-6">
+                                      <span class="dex-order-matching-status
+                                        dex-order-matching-status--{{ternary isMatchingEnabled "active" "inactive"}}">
+                                        {{ternary isMatchingEnabled "ACTIVE" "INACTIVE"}}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div class="row dex-gas-estimate">
+                                    {{#if or (gasEstimateInProgress) (or gasEstimateResult gasEstimateError)}}
+                                      {{#if gasEstimateInProgress}}
+                                        <span class="col-xs-12">
+                                            Estimating gas... <span class="loading-icon">{{{loadingIcon}}}</span>
+                                          </span>
+                                      {{else}}
+                                        {{#if gasEstimateResult}}
+                                          {{estimateGasInETH gasEstimateResult}}
+                                          <div class="col-xs-6 no-padding">
+                                            <span class="dex-currency-label dex-gas-label">
+                                              Gas <span class="highlighted"> {{{formatNumber gasEstimateInETH 4 true}}}
+                                              ETH</span>
+                                            </span>
+                                          </div>
+                                          <div class="col-xs-6">
+                                            <span style="width:90px"
+                                                  class="dex-currency-label dex-currency-label--fiat">
+                                              <span class="highlighted">
+                                                ~ {{{ formatNumber (multiply gasEstimateInETH priceInUSD) 2 true}}} USD
+                                              </span>
+                                            </span>
+                                          </div>
+                                        {{else}}
+                                          {{#if gasEstimateError}}
+                                            Gas estimation failed.
+                                          {{/if}}
+                                        {{/if}}
+                                      {{/if}}
+                                    {{/if}}
+                                  </div>
+                                </div>
+                                 </div>
+                              {{else}}
+                                <div class="row div-modal-text highlighted warning-section bordered bordered--danger">
+                                  <div class="order-warning-icon">
+                                    <img style="opacity: 0.5" src="order-warning-red.svg" fill="red">
+                                  </div>
+                                  <div class="order-warning-text text-clarifications text-danger">
+                                    <span class="text-danger">
+                                      Your {{offerType}} exceeds the gas limit of
+                                      <strong> {{formatGasLimit gasLimit 1000000 'M'}}</strong>.
+                                      <br>
+                                      To get a working order use the
+                                      <strong>{{ternary (equals offerType 'buy') 'Buy' 'Sell'}} Max Button</strong> .
+                                    </span>
+                                  </div>
+                                </div>
+                              {{/if}}
+                            </div>
+                          </div>
+                          {{/unless}}
+                        {{/if}}
+                      {{/let}}
+                    {{/unless}}
+                  </span>
+                </div>
+              </div>
             </div>
-          </div>
+          </section>
         </div>
         <div class="modal-footer">
           {{#unless hasAllowanceNewOrder offerType}}
             {{#if equals offerType 'buy'}}
-              <button type="button" data-refer="newOrder" data-link={{quoteCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order-allowance btn-placement-right" data-dismiss="modal">Change Allowance</button>
+              <button type="button" data-refer="newOrder" data-link={{quoteCurrency}} class="btn btn-allowance-modal
+                      dex-btn-default btn-submit-order-allowance btn-placement-right
+              " data-dismiss="modal">Change Allowance</button>
             {{else}}
-              <button type="button" data-refer="newOrder" data-link={{baseCurrency}} class="btn btn-allowance-modal btn-default btn-submit-order-allowance btn-placement-right" data-dismiss="modal">Change Allowance</button>
+              <button type="button" data-refer="newOrder" data-link={{baseCurrency}} class="btn btn-allowance-modal
+                      dex-btn-default btn-submit-order-allowance btn-placement-right
+              " data-dismiss="modal">Change Allowance</button>
             {{/if}}
           {{else}}
-            <button type="button" class="btn dex-btn-default {{offerType}} btn-placement-right" data-dismiss="modal" {{b "enable: canSubmit, click: confirmOffer"}}>{{offerType}} {{baseCurrency}}</button>
+            <button type="button" class="btn dex-btn-default {{offerType}} btn-placement-right" data-dismiss="modal" {{b
+              "enable: canSubmit, click: confirmOffer"}}>{{offerType}} {{baseCurrency}}</button>
           {{/unless}}
-          <button type="button" class="btn btn-default btn-placement-left btn-submit-order-cancel" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn dex-btn-default btn-placement-left" data-dismiss="modal">
+            Cancel
+          </button>
         </div>
       </div>
     </div>

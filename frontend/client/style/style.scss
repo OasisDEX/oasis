@@ -29,8 +29,8 @@ $color-cancel-order: #A8ACB9;
 
 @font-face {
   font-family: Montserrat;
-  src: url("../fonts/Montserrat-Medium.woff"),
-  url("../fonts/Montserrat-Medium.woff2");
+  src: url("../fonts/Montserrat-Medium.woff") format('woff'),
+  url("../fonts/Montserrat-Medium.woff2") format('woff2');
   font-weight: 500;
 }
 
@@ -153,6 +153,10 @@ table {
 
 .bold {
   font-weight: 700;
+}
+
+.no-padding {
+  padding: 0;
 }
 
 .select-glyph {
@@ -681,7 +685,7 @@ table {
   margin-left: 17px;
 }
 
-#mytrades-container {
+#myorders-container {
   h2 {
     padding-right: 30px;
   }
@@ -941,20 +945,13 @@ table {
       font-weight: 700;
       letter-spacing: 1px;
       text-align: left;
-      padding-left: 7px;
+      padding-left: 13px;
       display: inline-block;
-      width: 50px;
+      width: 60px;
     }
   }
 
   table {
-    border-collapse: separate !important;
-    border-spacing: 0;
-    border: solid #EFEFEF 1px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-    border-radius: 6px;
-
     tbody {
       th {
         width: 80px;
@@ -981,17 +978,18 @@ table {
         }
 
         td.dex-input-cell {
-          width: 230px;
+          max-width: 230px;
         }
 
         td.dex-currency-cell {
+          width: 60px;
           font-family: 'Montserrat', sans-serif;
+
           span {
             font-weight: 700;
             font-size: 10px;
             color: #68686C; /* #222228;*/
             letter-spacing: 1px;
-            width: 100%;
             display: inline-block;
             vertical-align: middle;
             text-align: left;
@@ -1076,7 +1074,7 @@ table {
     float: right;
     text-align: right;
     padding-right: 10px;
-    max-width: 120px;
+    max-width: 100%;
     background: none;
     &[disabled] {
       border: none;
@@ -1091,7 +1089,183 @@ table {
   }
 }
 
+.allowance-input-table {
+  margin-bottom: 20px;
+}
 
+.info-section-order-cancel {
+  padding: 20px 15px 5px 15px !important;
+}
+
+.info-section {
+  margin-bottom: 15px;
+  padding: 15px 0 15px 0;
+  font-size: 13px;
+  font-weight: normal;
+
+  .row {
+    line-height: 1.5;
+  }
+
+  .div-modal-text {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .dex-icon {
+    display: inline-block;
+    width: 18px;
+    height: 20px;
+    margin-right: 5px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    vertical-align: middle;
+    opacity: 1;
+  }
+
+  .dex-icon-add {
+    background-image: url(ic_add_circle_24px.svg);
+    @extend .dex-icon;
+  }
+
+  .dex-icon-subtract {
+    background-image: url(ic_remove_24px.svg);
+    @extend .dex-icon;
+  }
+
+  .dex-currency-label {
+    display: inline-block;
+    vertical-align: middle;
+    padding-right: 0;
+    line-height: 1.5;
+
+    &--fiat {
+      height: 20px;
+      text-align: center;
+      font-size: 11px;
+      padding: 0;
+      border: 1px solid #EFEFEF;
+      border-radius: 5px;
+      background-color: #F9F8F8;
+
+      > span {
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+      }
+    }
+  }
+
+  .dex-gas-label {
+    padding-left: 0;
+  }
+
+  .dex-currency-add {
+    padding-right: 15px;
+  }
+
+  .dex-currency-subtract {
+    padding-right: 15px;
+    padding-top: 10px;
+  }
+
+  .dex-gas-estimate {
+    padding-top: 10px;
+  }
+
+  .dex-order-matching-label {
+    border: 1px solid transparent;
+  }
+
+  .dex-order-matching-status {
+    height: 20px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    display: inline-block;
+    width: 90px;
+    text-align: center;
+
+    &--active {
+      border-color: $color-buy;
+      color: $color-buy;
+    }
+
+    &--inactive {
+      border-color: $color-sell;
+      color: $color-sell;
+    }
+  }
+
+  .highlighted {
+    opacity: 0.7;
+    font-weight: 500;
+    color: #67666A;
+  }
+}
+
+.text-holder {
+  display: block;
+  padding: 15px 0;
+  margin-bottom: 20px;
+
+  &--danger {
+    color: rgba(255, 0, 0, 0.5);;
+  }
+}
+
+.warning-section {
+  @extend .text-holder;
+}
+
+.modal {
+  button.dex-btn-default.buy, button.dex-btn-default.sell {
+    width: auto;
+  }
+
+  .input-section {
+    padding: 0;
+    margin-top: 20px;
+    margin-bottom: 15px;
+
+    tr {
+      height: inherit;
+      line-height: inherit;
+    }
+
+    table tbody tr.row-input-line th.dex-label-cell {
+      text-align: left;
+      padding-left: 13px;
+      background: #F8F7F5;
+    }
+
+    .available-amount {
+      width: 330px;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .available-label {
+      padding-left: 13px;
+    }
+  }
+}
+
+.bordered {
+  border: solid #EFEFEF 1px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+
+  &--danger {
+    border-color: rgba(255, 0, 0, 0.5);
+  }
+}
+
+table.bordered {
+  @extend .bordered;
+  border-collapse: separate !important;
+  border-spacing: 0;
+}
 
 button.dex-btn-default {
   font-family: 'Montserrat', sans-serif;
@@ -1112,19 +1286,29 @@ button.dex-btn-default {
   }
 }
 
+button.dex-btn-default {
+  min-width: 100px;
+  width: auto;
+}
+
+button.dex-btn-danger {
+  @extend button.dex-btn-default.sell;
+}
+
+button.dex-btn-success {
+  @extend button.dex-btn-default.buy;
+}
+
 button.dex-btn-max {
   @extend button.dex-btn-default;
   padding: 5px;
-  margin-left: 5px;
+  margin: 0 5px;
   font-size: 10px;
   border-radius: 5px;
   float: left;
+  min-width: inherit;
   width: auto;
   transform: translateY(2.5px);
-}
-
-button.dex-btn-default.buy, button.dex-btn-default.sell {
-  width: 100px;
 }
 
 button.dex-btn-default.buy, button.dex-btn-max.buy {
@@ -1176,12 +1360,8 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
     padding-left: 15px;
   }
 
-  .dex-input-cell .input {
-    max-width: 100px;
-  }
-
   .dex-input-cell input.recipient {
-    max-width: 250px;
+    max-width: 280px;
   }
 
   .btn-transfer {
@@ -1318,18 +1498,14 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   color: $color-allowance;
 }
 
-.btn-submit-order-cancel {
-  @extend .btn-submit-order;
-  border-color: $color-cancel;
-  color: $color-cancel;
-}
-
 .btn-placement-right {
   float: right;
 }
 
 .btn-placement-left {
   float: left;
+  margin-left: 0px !important;
+
 }
 
 .btn-place-order {
@@ -1358,7 +1534,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   font-family: 'Montserrat', sans-serif;
   font-size: 15px;
   font-weight: 500;
-  padding: 20px;
+  padding: 30px 30px 20px 30px;
   width: 490px;
   overflow: auto;
 
@@ -1372,7 +1548,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
     opacity: 0.68;
     font-weight: 500;
     font-size: 15px;
-    padding-left: 13px;
+    padding-left: 10px;
   }
 
   td {
@@ -1387,7 +1563,6 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
     border: 1px solid;
     text-align: right;
     padding-right: 10px;
-    width: 50%;
   }
 
   input[type=number]::-webkit-inner-spin-button,
@@ -1408,12 +1583,12 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
       }
     }
     td:last-child {
-      text-align: right;
+      text-align: left;
     }
   }
 
   .span-owner {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .span-offer-currency {
@@ -1428,16 +1603,91 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   }
 
   .div-modal-text {
-    margin-top: 15px;
-    font-weight: 700;
+    font-weight: 500;
     font-size: 14px;
-    color: #222228;
-    opacity: 0.50;
+    color: #989899;
   }
 
   .div-actions {
     float: right;
     margin-top: 5px;
+  }
+}
+
+#wrapperUpdate {
+  .modal-dialog {
+    margin-top: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+.modal-wrapper-update {
+  @extend .modal-order;
+
+  .modal-header {
+    margin-bottom: 32px;
+  }
+
+  .modal-body {
+    margin-bottom: 20px;
+    color: rgba(34, 34, 40, 0.7);
+  }
+
+  .modal-title {
+    letter-spacing: 4px;
+  }
+
+  .dex-icon-ethereum {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+
+  .currency-box {
+    width: 215px;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 10px;
+    font-size: 13px;
+
+    .value {
+      letter-spacing: 1.45px;
+      width: 156px;
+      display: inline-block;
+      vertical-align: middle;
+      color: rgba(34, 34, 40, 0.7);
+      font-size: 13px;
+      line-height: 18px;
+      float: none;
+      text-align: right;
+
+      .amount {
+        display: inline-block;
+        margin-right: 5px;
+      }
+
+      .token {
+        font-weight: 700;
+      }
+    }
+  }
+
+  .dex-progress-bar {
+    margin-top: 20px;
+  }
+
+  .glyphicon {
+    top: 4px;
+    transform: scale(0.75, 0.5);
+  }
+
+  .transition {
+    background: url('ic_compare_arrows_black_24px.svg') no-repeat 50% 50%;
+    width: 50px;
+    height: 10px;
+    display: inline-block;
+    text-align: center;
   }
 }
 
@@ -1649,7 +1899,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
         max-width: 90px !important;
       }
       &.th-amount {
-        max-width: 110px !important;
+        max-width: 105px !important;
       }
       &:last-of-type {
         width: 30px;
@@ -1662,12 +1912,6 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
     overflow-x: hidden;
     display: block;
     margin-top: 10px;
-    &.tbody-scrolling {
-      width: 98%;
-    }
-    &.tbody-not-scrolling {
-      width: 100%;
-    }
     tr {
       height: 30px;
       display: block;
@@ -1733,7 +1977,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
           max-width: 90px !important;
         }
         &.transfer {
-          max-width: 110px !important;
+          max-width: 105px !important;
         }
       }
     }
@@ -1899,11 +2143,12 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
         &:first-child {
           width: 20px !important;
         }
-        &.th-coin {
-          max-width: 70px !important;
+        &.th-pair {
+          text-align: center;
+          max-width: 120px !important;
         }
         &.th-price {
-          max-width: 150px !important;
+          max-width: 100px !important;
         }
         &.th-volume {
           max-width: 150px !important;
@@ -1920,16 +2165,49 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   }
   tbody {
     tr {
+      &.dex-show-more-row, &.dex-show-less-row {
+        background: none;
+        border-top: 1px #F3F3F4 solid !important;
+        border-bottom: 1px #F3F3F4 solid !important;
+        cursor: pointer;
+      }
+
       td {
         &:first-child {
           width: 20px !important;
+
+          &.more, &.less {
+            font-family: Montserrat, sans-serif;
+            width: 440px !important;
+            text-align: center;
+            font-weight: 500;
+            font-size: 12px;
+            color: #666669;
+
+            span {
+              line-height: 1.666667;
+            }
+          }
         }
-        &.td-coin {
-          max-width: 70px !important;
+        &.td-pair {
+          text-align: center;
+          max-width: 120px !important;
           font-weight: 900;
+
+          .quote {
+            color: #ABABAD;
+            color: rgba(74, 74, 74, 0.60);
+          }
+
+          .base, .quote {
+            display: inline-block;
+            width: 50px;
+            font-size: 14px;
+            text-align: center;
+          }
         }
         &.td-price {
-          max-width: 150px !important;
+          max-width: 100px !important;
           span.loading-icon {
             img {
               transform: translate(-4px, -3px) !important;
@@ -1953,9 +2231,6 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
             }
           }
         }
-        &:last-child {
-          width: 0px !important;
-        }
       }
     }
   }
@@ -1964,6 +2239,21 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
 span.loading-icon {
   img {
     transform: translate(0px, -3px);
+  }
+}
+
+.dex-icon-ethereum {
+  height: 24px;
+  width: 24px;
+
+  &--wrapped {
+    background: url('eth_circle_icon.svg') no-repeat;
+    background-size: 100% 100%;
+  }
+
+  &--unwrapped {
+    background: url('eth_circle_icon_full.svg') no-repeat;
+    background-size: 100% 100%;
   }
 }
 
@@ -2234,26 +2524,27 @@ span.right {
   .allowance-currency, .base-currency, .quote-currency {
     @extend .currency;
     float: right;
-    transform: translateY(5px);
+    transform: translateY(4px);
   }
   .text-clarifications {
     font-size: 14px;
-    color: rgba(0, 0, 0, 0.4);
+    font-weight: normal;
     b {
       color: #222228;
     }
   }
   .owner-address {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
     color: #68686C;
-    font-family: 'Roboto';
+    font-family: 'Roboto', sans-serif;
     margin-right: 15px;
   }
 }
 
 .modal-header {
   border: none;
+  padding: 0px 5px 5px 5px;
 }
 
 .modal-title {
@@ -2305,7 +2596,6 @@ span.right {
     border: none;
     text-align: right;
     padding-right: 10px;
-    max-width: 170px;
     background: none;
 
     &[disabled] {
@@ -2320,6 +2610,25 @@ span.right {
   span.set-total-allowance {
     cursor: pointer;
   }
+
+  button.dex-btn-max {
+    transform: translateY(5px);
+  }
+
+  td.dex-input-cell {
+    width: 280px;
+  }
+
+  td.dex-input-cell {
+    .read-only {
+      font-family: 'Roboto';
+      font-weight: bolder;
+      font-size: 24px;
+      text-align: right;
+      padding-right: 10px;
+      background: none;
+    }
+  }
 }
 
 .market-history {
@@ -2330,7 +2639,12 @@ span.right {
   }
 }
 
+.modal-body {
+  padding: 0;
+}
+
 .modal-footer {
+  padding: 0;
   border-top: none;
 }
 
@@ -2342,7 +2656,8 @@ span.right {
 
 .highlighted {
   .text-danger {
-    color: red;
+    vertical-align: middle;
+    color: rgba(255, 0, 0, 0.5);
   }
 }
 
@@ -2380,11 +2695,95 @@ a.logo:hover {
   .warning {
     color: red;
   }
+}
 
-  img.order-warning {
-    position: relative;
-    top: 7.5px;
+.order-warning {
+  &-icon {
+    width: 40px;
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 16px;
+  }
+
+  &-text {
+    width: 380px;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 16px;
   }
 }
 
+.dex-progress-bar {
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #C4C6CC;
+  border-radius: 10px;
+}
+
+.dex-progress {
+  width: 0;
+  -webkit-transition: width linear .5s;
+  -moz-transition: width linear .5s;
+  -ms-transition: width linear .5s;
+  -o-transition: width linear .5s;
+  transition: width linear .5s;
+  height: 30px;
+  background-color: #EEEEF0;
+}
+
+.dex-progress-message {
+  position: absolute;
+  text-transform: uppercase;
+  color: #49494A;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  text-align: center;
+  padding: 6px;
+  width: 100%;
+}
+
+#neworder {
+  .dex-btn-max {
+    width: 75px;
+  }
+
+  input.with-max-btn {
+    max-width: 145px;
+  }
+}
+
+#gnttokens, #ethtokens {
+  .dex-btn-max {
+    width: 100px;
+  }
+
+  input.with-max-btn {
+    max-width: 125px;
+  }
+}
+
+#sendtokens {
+  .dex-btn-max {
+    width: 108px;
+  }
+
+  input.with-max-btn {
+    max-width: 105px;
+  }
+}
+
+#newOrderModal, #offerModal {
+  .dex-btn-max {
+    width: 75px;
+  }
+
+  input.with-max-btn {
+    max-width: 195px;
+  }
+}
+
+tbody.tbody-scrolling {
+  width: 98% !important;
+}
 

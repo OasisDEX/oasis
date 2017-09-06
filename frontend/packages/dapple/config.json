@@ -1,22 +1,24 @@
 {
   "market": {
     "kovan": {
-      "address": "0x45ab8d410049116c7a01f6edfc08d564475c08ed",
-      "blockNumber": 685569
+      "address": "0x9bf86c37dAC74C632418B9e9D039243B43b7807A",
+      "blockNumber": 3453342
     },
     "ropsten": {
       "address": "0xb996fff774d37b900872609bf8b11e31f51bd19e",
       "blockNumber": 459835
     },
     "live": {
-      "address": "0x83ce340889c15a3b4d38cfcd1fc93e5d8497691f",
-      "blockNumber": 3435757
+      "address": "0x42a438d94a869051bbab67bd42e2e02351d92815",
+      "blockNumber": 4238564
     }
   },
   "tokens": {
     "kovan": {
+      "OW-ETH": "0x856a0c1ad8302896078134e99316b7051e99c688",
       "W-ETH": "0x53eccc9246c1e537d79199d0c7231e425a40f896",
       "DAI": "0x0000000000000000000000000000000000000000",
+      "SAI": "0x228bf3d5be3ee4b80718b89b68069b023c32131e",
       "MKR": "0x4bb514a7f83fbb13c2b41448208e89fabbcfe2fb",
       "DGD": "0xbb7697d091a2b9428053e2d42d088fcd2a6a0aaf",
       "GNT": "0xece9fa304cc965b00afc186f5d0281a00d3dbbfd",
@@ -35,8 +37,10 @@
       "NMR": "0x13ec2f6ab4be5a55800193e7b22e83042405bb64"
     },
     "ropsten": {
+      "OW-ETH": "0x0000000000000000000000000000000000000000",
       "W-ETH": "0xece9fa304cc965b00afc186f5d0281a00d3dbbfd",
       "DAI": "0x0000000000000000000000000000000000000000",
+      "SAI": "0x0000000000000000000000000000000000000000",
       "MKR": "0xa7f6c9a5052a08a14ff0e3349094b6efbc591ea4",
       "DGD": "0x1ab3bd2e2670d6e00ca406217e4d327f7f946d7e",
       "GNT": "0x7fb3c4ff78bd0305a6ec436eda79303f981c5938",
@@ -51,8 +55,10 @@
       "GUP": "0x0000000000000000000000000000000000000000"
     },
     "live": {
+      "OW-ETH": "0x0000000000000000000000000000000000000000",
       "W-ETH": "0xecf8f87f810ecf450940c9f60066b4a7a501d6a7",
       "DAI": "0x0000000000000000000000000000000000000000",
+      "SAI": "0x59adcf176ed2f6788a41b8ea4c4904518e62b6a4",
       "MKR": "0xc66ea802717bfb9833400264dd12c2bceaa34a6d",
       "DGD": "0xe0b7927c4af23765cb51314a0e0521a9645f0e2a",
       "GNT": "0xa74476443119a942de498590fe1f2454d7d4ac0d",

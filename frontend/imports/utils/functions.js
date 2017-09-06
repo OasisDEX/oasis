@@ -9,35 +9,39 @@ import { Spacebars } from 'meteor/spacebars';
  *  - a valid contract address is passed and we have corresponding token symbol
  *  then we return the symbol for the token.
  *
- *  If the token is a valid address by not known to the market, default value will be returned
- *  If the token is a symbol already but know among allowedTokens ,default value will be returned
+ *  If the token is a valid address but not known to the market, default value will be returned
  *  If the token is not known, default value is returned
  *
- * @param token - of type <any>
- * @param allowedTokens - of type <array> - market supports only specific tokens which can be used as base or quote tokens.
- * @param symbolIfNothingIsPresented - of type <string> - used as value if token is invalid value
- *  (not an address, not an address known to the market, not a symbol, not a symbol known to market.
+ * @param addressOrToken - of type <any>
+ * @param defaultToken - of type <string> - used as value if token is invalid value
+ *  (not an address, not an address known to the market, not a symbol, not a symbol known to market. (mandatory)
  *
- * @return symbol
+ * @return string
  *
  * @throws error if the method is invoked with missing attributes or the types of the attributes are different than expected
  */
-function addressToSymbol(token, allowedTokens, symbolIfNothingIsPresented) {
-  if (!token || !allowedTokens || !symbolIfNothingIsPresented
-    || !Array.isArray(allowedTokens)
-    || typeof symbolIfNothingIsPresented !== 'string') {
+function asToken(addressOrToken, defaultToken) {
+  const allTokens = Dapple.getTokens();
+
+  if (!defaultToken
+    || typeof defaultToken !== 'string'
+    || !allTokens.includes(defaultToken)) {
     throw Error('Wrong usage of the API. Read documentation');
   }
 
-  const isAnAddress = web3Obj.isAddress(token);
-  let currency = symbolIfNothingIsPresented;
+  if (!addressOrToken || typeof addressOrToken !== 'string') {
+    return defaultToken;
+  }
+  const isAnAddress = web3Obj.isAddress(addressOrToken);
+  let currency = defaultToken.toUpperCase();
+  let token = addressOrToken.toUpperCase();
 
   if (isAnAddress) {
-    currency = Dapple.getTokenByAddress(token).toUpperCase();
+    token = Dapple.getTokenByAddress(addressOrToken).toUpperCase();
   }
 
-  if (allowedTokens.includes(token)) {
-    currency = token.toUpperCase();
+  if (token && allTokens.includes(token)) {
+    currency = token;
   }
 
   return currency;
@@ -72,21 +76,44 @@ export function doHashChange() {
 
   if (location.hash.indexOf('#wrap') === -1 && location.hash.indexOf('#transfer') === -1) {
     if (location.hash.indexOf('#trade') === -1) {
-      location.hash = `#trade/${localStorage.getItem('quoteCurrency') || 'W-ETH'}`
-        + `/${localStorage.getItem('baseCurrency') || 'MKR'}`;
+      location.hash = `#trade/${localStorage.getItem('baseCurrency') || 'MKR'}`
+        + `/${localStorage.getItem('quoteCurrency') || 'W-ETH'}`;
     }
-    const coins = location.hash.replace('#trade/', '').split('/');
+    const coins = location.hash.replace(/#trade\//g, '').split('/');
 
-    const quote = coins[0];
-    quoteCurrency = addressToSymbol(quote, Dapple.getQuoteTokens(), 'W-ETH');
+    /**
+     * The default values for base and quote are respectively:
+     * MKR and W-ETH in all scenarios. The reason for this is
+     * because those are the main currencies that MAKER is dealing with.
+     */
+    const base = coins[0];
+    baseCurrency = asToken(base, 'MKR');
 
-    const base = coins[1];
-    baseCurrency = addressToSymbol(base, Dapple.getBaseTokens(), 'MKR');
+    const quote = coins[1];
+    quoteCurrency = asToken(quote, 'W-ETH');
 
-    if (quote === base) {
+    if (baseCurrency === quoteCurrency) {
       quoteCurrency = 'W-ETH';
       baseCurrency = 'MKR';
     }
+
+    // Looking for any existing pair that contains the currencies provided in the URL
+    const pair = Dapple.generatePairs().find((currentPair) =>
+    (currentPair.base === baseCurrency && currentPair.quote === quoteCurrency)
+    || (currentPair.base === quoteCurrency && currentPair.quote === baseCurrency));
+
+    // if such pair exists we use it to set the base and quote otherwise we default
+    if (pair) {
+      baseCurrency = pair.base;
+      quoteCurrency = pair.quote;
+    } else {
+      quoteCurrency = 'W-ETH';
+      baseCurrency = 'MKR';
+    }
+
+    Session.set('newPairSelected', pair);
+
+    location.hash = `#trade/${baseCurrency}/${quoteCurrency}`;
   }
 
   doTabShow();
@@ -134,10 +161,10 @@ export function formatNumber(number, dec) {
   }
   let n = number;
   if (typeof number !== 'object') {
-    n = new BigNumber(number);
+    n = new BigNumber(`${number}`);
   }
   const d = (new BigNumber(10)).pow(decimals);
-  n = n.mul(d).trunc().div(d).toFixed(decimals);
+  n = n.mul(d).trunc().div(d).toFixed(decimals, 6);
   return thousandSeparator(n);
 }
 

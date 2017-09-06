@@ -5,6 +5,7 @@ import { web3Obj } from 'meteor/makerotc:dapple';
 
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
+import WETH from '/imports/api/weth';
 import { uppercaseFirstLetter, formatError } from '/imports/utils/functions';
 
 import './ethtokens.html';
@@ -42,6 +43,9 @@ Template.ethtokens.viewmodel({
   },
   onBlur() {
     this.shouldShowMaxBtn(false);
+  },
+  focusOnInput(event) {
+    $(event.target).find('input.with-max-btn').focus();
   },
   progress() {
     return Session.get(`ETH${uppercaseFirstLetter(this.type())}Progress`);
@@ -101,6 +105,7 @@ Template.ethtokens.viewmodel({
               Session.set('ETHDepositErrorMessage', formatError(txError));
             }
           });
+          WETH.watchDeposit();
         } else {
           Session.set('ETHDepositProgress', 0);
           Session.set('ETHDepositProgressMessage', '');
@@ -125,6 +130,7 @@ Template.ethtokens.viewmodel({
               Session.set('ETHWithdrawErrorMessage', formatError(txError));
             }
           });
+          WETH.watchWithdraw();
         } else {
           Session.set('ETHWithdrawProgress', 0);
           Session.set('ETHWithdrawProgressMessage', '');

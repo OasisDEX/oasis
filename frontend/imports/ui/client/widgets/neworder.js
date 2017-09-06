@@ -2,7 +2,6 @@ import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
 import { BigNumber } from 'meteor/ethereum:web3';
 import { web3Obj } from 'meteor/makerotc:dapple';
-
 import Tokens from '/imports/api/tokens';
 import { Offers } from '/imports/api/offers';
 import { $ } from 'meteor/jquery';
@@ -19,11 +18,76 @@ Template.neworder.viewmodel({
   price: '',
   amount: '',
   shouldShowMaxBtn: false,
+  events: {
+    'input input, click .dex-btn-max': function () {
+      const order = Session.get('selectedOrder');
+      if (order) {
+        Session.set('selectedOrder', '');
+      }
+    },
+    'keyup input[data-requires-precision]'(event) {
+      const precision = Session.get('precision');
+      const value = event.target.value;
+      try {
+        const amount = new BigNumber(value || 0);
+        if (amount.decimalPlaces() > precision) {
+          $(event.target).val(amount.toFixed(precision), 6);
+          $(event.target).trigger('change');
+        }
+      } catch (exception) {
+        console.debug('Provided value in the input field is not a number!', exception);
+      }
+    },
+  },
+  autorun() {
+    const order = Session.get('selectedOrder');
+    if (order) {
+      /*
+       * If we have an existing offer with the given characteristics
+       *  PRICE: 2.00000
+       *  AMOUNT: 2.00000
+       *  TOTAL: 2.0000
+       *
+       *  Click on the existing order and the neworder input fields
+       *  will be populated with the same values.
+       *
+       *  Proceed and create new order with given values.
+       *
+       *  Don't click anywhere else and wait for the new order to appear in orderbook.
+       *
+       *  Click on it or on the previous order that we created the first order from.
+       *  The input fields will be all 0's thought the values of the properties will be popualted.
+       *
+       *  Assuming this is some rendering issue (most likely from meteor) this is the solution.
+       *  Before applying the new values, we clear old ones, forcing everything to rerender.
+       * */
+      this.amount('');
+      this.price('');
+      this.total('');
+      this.offerAmount(0);
+      this.offerPrice(0);
+      this.offerTotal(0);
+
+      const actionType = order.type === 'bid' ? 'buy' : 'sell';
+      const orderData = Offers.findOne({ _id: order.id });
+      if (orderData) {
+        this.price(orderData[`${order.type}_price`]);
+
+        if (actionType === this.type()) {
+          this.amount(web3Obj.fromWei(orderData[`${actionType}HowMuch`]));
+        } else {
+          this.amount(0);
+        }
+
+        this.calcTotal();
+      }
+    }
+  },
   type() {
     return this.orderType() ? this.orderType() : '';
   },
   precision() {
-    return Dapple.getTokenSpecs(Session.get('baseCurrency')).precision;
+    return Session.get('precision');
   },
   sellCurrency() {
     if (this.type() === 'buy') {
@@ -36,6 +100,9 @@ Template.neworder.viewmodel({
   },
   onBlur() {
     this.shouldShowMaxBtn(false);
+  },
+  focusOnInput(event) {
+    $(event.target).find('input.with-max-btn').focus();
   },
   canAutofill() {
     return Session.get('market_open');
@@ -61,9 +128,9 @@ Template.neworder.viewmodel({
       return;
     }
     try {
-      const price = new BigNumber(this.price());
-      const amount = new BigNumber(this.amount());
-      const total = price.times(amount);
+      const price = new BigNumber(new BigNumber(this.price(), 10).toFixed(this.precision(), 6));
+      const amount = new BigNumber(new BigNumber(this.amount(), 10).toFixed(this.precision(), 6));
+      const total = new BigNumber(price.times(amount).toFixed(this.precision(), 6), 10);
       if (total.isNaN()) {
         this.total('0');
       } else {
@@ -81,12 +148,12 @@ Template.neworder.viewmodel({
       return;
     }
     try {
-      const price = new BigNumber(this.price());
-      const total = new BigNumber(this.total());
+      const price = new BigNumber(new BigNumber(this.price(), 10).toFixed(this.precision(), 6));
+      const total = new BigNumber(new BigNumber(this.total(), 10).toFixed(this.precision(), 6));
       if (total.isZero() && price.isZero()) {
         this.amount('0');
       } else {
-        const amount = total.div(price);
+        const amount = new BigNumber(total.div(price).toFixed(this.precision(), 6), 10);
         if (amount.isNaN()) {
           this.amount('0');
         } else {
@@ -273,9 +340,6 @@ Template.neworder.viewmodel({
     this.offerAmount(this.amount());
     this.offerTotal(this.total());
     this.offerType(this.type());
-  },
-  showDepositTab() {
-    $('#wrap').tab('show');
   },
   showAllowanceModal(token) {
     $(`#allowanceModal${token}`).modal('show');

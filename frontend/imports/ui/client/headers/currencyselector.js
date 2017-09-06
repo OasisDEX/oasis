@@ -35,7 +35,7 @@ Template.currencySelector.viewmodel({
               this.baseHelper('Tokens are the same');
             }
             if (location.hash.indexOf('#trade') !== -1) {
-              location.hash = `#trade/${this.quoteCurrency()}/${this.baseCurrency()}`;
+              location.hash = `#trade/${this.baseCurrency()}/${this.quoteCurrency()}`;
             }
             Tokens.sync();
           } else {
@@ -60,7 +60,7 @@ Template.currencySelector.viewmodel({
               this.baseHelper('Tokens are the same');
             }
             if (location.hash.indexOf('#trade') !== -1) {
-              location.hash = `#trade/${this.quoteCurrency()}/${this.baseCurrency()}`;
+              location.hash = `#trade/${this.baseCurrency()}/${this.quoteCurrency()}`;
             }
             Tokens.sync();
           } else {
