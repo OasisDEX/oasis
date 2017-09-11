@@ -19,7 +19,6 @@
         </tr>
         </thead>
         <tbody class="{{#if showScroll}}tbody-scrolling{{else}}tbody-not-scrolling{{/if}}">
-        {{#unless loadingTradeHistory}}
           {{#each tradingPairs}}
             {{#if or showAll this.isVisible }}
               <tr class="clickable {{ selected(this) }}" {{b "click: select(this)"}}>
@@ -67,9 +66,6 @@
             </tr>
           {{/unless}}
           <!--{{sort}}-->
-        {{else}}
-          <div class="loading-market-history">{{{loadingIcon}}} Loading trading history...</div>
-        {{/unless}}
         </tbody>
         <tfoot>
 
