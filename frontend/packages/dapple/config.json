@@ -1,16 +1,12 @@
 {
   "market": {
     "kovan": {
-      "address": "0x9bf86c37dAC74C632418B9e9D039243B43b7807A",
-      "blockNumber": 3453342
-    },
-    "ropsten": {
-      "address": "0xb996fff774d37b900872609bf8b11e31f51bd19e",
-      "blockNumber": 459835
+      "address": "0x375d52588c3f39ee7710290237a95C691d8432E7",
+      "blockNumber": 3723952
     },
     "live": {
-      "address": "0x42a438d94a869051bbab67bd42e2e02351d92815",
-      "blockNumber": 4238564
+      "address": "0x3aa927a97594c3ab7d7bf0d47c71c3877d1de4a1",
+      "blockNumber": 4262057
     }
   },
   "tokens": {
@@ -35,24 +31,6 @@
       "GUP": "0xa786d73316e43c3361145241755566e72424274c",
       "BAT": "0x485bd6f93f3cd63d5da117c8205173b542da8e7e",
       "NMR": "0x13ec2f6ab4be5a55800193e7b22e83042405bb64"
-    },
-    "ropsten": {
-      "OW-ETH": "0x0000000000000000000000000000000000000000",
-      "W-ETH": "0xece9fa304cc965b00afc186f5d0281a00d3dbbfd",
-      "DAI": "0x0000000000000000000000000000000000000000",
-      "SAI": "0x0000000000000000000000000000000000000000",
-      "MKR": "0xa7f6c9a5052a08a14ff0e3349094b6efbc591ea4",
-      "DGD": "0x1ab3bd2e2670d6e00ca406217e4d327f7f946d7e",
-      "GNT": "0x7fb3c4ff78bd0305a6ec436eda79303f981c5938",
-      "W-GNT": "0xa5d92f318247c3b43241436dbb55ec4be600dc42",
-      "REP": "0xf75caa57375a75dfc1a7ea917d6abb2c95511053",
-      "ICN": "0x5b73d26807ea72287bafa1a27fccf8ece5deabc4",
-      "1ST": "0xa8c784efdfe7d48bc5df28f770b6454a037e2abe",
-      "SNGLS": "0xf48cf5ad04afa369fe1ae599a8f3699c712b0352",
-      "VSL": "0x5017f42cf680fcbcab1093263468745c9af63e35",
-      "PLU": "0xcfe185ce294b443c16dd89f00527d8b25c45bf9d",
-      "MLN": "0xd4a8f8293d639752e263be3869057eaf7536e005",
-      "GUP": "0x0000000000000000000000000000000000000000"
     },
     "live": {
       "OW-ETH": "0x0000000000000000000000000000000000000000",

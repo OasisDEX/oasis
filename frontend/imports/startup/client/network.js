@@ -197,10 +197,6 @@ function checkNetwork() {
                   network = 'main';
                   Session.set('AVGBlocksPerDay', 5760);
                   break;
-                case '3':
-                  network = 'ropsten';
-                  Session.set('AVGBlocksPerDay', 5760);
-                  break;
                 case '42':
                   network = 'kovan';
                   Session.set('AVGBlocksPerDay', 21600);

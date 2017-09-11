@@ -127,9 +127,7 @@ export function txHref(tx) {
   if (Dapple['maker-otc'].objects) {
     const network = Session.get('network');
     let networkPrefix = '';
-    if (network === 'ropsten') {
-      networkPrefix = 'testnet.';
-    } else if (network === 'kovan') {
+    if (network === 'kovan') {
       networkPrefix = 'kovan.';
     }
     txLink = `https://${networkPrefix}etherscan.io/tx/${tx}`;
