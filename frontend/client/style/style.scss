@@ -1093,6 +1093,14 @@ table {
   margin-bottom: 20px;
 }
 
+.allowance-current {
+  display: inline-block;
+  vertical-align: middle;
+  width: 200px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
 .info-section-order-cancel {
   padding: 20px 15px 5px 15px !important;
 }
@@ -2524,7 +2532,7 @@ span.right {
   .allowance-currency, .base-currency, .quote-currency {
     @extend .currency;
     float: right;
-    transform: translateY(4px);
+    transform: translateY(3px);
   }
   .text-clarifications {
     font-size: 14px;

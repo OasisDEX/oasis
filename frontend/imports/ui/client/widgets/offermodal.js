@@ -46,8 +46,8 @@ Template.offermodal.viewmodel({
       }
     });
   },
-  events : {
-    'keyup input[data-requires-precision]'(event) {
+  events: {
+    'keyup input[data-requires-precision]': function (event) {
       const precision = Session.get('precision');
       const value = event.target.value;
 
@@ -302,18 +302,18 @@ Template.offermodal.viewmodel({
 
     if (this.type() === 'bid') {
       bestOffer = Offers.findOne({
-          buyWhichToken: Session.get('baseCurrency'),
-          sellWhichToken: Session.get('quoteCurrency'),
-        },
+        buyWhichToken: Session.get('baseCurrency'),
+        sellWhichToken: Session.get('quoteCurrency'),
+      },
         {
           sort: { ask_price_sort: 1 },
         });
       return (new BigNumber(bestOffer.bid_price)).gt(new BigNumber(this.templateInstance.data.offer.bid_price));
     } else if (this.type() === 'ask') {
       bestOffer = Offers.findOne({
-          buyWhichToken: Session.get('quoteCurrency'),
-          sellWhichToken: Session.get('baseCurrency'),
-        },
+        buyWhichToken: Session.get('quoteCurrency'),
+        sellWhichToken: Session.get('baseCurrency'),
+      },
         {
           sort: { ask_price_sort: 1 },
         });
@@ -578,7 +578,7 @@ Template.offermodal.events({
   'click button.btn-allowance-modal': (event) => {
     const refer = $(event.target).data('refer');
     const token = $(event.target).data('link');
-    const allowance = Template.instance().viewmodel.offerAmount();
+    const allowance = Template.instance().viewmodel.offerType() === 'buy' ? Template.instance().viewmodel.offerTotal() : Template.instance().viewmodel.offerAmount();
     $(`#allowanceModal${token}`).data('refer', refer);
     $(`#allowanceModal${token}`).modal('show');
     $(`#allowanceModal${token}`).on('shown.bs.modal', () => {
