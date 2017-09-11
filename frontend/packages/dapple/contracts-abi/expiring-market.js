@@ -29,14 +29,6 @@ const ExpiringMarketABI = {
   }, {
     constant: true,
     inputs: [],
-    name: 'era',
-    outputs: [{ name: '', type: 'uint64' }],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
-  }, {
-    constant: true,
-    inputs: [],
     name: 'last_offer_id',
     outputs: [{ name: '', type: 'uint256' }],
     payable: false,
@@ -70,17 +62,17 @@ const ExpiringMarketABI = {
     stateMutability: 'nonpayable',
     type: 'function',
   }, {
-    constant: true,
+    constant: false,
     inputs: [],
-    name: 'close_time',
+    name: 'getTime',
     outputs: [{ name: '', type: 'uint64' }],
     payable: false,
-    stateMutability: 'view',
+    stateMutability: 'nonpayable',
     type: 'function',
   }, {
     constant: true,
     inputs: [],
-    name: 'lifetime',
+    name: 'close_time',
     outputs: [{ name: '', type: 'uint64' }],
     payable: false,
     stateMutability: 'view',
@@ -173,14 +165,6 @@ const ExpiringMarketABI = {
     type: 'function',
   }, {
     constant: false,
-    inputs: [{ name: 'age', type: 'uint64' }],
-    name: 'warp',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
-  }, {
-    constant: false,
     inputs: [{ name: 'id', type: 'uint256' }, { name: 'quantity', type: 'uint256' }],
     name: 'buy',
     outputs: [{ name: '', type: 'bool' }],
@@ -199,23 +183,10 @@ const ExpiringMarketABI = {
     stateMutability: 'nonpayable',
     type: 'function',
   }, {
-    inputs: [{ name: 'lifetime_', type: 'uint64' }, { name: 'era_', type: 'uint64' }],
+    inputs: [{ name: '_close_time', type: 'uint64' }],
     payable: false,
     stateMutability: 'nonpayable',
     type: 'constructor',
-  }, {
-    anonymous: true,
-    inputs: [{ indexed: true, name: 'sig', type: 'bytes4' }, {
-      indexed: true,
-      name: 'guy',
-      type: 'address',
-    }, { indexed: true, name: 'foo', type: 'bytes32' }, {
-      indexed: true,
-      name: 'bar',
-      type: 'bytes32',
-    }, { indexed: false, name: 'wad', type: 'uint256' }, { indexed: false, name: 'fax', type: 'bytes' }],
-    name: 'LogNote',
-    type: 'event',
   }, {
     anonymous: false,
     inputs: [{ indexed: false, name: 'id', type: 'uint256' }],
