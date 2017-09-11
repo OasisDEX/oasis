@@ -252,7 +252,11 @@ Offers.checkMarketOpen = () => {
     if (!error) {
       const closeTime = t.toNumber();
       Session.set('close_time', closeTime);
-      Session.set('market_open', closeTime > (new Date() / 1000));
+    }
+  });
+  Dapple['maker-otc'].objects.otc.isClosed((error, t) => {
+    if (!error) {
+      Session.set('market_open', !t);
     }
   });
 };
