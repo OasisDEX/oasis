@@ -37,10 +37,10 @@ Template.offermodal.viewmodel({
         const buyHowMuch = web3Obj.fromWei(new BigNumber(offer.buyHowMuch)).toString(10);
         const baseCurrency = Session.get('baseCurrency');
         if (baseCurrency === offer.buyWhichToken) {
-          this.fillOrderPartiallyOrFully(this.volume, this.baseAvailable(), web3Obj.toWei(buyHowMuch));
+          this.volume(buyHowMuch);
           this.calcTotal();
         } else {
-          this.fillOrderPartiallyOrFully(this.total, this.quoteAvailable(), web3Obj.toWei(buyHowMuch));
+          this.total(buyHowMuch);
           this.calcVolume();
         }
       }
