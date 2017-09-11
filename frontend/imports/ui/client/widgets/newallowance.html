@@ -47,34 +47,47 @@
                     <span class="allowance-currency">{{token._id}}</span>
                   </td>
                 </tr>
-                <tr class="row-input-line set-allowance">
-                  <th>
-                    Set
-                  </th>
-                  <td>
-                    <input class="input" type="number" min="0" step="any" placeholder={{fromWei token.allowance}} {{b
-                      "value: value"}}><span class="allowance-currency">{{token._id}}</span>
-                  </td>
-                </tr>
                 </tbody>
-                <tfoot>
-                {{#unless equals lastError ''}}
-                  <tr>
-                    <td colspan="2">
-                      {{lastError}}
-                    </td>
-                  </tr>
-                {{/unless}}
-                {{#each pending}}
-                  <tr>
-                    <td colspan="2">
-                      Pending: {{this.value}} {{this.token}}
-                    </td>
-                  </tr>
-                {{/each}}
-                </tfoot>
               </table>
             </div>
+          </form>
+          <section class="input-section">
+            <table class="allowance-input-table bordered">
+              <tbody>
+              <tr class="row-input-line">
+                <th class="dex-label-cell">
+                  <span>SET</span>
+                </th>
+                <td class="dex-input-cell">
+                  <input data-requires-precision type="number" class="input" step="any" min="0"
+                         placeholder={{fromWei token.allowance}} {{b "value: value"}}>
+                </td>
+                <td class="dex-currency-cell">
+                  <span>{{token._id}}</span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </section>
+          <form>
+            <table>
+              <tfoot>
+              {{#unless equals lastError ''}}
+                <tr>
+                  <td colspan="2">
+                    {{lastError}}
+                  </td>
+                </tr>
+              {{/unless}}
+              {{#each pending}}
+                <tr>
+                  <td colspan="2">
+                    Pending: {{this.value}} {{this.token}}
+                  </td>
+                </tr>
+              {{/each}}
+              </tfoot>
+            </table>
           </form>
         </div>
         <div class="modal-footer">
