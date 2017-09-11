@@ -555,13 +555,15 @@
         <div class="modal-footer">
           {{#unless hasAllowanceNewOrder offerType}}
             {{#if equals offerType 'buy'}}
-              <button type="button" data-refer="newOrder" data-link={{quoteCurrency}} class="btn btn-allowance-modal
-                      dex-btn-default btn-submit-order-allowance btn-placement-right
-              " data-dismiss="modal">Change Allowance</button>
+              <button type="button" data-refer="newOrder" data-link="{{quoteCurrency}}"
+                      class="btn btn-allowance-modal dex-btn-default btn-submit-order-allowance btn-placement-right"
+                      data-dismiss="modal">Change Allowance
+              </button>
             {{else}}
-              <button type="button" data-refer="newOrder" data-link={{baseCurrency}} class="btn btn-allowance-modal
-                      dex-btn-default btn-submit-order-allowance btn-placement-right
-              " data-dismiss="modal">Change Allowance</button>
+              <button type="button" data-refer="newOrder" data-link="{{baseCurrency}}"
+                      class="btn btn-allowance-modal dex-btn-default btn-submit-order-allowance btn-placement-right"
+                      data-dismiss="modal">Change Allowance
+              </button>
             {{/if}}
           {{else}}
             <button type="button" class="btn dex-btn-default {{offerType}} btn-placement-right" data-dismiss="modal" {{b
