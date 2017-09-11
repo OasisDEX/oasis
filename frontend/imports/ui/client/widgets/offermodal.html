@@ -18,11 +18,15 @@
               <tr class="row-data-line">
                 <th>ALLOWANCE</th>
                 {{#if equals offer.type 'bid'}}
-                  <td>{{{formatBalance baseToken.allowance '' '' true}}} <span
-                    class="allowance-currency">{{baseToken._id}}</span></td>
+                  <td>
+                    <span class="allowance-current">{{{formatBalance baseToken.allowance '' '' true}}} </span>
+                    <span class="allowance-currency">{{baseToken._id}}</span>
+                  </td>
                 {{else}}
-                  <td>{{{formatBalance quoteToken.allowance '' '' true}}} <span
-                    class="allowance-currency">{{quoteToken._id}}</span></td>
+                  <td>
+                    <span class="allowance-current">{{{formatBalance quoteToken.allowance '' '' true}}} </span>
+                    <span class="allowance-currency">{{quoteToken._id}}</span>
+                  </td>
                 {{/if}}
               </tr>
               <tr class="row-data-line">
@@ -219,13 +223,13 @@
                                               Gas {{{formatNumber gasEstimateInETH 4 true}}} ETH
                                             </span>
                                           </div>
-                                        <div class="col-xs-6">
+                                          <div class="col-xs-6">
                                           <span style="width: 90px" class="dex-currency-label dex-currency-label--fiat">
                                             <span>
                                               ~ {{{ formatNumber (multiply gasEstimateInETH priceInUSD) 2 true}}} USD
                                             </span>
                                           </span>
-                                        </div>
+                                          </div>
                                         {{else}}
                                           {{#if gasEstimateError}}
                                             Gas estimation failed.
@@ -323,11 +327,15 @@
             <tr class="row-data-line">
               <th>ALLOWANCE</th>
               {{#if equals offerType 'buy'}}
-                <td>{{{formatBalance quoteToken.allowance '' '' true}}} <span
-                  class="allowance-currency">{{quoteToken._id}}</span></td>
+                <td>
+                  <span class="allowance-current">{{{formatBalance quoteToken.allowance '' '' true}}} </span>
+                  <span class="allowance-currency">{{quoteToken._id}}</span>
+                </td>
               {{else}}
-                <td>{{{formatBalance baseToken.allowance '' '' true}}} <span
-                  class="allowance-currency">{{baseToken._id}}</span></td>
+                <td>
+                  <span class="allowance-current">{{{formatBalance baseToken.allowance '' '' true}}} </span>
+                  <span class="allowance-currency">{{baseToken._id}}</span>
+                </td>
               {{/if}}
             </tr>
             <tr class="row-data-line">
