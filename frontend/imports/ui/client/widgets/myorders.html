@@ -21,7 +21,7 @@
         {{#if loadingIndividualTradeHistory}}
           <div class="loading-market-history">{{{loadingIcon}}} Loading closed trades...</div>
         {{/if}}
-        {{> orders orders=(findOrders filterByStatus) type='myOrders' priceLabel='PRICE' showCancel=true showType=true canOpenTxLink=(equals filterByStatus  status.CLOSED) }}
+        {{> orders orders=(findOrders filterByStatus) type='myOrders' priceLabel='PRICE' showCancel=true showType=true showDate=(equals filterByStatus  status.CLOSED) canOpenTxLink=(equals filterByStatus  status.CLOSED) }}
       {{else}}
         <small>Select an account to display your orders</small>
       {{/if}}

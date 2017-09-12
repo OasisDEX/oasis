@@ -744,6 +744,14 @@ table {
             border-top: 1px #DCDDE0 solid;
             background: rgba(248, 247, 245, 0.15);
           }
+
+          & td.order-type {
+            width: 48px;
+          }
+
+          & td:nth-child(4) {
+            width: 75px;
+          }
         }
         &.helper-row {
           td {
@@ -762,9 +770,6 @@ table {
           color: #4A4A4A;
           text-align: right;
           max-width: 92px;
-        }
-        td:first-of-type {
-          width: 30px;
         }
         td.bid {
           color: $color-buy;
@@ -787,9 +792,6 @@ table {
           font-size: 12px;
           line-height: 20px;
           width: 55px;
-        }
-        td:nth-child(3) {
-          max-width: 90px !important;
         }
         td:last-of-type {
           width: 22px;
