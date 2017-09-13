@@ -292,6 +292,8 @@ Offers.sync = () => {
 
 Offers.syncOffers = () => {
   Offers.remove({});
+  Session.set('loadingCounter', 0);
+  Session.set('offersCount', 0);
 
   // Watch ItemUpdate Event
   /* eslint new-cap: ["error", { "capIsNewExceptions": ["ItemUpdate", "Trade", "LogTake"] }] */
@@ -316,7 +318,6 @@ Offers.syncOffers = () => {
       Session.set('loadingCounter', loaded);
 
       if (loaded === total) {
-        Session.set('loadingCounter', 0);
         Offers.syncOffer(id.toString(10));
       } else {
         Offers.syncOffer(id.toString(10), total);
