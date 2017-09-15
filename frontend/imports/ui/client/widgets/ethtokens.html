@@ -1,9 +1,25 @@
 <template name="ethtokens">
   <form id="ethtokens">
-    <h2>
+    <h2 class="{{#if equals title 'WRAP'}}marginal{{/if}}">
       {{title}}
       {{> whatisthis section="w-eth-wrapped-ether-tokens"}}
     </h2>
+    {{#if equals title 'WRAP'}}
+      <section>
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="row-fluid div-modal-text highlighted warning-section bordered bordered--danger">
+            <span class="order-warning-icon">
+              <img style="opacity: 0.5" src="order-warning-red.svg" fill="red">
+            </span>
+              <span class="order-warning-text text-danger">
+              <strong>Do not wrap all of your ETH!</strong> Otherwise you cannot pay for transactions.
+            </span>
+            </div>
+          </div>
+        </div>
+      </section>
+    {{/if}}
     {{#if equals type 'deposit'}}
       <div class="available">
         <span class="available-label">
@@ -37,7 +53,7 @@
                   {{b "click: fillAmount"}}>{{title}} MAX
                 </button>
               {{/if}}
-              <input type="number" class="input with-max-btn" step="any" min="" placeholder="0"
+              <input type="number" class="input {{#if equals title 'UNWRAP'}}with-max-btn{{/if}}" step="any" min="" placeholder="0"
                 {{b "value: amount, attr: { max: maxAmount }"}}>
             </div>
           </td>

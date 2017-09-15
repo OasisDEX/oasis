@@ -25,6 +25,7 @@ Template.ethtokens.viewmodel({
   amount: '',
   lastError: '',
   shouldShowMaxBtn: false,
+  shouldShowWrapWarning: false,
   fillAmount() {
     let amount = '0';
     try {
@@ -39,10 +40,12 @@ Template.ethtokens.viewmodel({
     this.amount(amount);
   },
   onFocus() {
-    this.shouldShowMaxBtn(true);
+    if (this.title().toLowerCase() === 'unwrap') { this.shouldShowMaxBtn(true); }
+    if (this.title().toLowerCase() === 'wrap') { this.shouldShowWrapWarning(true); }
   },
   onBlur() {
-    this.shouldShowMaxBtn(false);
+    if (this.title().toLowerCase() === 'unwrap') { this.shouldShowMaxBtn(false); }
+    if (this.title().toLowerCase() === 'wrap') { this.shouldShowWrapWarning(false); }
   },
   focusOnInput(event) {
     $(event.target).find('input.with-max-btn').focus();
