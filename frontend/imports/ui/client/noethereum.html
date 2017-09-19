@@ -1,28 +1,53 @@
 <template name="noEthereum">
-    <div class="no-ethereum-section">
-        <img class="img-header-logo" alt="Maker" src="logo.svg">
-        <hr class="horizontal-line">
-        <img class="img-ethereum-logo" alt="Ethereum" src="ethereum-logo.svg">
-        <h2>NOT CONNECTED TO ETHEREUM</h2>
-        <p class="p-not-found">OasisDEX requires an Ethereum client to be running and current. OasisDEX could not detect a client running which probably means it's not installed,
-            running or is misconfigured.</p>
-        <p class="p-use-clients">Please use one of the following clients to connect to Ethereum:</p>
-        <div class="div-clients">
-            <div class="div-metamask">
-                <img class="img-logo" alt="Metamask" src="metamask-logo.svg">
-                <h2>METAMASK</h2>
-                <p><span class="align-number"><span class="numberCircle">1</span></span>Install <a class="span-montserrat-semi-bold a-link" href="https://metamask.io/" target="_blank">Metamask</a></p>
-                <p><span class="align-number"><span class="numberCircle">2</span></span>Use Chrome to browse <a class="span-montserrat-semi-bold a-link" href="https://oasisdex.com" target="_blank">https://oasisdex.com</a></p>
-            </div>
-            <div class="div-mist">
-                <img class="img-logo" alt="Mist" src="mist-logo.svg">
-                <h2>MIST</h2>
-                <p><span class="align-number"><span class="numberCircle">1</span></span>Install and run <a class="span-montserrat-semi-bold a-link" href="https://github.com/ethereum/mist/releases" target="_blank">Mist</a></p>
-                <p><span class="align-number"><span class="numberCircle">2</span></span>Use Mist to browse <a class="span-montserrat-semi-bold a-link" href="https://oasisdex.com" target="_blank">https://oasisdex.com</a></p>
-            </div>
-        </div>
-        <p class="p-connect-geth">While you can also connect with <b>geth</b> or <b>parity</b>, a more advanced configuration is needed. See the
-            <a href="https://github.com/OasisDEX/oasis/wiki#network" target="_blank">OasisDEX documentation</a> for instructions.
+  <div class="no-ethereum-section">
+    <img class="img-header-logo" alt="Maker" src="logo.svg">
+    <hr class="horizontal-line">
+    <img class="img-ethereum-logo" alt="Ethereum" src="ethereum-logo.svg">
+    <h2>NOT CONNECTED TO ETHEREUM</h2>
+    <p class="p-not-found">OasisDEX requires an Ethereum client to be running and current. OasisDEX could not detect a
+      client running which probably means it's not installed,
+      running or is misconfigured.</p>
+    <p class="p-use-clients">Please use one of the following clients to connect to Ethereum:</p>
+    <div class="div-clients">
+      <div class="div-metamask">
+        <img class="img-logo" alt="Metamask" src="metamask-logo.svg">
+        <h2>METAMASK</h2>
+        <p><span class="align-number"><span class="numberCircle">1</span></span>Install <a
+          class="span-montserrat-semi-bold a-link" href="https://metamask.io/" target="_blank">Metamask</a></p>
+        <p><span class="align-number"><span class="numberCircle">2</span></span>Use Chrome to browse <a
+          class="span-montserrat-semi-bold a-link" href="https://oasisdex.com" target="_blank">https://oasisdex.com</a>
         </p>
+      </div>
+      <div class="div-parity">
+        <img class="img-logo" alt="Mist" src="parity-logo.png">
+        <h2>PARITY</h2>
+        <p>
+          <span class="align-number"><span class="numberCircle">1</span></span>Install and run
+          <a class="span-montserrat-semi-bold a-link" href="https://github.com/paritytech/parity"
+             target="_blank">Parity</a>  +
+          <a class="span-montserrat-semi-bold a-link"
+             href="https://chrome.google.com/webstore/detail/parity-ethereum-integrati/himekenlppkgeaoeddcliojfddemadig"
+             target="_blank">Parity Extension</a>
+        </p>
+        <p><span class="align-number"><span class="numberCircle">2</span></span>Use Chrome to browse <a
+          class="span-montserrat-semi-bold a-link" href="https://oasisdex.com" target="_blank">https://oasisdex.com</a>
+        </p>
+      </div>
+      <div class="div-mist">
+        <img class="img-logo" alt="Mist" src="mist-logo.svg">
+        <h2>MIST</h2>
+        <p><span class="align-number"><span class="numberCircle">1</span></span>Install and run <a
+          class="span-montserrat-semi-bold a-link" href="https://github.com/ethereum/mist/releases"
+          target="_blank">Mist</a></p>
+        <p><span class="align-number"><span class="numberCircle">2</span></span>Use Mist to browse <a
+          class="span-montserrat-semi-bold a-link" href="https://oasisdex.com" target="_blank">https://oasisdex.com</a>
+        </p>
+      </div>
     </div>
+    <p class="p-connect-geth">While you can also connect with <b>geth</b>, a more advanced
+      configuration is needed. See the
+      <a href="https://github.com/OasisDEX/oasis/wiki#network" target="_blank">OasisDEX documentation</a> for
+      instructions.
+    </p>
+  </div>
 </template>

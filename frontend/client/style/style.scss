@@ -1755,7 +1755,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   }
 
   .div-clients {
-    height: 360px;
+    height: 420px;
     display: flex;
     justify-content: center;
     font-size: 21px;
@@ -1765,11 +1765,12 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   }
 
   .div-metamask,
-  .div-mist {
+  .div-mist,
+  .div-parity {
     background-color: #FFFFFF;
     width: 340px;
-    height: 360px;
-    padding: 33px 10px 33px 27px;
+    height: 420px;
+    padding: 32px 24px;
     opacity: 0.89;
     border: 2px solid #EFF1F3;
     box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.13);
@@ -1813,7 +1814,6 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
 
     .align-number {
       display: table-cell;
-      vertical-align: middle;
       padding-right: 20px;
     }
 
