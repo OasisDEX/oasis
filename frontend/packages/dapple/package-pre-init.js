@@ -1,7 +1,7 @@
 // console.log('package-pre-init start')
 import { Session } from 'meteor/session';
 
-// const metamask = require('metamascara');
+const metamask = require('metamascara');
 
 Session.set('web3ObjReady', false);
 
