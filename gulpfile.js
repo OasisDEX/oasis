@@ -34,4 +34,11 @@ gulp.task('deploy-surge', [], function () {
   })
 })
 
+gulp.task('m-deploy-surge', ['build-meteor'], function () {
+  return surge({
+    project: './dist',          // Path to your static build directory
+    domain: 'mascara.oasisdex.surge.sh'  // Your domain or Surge subdomain
+  })
+})
+
 gulp.task('deploy', gulpsync.sync(['build-meteor', 'deploy-gh-pages']))
