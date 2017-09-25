@@ -689,6 +689,18 @@ table {
   h2 {
     padding-right: 30px;
   }
+  &.open-orders {
+    tbody tr td {
+      max-width: 92px;
+    }
+
+    thead {
+      th.th-quote-currency,
+      th.th-base-currency {
+        max-width: 92px;
+      }
+    }
+  }
   .t-scroll {
     thead {
       th {
@@ -709,12 +721,6 @@ table {
       }
       th.th-price {
         max-width: 90px;
-      }
-      th.th-quote-currency {
-        max-width: 92px;
-      }
-      th.th-base-currency {
-        max-width: 92px;
       }
       th:last-child {
         border-bottom-right-radius: 4px;
@@ -769,7 +775,6 @@ table {
           font-size: 14.5px;
           color: #4A4A4A;
           text-align: right;
-          max-width: 92px;
         }
         td.bid {
           color: $color-buy;

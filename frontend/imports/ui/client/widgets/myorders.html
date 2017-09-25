@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <div id="myorders-container">
+    <div id="myorders-container" class="{{#if equals filterByStatus  status.CLOSED}} closed-orders {{else}} open-orders {{/if}}">
       {{#if address}}
         {{#if loadingIndividualTradeHistory}}
           <div class="loading-market-history">{{{loadingIcon}}} Loading closed trades...</div>
