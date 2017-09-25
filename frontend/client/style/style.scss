@@ -671,7 +671,7 @@ table {
   width: 442px;
   min-height: 305px;
   margin: 0px 17px 35px 17px;
-  padding: 30px 0px 10px 30px;
+  padding: 20px 0px 20px 30px;
   overflow: hidden;
 }
 
@@ -1446,19 +1446,41 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
 }
 
 .deposit-section {
+
   .available {
     margin-bottom: 25px;
     padding-top: 20px;
   }
 
+  .order-warning-text {
+    width: 320px;
+  }
+
+  .bordered--danger {
+    border-color: rgba(242,117,114,0.8);
+  }
+
+  .highlighted .text-danger {
+    color: rgba(255, 0, 0, 0.7);
+  }
+
+  .warning-section {
+    padding: 5px 0;
+    margin-bottom: 0;
+  }
+
+  .marginal {
+    margin-bottom: 20px;
+  }
+
   h2 {
-    margin-bottom: 40px;
+    margin-bottom: 72px;
   }
 
   table.footer {
     tr {
       td {
-        padding-top: 35px;
+        padding-top: 20px;
         padding-bottom: 0;
       }
     }
