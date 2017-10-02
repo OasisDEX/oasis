@@ -653,7 +653,7 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
       const { sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId } =
         Offers.offerContractParameters(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken);
       Dapple['maker-otc'].objects.otc.offer(sellHowMuchAbsolute, sellWhichTokenAddress,
-        buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId,
+        buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId, true,
         { gas: Math.min(gasEstimate[0] + 500000, gasEstimate[1]) }, (error, tx) => {
           callback(error, tx);
           if (!error) {
