@@ -166,6 +166,17 @@ export function formatNumber(number, dec) {
   return thousandSeparator(n);
 }
 
+export function trim(number) {
+  const precision = Session.get('precision') || 5;
+  const rounding = Session.get('rounding') || 1;
+
+  if (!(number instanceof BigNumber)) {
+    return number;
+  }
+
+  return number.round(precision, rounding);
+}
+
 export function removeOutliersFromArray(data, fieldName, deviation) {
   const l = data.length;
   if (data.length <= 2) {
