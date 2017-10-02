@@ -610,8 +610,8 @@ Offers.newOfferGasEstimate = async (sellHowMuch, sellWhichToken, buyHowMuch, buy
   const { sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId } =
     Offers.offerContractParameters(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken);
 
-  const data = Dapple['maker-otc'].objects.otc.offer.getData(sellHowMuchAbsolute, sellWhichTokenAddress,
-    buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId);
+  const data = Dapple['maker-otc'].objects.otc.offer['uint256,address,uint256,address,uint256,bool'].getData(sellHowMuchAbsolute, sellWhichTokenAddress,
+    buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId, true);
 
   const latestBlockPromise = Offers.getBlock('latest');
   const estimateGasPromise = new Promise((resolve, reject) => {
@@ -652,7 +652,7 @@ Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callb
     .then((gasEstimate) => {
       const { sellHowMuchAbsolute, sellWhichTokenAddress, buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId } =
         Offers.offerContractParameters(sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken);
-      Dapple['maker-otc'].objects.otc.offer(sellHowMuchAbsolute, sellWhichTokenAddress,
+      Dapple['maker-otc'].objects.otc.offer['uint256,address,uint256,address,uint256,bool'](sellHowMuchAbsolute, sellWhichTokenAddress,
         buyHowMuchAbsolute, buyWhichTokenAddress, userHigherId, true,
         { gas: Math.min(gasEstimate[0] + 500000, gasEstimate[1]) }, (error, tx) => {
           callback(error, tx);
