@@ -147,7 +147,7 @@ function initNetwork(newNetwork) {
     Session.set('isConnected', true);
     Session.set('latestBlock', 0);
     Session.set('startBlock', 0);
-    Session.set('rounding', 1); // Setting rounding mode following http://mikemcl.github.io/bignumber.js/#constructor-properties
+    Session.set('rounding', 3); // Setting rounding mode following http://mikemcl.github.io/bignumber.js/#constructor-properties
     doHashChange();
     denotePrecision();
     Tokens.sync();

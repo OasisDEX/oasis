@@ -13,7 +13,7 @@ import './neworder.html';
 Template.neworder.viewmodel({
   share: 'newOffer',
   precision: Session.get('precision') || 5,
-  rounding: Session.get('rounding') || 1,
+  rounding: Session.get('rounding') || 3,
   lastError: '',
   bestOffer: undefined,
   validAmount: true,
