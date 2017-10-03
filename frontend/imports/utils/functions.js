@@ -168,7 +168,7 @@ export function formatNumber(number, dec) {
 
 export function trim(number) {
   const precision = Session.get('precision') || 5;
-  const rounding = Session.get('rounding') || 1;
+  const rounding = Session.get('rounding') || 3;
 
   if (!(number instanceof BigNumber)) {
     return number;
