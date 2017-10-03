@@ -123,12 +123,9 @@ function checkIfBuyEnabled(marketType) {
 }
 
 function denotePrecision() {
-  // This logic was to set global precision based on the token with lower precision.
-  // const basePrecision = Dapple.getTokenSpecs(Session.get('baseCurrency')).precision;
-  // const quotePrecision = Dapple.getTokenSpecs(Session.get('quoteCurrency')).precision;
-  // const precision = basePrecision < quotePrecision ? basePrecision : quotePrecision;
-
-  const precision = 5;
+  const basePrecision = Dapple.getTokenSpecs(Session.get('baseCurrency')).precision;
+  const quotePrecision = Dapple.getTokenSpecs(Session.get('quoteCurrency')).precision;
+  const precision = basePrecision < quotePrecision ? basePrecision : quotePrecision;
   Session.set('precision', precision);
   // TODO: find away to place ROUNDING_MODE in here.
   // Right now no matter where It is put , it's overridden with ROUNDING_MODE: 1 from web3 package config.
@@ -147,7 +144,6 @@ function initNetwork(newNetwork) {
     Session.set('isConnected', true);
     Session.set('latestBlock', 0);
     Session.set('startBlock', 0);
-    Session.set('rounding', 1); // Setting rounding mode following http://mikemcl.github.io/bignumber.js/#constructor-properties
     doHashChange();
     denotePrecision();
     Tokens.sync();

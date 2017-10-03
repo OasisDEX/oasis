@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 import { $ } from 'meteor/jquery';
 import { BigNumber } from 'meteor/ethereum:web3';
 import { web3Obj } from 'meteor/makerotc:dapple';
-import { formatError, trim } from '/imports/utils/functions';
+import { formatError } from '/imports/utils/functions';
 import { convertToTokenPrecision } from '/imports/utils/conversion';
 
 import Tokens from '/imports/api/tokens';
@@ -16,7 +16,6 @@ const latest = require('promise-latest');
 
 Template.offermodal.viewmodel({
   share: 'newOffer',
-  precision: Session.get('precision'),
   volume: '',
   total: '',
   priceInUSD: '',
@@ -49,16 +48,22 @@ Template.offermodal.viewmodel({
   },
   events: {
     'keyup input[data-requires-precision]': function (event) {
+      const precision = Session.get('precision');
+      const value = event.target.value;
+
       try {
-        const amount = new BigNumber(event.target.value || 0);
-        if (amount.decimalPlaces() > this.precision()) {
-          $(event.target).val(trim(amount));
+        const amount = new BigNumber(value || 0);
+        if (amount.decimalPlaces() > precision) {
+          $(event.target).val(amount.toFixed(precision), 6);
           $(event.target).trigger('change');
         }
       } catch (exception) {
         console.debug('Provided value in the input field is not a number!', exception);
       }
     },
+  },
+  precision() {
+    return Session.get('precision');
   },
   validAmount: true,
   validNewOrderAmount: true,
@@ -209,13 +214,13 @@ Template.offermodal.viewmodel({
     }
     try {
       const baseCurrency = Session.get('baseCurrency');
-      const total = trim(new BigNumber(this.total()));
-      const buyHowMuch = trim(new BigNumber(this.templateInstance.data.offer.buyHowMuch));
-      const sellHowMuch = trim(new BigNumber(this.templateInstance.data.offer.sellHowMuch));
+      const total = new BigNumber(this.total(), 10).toFixed(this.precision(), 6);
+      const buyHowMuch = new BigNumber(new BigNumber(this.templateInstance.data.offer.buyHowMuch, 10).toFixed(this.precision(), 6), 10);
+      const sellHowMuch = new BigNumber(new BigNumber(this.templateInstance.data.offer.sellHowMuch, 10).toFixed(this.precision(), 6), 10);
       if (this.templateInstance.data.offer.buyWhichToken === baseCurrency) {
-        this.volume(buyHowMuch.times(total).div(sellHowMuch).round(this.precision(), 6).valueOf());
+        this.volume(buyHowMuch.times(total).div(sellHowMuch).toFixed(this.precision(), 6));
       } else {
-        this.volume(sellHowMuch.times(total).div(buyHowMuch).round(this.precision(), 6).valueOf());
+        this.volume(sellHowMuch.times(total).div(buyHowMuch).toFixed(this.precision(), 6));
       }
     } catch (e) {
       this.volume('0');
@@ -230,13 +235,13 @@ Template.offermodal.viewmodel({
     }
     try {
       const baseCurrency = Session.get('baseCurrency');
-      const volume = trim(new BigNumber(this.volume()));
-      const buyHowMuch = trim(new BigNumber(this.templateInstance.data.offer.buyHowMuch));
-      const sellHowMuch = trim(new BigNumber(this.templateInstance.data.offer.sellHowMuch));
+      const volume = new BigNumber(this.volume(), 10).toFixed(this.precision(), 6);
+      const buyHowMuch = new BigNumber(new BigNumber(this.templateInstance.data.offer.buyHowMuch, 10).toFixed(this.precision(), 6), 10);
+      const sellHowMuch = new BigNumber(new BigNumber(this.templateInstance.data.offer.sellHowMuch, 10).toFixed(this.precision(), 6), 10);
       if (this.templateInstance.data.offer.buyWhichToken === baseCurrency) {
-        this.total(sellHowMuch.times(volume).div(buyHowMuch).round(this.precision(), 6).valueOf());
+        this.total(sellHowMuch.times(volume).div(buyHowMuch).toFixed(this.precision(), 6));
       } else {
-        this.total(buyHowMuch.times(volume).div(sellHowMuch).round(this.precision(), 6).valueOf());
+        this.total(buyHowMuch.times(volume).div(sellHowMuch).toFixed(this.precision(), 6));
       }
     } catch (e) {
       console.log(e);
@@ -252,13 +257,13 @@ Template.offermodal.viewmodel({
       return;
     }
     try {
-      const price = trim(new BigNumber(this.offerPrice()));
-      const amount = trim(new BigNumber(this.offerAmount()));
-      const total = price.times(amount).round(this.precision(), 6);
+      const price = new BigNumber(new BigNumber(this.offerPrice(), 10).toFixed(this.precision(), 6), 10);
+      const amount = new BigNumber(new BigNumber(this.offerAmount(), 10).toFixed(this.precision(), 6), 10);
+      const total = new BigNumber(price.times(amount), 10);
       if (total.isNaN()) {
         this.offerTotal('0');
       } else {
-        this.offerTotal(total.valueOf());
+        this.offerTotal(total.toString(10));
       }
     } catch (e) {
       this.offerTotal('0');
@@ -274,13 +279,13 @@ Template.offermodal.viewmodel({
       return;
     }
     try {
-      const price = trim(new BigNumber(this.offerPrice()));
-      const total = trim(new BigNumber(this.offerTotal()));
-      let amount = new BigNumber(this.offerAmount() || 0);
+      const price = new BigNumber(new BigNumber(this.offerPrice(), 10).toFixed(this.precision(), 6), 10);
+      const total = new BigNumber(new BigNumber(this.offerTotal(), 10).toFixed(this.precision(), 6), 10);
+      let amount = new BigNumber(this.offerAmount() || 0, 10);
       if (total.isZero() && price.isZero() && (amount.isNaN() || amount.isNegative())) {
         this.offerAmount('0');
       } else if (!total.isZero() || !price.isZero()) {
-        amount = total.div(price).round(this.precision(), 6);
+        amount = new BigNumber(total.div(price).toFixed(this.precision(), 6), 10);
         if (amount.isNaN()) {
           this.offerAmount('0');
         } else {
@@ -297,18 +302,18 @@ Template.offermodal.viewmodel({
 
     if (this.type() === 'bid') {
       bestOffer = Offers.findOne({
-          buyWhichToken: Session.get('baseCurrency'),
-          sellWhichToken: Session.get('quoteCurrency'),
-        },
+        buyWhichToken: Session.get('baseCurrency'),
+        sellWhichToken: Session.get('quoteCurrency'),
+      },
         {
           sort: { ask_price_sort: 1 },
         });
       return (new BigNumber(bestOffer.bid_price)).gt(new BigNumber(this.templateInstance.data.offer.bid_price));
     } else if (this.type() === 'ask') {
       bestOffer = Offers.findOne({
-          buyWhichToken: Session.get('quoteCurrency'),
-          sellWhichToken: Session.get('baseCurrency'),
-        },
+        buyWhichToken: Session.get('quoteCurrency'),
+        sellWhichToken: Session.get('baseCurrency'),
+      },
         {
           sort: { ask_price_sort: 1 },
         });

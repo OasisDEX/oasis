@@ -5,15 +5,12 @@ import { web3Obj } from 'meteor/makerotc:dapple';
 import Tokens from '/imports/api/tokens';
 import { Offers } from '/imports/api/offers';
 import { $ } from 'meteor/jquery';
-import { trim } from '/imports/utils/functions';
 
 import '/imports/ui/client/shared.js';
 import './neworder.html';
 
 Template.neworder.viewmodel({
   share: 'newOffer',
-  precision: Session.get('precision') || 5,
-  rounding: Session.get('rounding') || 1,
   lastError: '',
   bestOffer: undefined,
   validAmount: true,
@@ -29,10 +26,12 @@ Template.neworder.viewmodel({
       }
     },
     'keyup input[data-requires-precision]'(event) {
+      const precision = Session.get('precision');
+      const value = event.target.value;
       try {
-        const amount = new BigNumber(event.target.value || 0);
-        if (amount.decimalPlaces() > this.precision()) {
-          $(event.target).val(trim(amount).valueOf());
+        const amount = new BigNumber(value || 0);
+        if (amount.decimalPlaces() > precision) {
+          $(event.target).val(amount.toFixed(precision), 6);
           $(event.target).trigger('change');
         }
       } catch (exception) {
@@ -87,6 +86,9 @@ Template.neworder.viewmodel({
   type() {
     return this.orderType() ? this.orderType() : '';
   },
+  precision() {
+    return Session.get('precision');
+  },
   sellCurrency() {
     if (this.type() === 'buy') {
       return Session.get('quoteCurrency');
@@ -126,9 +128,9 @@ Template.neworder.viewmodel({
       return;
     }
     try {
-      const price = trim(new BigNumber(this.price()));
-      const amount = trim(new BigNumber(this.amount()));
-      const total = price.times(amount).round(this.precision(), 6);
+      const price = new BigNumber(new BigNumber(this.price(), 10).toFixed(this.precision(), 6));
+      const amount = new BigNumber(new BigNumber(this.amount(), 10).toFixed(this.precision(), 6));
+      const total = new BigNumber(price.times(amount).toFixed(this.precision(), 6), 10);
       if (total.isNaN()) {
         this.total('0');
       } else {
@@ -146,12 +148,12 @@ Template.neworder.viewmodel({
       return;
     }
     try {
-      const price = trim(new BigNumber(this.price()));
-      const total = trim(new BigNumber(this.total()));
+      const price = new BigNumber(new BigNumber(this.price(), 10).toFixed(this.precision(), 6));
+      const total = new BigNumber(new BigNumber(this.total(), 10).toFixed(this.precision(), 6));
       if (total.isZero() && price.isZero()) {
         this.amount('0');
       } else {
-        const amount = total.div(price).round(this.precision(), 6);
+        const amount = new BigNumber(total.div(price).toFixed(this.precision(), 6), 10);
         if (amount.isNaN()) {
           this.amount('0');
         } else {
