@@ -230,6 +230,11 @@ table {
     font-family: 'Montserrat', sans-serif;
     font-size: 10px;
     color: #D0D0D0;
+
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
 }
 
