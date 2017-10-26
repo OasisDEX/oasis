@@ -2,7 +2,7 @@
   <div class="account-section">
     <p>
       Account:
-      <span class="select-change-allowance"> 
+      <span class="select-change-allowance">
         <select class="select-change-account">
         {{#each accounts}}
           <option value="{{this}}" selected={{equals this address}}>{{this}}</option>
@@ -13,11 +13,11 @@
     </p>
     {{#if ready}}
     <p>
-      Market: 
-      <span class="select-change-allowance">
+      Market:
+      <span class="select-change-allowance" title="DO NOT TRANSFER TO THIS ADDRESS!">
         <a class="link-contract-address" href={{contractHref}} target="_blank">{{contractAddress}}</a>
         {{> whatisthis section="contract"}}
-      </span> 
+      </span>
     </p>
     {{/if}}
   </div>
