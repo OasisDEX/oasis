@@ -1253,8 +1253,6 @@ table {
     }
 
     table tbody tr.row-input-line th.dex-label-cell {
-      text-align: left;
-      padding-left: 13px;
       background: #F8F7F5;
     }
 
@@ -2639,9 +2637,6 @@ span.right {
       border-bottom: 1px solid #F0F2F3;
       &.set-allowance {
         border-top: 1px solid #E5E9EB;
-        th, td {
-          padding-top: 10px;
-        }
       }
     }
   }
