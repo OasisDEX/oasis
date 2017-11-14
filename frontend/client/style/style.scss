@@ -1462,7 +1462,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   }
 
   .bordered--danger {
-    border-color: rgba(242,117,114,0.8);
+    border-color: rgba(242, 117, 114, 0.8);
   }
 
   .highlighted .text-danger {
@@ -2416,6 +2416,21 @@ section.depositbalance {
     border-top: 1px #E8E9EA solid;
     border-bottom: 1px #E8E9EA solid;
     cursor: pointer;
+  }
+
+  .action-button-holder {
+    text-align: center;
+  }
+
+  .action-button {
+    border: 1px solid #D3D5DC;
+    border-radius: 100px;
+    @extend .montserrat-semibold;
+    font-size: 12px;
+    color: #222228;
+    opacity: 0.68;
+    text-decoration: none;
+    padding: 10px 20px 10px 20px;
   }
 }
 
