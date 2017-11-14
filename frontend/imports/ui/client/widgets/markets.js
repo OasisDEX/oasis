@@ -209,4 +209,8 @@ Template.markets.viewmodel({
   showScroll() {
     return this.tradingPairs().filter((pair) => pair.isVisible()).length > 5 || this.showAll();
   },
+  pairContains(token) {
+    return this.quoteCurrency().toUpperCase() === token.toUpperCase()
+       || this.baseCurrency().toUpperCase() === token.toUpperCase();
+  },
 });
