@@ -2346,8 +2346,7 @@ span.loading-icon {
       -moz-appearance: none;
       -webkit-appearance: none;
       background-color: rgba(0, 0, 0, 0.0);
-      color: #222228;
-      opacity: 0.68;
+      color: #4F5362;
       border: none;
       margin-right: -20px;
       padding: 9px 30px 9px 15px;
@@ -2416,19 +2415,23 @@ section.depositbalance {
     cursor: pointer;
   }
 
-  .action-button-holder {
-    text-align: center;
-  }
-
   .action-button {
+    @extend .montserrat-semibold;
     border: 1px solid #D3D5DC;
     border-radius: 100px;
-    @extend .montserrat-semibold;
     font-size: 12px;
-    color: #222228;
-    opacity: 0.68;
+    color: #4F5362;
     text-decoration: none;
-    padding: 10px 20px 10px 20px;
+    float: right;
+    margin-right: 35px;
+    padding: 9px 20px 9px 20px;
+    transform: translateY(-6px);
+
+    &:hover, &:focus:enabled, &:active:enabled {
+      color: white;
+      background-color: #A8ACB9;
+      border-color: #838690;
+    }
   }
 }
 
