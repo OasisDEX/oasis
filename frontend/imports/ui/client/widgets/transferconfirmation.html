@@ -7,23 +7,29 @@
             aria-hidden="true">&times;</span></button>
           <h4 class="modal-title">Transfer Wrapped Tokens</h4>
         </div>
-        <div class="modal-body row">
-          <div class="col-xs-1">
-            <img src="order-warning-red.svg" fill="red" class="order-warning">
-          </div>
-          <div class="col-xs-11">
-            <span class="text-danger">
-              <span class="warning"> WARNING: You are attempting to transfer a wrapped token. </span> <br><br>
-              This is not the same as transferring the token itself, and many wallets do not yet support these wrapped tokens.
-              This means it could get stuck or be very difficult to transfer back out of this address. <br><br>
-              Are you sure you don't want to unwrap the token first and  then transfer that?
-            </span>
+        <div class="row modal-body info-section-order-cancel">
+          <div class="col-xs-12">
+            <div class="row div-modal-text warning-section bordered bordered--danger">
+              <div class="order-warning-icon">
+                <img src="order-warning-red.svg">
+              </div>
+              <div class="order-warning-text text-clarifications text-danger">
+                  <span class="warning">
+                      WARNING You are attempting to transfer a wrapped token. <br><br>
+                  </span>
+                  <span class="text-danger">
+                  This is not the same as transferring the token itself, and many wallets do not yet support these wrapped tokens.
+                  This means it could get stuck or be very difficult to transfer back out of this address. <br><br>
+                  Are you sure you don't want to unwrap the token first and  then transfer that?
+                  </span>
+              </div>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default btn-transfer btn-placement-left" data-dismiss="modal">Close
+          <button type="button" class="btn dex-btn-default btn-placement-left" data-dismiss="modal">Close
           </button>
-          <button type="button" class="btn btn-default btn-transfer btn-warning btn-placement-right"
+          <button type="button" class="btn dex-btn-default btn-warning btn-placement-right sell"
                   data-dismiss="modal" {{b "click: confirm"}}>
             Transfer
           </button>
