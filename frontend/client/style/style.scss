@@ -1100,10 +1100,6 @@ table {
   }
 }
 
-.allowance-input-table {
-  margin-bottom: 20px;
-}
-
 .allowance-current {
   display: inline-block;
   vertical-align: middle;
@@ -1264,6 +1260,11 @@ table {
     .available-label {
       padding-left: 13px;
     }
+  }
+
+  .input-section.allowance {
+    margin-top: 10px;
+    margin-bottom: 25px;
   }
 }
 
@@ -2603,16 +2604,46 @@ span.right {
   text-transform: uppercase;
 }
 
+
 .modal-body {
   .my-allowance-instructions {
-    background: #FBFAF9;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    border: 1px solid #E5E9EB;
     border-radius: 8px;
-    padding: 20px;
+    padding: 20px 30px 20px 30px;
     div.my-allowance {
-      p {
-        color: rgba(34, 34, 40, 0.68);
+
+      div.allowance-text {
+        text-align: start;
+        color: rgba(34, 34, 40, 0.50);
+        font-weight: 400;
+      }
+
+      img.allowance-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+      }
+
+    }
+
+
+    div.my-allowance.row {
+      display: flex;
+      flex-flow: row wrap;
+
+      &::before {
+        display: block;
       }
     }
+
+
+    div.my-allowance.row.grant {
+      margin-bottom: 10px;
+    }
+
   }
   th {
     text-transform: uppercase;
