@@ -19,6 +19,9 @@ $color-cancel: #A8ACB9;
 $border-more: #A8ACB9;
 $color-place-order: #4F5362;
 $color-cancel-order: #A8ACB9;
+$color-border-warning: rgba(255, 0, 0, 0.5);
+$color-btn-default-text: #4F5362;
+
 
 /* FONTS */
 
@@ -169,7 +172,7 @@ table {
 }
 
 .row-messages {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 .row-tabs {
@@ -196,7 +199,7 @@ table {
     background-color: rgba(0, 0, 0, 0.0);
     margin-left: 25px;
     display: inline-block;
-    padding: 0px 17px 0px 10px;
+    padding: 0 17px 0 10px;
     width: 330px;
     .question-circle {
       @extend .question-circle;
@@ -224,13 +227,11 @@ table {
   .link-contract-address {
     color: #D0D0D0;
     transform: translateX(-10px);
-    padding: 13px 0px 13px 17px;
+    padding: 13px 0 13px 17px;
     display: inline-block;
     opacity: 0.68;
     font-family: 'Montserrat', sans-serif;
     font-size: 10px;
-    color: #D0D0D0;
-
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
@@ -367,7 +368,7 @@ table {
 
     .middle-tab {
       background-color: rgba(0, 0, 0, 0.0);
-      border-radius: 0px;
+      border-radius: 0;
       border-left: none;
       border-right: none;
       width: 196px;
@@ -375,7 +376,7 @@ table {
 
     .last-tab {
       background-color: rgba(0, 0, 0, 0.0);
-      border-radius: 0px 100px 100px 0px;
+      border-radius: 0 100px 100px 0;
       width: 124px;
     }
   }
@@ -408,7 +409,7 @@ table {
 
 .div-message {
   background: rgba(215, 215, 215, 0.05);
-  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.15);
   border-radius: 3px;
   padding: 8px 25px 8px 20px;
   width: 100%;
@@ -425,7 +426,7 @@ table {
   }
 
   ul {
-    padding-left: 0px;
+    padding-left: 0;
     li {
       opacity: 0.69;
       font-family: 'Montserrat', sans-serif;
@@ -434,12 +435,10 @@ table {
       color: #4F5362;
       letter-spacing: 0.58px;
       margin-bottom: 8px;
-      margin-left: 10px;
-      padding-left: 0px;
       line-height: 18px;
       list-style-type: none;
-      margin-left: 0px;
-      padding: 0px 0px 0px 36px;
+      margin-left: 0;
+      padding: 0 0 0 36px;
     }
   }
 
@@ -450,9 +449,9 @@ table {
     font-size: 14px;
     color: #4F5362;
     letter-spacing: 0.58px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     line-height: 18px;
-    padding: 0px 15px;
+    padding: 0 15px;
     .attention {
       font-weight: bold;
       font-size: 13px;
@@ -465,7 +464,7 @@ table {
       font-size: 16px;
       text-transform: uppercase;
       font-weight: 800;
-      padding: 10px 0px;
+      padding: 10px 0;
     }
 
     .warning {
@@ -601,7 +600,7 @@ table {
     text-align: center;
     color: #4F5362;
     letter-spacing: 2px;
-    margin: 0px;
+    margin: 0;
     display: block;
     align-self: center;
 
@@ -610,7 +609,7 @@ table {
       -webkit-appearance: none;
       border: none;
       background-color: rgba(0, 0, 0, 0.0);
-      padding: 8px 0px 8px 0px;
+      padding: 8px 0 8px 0;
       cursor: pointer;
     }
 
@@ -639,8 +638,8 @@ table {
       @extend .select-currency;
       border-radius: 100px 0 0 100px;
       background-color: #E8E9ED;
-      padding: 0px 0px 0px 12px;
-      border-right: 0px;
+      padding: 0 0 0 12px;
+      border-right: 0;
       margin-right: -6px;
     }
 
@@ -649,7 +648,7 @@ table {
       border-radius: 0 100px 100px 0;
       opacity: 0.5;
       background-color: rgba(0, 0, 0, 0.0);
-      padding: 0px 12px 0px 0px;
+      padding: 0 12px 0 0;
     }
 
     .span-token-pair {
@@ -671,12 +670,12 @@ table {
   opacity: 0.89;
   background: #FFFFFF;
   border: 1px solid #EFF1F3;
-  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.13);
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.13);
   border-radius: 4px;
   width: 442px;
   min-height: 305px;
-  margin: 0px 17px 35px 17px;
-  padding: 30px 0px 10px 30px;
+  margin: 0 17px 35px 17px;
+  padding: 30px 0 10px 30px;
   overflow: hidden;
 }
 
@@ -808,7 +807,7 @@ table {
         }
         .cancel {
           border: none;
-          padding: 0px;
+          padding: 0;
           width: 29px;
           height: 16px;
           border-radius: 7px;
@@ -916,7 +915,7 @@ table {
 
   .cancel {
     border: none;
-    padding: 0px;
+    padding: 0;
     width: 29px;
     height: 16px;
     border-radius: 7px;
@@ -1229,7 +1228,7 @@ table {
   margin-bottom: 20px;
 
   &--danger {
-    color: rgba(255, 0, 0, 0.5);;
+    color: $color-border-warning;
   }
 }
 
@@ -1275,7 +1274,7 @@ table {
   border-radius: 6px;
 
   &--danger {
-    border-color: rgba(255, 0, 0, 0.5);
+    border-color: $color-border-warning;
   }
 }
 
@@ -1293,7 +1292,7 @@ button.dex-btn-default {
   border: 1px solid #A8ACB9;
   border-radius: 100px;
   width: 120px;
-  color: #4F5362;
+  color: $color-btn-default-text;
   background-color: transparent;
   text-transform: uppercase;
 
@@ -1382,10 +1381,6 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
     max-width: 280px;
   }
 
-  .btn-transfer {
-    margin-top: 13px;
-  }
-
   .btn-warning {
     @extend .montserrat-semibold;
     border: 1px solid $color-sell;
@@ -1460,11 +1455,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   }
 
   .bordered--danger {
-    border-color: rgba(242, 117, 114, 0.8);
-  }
-
-  .highlighted .text-danger {
-    color: rgba(255, 0, 0, 0.7);
+    border-color: $color-border-warning;
   }
 
   .warning-section {
@@ -1544,7 +1535,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
 
 .btn-placement-left {
   float: left;
-  margin-left: 0px !important;
+  margin-left: 0 !important;
 
 }
 
@@ -1567,7 +1558,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
 
 .div-more {
   text-align: center;
-  margin: 15px 0px 5px 0px;
+  margin: 15px 0 5px 0;
 }
 
 .modal-order {
@@ -1757,7 +1748,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
 
   .horizontal-line {
     color: #DCDDE0;
-    border: 0px;
+    border: 0;
     border-top: solid 1px #DCDDE0;
   }
 
@@ -1802,7 +1793,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
     padding: 33px 10px 33px 27px;
     opacity: 0.89;
     border: 2px solid #EFF1F3;
-    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.13);
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.13);
     border-radius: 4px;
     margin: 0 20px;
 
@@ -1832,7 +1823,6 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
       height: 28px;
       width: 28px;
       line-height: 28px;
-      border-radius: 50%;
       -moz-border-radius: 50%;
       text-align: center;
       border: solid 1px #CFD8DC;
@@ -1899,7 +1889,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
         @include qq-equal(5) {
           max-width: 110px;
           &:last-of-type {
-            width: 0px;
+            width: 0;
           }
         }
         @include qq-equal(6) {
@@ -1908,7 +1898,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
         @include qq-equal(7) {
           max-width: 85px;
           &:first-of-type {
-            width: 0px;
+            width: 0;
           }
           &.th-date {
             max-width: 80px !important;
@@ -1929,7 +1919,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
             max-width: 65px;
           }
           &:last-of-type {
-            width: 0px;
+            width: 0;
           }
         }
       }
@@ -1972,7 +1962,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
           @include qq-equal(5) {
             max-width: 110px;
             &:last-of-type {
-              width: 0px;
+              width: 0;
             }
           }
           @include qq-equal(6) {
@@ -1981,7 +1971,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
           @include qq-equal(7) {
             max-width: 85px;
             &:first-of-type {
-              width: 0px;
+              width: 0;
             }
             &.timestamp {
               max-width: 80px !important;
@@ -1999,7 +1989,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
               max-width: 80px;
             }
             &:last-of-type {
-              width: 0px;
+              width: 0;
             }
           }
         }
@@ -2177,8 +2167,8 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   @extend .t-scroll;
   thead {
     tr {
-      border-top-left-radius: 0px;
-      border-bottom-left-radius: 0px;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
       th {
         &:first-child {
           width: 20px !important;
@@ -2198,7 +2188,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
           }
         }
         &:last-child {
-          width: 0px !important;
+          width: 0 !important;
         }
       }
     }
@@ -2299,11 +2289,11 @@ span.loading-icon {
 
 .hr-footer {
   max-width: 980px;
-  margin: 50px auto 0px auto;
+  margin: 50px auto 0 auto;
 }
 
 .tab-content {
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 /* MARKET CHART */
@@ -2313,7 +2303,7 @@ span.loading-icon {
   line-height: 205px;
   position: absolute;
   top: 65px;
-  left: 0px;
+  left: 0;
   z-index: 100000;
   text-align: center;
   background: rgba(255, 255, 255, 0.5);
@@ -2338,7 +2328,7 @@ span.loading-icon {
     font-size: 10px;
     background-color: rgba(0, 0, 0, 0.0);
     display: block;
-    padding: 0px 17px 0px 10px;
+    padding: 0 17px 0 10px;
     float: right;
     margin-right: 35px;
     transform: translateY(-6px);
@@ -2362,7 +2352,7 @@ span.loading-icon {
 
 section.markets {
   background: #FCFCFB;
-  padding-left: 0px;
+  padding-left: 0;
   h2 {
     padding-left: 30px;
   }
@@ -2374,7 +2364,7 @@ section.chart {
 
 section.depositbalance {
   background: #FCFCFB;
-  padding-left: 0px;
+  padding-left: 0;
   h2 {
     padding-left: 30px;
   }
@@ -2383,7 +2373,7 @@ section.depositbalance {
 #container-transfer {
   @extend .select-market;
   .select-market-container {
-    margin-right: 0px;
+    margin-right: 0;
   }
 }
 
@@ -2420,7 +2410,7 @@ section.depositbalance {
     border: 1px solid #D3D5DC;
     border-radius: 100px;
     font-size: 12px;
-    color: #4F5362;
+    color: $color-btn-default-text;
     text-decoration: none;
     float: right;
     margin-right: 35px;
@@ -2440,6 +2430,10 @@ section.depositbalance {
   background-color: transparent;
 }
 
+.btn-transfer {
+  margin-top: 11px;
+}
+
 .alert {
   margin-top: 30px;
 }
@@ -2457,7 +2451,7 @@ section.depositbalance {
 }
 
 .text-danger {
-  color: rgba(0, 0, 0, 0.4);
+  color: rgba(239, 83, 80, 0.7);
   a {
     color: inherit;
   }
@@ -2468,16 +2462,16 @@ section.depositbalance {
 }
 
 .npl {
-  padding-left: 0px;
+  padding-left: 0;
 }
 
 .npr {
-  padding-right: 0px;
+  padding-right: 0;
 }
 
 .nplr {
-  padding-left: 0px;
-  padding-right: 0px;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .ns-aux {
@@ -2489,7 +2483,7 @@ section.depositbalance {
 }
 
 hr.nmt {
-  margin-top: 0px !important;
+  margin-top: 0 !important;
 }
 
 /* CUSTOM TOOLTIP CHART.JS */
@@ -2541,7 +2535,7 @@ span.right {
 
 /* MODAL RESET */
 #offerModal {
-  padding: 0px !important;
+  padding: 0 !important;
 }
 
 .modal-backdrop {
@@ -2602,7 +2596,7 @@ span.right {
 
 .modal-header {
   border: none;
-  padding: 0px 5px 5px 5px;
+  padding: 0 5px 5px 5px;
 }
 
 .modal-title {
@@ -2712,7 +2706,6 @@ span.right {
 .highlighted {
   .text-danger {
     vertical-align: middle;
-    color: rgba(255, 0, 0, 0.5);
   }
 }
 
@@ -2742,13 +2735,9 @@ a.logo:hover {
 }
 
 #transferconfirmation {
-  //dirty hack to make the red more blurry
-  .modal-body {
-    opacity: 0.7;
-  }
 
   .warning {
-    color: red;
+    color: $color-sell;
   }
 }
 
@@ -2758,6 +2747,7 @@ a.logo:hover {
     display: inline-block;
     vertical-align: middle;
     padding-left: 16px;
+    opacity: 0.7;
   }
 
   &-text {
