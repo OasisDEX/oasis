@@ -989,6 +989,7 @@ table {
         }
 
         td.dex-input-cell {
+          text-align: right;
           max-width: 230px;
         }
 
@@ -1082,7 +1083,6 @@ table {
     font-weight: bold;
     color: #ABABAD;
     border: none;
-    float: right;
     text-align: right;
     padding-right: 10px;
     max-width: 100%;
@@ -1379,7 +1379,8 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   }
 
   .dex-input-cell input.recipient {
-    max-width: 280px;
+    padding-right: 20px;
+    width: 100%;
   }
 
   .btn-warning {
