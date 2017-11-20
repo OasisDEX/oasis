@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
 import { BigNumber } from 'meteor/ethereum:web3';
@@ -102,10 +103,15 @@ Template.ethtokens.viewmodel({
               Session.set('ETHDepositProgressMessage', 'Executing wrap... (waiting for transaction confirmation)');
               Session.set('ETHDepositErrorMessage', '');
               Transactions.add(TRANSACTION_TYPE_DEPOSIT, tx, { type: DEPOSIT, amount: this.amount() });
+              this.amount(0);
             } else {
               Session.set('ETHDepositProgress', 0);
               Session.set('ETHDepositProgressMessage', '');
               Session.set('ETHDepositErrorMessage', formatError(txError));
+
+              Meteor.setTimeout(() => {
+                Session.set('ETHDepositErrorMessage', '');
+              }, 10000);
             }
           });
           WETH.watchDeposit();
@@ -113,6 +119,10 @@ Template.ethtokens.viewmodel({
           Session.set('ETHDepositProgress', 0);
           Session.set('ETHDepositProgressMessage', '');
           Session.set('ETHDepositErrorMessage', error.toString());
+
+          Meteor.setTimeout(() => {
+            Session.set('ETHDepositErrorMessage', '');
+          }, 10000);
         }
       });
     } else {
@@ -127,10 +137,15 @@ Template.ethtokens.viewmodel({
               Session.set('ETHWithdrawProgress', 66);
               Session.set('ETHWithdrawProgressMessage', 'Executing unwrap... (waiting for transaction confirmation)');
               Transactions.add(TRANSACTION_TYPE_WITHDRAW, tx, { type: WITHDRAW, amount: this.amount() });
+              this.amount(0);
             } else {
               Session.set('ETHWithdrawProgress', 0);
               Session.set('ETHWithdrawProgressMessage', '');
               Session.set('ETHWithdrawErrorMessage', formatError(txError));
+
+              Meteor.setTimeout(() => {
+                Session.set('ETHWithdrawErrorMessage', '');
+              }, 10000);
             }
           });
           WETH.watchWithdraw();
@@ -138,6 +153,10 @@ Template.ethtokens.viewmodel({
           Session.set('ETHWithdrawProgress', 0);
           Session.set('ETHWithdrawProgressMessage', '');
           Session.set('ETHWithdrawErrorMessage', error.toString());
+
+          Meteor.setTimeout(() => {
+            Session.set('ETHWithdrawErrorMessage', '');
+          }, 10000);
         }
       });
     }
