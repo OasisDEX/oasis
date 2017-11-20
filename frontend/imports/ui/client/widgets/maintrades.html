@@ -36,10 +36,10 @@
     <div class="row">
       <div class="order-center">
         <section class="order-section col-md-6">
-          {{> orderbook title='BUY ORDERS' subtitle=(concat '(click on an order listing to sell ' baseCurrency ')') priceClass='bid' priceLabel='BID PRICE' orders=(findOffers 'bid') showType=false}}
+          {{> orderbook title='BUY ORDERS' subtitle=(concat '(click on an order listing to sell ' baseCurrency ')') priceClass='bid' priceLabel='BID PRICE' orders=(findOffers 'bid') showCancel=true showType=false}}
         </section>
         <section class="order-section col-md-6">
-          {{> orderbook title='SELL ORDERS' subtitle=(concat '(click on an order listing to buy ' baseCurrency ')') priceClass='ask' priceLabel='ASK PRICE' orders=(findOffers 'ask')}}
+          {{> orderbook title='SELL ORDERS' subtitle=(concat '(click on an order listing to buy ' baseCurrency ')') priceClass='ask' priceLabel='ASK PRICE' orders=(findOffers 'ask') showCancel=true}}
         </section>
       </div>
     </div>
