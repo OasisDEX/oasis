@@ -825,6 +825,10 @@ table {
 .order-section-content {
   h2 {
     padding-right: 30px;
+
+    &.myorders-header {
+      padding-right: 0;
+    }
   }
   thead {
     th {
