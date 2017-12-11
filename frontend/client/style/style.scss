@@ -22,7 +22,6 @@ $color-cancel-order: #A8ACB9;
 $color-border-warning: rgba(255, 0, 0, 0.5);
 $color-btn-default-text: #4F5362;
 
-
 /* FONTS */
 
 .montserrat-semibold {
@@ -1656,6 +1655,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
 
 .modal-wrapper-update {
   @extend .modal-order;
+  width: 550px;
 
   .modal-header {
     margin-bottom: 32px;
@@ -2604,7 +2604,6 @@ span.right {
   text-transform: uppercase;
 }
 
-
 .modal-body {
   .my-allowance-instructions {
     margin-top: 20px;
@@ -2624,11 +2623,10 @@ span.right {
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%,-50%);
+        transform: translate(-50%, -50%);
       }
 
     }
-
 
     div.my-allowance.row {
       display: flex;
@@ -2638,7 +2636,6 @@ span.right {
         display: block;
       }
     }
-
 
     div.my-allowance.row.grant {
       margin-bottom: 10px;
