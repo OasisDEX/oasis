@@ -19,6 +19,7 @@ import '../../ui/client/widgets/orders.js';
 import '../../ui/client/widgets/orderbook.html';
 import '../../ui/client/widgets/sendtokens.js';
 import '../../ui/client/widgets/wrapper-update';
+import '../../ui/client/widgets/redeemer-modal';
 
 import '../../ui/client/headers/accountselector.js';
 import '../../ui/client/headers/balance.js';
