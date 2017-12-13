@@ -25,9 +25,14 @@ Template.redeemer.viewmodel({
     const redeemer = new Redeemer(Dapple.env);
     this.inProgress(true);
 
-    this.current(33);
-    this.message('Confirming redeem process...');
-    await redeemer.approve(account);
+    const allowance = await redeemer.allowanceOf(account);
+    const balance = await redeemer.balanceOf(account);
+
+    if (allowance < balance) {
+      this.current(33);
+      this.message('Confirming redeem process...');
+      await redeemer.approve(account);
+    }
 
     this.current(66);
     this.message('Redeeming new MKR tokens');
@@ -37,7 +42,6 @@ Template.redeemer.viewmodel({
     this.message('Redeeming Done!');
     setTimeout(() => {
       this.inProgress(false);
-      Session.set('redeemInProgress', false);
       /**
        * Nasty workaround because $('#redeemer').modal('hide') not working on surge.
        * Even invoked within dev console it's still  not closing the modal.

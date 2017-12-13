@@ -864,9 +864,9 @@ const envConfig = {
 class Redeemer {
   constructor(env) {
     const { oldMKRAddress, redeemerAddress } = envConfig[env];
-    this.contract = web3Obj.eth.contract(abi).at(redeemerAddress);
+    this.redeemer = web3Obj.eth.contract(abi).at(redeemerAddress);
     this.redeemerAddress = envConfig[env].redeemerAddress;
-    this.oldMKRAddress = oldMKRAddress;
+    this.mkr = web3Obj.eth.contract(tokenAbi).at(oldMKRAddress);
 
     this.redeem = this.redeem.bind(this);
     this.balanceOf = this.balanceOf.bind(this);
@@ -875,11 +875,9 @@ class Redeemer {
 
   async approve(account) {
     const balance = await this.balanceOf(account);
-    const oldMKR = web3Obj.eth.contract(tokenAbi).at(this.oldMKRAddress);
-
     return new Promise((resolve, reject) => {
       console.log('Approving redeeming process...');
-      oldMKR.approve(this.redeemerAddress, balance, { gasPrice: web3Obj.toWei(4, 'gwei') }, async (error, tx) => {
+      this.mkr.approve(this.redeemerAddress, balance, { gasPrice: web3Obj.toWei(4, 'gwei') }, async (error, tx) => {
         console.log('Approval TX number: ', tx);
         if (!error) {
           /* eslint-disable no-underscore-dangle */
@@ -899,7 +897,7 @@ class Redeemer {
   async redeem() {
     return new Promise((resolve, reject) => {
       console.log('Redeeming ...');
-      this.contract.redeem({ gasPrice: web3Obj.toWei(4, 'gwei') }, async (e, tx) => {
+      this.redeemer.redeem({ gasPrice: web3Obj.toWei(4, 'gwei') }, async (e, tx) => {
         console.log('Redeeming TX number: ', tx);
         if (!e) {
           /* eslint-disable no-underscore-dangle */
@@ -918,10 +916,21 @@ class Redeemer {
 
   async balanceOf(account) {
     return new Promise((resolve, reject) => {
-      const token = web3Obj.eth.contract(tokenAbi).at(this.oldMKRAddress);
-      token.balanceOf(account, (error, balance) => {
+      this.mkr.balanceOf(account, (error, balance) => {
         if (!error) resolve(balance);
         else reject();
+      });
+    });
+  }
+
+  async allowanceOf(account) {
+    return new Promise((resolve, reject) => {
+      this.mkr.allowance(account, this.redeemerAddress, (error, balance) => {
+        if (!error) {
+          resolve(balance);
+        } else {
+          reject(error);
+        }
       });
     });
   }

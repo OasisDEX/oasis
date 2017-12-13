@@ -296,7 +296,6 @@ function initSession() {
   Session.set('loadingIndividualTradeHistory', false); // this will be loading only if the user filter by closed status of orders
   Session.set('AVGBlocksPerDay', null);
   Session.set('watchedEvents', false);
-  Session.set('redeemInProgress', false);
   if (!Session.get('volumeSelector')) {
     Session.set('volumeSelector', 'quote');
   }
