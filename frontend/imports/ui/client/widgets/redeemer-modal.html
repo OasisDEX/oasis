@@ -1,9 +1,9 @@
-<template name="wrapperUpdate">
-  <div class="modal fade" id="wrapperUpdate" tabindex="-1" role="dialog">
+<template name="redeemer">
+  <div class="modal fade" id="redeemer" tabindex="-1" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content modal-wrapper-update">
         <div class="modal-header">
-          <h4 class="modal-title">WRAPPER UPDATE</h4>
+          <h4 class="modal-title">REDEEM MKR</h4>
         </div>
         <div class="modal-body">
           <div class="row">
@@ -12,20 +12,20 @@
                 <div class="col-xs-12">
                   <div class="row text-holder bordered">
                     <div class="col-xs-12">
-                      We have updated the wrapper contract.<br>
-                      Please unwrap your W-ETH to use the upgraded wrapper.
+                      We have updated and improved the MKR token.<br>
+                      Please redeem you new MKR tokens.
                     </div>
                   </div>
                   <div class="row">
                     <div class="currency-box bordered">
-                      <span class="dex-icon dex-icon-old--ethereum"></span>
-                      <span class="value"><span class="amount"></span><span class="token">W-ETH</span></span>
+                      <span class="dex-icon dex-icon-old--maker"></span>
+                      <span class="value"><span class="amount"></span><span class="token">MKR</span></span>
                     </div>
                     <div class="transition">
                     </div>
                     <div class="currency-box bordered">
-                      <span class="dex-icon dex-icon-new--ethereum"></span>
-                      <span class="value"><span class="amount"></span><span class="token">ETH</span></span>
+                      <span class="dex-icon dex-icon-new--maker"></span>
+                      <span class="value"><span class="amount"></span><span class="token">MKR</span></span>
                     </div>
                   </div>
                 </div>
@@ -41,8 +41,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn dex-btn-default dex-btn-success btn-placement-right" {{b "click:unwrap"}}>
-            UNWRAP ALL
+          <button type="button" class="btn dex-btn-default dex-btn-success btn-placement-right" {{b "click:redeem"}}>
+            REDEEM
           </button>
         </div>
       </div>
