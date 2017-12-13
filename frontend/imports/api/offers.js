@@ -510,14 +510,14 @@ Offers.syncOffer = (id, max = 0) => {
   Dapple['maker-otc'].objects.otc.offers(id, (error, data) => {
     if (!error) {
       const idx = id.toString();
-      const [sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress, owner, active] = data;
+      const [sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress, owner, timestamp] = data;
       const sellToken = Dapple.getTokenByAddress(sellWhichTokenAddress);
       if (sellToken === base && Session.get('loadingBuyOrders')) {
         Session.set('loadingBuyOrders', false);
       } else if (Session.get('loadingSellOrders')) {
         Session.set('loadingSellOrders', false);
       }
-      if (active) {
+      if (timestamp.valueOf() > 0) {
         Offers.updateOffer(idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWhichTokenAddress,
           owner, Status.CONFIRMED);
       } else {
@@ -570,7 +570,6 @@ Offers.updateOffer = (idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWh
       ask_price_sort: new BigNumber(buyHowMuchValue.div(sellHowMuchValue).toFixed(precision < 5 ? 5 : precision, 6), 10).toNumber(),
       bid_price_sort: new BigNumber(sellHowMuchValue.div(buyHowMuchValue).toFixed(precision < 5 ? 5 : precision, 6), 10).toNumber(),
     };
-
     Offers.upsert(idx, { $set: offer });
   }
 };

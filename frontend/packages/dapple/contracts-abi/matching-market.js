@@ -17,6 +17,17 @@ const MatchingMarketABI = {
     type: 'function',
   }, {
     constant: false,
+    inputs: [{ name: 'pay_gem', type: 'address' }, {
+      name: 'pay_amt',
+      type: 'uint256',
+    }, { name: 'buy_gem', type: 'address' }, { name: 'min_fill_amount', type: 'uint256' }],
+    name: 'sellAllAmount',
+    outputs: [{ name: 'fill_amt', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  }, {
+    constant: false,
     inputs: [],
     name: 'stop',
     outputs: [],
@@ -25,10 +36,10 @@ const MatchingMarketABI = {
     type: 'function',
   }, {
     constant: false,
-    inputs: [{ name: 'pay_gem', type: 'address' }, { name: 'buy_gem', type: 'address' }, {
-      name: 'pay_amt',
-      type: 'uint128',
-    }, { name: 'buy_amt', type: 'uint128' }],
+    inputs: [{ name: 'pay_gem', type: 'address' }, {
+      name: 'buy_gem',
+      type: 'address',
+    }, { name: 'pay_amt', type: 'uint128' }, { name: 'buy_amt', type: 'uint128' }],
     name: 'make',
     outputs: [{ name: '', type: 'bytes32' }],
     payable: false,
@@ -41,6 +52,17 @@ const MatchingMarketABI = {
     outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
+    type: 'function',
+  }, {
+    constant: true,
+    inputs: [{ name: 'buy_gem', type: 'address' }, {
+      name: 'pay_gem',
+      type: 'address',
+    }, { name: 'pay_amt', type: 'uint256' }],
+    name: 'getBuyAmount',
+    outputs: [{ name: 'fill_amt', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'view',
     type: 'function',
   }, {
     constant: false,
@@ -60,10 +82,13 @@ const MatchingMarketABI = {
     type: 'function',
   }, {
     constant: false,
-    inputs: [{ name: 'pay_amt', type: 'uint256' }, { name: 'pay_gem', type: 'address' }, {
-      name: 'buy_amt',
+    inputs: [{ name: 'pay_amt', type: 'uint256' }, {
+      name: 'pay_gem',
+      type: 'address',
+    }, { name: 'buy_amt', type: 'uint256' }, { name: 'buy_gem', type: 'address' }, {
+      name: 'pos',
       type: 'uint256',
-    }, { name: 'buy_gem', type: 'address' }, { name: 'pos', type: 'uint256' }],
+    }],
     name: 'offer',
     outputs: [{ name: '', type: 'uint256' }],
     payable: false,
@@ -114,6 +139,14 @@ const MatchingMarketABI = {
     type: 'function',
   }, {
     constant: false,
+    inputs: [{ name: 'id', type: 'uint256' }],
+    name: 'del_rank',
+    outputs: [{ name: '', type: 'bool' }],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  }, {
+    constant: false,
     inputs: [{ name: 'id', type: 'bytes32' }, { name: 'maxTakeAmount', type: 'uint128' }],
     name: 'take',
     outputs: [],
@@ -129,12 +162,12 @@ const MatchingMarketABI = {
     stateMutability: 'view',
     type: 'function',
   }, {
-    constant: false,
+    constant: true,
     inputs: [],
     name: 'getTime',
     outputs: [{ name: '', type: 'uint64' }],
     payable: false,
-    stateMutability: 'nonpayable',
+    stateMutability: 'view',
     type: 'function',
   }, {
     constant: true,
@@ -201,6 +234,17 @@ const MatchingMarketABI = {
     stateMutability: 'view',
     type: 'function',
   }, {
+    constant: false,
+    inputs: [{ name: 'buy_gem', type: 'address' }, {
+      name: 'buy_amt',
+      type: 'uint256',
+    }, { name: 'pay_gem', type: 'address' }, { name: 'max_fill_amount', type: 'uint256' }],
+    name: 'buyAllAmount',
+    outputs: [{ name: 'fill_amt', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  }, {
     constant: true,
     inputs: [{ name: 'id', type: 'uint256' }],
     name: 'isActive',
@@ -212,12 +256,12 @@ const MatchingMarketABI = {
     constant: true,
     inputs: [{ name: '', type: 'uint256' }],
     name: 'offers',
-    outputs: [{ name: 'pay_amt', type: 'uint256' }, { name: 'pay_gem', type: 'address' }, {
-      name: 'buy_amt',
-      type: 'uint256',
-    }, { name: 'buy_gem', type: 'address' }, { name: 'owner', type: 'address' }, {
-      name: 'active',
-      type: 'bool',
+    outputs: [{ name: 'pay_amt', type: 'uint256' }, {
+      name: 'pay_gem',
+      type: 'address',
+    }, { name: 'buy_amt', type: 'uint256' }, { name: 'buy_gem', type: 'address' }, {
+      name: 'owner',
+      type: 'address',
     }, { name: 'timestamp', type: 'uint64' }],
     payable: false,
     stateMutability: 'view',
@@ -322,7 +366,10 @@ const MatchingMarketABI = {
     constant: true,
     inputs: [{ name: '', type: 'uint256' }],
     name: '_rank',
-    outputs: [{ name: 'next', type: 'uint256' }, { name: 'prev', type: 'uint256' }],
+    outputs: [{ name: 'next', type: 'uint256' }, { name: 'prev', type: 'uint256' }, {
+      name: 'delb',
+      type: 'uint256',
+    }],
     payable: false,
     stateMutability: 'view',
     type: 'function',
@@ -360,13 +407,13 @@ const MatchingMarketABI = {
     type: 'function',
   }, {
     constant: false,
-    inputs: [{ name: 'pay_amt', type: 'uint256' }, { name: 'pay_gem', type: 'address' }, {
-      name: 'buy_amt',
+    inputs: [{ name: 'pay_amt', type: 'uint256' }, {
+      name: 'pay_gem',
+      type: 'address',
+    }, { name: 'buy_amt', type: 'uint256' }, { name: 'buy_gem', type: 'address' }, {
+      name: 'pos',
       type: 'uint256',
-    }, { name: 'buy_gem', type: 'address' }, { name: 'pos', type: 'uint256' }, {
-      name: 'rounding',
-      type: 'bool',
-    }],
+    }, { name: 'rounding', type: 'bool' }],
     name: 'offer',
     outputs: [{ name: '', type: 'uint256' }],
     payable: false,
@@ -374,10 +421,10 @@ const MatchingMarketABI = {
     type: 'function',
   }, {
     constant: false,
-    inputs: [{ name: 'pay_amt', type: 'uint256' }, { name: 'pay_gem', type: 'address' }, {
-      name: 'buy_amt',
-      type: 'uint256',
-    }, { name: 'buy_gem', type: 'address' }],
+    inputs: [{ name: 'pay_amt', type: 'uint256' }, {
+      name: 'pay_gem',
+      type: 'address',
+    }, { name: 'buy_amt', type: 'uint256' }, { name: 'buy_gem', type: 'address' }],
     name: 'offer',
     outputs: [{ name: '', type: 'uint256' }],
     payable: false,
@@ -388,6 +435,17 @@ const MatchingMarketABI = {
     inputs: [],
     name: 'buyEnabled',
     outputs: [{ name: '', type: 'bool' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  }, {
+    constant: true,
+    inputs: [{ name: 'pay_gem', type: 'address' }, {
+      name: 'buy_gem',
+      type: 'address',
+    }, { name: 'buy_amt', type: 'uint256' }],
+    name: 'getPayAmount',
+    outputs: [{ name: 'fill_amt', type: 'uint256' }],
     payable: false,
     stateMutability: 'view',
     type: 'function',
@@ -568,7 +626,26 @@ const MatchingMarketABI = {
     }],
     name: 'LogRemTokenPairWhitelist',
     type: 'event',
-  }],
+  }, {
+    anonymous: false,
+    inputs: [{ indexed: false, name: 'keeper', type: 'address' }, {
+      indexed: false,
+      name: 'id',
+      type: 'uint256',
+    }],
+    name: 'LogInsert',
+    type: 'event',
+  }, {
+    anonymous: false,
+    inputs: [{ indexed: false, name: 'keeper', type: 'address' }, {
+      indexed: false,
+      name: 'id',
+      type: 'uint256',
+    }],
+    name: 'LogDelete',
+    type: 'event',
+  }]
+  ,
 };
 
 export { MatchingMarketABI as default };
