@@ -1,4 +1,4 @@
-import { Dapple, web3Obj } from 'meteor/makerotc:dapple';
+import { web3Obj } from 'meteor/makerotc:dapple';
 
 const abi = [
   {
@@ -878,26 +878,17 @@ class Redeemer {
     const oldMKR = web3Obj.eth.contract(tokenAbi).at(this.oldMKRAddress);
 
     return new Promise((resolve, reject) => {
-      oldMKR.approve(this.redeemerAddress, balance, { gasPrice: web3Obj.toWei(4, 'gwei') }, (error, tx) => {
+      console.log('Approving redeeming process...');
+      oldMKR.approve(this.redeemerAddress, balance, { gasPrice: web3Obj.toWei(4, 'gwei') }, async (error, tx) => {
+        console.log('Approval TX number: ', tx);
         if (!error) {
-          let pending = true;
-
-          const checkTXStatus = setInterval(() => {
-            if (pending) {
-              web3Obj.eth.getTransactionReceipt(tx, (err, result) => {
-                if (!err) {
-                  if (result) {
-                    pending = false;
-                    resolve();
-                  }
-                } else {
-                  reject();
-                }
-              });
-            } else {
-              clearInterval(checkTXStatus);
-            }
-          }, 500);
+          /* eslint-disable no-underscore-dangle */
+          try {
+            await this._waitForTxReceipt(tx);
+            resolve();
+          } catch (rejection) {
+            reject();
+          }
         } else {
           reject();
         }
@@ -907,26 +898,17 @@ class Redeemer {
 
   async redeem() {
     return new Promise((resolve, reject) => {
-      this.contract.redeem({ gasPrice: web3Obj.toWei(4, 'gwei') }, (e, tx) => {
+      console.log('Redeeming ...');
+      this.contract.redeem({ gasPrice: web3Obj.toWei(4, 'gwei') }, async (e, tx) => {
+        console.log('Redeeming TX number: ', tx);
         if (!e) {
-          let pending = true;
-
-          const checkTXStatus = setInterval(() => {
-            if (pending) {
-              web3Obj.eth.getTransactionReceipt(tx, (err, result) => {
-                if (!err) {
-                  if (result) {
-                    pending = false;
-                    resolve();
-                  }
-                } else {
-                  reject();
-                }
-              });
-            } else {
-              clearInterval(checkTXStatus);
-            }
-          }, 500);
+          /* eslint-disable no-underscore-dangle */
+          try {
+            await this._waitForTxReceipt(tx);
+            resolve();
+          } catch (rejection) {
+            reject();
+          }
         } else {
           reject();
         }
@@ -941,6 +923,34 @@ class Redeemer {
         if (!error) resolve(balance);
         else reject();
       });
+    });
+  }
+
+  async _waitForTxReceipt(tx) {
+    return new Promise((resolve, reject) => {
+      const txChecking = setInterval(() => {
+        web3Obj.eth.getTransactionReceipt(tx, (err, result) => {
+          if (!err) {
+            if (result) {
+              console.log('Receipt status :', result.status);
+              // On mainnet after the Byzantium update status property was included to reflect
+              // if the top-level call actually was successful or not.
+
+              // On kovan we don't have this update so result.status will be null.
+              // In this case we consider that transaction failed only if the value is 0
+              if (result.status === '0x0') {
+                reject();
+              } else {
+                resolve();
+              }
+
+              clearInterval(txChecking);
+            }
+          } else {
+            reject();
+          }
+        });
+      }, 1000);
     });
   }
 }
