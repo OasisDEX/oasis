@@ -37,30 +37,41 @@ Template.wrapperUpdate.viewmodel({
           if (!txError) {
             this.current(66);
             this.message('Unwrapping... (waiting for transaction confirmation)');
-            Transactions.add(TRANSACTION_TYPE_WITHDRAW, tx, { type: WITHDRAW, amount: amount.toString(10) });
-            Transactions.observeRemoved(TRANSACTION_TYPE_WITHDRAW, (document) => {
-              if (document.receipt.logs.length === 0) {
-                this.onInterruptedWrapping('Missing logs inside the receipt!');
-              } else {
-                this.current(100);
-                this.message('Unwrapping Done!');
-                setTimeout(() => {
-                  this.inProgress(false);
-                  /**
-                   * Nasty workaround because $('#wrapperUpdate').modal('hide') not working on surge.
-                   * Even invoked within dev console it's still  not closing the modal.
-                   * @type {*}
-                   */
-                  const modal = $('#wrapperUpdate');
-                  modal.removeClass('in');
-                  modal.css('display', 'none');
+            const txChecking = setInterval(() => {
+              web3Obj.eth.getTransactionReceipt(tx, (err, result) => {
+                if (!err) {
+                  if (result) {
+                    console.log('Receipt status :', result.status);
+                    if (result.status === '0x1') {
+                      this.current(100);
+                      this.message('Unwrapping Done!');
+                    } else {
+                      this.onInterruptedWrapping('Missing logs inside the receipt!');
+                    }
 
-                  const body = $('body');
-                  body.removeClass('modal-open');
-                  body.css('padding-right', '0');
-                }, 1000);
-              }
-            });
+                    clearInterval(txChecking);
+
+                    setTimeout(() => {
+                      this.inProgress(false);
+                      /**
+                       * Nasty workaround because $('#wrapperUpdate').modal('hide') not working on surge.
+                       * Even invoked within dev console it's still  not closing the modal.
+                       * @type {*}
+                       */
+                      const modal = $('#wrapperUpdate');
+                      modal.removeClass('in');
+                      modal.css('display', 'none');
+
+                      const body = $('body');
+                      body.removeClass('modal-open');
+                      body.css('padding-right', '0');
+                    }, 1000);
+                  }
+                } else {
+                  this.onInterruptedWrapping(txError);
+                }
+              });
+            }, 1000);
           } else {
             this.onInterruptedWrapping(txError);
           }
