@@ -74,7 +74,7 @@ async function checkIfUserHasOldMKR(userAddress) {
   const redeemer = new Redeemer(Dapple.env);
   const oldMKRBalance = await redeemer.balanceOf(userAddress);
 
-  return new Promise ((resolve, reject) => {
+  return new Promise ((resolve) => {
 
     if (oldMKRBalance.valueOf() >= 10000000000000000) {
       $('#redeemer').modal({
@@ -90,6 +90,11 @@ async function checkIfUserHasOldMKR(userAddress) {
       $("#redeemer").on("hidden.bs.modal", function () {
         resolve();
       });
+
+      const redeemerModal = document.getElementById('redeemer');
+      redeemerModal.addEventListener('hide-modal' , () => {
+        resolve();
+      })
     }
     else resolve();
   });
@@ -296,6 +301,7 @@ function initSession() {
   Session.set('loadingIndividualTradeHistory', false); // this will be loading only if the user filter by closed status of orders
   Session.set('AVGBlocksPerDay', null);
   Session.set('watchedEvents', false);
+  Session.set('redeemInProgress', false);
   if (!Session.get('volumeSelector')) {
     Session.set('volumeSelector', 'quote');
   }

@@ -55,7 +55,8 @@ Template.redeemer.viewmodel({
       body.removeClass('modal-open');
       body.css('padding-right', '0');
 
-      modal.modal('hide');
+      const redeemerModal = document.getElementById('redeemer');
+      redeemerModal.dispatchEvent(new Event('hide-modal'));
     }, 1000);
   },
 });
