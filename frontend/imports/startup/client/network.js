@@ -4,6 +4,7 @@ import { BigNumber } from 'meteor/ethereum:web3';
 import { Dapple, web3Obj } from 'meteor/makerotc:dapple';
 import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
+import Redeemer from '/imports/utils/redeemer';
 import Limits from '/imports/api/limits';
 import Transactions from '/imports/api/transactions';
 import Tokens from '/imports/api/tokens';
@@ -66,6 +67,31 @@ function checkIfUserHasBalanceInOldWrapper(userAddress) {
     } else {
       console.debug(`Cannot extract information for ${token} `, error);
     }
+  });
+}
+
+async function checkIfUserHasOldMKR(userAddress) {
+  const redeemer = new Redeemer(Dapple.env);
+  const oldMKRBalance = await redeemer.balanceOf(userAddress);
+
+  return new Promise ((resolve, reject) => {
+
+    if (oldMKRBalance.valueOf() >= 10000000000000000) {
+      $('#redeemer').modal({
+        keyboard: false,
+        show: true,
+        backdrop: false,
+      });
+
+      $('#redeemer').on('shown.bs.modal', () => {
+        $('.amount').text(Blaze._globalHelpers.formatBalance(oldMKRBalance, 3, '', false));
+      });
+
+      $("#redeemer").on("hidden.bs.modal", function () {
+        resolve();
+      });
+    }
+    else resolve();
   });
 }
 
@@ -136,7 +162,10 @@ function denotePrecision() {
 function initNetwork(newNetwork) {
   Dapple.init(newNetwork);
   const market = Dapple['maker-otc'].environments.kovan.otc;
-  checkAccounts().then(checkIfUserHasBalanceInOldWrapper);
+  checkAccounts().then(async (account) => {
+    await checkIfUserHasOldMKR(account);
+    checkIfUserHasBalanceInOldWrapper(account);
+  });
   const isMatchingEnabled = checkIfOrderMatchingEnabled(market.type);
   const isBuyEnabled = checkIfBuyEnabled(market.type);
   Promise.all([isMatchingEnabled, isBuyEnabled]).then(() => {

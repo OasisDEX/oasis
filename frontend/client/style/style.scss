@@ -22,7 +22,6 @@ $color-cancel-order: #A8ACB9;
 $color-border-warning: rgba(255, 0, 0, 0.5);
 $color-btn-default-text: #4F5362;
 
-
 /* FONTS */
 
 .montserrat-semibold {
@@ -405,6 +404,38 @@ table {
   justify-content: center;
   width: 920px;
   margin: auto;
+
+  &--closing {
+    padding-bottom: 20px;
+  }
+}
+
+.div-message-closing {
+  border-radius: 3px;
+  border: solid 1px #1ABC9C;
+  padding: 8px 20px 8px 20px;
+  width: 100%;
+
+  p {
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 0;
+
+    &.text-success {
+      line-height: 18px;
+      text-align: center;
+      font-size: 16px;
+      text-transform: uppercase;
+      padding: 10px 15px;
+    }
+
+    .update {
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 0.54px;
+      margin-right: 15px;
+      color: #18AD90;
+    }
+  }
 }
 
 .div-message {
@@ -826,6 +857,10 @@ table {
 .order-section-content {
   h2 {
     padding-right: 30px;
+
+    &.myorders-header {
+      padding-right: 0;
+    }
   }
   thead {
     th {
@@ -1647,7 +1682,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
   }
 }
 
-#wrapperUpdate {
+#wrapperUpdate, #redeemer {
   .modal-dialog {
     margin-top: 0;
     top: 50%;
@@ -1657,6 +1692,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
 
 .modal-wrapper-update {
   @extend .modal-order;
+  width: 550px;
 
   .modal-header {
     margin-bottom: 32px;
@@ -1671,10 +1707,36 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
     letter-spacing: 4px;
   }
 
-  .dex-icon-ethereum {
+  .dex-icon {
     display: inline-block;
     vertical-align: middle;
     margin-right: 8px;
+    height: 28px;
+    width: 28px;
+
+    &-old {
+      &--ethereum {
+        background: url('eth_circle_icon.svg') no-repeat;
+        background-size: 28px;
+      }
+
+      &--maker {
+        background: url('maker_circle_icon.svg') no-repeat;
+        background-size: 28px;
+      }
+    }
+
+    &-new {
+      &--ethereum {
+        background: url('eth_circle_icon_full.svg') no-repeat;
+        background-size: 28px;
+      }
+
+      &--maker {
+        background: url('maker_circle_icon_full.svg') no-repeat;
+        background-size: 28px;
+      }
+    }
   }
 
   .currency-box {
@@ -1686,7 +1748,7 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
 
     .value {
       letter-spacing: 1.45px;
-      width: 156px;
+      width: 153px;
       display: inline-block;
       vertical-align: middle;
       color: rgba(34, 34, 40, 0.7);
@@ -2274,21 +2336,6 @@ span.loading-icon {
   }
 }
 
-.dex-icon-ethereum {
-  height: 24px;
-  width: 24px;
-
-  &--wrapped {
-    background: url('eth_circle_icon.svg') no-repeat;
-    background-size: 100% 100%;
-  }
-
-  &--unwrapped {
-    background: url('eth_circle_icon_full.svg') no-repeat;
-    background-size: 100% 100%;
-  }
-}
-
 .hr-footer {
   max-width: 980px;
   margin: 50px auto 0 auto;
@@ -2605,7 +2652,6 @@ span.right {
   text-transform: uppercase;
 }
 
-
 .modal-body {
   .my-allowance-instructions {
     margin-top: 20px;
@@ -2625,11 +2671,10 @@ span.right {
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%,-50%);
+        transform: translate(-50%, -50%);
       }
 
     }
-
 
     div.my-allowance.row {
       display: flex;
@@ -2639,7 +2684,6 @@ span.right {
         display: block;
       }
     }
-
 
     div.my-allowance.row.grant {
       margin-bottom: 10px;
@@ -2676,6 +2720,7 @@ span.right {
     color: #D0D0D0;
     border: none;
     text-align: right;
+    width: 100%;
     padding-right: 10px;
     background: none;
 
