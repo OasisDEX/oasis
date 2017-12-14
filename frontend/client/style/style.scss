@@ -404,6 +404,38 @@ table {
   justify-content: center;
   width: 920px;
   margin: auto;
+
+  &--closing {
+    padding-bottom: 20px;
+  }
+}
+
+.div-message-closing {
+  border-radius: 3px;
+  border: solid 1px #1ABC9C;
+  padding: 8px 20px 8px 20px;
+  width: 100%;
+
+  p {
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 0;
+
+    &.text-success {
+      line-height: 18px;
+      text-align: center;
+      font-size: 16px;
+      text-transform: uppercase;
+      padding: 10px 15px;
+    }
+
+    .update {
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 0.54px;
+      margin-right: 15px;
+      color: #18AD90;
+    }
+  }
 }
 
 .div-message {

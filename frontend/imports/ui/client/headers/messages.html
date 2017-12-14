@@ -1,4 +1,11 @@
 <template name="messages">
+  <div class="messages messages--closing">
+    <div class="div-message-closing">
+      <p class="text-success">
+        <span class="update">The market will be closing in the coming days for improvements. <br> All open orders will be canceled automatically</span>
+      </p>
+    </div>
+  </div>
   <div class="messages">
     {{#if updateOpen}}
       <div class="div-message-update {{#if warningOpen}}resized{{/if}}">
