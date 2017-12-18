@@ -48,7 +48,7 @@ function checkIfUserHasBalanceInOldWrapper(userAddress) {
       if (token) {
         token.balanceOf(userAddress, (err, balance) => {
           if (!error) {
-            if (balance.toString(10) > 0) {
+            if (balance.valueOf() >= 100000000000000000) {
               $('#wrapperUpdate').modal({
                 keyboard: false,
                 show: true,
