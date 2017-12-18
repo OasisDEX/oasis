@@ -1,19 +1,19 @@
 {
   "market": {
     "kovan": {
-      "address": "0xdd8b03903157ef5f6656906651e0836751d02e94",
-      "blockNumber": 5057308
+      "address": "0x221cdf5a72e8a44f10ef7e3e24568c0677f4f905",
+      "blockNumber": 5107293
     },
     "live": {
-      "address": "0x91dfe531ff8ba876a505c8f1c98bafede6c7effc",
-      "blockNumber": 4732388
+      "address": "0x14fbca95be7e99c15cc2996c6c9d841e54b79425",
+      "blockNumber": 4751582
     }
   },
   "tokens": {
     "kovan": {
       "OW-ETH": "0x53eccc9246c1e537d79199d0c7231e425a40f896",
       "W-ETH": "0xd0a1e359811322d97991e03f863a0c30c2cf029c",
-      "DAI": "0x0000000000000000000000000000000000000000",
+      "DAI": "0x95878488a599e1d821c0ff2bc079b9e7f96d95be",
       "SAI": "0x228bf3d5be3ee4b80718b89b68069b023c32131e",
       "MKR": "0x4572baca0e43504234f86380fcdd38fbf81c7888",
       "DGD": "0xbb7697d091a2b9428053e2d42d088fcd2a6a0aaf",
@@ -35,7 +35,7 @@
     "live": {
       "OW-ETH": "0xecf8f87f810ecf450940c9f60066b4a7a501d6a7",
       "W-ETH": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-      "DAI": "0x0000000000000000000000000000000000000000",
+      "DAI": "0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359",
       "SAI": "0x59adcf176ed2f6788a41b8ea4c4904518e62b6a4",
       "MKR": "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2",
       "DGD": "0xe0b7927c4af23765cb51314a0e0521a9645f0e2a",

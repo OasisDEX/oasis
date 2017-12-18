@@ -58,7 +58,7 @@ Dapple.getQuoteTokens = () => ['W-ETH'];
 
 Dapple.getBaseTokens = () => ['W-GNT', 'DGD', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC', 'TIME', 'GUP', 'BAT', 'NMR'];
 
-Dapple.getTokens = () => ['W-ETH', 'MKR', 'DGD', 'GNT', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC', 'TIME', 'GUP', 'BAT', 'NMR', 'SAI'];
+Dapple.getTokens = () => ['W-ETH', 'MKR', 'DGD', 'GNT', 'W-GNT', 'REP', 'ICN', '1ST', 'SNGLS', 'VSL', 'PLU', 'MLN', 'RHOC', 'TIME', 'GUP', 'BAT', 'NMR', 'SAI', 'DAI'];
 
 Dapple.generatePairs = () => {
   const TradingPairs = [
@@ -69,13 +69,18 @@ Dapple.generatePairs = () => {
     },
     {
       base: 'W-ETH',
-      quote: 'SAI',
+      quote: 'DAI',
       priority: 9,
     },
     {
       base: 'MKR',
-      quote: 'SAI',
+      quote: 'DAI',
       priority: 8,
+    },
+    {
+      base: 'SAI',
+      quote: 'DAI',
+      priority: 7,
     },
   ];
 
