@@ -11,8 +11,8 @@
   },
   "tokens": {
     "kovan": {
-      "OW-ETH": "0x53eccc9246c1e537d79199d0c7231e425a40f896",
-      "W-ETH": "0xd0a1e359811322d97991e03f863a0c30c2cf029c",
+      "OW-ETH": "0x0000000000000000000000000000000000000000",
+      "W-ETH": "0x53eccc9246c1e537d79199d0c7231e425a40f896",
       "DAI": "0x95878488a599e1d821c0ff2bc079b9e7f96d95be",
       "SAI": "0x228bf3d5be3ee4b80718b89b68069b023c32131e",
       "MKR": "0x4572baca0e43504234f86380fcdd38fbf81c7888",
@@ -33,8 +33,8 @@
       "NMR": "0x13ec2f6ab4be5a55800193e7b22e83042405bb64"
     },
     "live": {
-      "OW-ETH": "0xecf8f87f810ecf450940c9f60066b4a7a501d6a7",
-      "W-ETH": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "OW-ETH": "0x0000000000000000000000000000000000000000",
+      "W-ETH": "0xecf8f87f810ecf450940c9f60066b4a7a501d6a7",
       "DAI": "0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359",
       "SAI": "0x59adcf176ed2f6788a41b8ea4c4904518e62b6a4",
       "MKR": "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2",
