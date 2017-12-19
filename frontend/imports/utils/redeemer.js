@@ -877,7 +877,7 @@ class Redeemer {
     const balance = await this.balanceOf(account);
     return new Promise((resolve, reject) => {
       console.log('Approving redeeming process...');
-      this.mkr.approve(this.redeemerAddress, balance, { gasPrice: web3Obj.toWei(4, 'gwei') }, async (error, tx) => {
+      this.mkr.approve(this.redeemerAddress, balance, async (error, tx) => {
         console.log('Approval TX number: ', tx);
         if (!error) {
           /* eslint-disable no-underscore-dangle */
@@ -897,7 +897,7 @@ class Redeemer {
   async redeem() {
     return new Promise((resolve, reject) => {
       console.log('Redeeming ...');
-      this.redeemer.redeem({ gasPrice: web3Obj.toWei(4, 'gwei') }, async (e, tx) => {
+      this.redeemer.redeem(async (e, tx) => {
         console.log('Redeeming TX number: ', tx);
         if (!e) {
           /* eslint-disable no-underscore-dangle */
