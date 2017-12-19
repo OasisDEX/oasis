@@ -57,19 +57,7 @@
               </tr>
             {{/if }}
           {{/each}}
-          {{#unless showAll}}
-            <tr class="dex-show-more-row" {{b 'click: showMore'}}>
-              <td colspan="3" class="more">
-                <span> SHOW MORE </span>
-              </td>
-            </tr>
-          {{else}}
-            <tr class="dex-show-less-row" {{b 'click: showLess'}}>
-              <td colspan="3" class="more">
-                <span> SHOW LESS </span>
-              </td>
-            </tr>
-          {{/unless}}
+
           <!--{{sort}}-->
         </tbody>
         <tfoot>

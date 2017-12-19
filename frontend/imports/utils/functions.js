@@ -76,25 +76,25 @@ export function doHashChange() {
 
   if (location.hash.indexOf('#wrap') === -1 && location.hash.indexOf('#transfer') === -1) {
     if (location.hash.indexOf('#trade') === -1) {
-      location.hash = `#trade/${localStorage.getItem('baseCurrency') || 'MKR'}`
+      location.hash = `#trade/${localStorage.getItem('baseCurrency') || 'SAI'}`
         + `/${localStorage.getItem('quoteCurrency') || 'W-ETH'}`;
     }
     const coins = location.hash.replace(/#trade\//g, '').split('/');
 
     /**
      * The default values for base and quote are respectively:
-     * MKR and W-ETH in all scenarios. The reason for this is
+     * SAI and W-ETH in all scenarios. The reason for this is
      * because those are the main currencies that MAKER is dealing with.
      */
     const base = coins[0];
-    baseCurrency = asToken(base, 'MKR');
+    baseCurrency = asToken(base, 'SAI');
 
     const quote = coins[1];
     quoteCurrency = asToken(quote, 'W-ETH');
 
     if (baseCurrency === quoteCurrency) {
       quoteCurrency = 'W-ETH';
-      baseCurrency = 'MKR';
+      baseCurrency = 'SAI';
     }
 
     // Looking for any existing pair that contains the currencies provided in the URL
@@ -108,7 +108,7 @@ export function doHashChange() {
       quoteCurrency = pair.quote;
     } else {
       quoteCurrency = 'W-ETH';
-      baseCurrency = 'MKR';
+      baseCurrency = 'SAI';
     }
 
     Session.set('newPairSelected', pair);
