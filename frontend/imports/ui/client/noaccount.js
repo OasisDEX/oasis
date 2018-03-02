@@ -6,7 +6,10 @@ import './noaccount.html';
 Template.noAccount.helpers({
   metamask: function metamask() {
     return web3Obj &&
-            web3Obj.currentProvider &&
-            web3Obj.currentProvider.constructor.name === 'MetamaskInpageProvider';
+           web3Obj.currentProvider &&
+           (
+             web3Obj.currentProvider.isMetaMask ||
+             web3Obj.currentProvider.constructor.name === 'MetamaskInpageProvider'
+           );
   },
 });
