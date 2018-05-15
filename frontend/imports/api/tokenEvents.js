@@ -168,7 +168,7 @@ class TokenEventCollection extends Mongo.Collection {
                 });
                 Session.set('loadingWrapHistory', false);
               }
-              token.Deposit({}, { fromBlock: 'latest' }, (err2, result2) => {
+              token.Deposit({who: address}, { fromBlock: 'latest' }, (err2, result2) => {
                 if (!err2) {
                   this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
                   self.syncEvent(tokenId, result2);
@@ -185,7 +185,7 @@ class TokenEventCollection extends Mongo.Collection {
                 });
                 Session.set('loadingWrapHistory', false);
               }
-              token.Withdrawal({}, { fromBlock: 'latest' }, (err2, result2) => {
+              token.Withdrawal({who: address}, { fromBlock: 'latest' }, (err2, result2) => {
                 if (!err2) {
                   this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
                   self.syncEvent(tokenId, result2);
