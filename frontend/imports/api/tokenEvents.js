@@ -158,7 +158,7 @@ class TokenEventCollection extends Mongo.Collection {
             });
           });
           if (tokenId === 'W-ETH') {
-            token.Deposit({}, {
+            token.Deposit({who: address}, {
               fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
             }).get((err, result) => {
               if (!err) {
@@ -175,7 +175,7 @@ class TokenEventCollection extends Mongo.Collection {
                 }
               });
             });
-            token.Withdrawal({}, {
+            token.Withdrawal({who: address}, {
               fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
             }).get((err, result) => {
               if (!err) {
