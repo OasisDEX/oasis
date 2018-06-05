@@ -185,6 +185,18 @@ table {
   }
 }
 
+.btn-cancel {
+  background: url("cancel_button_idle.svg") no-repeat center;
+  width: 28px;
+  height: 15px;
+  padding: 0;
+  border: none;
+
+  &:hover {
+    background: url("cancel_button_hover.svg") no-repeat center;
+  }
+}
+
 .account-section {
   font-family: 'Montserrat', sans-serif;
   font-weight: 500;
@@ -804,19 +816,6 @@ table {
         td:last-of-type {
           width: 22px;
         }
-        .cancel {
-          border: none;
-          padding: 0;
-          width: 29px;
-          height: 16px;
-          border-radius: 7px;
-          &:hover {
-
-          }
-          img {
-            transform: translate(0px, -3px);
-          }
-        }
       }
     }
   }
@@ -871,6 +870,11 @@ table {
         border-top: 1px #DCDDE0 solid;
         background: rgba(248, 247, 245, 0.15);
       }
+
+      td:first-child {
+        width: 50px;
+        text-align: center;
+      }
     }
     &.helper-row {
       td {
@@ -895,10 +899,12 @@ table {
   }
 
   td.bid {
+    width: 90px;
     color: $color-buy;
   }
 
   td.ask {
+    width: 90px;
     color: $color-sell;
   }
 
@@ -914,17 +920,6 @@ table {
     font-weight: 700;
     font-size: 12px;
     line-height: 20px;
-  }
-
-  .cancel {
-    border: none;
-    padding: 0;
-    width: 29px;
-    height: 16px;
-    border-radius: 7px;
-    img {
-      transform: translate(0px, -3px);
-    }
   }
 }
 
@@ -2029,6 +2024,9 @@ button.dex-btn-default.sell, button.dex-btn-max.sell {
         padding: 5px 0;
         position: relative;
         float: left;
+        &:first-child {
+          padding: 4px 0;
+        }
         &:last-of-type {
           width: 30px;
         }

@@ -3,12 +3,11 @@
     <td>
       {{#if order.canCancel}}
         {{#if showCancel}}
-          <button type="button" class="btn btn-default cancel">
-            <img src="remove_button.svg" alt="Cancel order">
+          <button type="button" class="btn btn-default btn-cancel">
           </button>
         {{/if}}
       {{/if}}
-    </td>    
+    </td>
     {{#if showDate}}
       <td class="timestamp">{{timestampToString order.timestamp true true}}</td>
     {{/if}}

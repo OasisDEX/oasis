@@ -17,7 +17,7 @@
           <div class="loading-market-history">{{{loadingIcon}}} Loading sell orders...</div>
         {{/if}}
       {{/if}}
-      {{> orders orders=orders type=priceClass priceLabel=priceLabel priceClass=priceClass canAccept=(isMarketOpen) showCancel=(not isMarketOpen)}}
+      {{> orders orders=orders type=priceClass priceLabel=priceLabel priceClass=priceClass canAccept=(isMarketOpen) showCancel=showCancel}}
     </div>
   </div>
 </template>
